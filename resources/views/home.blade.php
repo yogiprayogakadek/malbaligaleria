@@ -1021,6 +1021,7 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
         }
 
         .info-item {
@@ -1061,6 +1062,7 @@
             width: 1px;
             height: 60%;
             background: rgba(44, 62, 80, 0.1);
+            pointer-events: none;
         }
 
         body.dark-mode .divider {
@@ -1357,6 +1359,7 @@
             gap: 20px;
             height: 600px;
             overflow: hidden;
+            position: relative;
         }
 
         .experience-card {
@@ -1370,11 +1373,15 @@
             background-position: center;
         }
 
-        .experience-card.destinations {
+        .experience-card.expanded {
+            flex: 2 !important;
+        }
+
+        .experience-card.promotion {
             flex: 2;
         }
 
-        .experience-card:not(.destinations) {
+        .experience-card:not(.promotion):not(.expanded) {
             flex: 0.5;
         }
 
@@ -1484,11 +1491,19 @@
             letter-spacing: 3px;
         }
 
-        .experience-card.destinations .experience-card-content {
+        .experience-card.promotion .experience-card-content {
             opacity: 1;
         }
 
-        .experience-card.destinations .experience-card-title-vertical {
+        .experience-card.promotion .experience-card-title-vertical {
+            opacity: 0;
+        }
+
+        .experience-card.expanded .experience-card-content {
+            opacity: 1;
+        }
+
+        .experience-card.expanded .experience-card-title-vertical {
             opacity: 0;
         }
 
@@ -1500,11 +1515,19 @@
             opacity: 0;
         }
 
-        .experience-cards:hover .experience-card.destinations:not(:hover) .experience-card-content {
+        .experience-cards:hover .experience-card.promotion:not(:hover):not(.expanded) .experience-card-content {
             opacity: 0;
         }
 
-        .experience-cards:hover .experience-card.destinations:not(:hover) .experience-card-title-vertical {
+        .experience-cards:hover .experience-card.promotion:not(:hover):not(.expanded) .experience-card-title-vertical {
+            opacity: 1;
+        }
+
+        .experience-cards:hover .experience-card.expanded:not(:hover) .experience-card-content {
+            opacity: 0;
+        }
+
+        .experience-cards:hover .experience-card.expanded:not(:hover) .experience-card-title-vertical {
             opacity: 1;
         }
 
@@ -1749,6 +1772,77 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            max-height: calc(4 * 78px + 3 * 15px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 10px;
+            position: relative;
+        }
+
+        /* Scroll indicator for map floors */
+        .scroll-indicator {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+            padding: 15px 0 0;
+            text-align: center;
+            font-size: 12px;
+            color: #5fcfda;
+            font-weight: 600;
+            letter-spacing: 1px;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            margin-right: -10px;
+        }
+
+        body.dark-mode .scroll-indicator {
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.95), transparent);
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+        }
+
+        .scroll-indicator svg {
+            width: 16px;
+            height: 16px;
+            fill: #5fcfda;
+            animation: bounceDown 1.5s infinite;
+            display: block;
+            margin: 5px auto 0;
+        }
+
+        @keyframes bounceDown {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-5px);
+            }
+
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Hide scrollbar for map floors */
+        .map-floors {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .map-floors::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
         }
 
         .floor-item {
@@ -1758,6 +1852,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            min-height: 78px;
         }
 
         body.dark-mode .floor-item {
@@ -1809,6 +1904,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .dining-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .map-wrapper {
                 grid-template-columns: 1fr;
             }
@@ -1817,17 +1916,24 @@
                 height: 400px;
             }
 
+            .parking-content {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
 
             .event-section,
-            .map-section {
+            .dining-section,
+            .map-section,
+            .parking-section {
                 padding: 60px 20px;
             }
 
             .event-container h2,
-            .map-container h2 {
+            .dining-container h2,
+            .map-container h2,
+            .parking-container h2 {
                 font-size: 36px;
             }
 
@@ -1835,6 +1941,13 @@
                 height: 300px;
             }
 
+            .dining-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .parking-features {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Footer */
@@ -2297,15 +2410,15 @@
             </div>
 
             <div class="info-grid">
-                <div class="info-item" style="position: relative;">
+                <div class="info-item">
                     <h3>Open Hour</h3>
                     <p>10AM - 10PM (Daily)</p>
-                    <div class="divider"></div>
                 </div>
                 <div class="info-item">
                     <h3>Address</h3>
                     <p>Jl. Sunset Road No. 89,<br>Kuta, Badung, Bali, Indonesia 80361</p>
                 </div>
+                <div class="divider"></div>
             </div>
         </div>
     </section>
@@ -2512,7 +2625,7 @@
                         <p>Interactive mall map</p>
                     </div>
                 </div>
-                <div class="map-floors">
+                <div class="map-floors" id="mapFloors">
                     <div class="floor-item active">
                         <h4>Ground Floor</h4>
                         <p>Fashion, Accessories, Cosmetics</p>
@@ -2532,6 +2645,12 @@
                     <div class="floor-item">
                         <h4>Basement</h4>
                         <p>Supermarket, Parking</p>
+                    </div>
+                    <div class="scroll-indicator" id="scrollIndicator">
+                        SCROLL FOR MORE
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -2889,17 +3008,78 @@
             });
         });
 
-        // Add hover effect to experience cards with glow
-        const experienceCards = document.querySelectorAll('.experience-card');
+        // Experience cards - track last hovered card and persist on scroll
+        const experienceCardsContainer = document.querySelector('.experience-cards');
+        let lastHoveredCard = document.querySelector('.experience-card.promotion');
+        let isHovering = false;
+
         experienceCards.forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
+                lastHoveredCard = card;
+                isHovering = true;
             });
 
             card.addEventListener('mouseleave', () => {
                 card.style.boxShadow = 'none';
+                isHovering = false;
             });
         });
+
+        // When mouse leaves the container, expand the last hovered card
+        if (experienceCardsContainer) {
+            experienceCardsContainer.addEventListener('mouseleave', () => {
+                // Remove all expanded/promotion states
+                experienceCards.forEach(card => {
+                    card.classList.remove('promotion', 'expanded');
+                });
+                // Add expanded state to last hovered card
+                if (lastHoveredCard) {
+                    lastHoveredCard.classList.add('expanded');
+                }
+            });
+        }
+
+        // Keep expanded card visible when scrolling
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (!isHovering && lastHoveredCard && experienceCardsContainer) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // Reapply expanded class to ensure it stays visible
+                    experienceCards.forEach(card => {
+                        card.classList.remove('promotion', 'expanded');
+                    });
+                    lastHoveredCard.classList.add('expanded');
+                }, 100);
+            }
+        });
+
+        // Mall Directory Scroll Indicator
+        const mapFloors = document.getElementById('mapFloors');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        if (mapFloors && scrollIndicator) {
+            // Check if scrollable
+            const checkScrollable = () => {
+                const isScrollable = mapFloors.scrollHeight > mapFloors.clientHeight;
+                if (!isScrollable) {
+                    scrollIndicator.classList.add('hidden');
+                }
+            };
+
+            // Hide indicator when scrolled to bottom
+            mapFloors.addEventListener('scroll', () => {
+                const isAtBottom = mapFloors.scrollHeight - mapFloors.scrollTop <= mapFloors.clientHeight + 10;
+                if (isAtBottom) {
+                    scrollIndicator.classList.add('hidden');
+                } else {
+                    scrollIndicator.classList.remove('hidden');
+                }
+            });
+
+            checkScrollable();
+        }
 
         // Add intersection observer for more advanced animations
         const observerOptions = {
