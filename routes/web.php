@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/tenant', function () {
     return view('frontend.tenant.index');
 });
+
+Route::get('/directory', function () {
+    return view('frontend.directory.index');
+});

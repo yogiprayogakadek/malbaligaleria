@@ -19,6 +19,7 @@
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
+            max-width: 100vw;
         }
 
         body.dark-mode {
@@ -30,7 +31,6 @@
             overflow: hidden;
         }
 
-        /* Hide Scrollbar */
         * {
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -68,7 +68,6 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Search Bar */
         .search-container {
             flex: 0 0 280px;
         }
@@ -99,7 +98,6 @@
             height: 20px;
             stroke: #2c3e50;
             margin-right: 10px;
-            transition: stroke 0.3s ease;
         }
 
         body.dark-mode .search-bar svg {
@@ -113,7 +111,6 @@
             font-size: 14px;
             width: 100%;
             outline: none;
-            transition: color 0.3s ease;
         }
 
         body.dark-mode .search-bar input {
@@ -122,20 +119,19 @@
 
         .search-bar input::placeholder {
             color: rgba(0, 0, 0, 0.5);
-            transition: color 0.3s ease;
         }
 
         body.dark-mode .search-bar input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
+        /* Mobile: Search di sidebar */
         @media (max-width: 768px) {
             .search-container {
                 display: none;
             }
         }
 
-        /* Logo */
         .logo {
             position: absolute;
             left: 50%;
@@ -150,7 +146,6 @@
             letter-spacing: 3px;
             text-transform: lowercase;
             font-family: 'Playfair Display', serif;
-            transition: all 0.3s ease;
         }
 
         body.dark-mode .logo h1 {
@@ -163,9 +158,9 @@
             letter-spacing: 5px;
             margin-top: -5px;
             color: #5fcfda;
-            transition: color 0.3s ease;
         }
 
+        /* Mobile: Logo di kiri */
         @media (max-width: 768px) {
             .logo {
                 position: static;
@@ -179,7 +174,6 @@
             }
         }
 
-        /* Menu Button */
         .menu-btn {
             flex: 0 0 auto;
             background: transparent;
@@ -199,6 +193,14 @@
         }
 
         body.dark-mode .menu-btn span {
+            background: #e0e0e0;
+        }
+
+        .menu-btn.active span {
+            background: #2c3e50;
+        }
+
+        body.dark-mode .menu-btn.active span {
             background: #e0e0e0;
         }
 
@@ -272,6 +274,7 @@
             color: #5fcfda;
         }
 
+        /* Sidebar Close Button */
         .sidebar-close {
             position: absolute;
             right: 30px;
@@ -318,6 +321,7 @@
             background: #5fcfda;
         }
 
+        /* Sidebar Search - Mobile only */
         .sidebar-search {
             display: none;
             position: absolute;
@@ -331,16 +335,40 @@
             .sidebar-search {
                 display: block;
             }
+        }
 
-            .sidebar {
-                width: 100%;
-                padding: 80px 30px 120px;
-            }
+        .sidebar-search .search-bar {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
-            .sidebar-logo {
-                left: 30px;
-                top: 25px;
-            }
+        body.dark-mode .sidebar-search .search-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-search .search-bar svg {
+            stroke: #2c3e50;
+        }
+
+        body.dark-mode .sidebar-search .search-bar svg {
+            stroke: #e0e0e0;
+        }
+
+        .sidebar-search .search-bar input {
+            color: #2c3e50;
+        }
+
+        body.dark-mode .sidebar-search .search-bar input {
+            color: #e0e0e0;
+        }
+
+        .sidebar-search .search-bar input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .sidebar-search .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .sidebar nav ul {
@@ -417,7 +445,6 @@
             width: 50px;
         }
 
-        /* Dark Mode Toggle */
         .dark-mode-toggle {
             position: fixed;
             bottom: 30px;
@@ -479,12 +506,10 @@
             transform: rotate(90deg) scale(0);
         }
 
-        /* Main Content */
         main {
             padding-top: 80px;
         }
 
-        /* Image Carousel Section */
         .carousel-section {
             width: 100%;
             height: 80vh;
@@ -577,7 +602,6 @@
             right: 30px;
         }
 
-        /* Detail Section */
         .detail-section {
             padding: 100px 40px;
             background: #ffffff;
@@ -593,6 +617,7 @@
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 60px;
+            width: 100%;
         }
 
         .detail-left {
@@ -752,6 +777,8 @@
             display: flex;
             gap: 15px;
             margin-top: 30px;
+            width: 100%;
+            max-width: 100%;
         }
 
         .action-btn {
@@ -804,11 +831,19 @@
             color: #1a1a1a;
         }
 
-        /* Similar Category Section */
+        /* Similar Section with Scroll Indicator */
         .similar-section {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            position: relative;
+        }
+
+        .similar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .similar-section h3 {
@@ -816,20 +851,103 @@
             font-size: 28px;
             font-weight: 500;
             color: #2c3e50;
-            margin-bottom: 10px;
         }
 
         body.dark-mode .similar-section h3 {
             color: #e0e0e0;
         }
 
+        .scroll-indicator {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+            padding: 15px 0 0;
+            text-align: center;
+            font-size: 12px;
+            color: #5fcfda;
+            font-weight: 600;
+            letter-spacing: 1px;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            margin-right: -10px;
+        }
+
+        body.dark-mode .scroll-indicator {
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.95), transparent);
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+        }
+
+        .scroll-indicator svg {
+            width: 16px;
+            height: 16px;
+            fill: #5fcfda;
+            animation: bounceDown 1.5s infinite;
+            display: block;
+            margin: 5px auto 0;
+        }
+
+        @keyframes bounceDown {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-5px);
+            }
+
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .similar-tenants-wrapper {
+            position: relative;
+        }
+
         .similar-tenants {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-height: 600px;
+            max-height: calc(2 * 270px + 1 * 20px);
             overflow-y: auto;
             padding-right: 10px;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar for similar tenants - desktop only */
+        @media (min-width: 769px) {
+            .similar-tenants::-webkit-scrollbar {
+                display: block;
+                width: 6px;
+            }
+
+            .similar-tenants::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 10px;
+            }
+
+            body.dark-mode .similar-tenants::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .similar-tenants::-webkit-scrollbar-thumb {
+                background: #5fcfda;
+                border-radius: 10px;
+            }
+
+            .similar-tenants::-webkit-scrollbar-thumb:hover {
+                background: #4db8c3;
+            }
         }
 
         .similar-tenant-card {
@@ -842,6 +960,7 @@
             transition: all 0.4s ease;
             background-size: cover;
             background-position: center;
+            flex-shrink: 0;
         }
 
         .similar-tenant-card::before {
@@ -942,9 +1061,39 @@
                 flex: 0 0 300px;
                 height: 200px;
             }
+
+            .scroll-indicator svg {
+                transform: rotate(90deg);
+            }
+
+            @keyframes bounce {
+
+                0%,
+                100% {
+                    transform: translateX(0) rotate(90deg);
+                }
+
+                50% {
+                    transform: translateX(5px) rotate(90deg);
+                }
+            }
         }
 
         @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 80px 30px 120px;
+            }
+
+            .sidebar-logo {
+                left: 30px;
+                top: 25px;
+            }
+
             .carousel-section {
                 height: 60vh;
                 min-height: 400px;
@@ -968,12 +1117,17 @@
                 padding: 60px 20px;
             }
 
+            .detail-container {
+                gap: 40px;
+            }
+
             .detail-left {
                 gap: 30px;
             }
 
             .tenant-logo-wrapper {
                 flex-direction: column;
+                width: 100%;
             }
 
             .tenant-logo {
@@ -982,28 +1136,135 @@
                 margin: 0 auto;
             }
 
+            .tenant-location {
+                width: 100%;
+            }
+
+            .tenant-info {
+                width: 100%;
+                overflow: hidden;
+            }
+
             .tenant-info h1 {
-                font-size: 36px;
+                font-size: 32px;
+            }
+
+            .tenant-description {
+                font-size: 15px;
             }
 
             .tenant-details-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .tenant-actions {
                 flex-direction: column;
+                width: 100%;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .similar-section {
+                width: 100%;
+                overflow: hidden;
+            }
+
+            .similar-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
 
             .similar-section h3 {
                 font-size: 24px;
             }
 
+            .scroll-indicator {
+                font-size: 12px;
+            }
+
+            .similar-tenants {
+                flex-direction: row;
+                max-height: none;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding-right: 0;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .similar-tenants::-webkit-scrollbar {
+                height: 6px;
+            }
+
             .similar-tenant-card {
-                flex: 0 0 250px;
+                flex: 0 0 280px;
+                height: 200px;
+            }
+
+            .similar-tenant-content {
+                padding: 20px;
+            }
+
+            .similar-tenant-content h4 {
+                font-size: 20px;
+            }
+
+            .scroll-indicator svg {
+                transform: rotate(-90deg);
+            }
+
+            @keyframes bounce {
+
+                0%,
+                100% {
+                    transform: translateX(0) rotate(-90deg);
+                }
+
+                50% {
+                    transform: translateX(5px) rotate(-90deg);
+                }
+            }
+
+            .dark-mode-toggle {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .dark-mode-toggle svg {
+                width: 20px;
+                height: 20px;
+                margin-left: -10px;
+                margin-top: -10px;
             }
         }
 
-        /* Footer */
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 18px;
+            }
+
+            .tenant-info h1 {
+                font-size: 28px;
+            }
+
+            .tenant-category {
+                font-size: 12px;
+                padding: 6px 15px;
+            }
+
+            .similar-tenant-card {
+                flex: 0 0 250px;
+                height: 180px;
+            }
+        }
+
+        /* Footer - FIXED GRADIENT */
         footer {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
@@ -1216,12 +1477,12 @@
             }
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1299,6 +1560,7 @@
             </ul>
         </nav>
 
+        <!-- Search in Sidebar for Mobile -->
         <div class="sidebar-search">
             <div class="search-bar">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -1315,10 +1577,18 @@
         <!-- Image Carousel Section -->
         <section class="carousel-section">
             <div class="carousel-images" id="carouselImages">
-                <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920');"></div>
-                <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920');"></div>
-                <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920');"></div>
-                <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?w=1920');"></div>
+                <div class="carousel-image"
+                    style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920');">
+                </div>
+                <div class="carousel-image"
+                    style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920');">
+                </div>
+                <div class="carousel-image"
+                    style="background-image: url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920');">
+                </div>
+                <div class="carousel-image"
+                    style="background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?w=1920');">
+                </div>
             </div>
 
             <button class="carousel-arrow prev" id="carouselPrev">‹</button>
@@ -1335,12 +1605,12 @@
         <!-- Detail Section -->
         <section class="detail-section">
             <div class="detail-container">
-                <!-- Left Column: Logo + Location & Details -->
+                <!-- Left Column -->
                 <div class="detail-left">
-                    <!-- Logo & Location -->
                     <div class="tenant-logo-wrapper">
                         <div class="tenant-logo">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Zara_Logo.svg/2560px-Zara_Logo.svg.png" alt="Zara Logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Zara_Logo.svg/2560px-Zara_Logo.svg.png"
+                                alt="Zara Logo">
                         </div>
                         <div class="tenant-location">
                             <h4>Location</h4>
@@ -1370,7 +1640,6 @@
                         </div>
                     </div>
 
-                    <!-- Tenant Information -->
                     <div class="tenant-info">
                         <div>
                             <h1>Zara</h1>
@@ -1380,7 +1649,8 @@
                         <p class="tenant-description">
                             Zara is one of the largest international fashion companies belonging to the Inditex group.
                             We offer the latest fashion trends for women, men, and children through our collections.
-                            With a focus on fast fashion, Zara brings runway-inspired designs to customers quickly and affordably.
+                            With a focus on fast fashion, Zara brings runway-inspired designs to customers quickly and
+                            affordably.
                         </p>
 
                         <div class="tenant-details-grid">
@@ -1398,7 +1668,7 @@
                             </div>
                             <div class="detail-item">
                                 <label>Price Range</label>
-                                <p>$$$ (Mid to High)</p>
+                                <p>$ (Mid to High)</p>
                             </div>
                             <div class="detail-item">
                                 <label>Contact</label>
@@ -1412,16 +1682,18 @@
 
                         <div class="tenant-actions">
                             <a href="#" class="action-btn primary">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                    <polyline points="9 22 9 12 15 12 15 22"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                    <polyline points="9 22 9 12 15 12 15 22" />
                                 </svg>
                                 Visit Website
                             </a>
                             <a href="#" class="action-btn secondary">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                    <circle cx="12" cy="10" r="3"/>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
                                 </svg>
                                 Get Directions
                             </a>
@@ -1429,57 +1701,73 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Similar Category -->
+                <!-- Right Column: Similar Stores -->
                 <div class="similar-section">
-                    <h3>Similar Stores</h3>
-                    <div class="similar-tenants" id="similarTenants">
-                        <div class="similar-tenant-card" style="background-image: url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800');">
-                            <div class="similar-tenant-content">
-                                <h4>H&M</h4>
-                                <a href="#" class="similar-tenant-link">
-                                    See Details
-                                    <span>→</span>
-                                </a>
+                    <div class="similar-header">
+                        <h3>Similar Stores</h3>
+                    </div>
+                    <div class="similar-tenants-wrapper">
+                        <div class="similar-tenants" id="similarTenants">
+                            <div class="similar-tenant-card"
+                                style="background-image: url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800');">
+                                <div class="similar-tenant-content">
+                                    <h4>H&M</h4>
+                                    <a href="#" class="similar-tenant-link">
+                                        See Details
+                                        <span>→</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="similar-tenant-card" style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=800');">
-                            <div class="similar-tenant-content">
-                                <h4>Uniqlo</h4>
-                                <a href="#" class="similar-tenant-link">
-                                    See Details
-                                    <span>→</span>
-                                </a>
+                            <div class="similar-tenant-card"
+                                style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=800');">
+                                <div class="similar-tenant-content">
+                                    <h4>Uniqlo</h4>
+                                    <a href="#" class="similar-tenant-link">
+                                        See Details
+                                        <span>→</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="similar-tenant-card" style="background-image: url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800');">
-                            <div class="similar-tenant-content">
-                                <h4>Pull & Bear</h4>
-                                <a href="#" class="similar-tenant-link">
-                                    See Details
-                                    <span>→</span>
-                                </a>
+                            <div class="similar-tenant-card"
+                                style="background-image: url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800');">
+                                <div class="similar-tenant-content">
+                                    <h4>Pull & Bear</h4>
+                                    <a href="#" class="similar-tenant-link">
+                                        See Details
+                                        <span>→</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="similar-tenant-card" style="background-image: url('https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800');">
-                            <div class="similar-tenant-content">
-                                <h4>Mango</h4>
-                                <a href="#" class="similar-tenant-link">
-                                    See Details
-                                    <span>→</span>
-                                </a>
+                            <div class="similar-tenant-card"
+                                style="background-image: url('https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800');">
+                                <div class="similar-tenant-content">
+                                    <h4>Mango</h4>
+                                    <a href="#" class="similar-tenant-link">
+                                        See Details
+                                        <span>→</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="similar-tenant-card" style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea197ce7?w=800');">
-                            <div class="similar-tenant-content">
-                                <h4>Massimo Dutti</h4>
-                                <a href="#" class="similar-tenant-link">
-                                    See Details
-                                    <span>→</span>
-                                </a>
+                            <div class="similar-tenant-card"
+                                style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea197ce7?w=800');">
+                                <div class="similar-tenant-content">
+                                    <h4>Massimo Dutti</h4>
+                                    <a href="#" class="similar-tenant-link">
+                                        See Details
+                                        <span>→</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="scroll-indicator" id="scrollIndicator">
+                                SCROLL FOR MORE
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M7 10l5 5 5-5z" />
+                                </svg>
                             </div>
                         </div>
                     </div>
@@ -1492,7 +1780,6 @@
     <footer>
         <div class="footer-container">
             <div class="footer-content">
-                <!-- About Column -->
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
                     <p>Your premier shopping destination in Bali, offering luxury brands, dining, and entertainment
@@ -1527,7 +1814,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
@@ -1539,7 +1825,6 @@
                     </ul>
                 </div>
 
-                <!-- Services -->
                 <div class="footer-column">
                     <h3>Services</h3>
                     <ul class="footer-links">
@@ -1551,7 +1836,6 @@
                     </ul>
                 </div>
 
-                <!-- Contact -->
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
@@ -1602,12 +1886,14 @@
             document.body.classList.toggle('menu-open');
         });
 
+        // Close sidebar with close button
         sidebarClose.addEventListener('click', () => {
             menuBtn.classList.remove('active');
             sidebar.classList.remove('active');
             document.body.classList.remove('menu-open');
         });
 
+        // Close sidebar when clicking on a link
         const sidebarLinks = sidebar.querySelectorAll('a');
         sidebarLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -1676,7 +1962,6 @@
         // Auto-play carousel
         let autoplayInterval = setInterval(nextSlide, 5000);
 
-        // Pause autoplay on hover
         const carouselSection = document.querySelector('.carousel-section');
         carouselSection.addEventListener('mouseenter', () => {
             clearInterval(autoplayInterval);
@@ -1692,28 +1977,78 @@
             if (e.key === 'ArrowRight') nextSlide();
         });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = target.offsetTop - headerHeight;
+        // Scroll Indicator for Similar Stores - FIXED LIKE MALL DIRECTORY
+        const similarTenants = document.getElementById('similarTenants');
+        const scrollIndicator = document.getElementById('scrollIndicator');
 
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
+        function checkScroll() {
+            if (!similarTenants || !scrollIndicator) return;
+
+            const isDesktop = window.innerWidth > 768;
+
+            if (isDesktop) {
+                // Desktop: vertical scroll
+                const scrollTop = similarTenants.scrollTop;
+                const scrollHeight = similarTenants.scrollHeight;
+                const clientHeight = similarTenants.clientHeight;
+
+                // Check if content is scrollable
+                const isScrollable = scrollHeight > clientHeight;
+
+                if (!isScrollable) {
+                    scrollIndicator.classList.add('hidden');
+                    return;
                 }
-            });
-        });
+
+                // Hide indicator when scrolled near bottom (within 50px)
+                const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50;
+
+                if (isAtBottom) {
+                    scrollIndicator.classList.add('hidden');
+                } else {
+                    scrollIndicator.classList.remove('hidden');
+                }
+            } else {
+                // Mobile: horizontal scroll
+                const scrollLeft = similarTenants.scrollLeft;
+                const scrollWidth = similarTenants.scrollWidth;
+                const clientWidth = similarTenants.clientWidth;
+
+                // Check if content is scrollable
+                const isScrollable = scrollWidth > clientWidth;
+
+                if (!isScrollable) {
+                    scrollIndicator.classList.add('hidden');
+                    return;
+                }
+
+                // Hide indicator when scrolled near end (within 50px)
+                const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 50;
+
+                if (isAtEnd) {
+                    scrollIndicator.classList.add('hidden');
+                } else {
+                    scrollIndicator.classList.remove('hidden');
+                }
+            }
+        }
+
+        if (similarTenants && scrollIndicator) {
+            similarTenants.addEventListener('scroll', checkScroll);
+            window.addEventListener('resize', checkScroll);
+
+            // Initial check after a short delay to ensure content is loaded
+            setTimeout(checkScroll, 100);
+        }
 
         // Add fade-in animation on load
         window.addEventListener('load', () => {
             document.querySelectorAll('.detail-section, .similar-section').forEach(el => {
                 el.classList.add('fade-in');
             });
+
+            // Re-check scroll after page load
+            setTimeout(checkScroll, 200);
         });
     </script>
 </body>
