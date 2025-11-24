@@ -2551,6 +2551,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
+                <li><a href="{{ route('directory') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -2577,7 +2578,7 @@
             <p>Retail therapy for communities to connect with nature, leisure and recreations in modern way</p>
             <button class="explore-btn">
                 <span class="arrow">→</span>
-                <span class="text">Explore beachwalk</span>
+                <span class="text">Explore malbaligaleria</span>
             </button>
         </div>
     </section>
@@ -2621,14 +2622,16 @@
             <div class="carousel-wrapper">
                 <div class="carousel-container" id="carouselContainer">
                     <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400');">
-                        </div>
-                        <div class="tenant-card-content">
-                            <h3>Zara</h3>
-                            <p>Fashion & Apparel</p>
-                            <span class="tenant-card-tag">Ground Floor</span>
-                        </div>
+                        <a href="{{ route('tenant') }}">
+                            <div class="tenant-card-image"
+                                style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400');">
+                            </div>
+                            <div class="tenant-card-content">
+                                <h3>Zara</h3>
+                                <p>Fashion & Apparel</p>
+                                <span class="tenant-card-tag">Ground Floor</span>
+                            </div>
+                        </a>
                     </div>
                     <div class="tenant-card">
                         <div class="tenant-card-image"

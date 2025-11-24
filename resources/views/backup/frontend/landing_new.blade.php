@@ -8,6 +8,14 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
     <style>
         @font-face {
             font-family: 'Argesta Display';
@@ -32,9 +40,41 @@
             overflow-y: auto;
         }
 
+        /* Enhanced dark mode with better contrast */
         body.dark-mode {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+        }
+
+        /* Basic dark mode for sections */
+        body.dark-mode .hero {
+            background: linear-gradient(to bottom, rgba(13, 13, 13, 0.95), rgba(13, 13, 13, 1)) !important;
+        }
+
+        body.dark-mode .about-section,
+        body.dark-mode .tenant-section,
+        body.dark-mode .experience-section,
+        body.dark-mode .event-section,
+        body.dark-mode .map-section {
+            background: #0d0d0d;
+        }
+
+        /* Basic contrast for text */
+        body.dark-mode .hero-content h2,
+        body.dark-mode .about-container h2,
+        body.dark-mode .tenant-container h2,
+        body.dark-mode .event-container h2,
+        body.dark-mode .map-container h2 {
+            color: #ffffff;
+        }
+
+        body.dark-mode .hero-content p,
+        body.dark-mode .about-content p,
+        body.dark-mode .tenant-card-content h3,
+        body.dark-mode .tenant-card-content p,
+        body.dark-mode .event-card p,
+        body.dark-mode .info-item p {
+            color: #d0d0d0;
         }
 
         body.menu-open {
@@ -795,6 +835,23 @@
             transform: translateZ(0);
         }
 
+        /* Performance optimized elements */
+        .optimized-performance {
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        /* Lazy loading styles */
+        .lazy {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loaded {
+            opacity: 1;
+        }
+
         .hero::before {
             content: '';
             position: absolute;
@@ -964,10 +1021,338 @@
             transform: translateY(0);
         }
 
+        /* Stagger animation for children */
+        .reveal.active .stagger-item {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: staggerFadeIn 0.6s ease forwards;
+        }
+
+        .reveal.active .stagger-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .reveal.active .stagger-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .reveal.active .stagger-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .reveal.active .stagger-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .reveal.active .stagger-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .reveal.active .stagger-item:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes staggerFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Fade in from left */
+        .fade-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Fade in from right */
+        .fade-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Scale animation */
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scale-in.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Rotate in animation */
+        .rotate-in {
+            opacity: 0;
+            transform: rotate(-5deg) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rotate-in.active {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating:nth-child(2n) {
+            animation-delay: -1s;
+        }
+
+        .floating:nth-child(3n) {
+            animation-delay: -2s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .morphing-button {
+            position: relative;
+            overflow: hidden;
+            border-radius: 50px;
+        }
+
+        .morphing-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .morphing-button:hover::before {
+            left: 100%;
+        }
+
+        .smooth-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .smooth-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        /* Enhanced Hero Section */
+        .hero-text-container {
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .particle:nth-child(1) {
+            top: 20%;
+            left: 10%;
+        }
+
+        .particle:nth-child(2) {
+            top: 60%;
+            left: 70%;
+        }
+
+        .particle:nth-child(3) {
+            top: 80%;
+            left: 30%;
+        }
+
+
+        /* Gradient overlays */
+        .gradient-overlay {
+            position: relative;
+        }
+
+        .gradient-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg,
+                rgba(95, 207, 218, 0.1) 0%,
+                rgba(77, 184, 195, 0.1) 100%);
+            z-index: -1;
+            border-radius: inherit;
+        }
+
+        /* Modern typography enhancements */
+        .typography-display {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .typography-sans {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+
+        /* Dynamic background effects */
+        .dynamic-bg {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dynamic-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(95, 207, 218, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation dots */
+        .navigation-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(95, 207, 218, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot:hover {
+            background: #5fcfda;
+            transform: scale(1.2);
+        }
+
+        .nav-dot.active {
+            background: #5fcfda;
+            box-shadow: 0 0 10px rgba(95, 207, 218, 0.5);
+        }
+
+        .nav-dot .label {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot:hover .label {
+            opacity: 1;
+        }
+
+        /* Custom scroll bar for better UX */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: #2a2a2a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #5fcfda, #4db8c3);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #4db8c3, #3da3ad);
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #5fcfda;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 5px 5px;
+            z-index: 10000;
+            transition: top 0.3s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
         /* About Section */
         .about-section {
             min-height: 100vh;
-            background: #f5f3ed;
+            background: #ffffff;
             padding: 100px 40px;
             display: flex;
             align-items: center;
@@ -975,7 +1360,7 @@
         }
 
         body.dark-mode .about-section {
-            background: #2a2a2a;
+            background: #1a1a1a;
         }
 
         .about-container {
@@ -990,6 +1375,14 @@
             font-weight: 400;
             color: #2c3e50;
             margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active .about-container h2 {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         body.dark-mode .about-container h2 {
@@ -1021,11 +1414,27 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
         }
 
         .info-item {
             text-align: center;
             padding: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active .info-item:nth-child(1) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+
+        .reveal.active .info-item:nth-child(2) {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.4s;
         }
 
         .info-item h3 {
@@ -1061,6 +1470,7 @@
             width: 1px;
             height: 60%;
             background: rgba(44, 62, 80, 0.1);
+            pointer-events: none;
         }
 
         body.dark-mode .divider {
@@ -1070,7 +1480,7 @@
         /* Tenant Carousel Section */
         .tenant-section {
             min-height: 100vh;
-            background: #fff;
+            background: #ffffff;
             padding: 100px 40px;
             display: flex;
             align-items: center;
@@ -1094,6 +1504,14 @@
             color: #2c3e50;
             margin-bottom: 60px;
             text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active .tenant-container h2 {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         body.dark-mode .tenant-container h2 {
@@ -1103,6 +1521,14 @@
         .carousel-wrapper {
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .reveal.active .carousel-wrapper {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .carousel-container {
@@ -1113,7 +1539,7 @@
 
         .tenant-card {
             flex: 0 0 calc(25% - 22.5px);
-            background: #f5f3ed;
+            background: #f8f8f8;
             border-radius: 15px;
             overflow: hidden;
             transition: all 0.4s ease;
@@ -1231,7 +1657,7 @@
         /* Experience Section */
         .experience-section {
             min-height: 100vh;
-            background: #f5f3ed;
+            background: #ffffff;
             padding: 100px 40px;
             display: flex;
             align-items: center;
@@ -1239,7 +1665,7 @@
         }
 
         body.dark-mode .experience-section {
-            background: #2a2a2a;
+            background: #1a1a1a;
         }
 
         .experience-wrapper {
@@ -1249,6 +1675,14 @@
             display: flex;
             gap: 40px;
             align-items: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active .experience-wrapper {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .experience-left {
@@ -1357,6 +1791,7 @@
             gap: 20px;
             height: 600px;
             overflow: hidden;
+            position: relative;
         }
 
         .experience-card {
@@ -1370,11 +1805,15 @@
             background-position: center;
         }
 
-        .experience-card.destinations {
+        .experience-card.expanded {
+            flex: 2 !important;
+        }
+
+        .experience-card.promotion {
             flex: 2;
         }
 
-        .experience-card:not(.destinations) {
+        .experience-card:not(.promotion):not(.expanded) {
             flex: 0.5;
         }
 
@@ -1484,11 +1923,19 @@
             letter-spacing: 3px;
         }
 
-        .experience-card.destinations .experience-card-content {
+        .experience-card.promotion .experience-card-content {
             opacity: 1;
         }
 
-        .experience-card.destinations .experience-card-title-vertical {
+        .experience-card.promotion .experience-card-title-vertical {
+            opacity: 0;
+        }
+
+        .experience-card.expanded .experience-card-content {
+            opacity: 1;
+        }
+
+        .experience-card.expanded .experience-card-title-vertical {
             opacity: 0;
         }
 
@@ -1500,11 +1947,19 @@
             opacity: 0;
         }
 
-        .experience-cards:hover .experience-card.destinations:not(:hover) .experience-card-content {
+        .experience-cards:hover .experience-card.promotion:not(:hover):not(.expanded) .experience-card-content {
             opacity: 0;
         }
 
-        .experience-cards:hover .experience-card.destinations:not(:hover) .experience-card-title-vertical {
+        .experience-cards:hover .experience-card.promotion:not(:hover):not(.expanded) .experience-card-title-vertical {
+            opacity: 1;
+        }
+
+        .experience-cards:hover .experience-card.expanded:not(:hover) .experience-card-content {
+            opacity: 0;
+        }
+
+        .experience-cards:hover .experience-card.expanded:not(:hover) .experience-card-title-vertical {
             opacity: 1;
         }
 
@@ -1522,6 +1977,528 @@
 
         .experience-card.new-store {
             background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800');
+        }
+
+        /* Event Highlight Section */
+        .event-section {
+            min-height: 100vh;
+            background: #ffffff;
+            padding: 100px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-mode .event-section {
+            background: #1a1a1a;
+        }
+
+        .event-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .event-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 400;
+            color: #2c3e50;
+            margin-bottom: 60px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active .event-container h2 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .event-container h2 {
+            color: #e0e0e0;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .event-card {
+            position: relative;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+
+        .reveal.active .event-card:nth-child(1) {
+            animation: slideUpScale 0.8s ease forwards 0.2s;
+        }
+
+        .reveal.active .event-card:nth-child(2) {
+            animation: slideUpScale 0.8s ease forwards 0.3s;
+        }
+
+        @keyframes slideUpScale {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .event-card:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .event-card-bg {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease;
+        }
+
+        .event-card:hover .event-card-bg {
+            transform: scale(1.1);
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.8));
+            z-index: 1;
+        }
+
+        .event-card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            z-index: 2;
+            color: white;
+        }
+
+        .event-date {
+            display: inline-block;
+            background: #5fcfda;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .event-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .event-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+        }
+
+        .event-link {
+            display: inline-flex;
+            align-items: center;
+            color: #5fcfda;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            gap: 8px;
+            transition: gap 0.3s ease;
+        }
+
+        .event-link:hover {
+            gap: 12px;
+        }
+
+        /* Mall Map Section */
+        .map-section {
+            min-height: 100vh;
+            background: #ffffff;
+            padding: 100px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-mode .map-section {
+            background: #1a1a1a;
+        }
+
+        .map-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .map-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 400;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active .map-container h2 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .map-container h2 {
+            color: #e0e0e0;
+        }
+
+        .map-subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #5a5a5a;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .reveal.active .map-subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .map-subtitle {
+            color: #b0b0b0;
+        }
+
+        .map-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .map-display {
+            background: #f8f8f8;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 600px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .reveal.active .map-display {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        body.dark-mode .map-display {
+            background: #2a2a2a;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            color: #5a5a5a;
+        }
+
+        body.dark-mode .map-placeholder {
+            color: #b0b0b0;
+        }
+
+        .map-icon {
+            width: 80px;
+            height: 80px;
+            background: #5fcfda;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+        }
+
+        .map-floors {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: calc(4 * 78px + 3 * 15px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 10px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+        }
+
+        .reveal.active .map-floors {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Scroll indicator for map floors */
+        .scroll-indicator {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+            padding: 15px 0 0;
+            text-align: center;
+            font-size: 12px;
+            color: #5fcfda;
+            font-weight: 600;
+            letter-spacing: 1px;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            margin-right: -10px;
+        }
+
+        body.dark-mode .scroll-indicator {
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.95), transparent);
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+        }
+
+        .scroll-indicator svg {
+            width: 16px;
+            height: 16px;
+            fill: #5fcfda;
+            animation: bounceDown 1.5s infinite;
+            display: block;
+            margin: 5px auto 0;
+        }
+
+        @keyframes bounceDown {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-5px);
+            }
+
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Hide scrollbar for map floors */
+        .map-floors {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .map-floors::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        /* Enhanced map controls */
+        .map-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .map-control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode .map-control-btn {
+            background: rgba(42, 42, 42, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #e0e0e0;
+        }
+
+        .map-control-btn:hover {
+            background: #5fcfda;
+            color: white;
+            border-color: #5fcfda;
+            transform: scale(1.1);
+        }
+
+        .map-floor-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        body.dark-mode .map-floor-indicator {
+            background: rgba(42, 42, 42, 0.9);
+            color: #e0e0e0;
+        }
+
+        .floor-item {
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            min-height: 78px;
+        }
+
+        body.dark-mode .floor-item {
+            background: #2a2a2a;
+        }
+
+        .floor-item:hover {
+            border-color: #5fcfda;
+            transform: translateX(5px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(95, 207, 218, 0.2);
+        }
+
+        .floor-item.active {
+            background: #5fcfda;
+            border-color: #5fcfda;
+        }
+
+        .floor-item.active h4,
+        .floor-item.active p {
+            color: white;
+        }
+
+        .floor-item h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .floor-item h4 {
+            color: #e0e0e0;
+        }
+
+        .floor-item p {
+            font-size: 13px;
+            color: #5a5a5a;
+            margin: 0;
+        }
+
+        body.dark-mode .floor-item p {
+            color: #b0b0b0;
+        }
+
+
+
+        /* Responsive untuk section baru */
+        @media (max-width: 1024px) {
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dining-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .map-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .map-display {
+                height: 400px;
+            }
+
+            .parking-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .event-section,
+            .dining-section,
+            .map-section,
+            .parking-section {
+                padding: 60px 20px;
+            }
+
+            .event-container h2,
+            .dining-container h2,
+            .map-container h2,
+            .parking-container h2 {
+                font-size: 36px;
+            }
+
+            .event-card {
+                height: 300px;
+            }
+
+            .dining-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .parking-features {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Footer */
@@ -1895,7 +2872,7 @@
     </button>
 
     <!-- Header -->
-    <header>
+    <header id="main-content">
         <div class="search-container">
             <div class="search-bar">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -1934,6 +2911,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
+                <li><a href="{{ route('directory') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -1958,17 +2936,22 @@
         <div class="hero-content">
             <h2>Indonesia's Iconic Resort Lifestyle Destination</h2>
             <p>Retail therapy for communities to connect with nature, leisure and recreations in modern way</p>
-            <button class="explore-btn">
+            <button class="explore-btn morphing-button">
                 <span class="arrow">→</span>
-                <span class="text">Explore beachwalk</span>
+                <span class="text">Explore malbaligaleria</span>
             </button>
+        </div>
+        <div class="floating-particles">
+            <div class="particle floating"></div>
+            <div class="particle floating" style="animation-delay: -2s;"></div>
+            <div class="particle floating" style="animation-delay: -4s;"></div>
         </div>
     </section>
 
     <!-- About Section -->
     <section class="about-section reveal" id="about">
         <div class="about-container">
-            <h2>Welcome to Mal Bali Galeria</h2>
+            <h2 class="underline-animation">Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
                 <p>Mal Bali Galeria Shopping Center offers an exclusive shopping experience with modern architectural
                     design and comprehensive facilities. Located in the strategic area of Denpasar, we provide a
@@ -1984,15 +2967,15 @@
             </div>
 
             <div class="info-grid">
-                <div class="info-item" style="position: relative;">
+                <div class="info-item">
                     <h3>Open Hour</h3>
                     <p>10AM - 10PM (Daily)</p>
-                    <div class="divider"></div>
                 </div>
                 <div class="info-item">
                     <h3>Address</h3>
                     <p>Jl. Sunset Road No. 89,<br>Kuta, Badung, Bali, Indonesia 80361</p>
                 </div>
+                <div class="divider"></div>
             </div>
         </div>
     </section>
@@ -2000,18 +2983,20 @@
     <!-- Tenant Carousel Section -->
     <section class="tenant-section reveal" id="tenants">
         <div class="tenant-container">
-            <h2>Featured Tenants</h2>
+            <h2 class="underline-animation">Featured Tenants</h2>
             <div class="carousel-wrapper">
                 <div class="carousel-container" id="carouselContainer">
                     <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400');">
-                        </div>
-                        <div class="tenant-card-content">
-                            <h3>Zara</h3>
-                            <p>Fashion & Apparel</p>
-                            <span class="tenant-card-tag">Ground Floor</span>
-                        </div>
+                        <a href="{{ route('tenant') }}">
+                            <div class="tenant-card-image"
+                                style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400');">
+                            </div>
+                            <div class="tenant-card-content">
+                                <h3>Zara</h3>
+                                <p>Fashion & Apparel</p>
+                                <span class="tenant-card-tag">Ground Floor</span>
+                            </div>
+                        </a>
                     </div>
                     <div class="tenant-card">
                         <div class="tenant-card-image"
@@ -2154,6 +3139,91 @@
         </div>
     </section>
 
+    <!-- Event Highlight Section -->
+    <section class="event-section reveal" id="events">
+        <div class="event-container">
+            <h2 class="underline-animation">Upcoming Events</h2>
+            <div class="event-grid">
+                <div class="event-card">
+                    <div class="event-card-bg"
+                        style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800');">
+                    </div>
+                    <div class="event-card-content">
+                        <span class="event-date">25 DEC 2024</span>
+                        <h3>Christmas Grand Sale</h3>
+                        <p>Get up to 70% off on selected items from your favorite brands. Exclusive Christmas deals you
+                            don't want to miss!</p>
+                        <a href="#" class="event-link">Learn More →</a>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-card-bg"
+                        style="background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800');">
+                    </div>
+                    <div class="event-card-content">
+                        <span class="event-date">01 JAN 2025</span>
+                        <h3>New Year Festival</h3>
+                        <p>Ring in the new year with live music, food festival, and spectacular fireworks display at Mal
+                            Bali Galeria.</p>
+                        <a href="#" class="event-link">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mall Map Section -->
+    <section class="map-section reveal">
+        <div class="map-container">
+            <h2>Mall Directory</h2>
+            <p class="map-subtitle">Navigate through our shopping center with ease</p>
+            <div class="map-wrapper">
+                <div class="map-display">
+                    <div class="map-placeholder">
+                        <div class="map-icon">🗺️</div>
+                        <p>Interactive 3D Mall Map</p>
+                    </div>
+                    <div class="map-controls">
+                        <button class="map-control-btn" id="zoomInBtn">+</button>
+                        <button class="map-control-btn" id="zoomOutBtn">-</button>
+                        <button class="map-control-btn" id="resetViewBtn">↺</button>
+                    </div>
+                    <div class="map-floor-indicator">
+                        <span id="currentFloor">Ground Floor</span>
+                    </div>
+                </div>
+                <div class="map-floors" id="mapFloors">
+                    <div class="floor-item active" data-floor="ground">
+                        <h4>Ground Floor</h4>
+                        <p>Fashion, Accessories, Cosmetics</p>
+                    </div>
+                    <div class="floor-item" data-floor="1">
+                        <h4>Level 1</h4>
+                        <p>Electronics, Books, Sports</p>
+                    </div>
+                    <div class="floor-item" data-floor="2">
+                        <h4>Level 2</h4>
+                        <p>Restaurants, Cafés, Food Court</p>
+                    </div>
+                    <div class="floor-item" data-floor="3">
+                        <h4>Level 3</h4>
+                        <p>Entertainment, Cinema, Kids Zone</p>
+                    </div>
+                    <div class="floor-item" data-floor="basement">
+                        <h4>Basement</h4>
+                        <p>Supermarket, Parking</p>
+                    </div>
+                    <div class="scroll-indicator" id="scrollIndicator">
+                        SCROLL FOR MORE
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="reveal" id="contact">
         <div class="footer-container">
@@ -2257,6 +3327,142 @@
     </footer>
 
     <script>
+        // Register GSAP plugins
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof ScrollToPlugin !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+        }
+
+        // Enhanced scroll-triggered animations with GSAP
+        window.addEventListener('load', () => {
+            // Animate hero section with GSAP
+            gsap.from('.hero-content h2', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: 'power3.out',
+                delay: 0.5
+            });
+
+            gsap.from('.hero-content p', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: 'power3.out',
+                delay: 0.7
+            });
+
+            gsap.from('.explore-btn', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: 'power3.out',
+                delay: 0.9
+            });
+
+            // Stagger animation for tenant cards
+            gsap.from('.tenant-card', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.tenant-section',
+                    start: 'top 80%'
+                }
+            });
+
+            // Enhanced reveal animations for all sections
+            const revealElements = gsap.utils.toArray('.reveal');
+
+            revealElements.forEach(element => {
+                gsap.fromTo(element,
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1.2,
+                        scrollTrigger: {
+                            trigger: element,
+                            start: 'top 85%',
+                            end: 'bottom 15%',
+                            toggleActions: 'play none none none'
+                        }
+                    }
+                );
+            });
+
+            // Enhanced parallax for hero section
+            gsap.to('.hero-bg', {
+                y: '-20%',
+                scale: 1.2,
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1
+                }
+            });
+
+            // Animated counters for about section
+            const infoItems = gsap.utils.toArray('.info-item');
+            infoItems.forEach((item, i) => {
+                gsap.fromTo(item,
+                    { opacity: 0, y: 30 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        delay: i * 0.2,
+                        scrollTrigger: {
+                            trigger: item,
+                            start: 'top 85%'
+                        }
+                    }
+                );
+            });
+
+            // Enhanced experience cards animation
+            const experienceCards = gsap.utils.toArray('.experience-card');
+            experienceCards.forEach((card, i) => {
+                gsap.fromTo(card,
+                    { opacity: 0, scale: 0.8 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.8,
+                        delay: i * 0.1,
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 85%'
+                        }
+                    }
+                );
+            });
+
+            // Add scroll progress indicator
+            const progress = document.createElement('div');
+            progress.id = 'scroll-progress';
+            progress.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 3px;
+                background: linear-gradient(90deg, #5fcfda, #4db8c3);
+                z-index: 9999;
+                transition: width 0.1s ease;
+            `;
+            document.body.appendChild(progress);
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset;
+                const docHeight = document.body.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                progress.style.width = scrollPercent + '%';
+            });
+        });
+
         // Page Loader
         const pageLoader = document.getElementById('pageLoader');
 
@@ -2349,10 +3555,10 @@
             e.preventDefault();
             e.stopPropagation();
 
-            body.classList.toggle('dark-mode');
+            document.body.classList.toggle('dark-mode');
 
             // Save preference
-            if (body.classList.contains('dark-mode')) {
+            if (document.body.classList.contains('dark-mode')) {
                 localStorage.setItem('darkMode', 'enabled');
             } else {
                 localStorage.setItem('darkMode', 'disabled');
@@ -2505,17 +3711,172 @@
             });
         });
 
-        // Add hover effect to experience cards with glow
-        const experienceCards = document.querySelectorAll('.experience-card');
+        // Experience cards - track last hovered card and persist on scroll
+        const experienceCardsContainer = document.querySelector('.experience-cards');
+        let lastHoveredCard = document.querySelector('.experience-card.promotion');
+        let isHovering = false;
+
         experienceCards.forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
+                lastHoveredCard = card;
+                isHovering = true;
             });
 
             card.addEventListener('mouseleave', () => {
                 card.style.boxShadow = 'none';
+                isHovering = false;
             });
         });
+
+        // When mouse leaves the container, expand the last hovered card
+        if (experienceCardsContainer) {
+            experienceCardsContainer.addEventListener('mouseleave', () => {
+                // Remove all expanded/promotion states
+                experienceCards.forEach(card => {
+                    card.classList.remove('promotion', 'expanded');
+                });
+                // Add expanded state to last hovered card
+                if (lastHoveredCard) {
+                    lastHoveredCard.classList.add('expanded');
+                }
+            });
+        }
+
+        // Keep expanded card visible when scrolling
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (!isHovering && lastHoveredCard && experienceCardsContainer) {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // Reapply expanded class to ensure it stays visible
+                    experienceCards.forEach(card => {
+                        card.classList.remove('promotion', 'expanded');
+                    });
+                    lastHoveredCard.classList.add('expanded');
+                }, 100);
+            }
+        });
+
+        // Mall Directory Interactive Map
+        const mapFloors = document.getElementById('mapFloors');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const floorItems = document.querySelectorAll('.floor-item');
+        const currentFloorDisplay = document.getElementById('currentFloor');
+
+        // Add map controls functionality
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetViewBtn = document.getElementById('resetViewBtn');
+        const mapPlaceholder = document.querySelector('.map-placeholder');
+
+        if (mapFloors && scrollIndicator) {
+            // Check if scrollable
+            const checkScrollable = () => {
+                const isScrollable = mapFloors.scrollHeight > mapFloors.clientHeight;
+                if (!isScrollable) {
+                    scrollIndicator.classList.add('hidden');
+                }
+            };
+
+            // Hide indicator when scrolled to bottom
+            mapFloors.addEventListener('scroll', () => {
+                const isAtBottom = mapFloors.scrollHeight - mapFloors.scrollTop <= mapFloors.clientHeight + 10;
+                if (isAtBottom) {
+                    scrollIndicator.classList.add('hidden');
+                } else {
+                    scrollIndicator.classList.remove('hidden');
+                }
+            });
+
+            // Interactive floor selection
+            floorItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    floorItems.forEach(i => i.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+
+                    // Update current floor display
+                    const floorName = item.querySelector('h4').textContent;
+                    currentFloorDisplay.textContent = floorName;
+
+                    // Animate map placeholder to show floor-specific content
+                    gsap.to(mapPlaceholder, {
+                        duration: 0.3,
+                        scale: 0.9,
+                        opacity: 0.7,
+                        onComplete: () => {
+                            // Change content based on selected floor
+                            const floorType = item.dataset.floor;
+                            const floorData = getFloorContent(floorType);
+                            mapPlaceholder.innerHTML = floorData.icon + '<p>' + floorData.name + '</p>';
+
+                            gsap.to(mapPlaceholder, {
+                                duration: 0.3,
+                                scale: 1,
+                                opacity: 1
+                            });
+                        }
+                    });
+                });
+            });
+
+            // Map zoom controls
+            let mapScale = 1;
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                    if (mapScale < 2) {
+                        mapScale += 0.2;
+                        gsap.to(mapPlaceholder, {
+                            duration: 0.3,
+                            scale: mapScale,
+                            ease: "power2.out"
+                        });
+                    }
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                    if (mapScale > 0.6) {
+                        mapScale -= 0.2;
+                        gsap.to(mapPlaceholder, {
+                            duration: 0.3,
+                            scale: mapScale,
+                            ease: "power2.out"
+                        });
+                    }
+                });
+            }
+
+            if (resetViewBtn) {
+                resetViewBtn.addEventListener('click', () => {
+                    mapScale = 1;
+                    gsap.to(mapPlaceholder, {
+                        duration: 0.3,
+                        scale: 1,
+                        ease: "power2.out"
+                    });
+                });
+            }
+
+            checkScrollable();
+        }
+
+        // Function to get floor-specific content
+        function getFloorContent(floorType) {
+            const floors = {
+                'ground': { name: 'Ground Floor', icon: '👕' },
+                '1': { name: 'Level 1', icon: '🎮' },
+                '2': { name: 'Level 2', icon: '🍽️' },
+                '3': { name: 'Level 3', icon: '🎬' },
+                'basement': { name: 'Basement', icon: '🛒' }
+            };
+
+            return floors[floorType] || { name: 'Unknown Floor', icon: '🏢' };
+        }
 
         // Add intersection observer for more advanced animations
         const observerOptions = {
@@ -2591,21 +3952,343 @@
         `;
         document.head.appendChild(style);
 
-        // Lazy loading for images
+        // Performance optimized lazy loading for images
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) {
-                        img.style.backgroundImage = `url(${img.dataset.src})`;
-                        observer.unobserve(img);
+                    const element = entry.target;
+
+                    // Handle background images
+                    if (element.dataset.bgSrc) {
+                        element.style.backgroundImage = `url(${element.dataset.bgSrc})`;
+                    }
+
+                    // Handle regular images
+                    if (element.dataset.src) {
+                        const img = new Image();
+                        img.onload = () => {
+                            element.src = element.dataset.src;
+                            element.classList.remove('lazy');
+                            element.classList.add('loaded');
+                        };
+                        img.src = element.dataset.src;
+                    }
+
+                    observer.unobserve(element);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+
+        // Observe all lazy-loadable elements
+        document.querySelectorAll('[data-src], [data-bg-src]').forEach(el => {
+            imageObserver.observe(el);
+        });
+
+        // Optimized image preloading for important images
+        const preloadImages = (imageUrls) => {
+            imageUrls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        };
+
+        // Preload key images that will be needed soon
+        const keyImages = [
+            'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400',
+            'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400',
+            'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400',
+            // Add other key images as needed
+        ];
+
+        // Preload images after initial load
+        window.addEventListener('load', () => {
+            setTimeout(() => preloadImages(keyImages), 500);
+        });
+
+        // Memory cleanup for performance
+        const cleanup = () => {
+            // Remove event listeners that are no longer needed
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('scroll', handleScroll);
+        };
+
+        // Cleanup resources when leaving page
+        window.addEventListener('beforeunload', cleanup);
+
+        // Add haptic feedback simulation
+        function simulateHapticFeedback(intensity = 'medium') {
+            // Simulate haptic feedback using vibration API if available
+            if (navigator.vibrate) {
+                const durations = {
+                    'light': 50,
+                    'medium': 100,
+                    'heavy': 150
+                };
+                navigator.vibrate(durations[intensity] || 100);
+            }
+
+            // Visual feedback for devices without vibration
+            document.documentElement.style.setProperty('--haptic-color', 'rgba(95, 207, 218, 0.3)');
+            setTimeout(() => {
+                document.documentElement.style.setProperty('--haptic-color', '');
+            }, 150);
+        }
+
+        // Add micro-interactions to buttons and interactive elements
+        const interactiveElements = document.querySelectorAll('button, a, .tenant-card, .event-card, .experience-card, .floor-item');
+        interactiveElements.forEach((element, index) => {
+            // Add ripple effect on click
+            element.addEventListener('click', (e) => {
+                simulateHapticFeedback('medium');
+
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = element.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: radial-gradient(circle, rgba(95, 207, 218, 0.5) 0%, transparent 80%);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                    z-index: 9999;
+                `;
+
+                if (element.style.position === 'static') {
+                    element.style.position = 'relative';
+                }
+
+                element.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+
+            // Add hover micro-interactions
+            element.addEventListener('mouseenter', () => {
+                element.style.transform = 'translateY(-2px)';
+                element.style.transition = 'transform 0.2s ease';
+            });
+
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add custom cursor effects for better UX
+        const cursor = document.createElement('div');
+        cursor.style.cssText = `
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #5fcfda;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+            transform: scale(1);
+            pointer-events: none;
+        `;
+        document.body.appendChild(cursor);
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+        });
+
+        // Change cursor style on interactive elements
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(2)';
+                cursor.style.border = '2px solid #ffffff';
+            });
+
+            element.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.border = '2px solid #5fcfda';
+            });
+        });
+
+        // Add ripple animation to the CSS
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+
+            .cursor-trail {
+                position: fixed;
+                width: 10px;
+                height: 10px;
+                background: #5fcfda;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9998;
+                animation: trail-disappear 0.5s ease-out forwards;
+            }
+
+            @keyframes trail-disappear {
+                0% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0);
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+
+        // Add particle trails for cursor movement
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.7) { // Only create particles occasionally
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.clientX - 5 + 'px';
+                trail.style.top = e.clientY - 5 + 'px';
+
+                document.body.appendChild(trail);
+
+                setTimeout(() => {
+                    trail.remove();
+                }, 500);
+            }
+        });
+
+        // Add modern navigation with full-page transitions
+        const navSections = ['home', 'about', 'tenants', 'experience', 'events', 'contact'];
+        let currentPage = 'home';
+
+        // Create navigation dots (breadcrumb indicators)
+        const navDotsContainer = document.createElement('div');
+        navDotsContainer.className = 'navigation-dots';
+        navDotsContainer.innerHTML = navSections.map((section, index) =>
+            `<div class="nav-dot ${section === 'home' ? 'active' : ''}" data-section="${section}" title="${section.charAt(0).toUpperCase() + section.slice(1)}">
+                <span class="dot"></span>
+                <span class="label">${section.charAt(0).toUpperCase()}</span>
+            </div>`
+        ).join('');
+
+        document.body.appendChild(navDotsContainer);
+
+        // Navigation dots click handlers
+        document.querySelectorAll('.nav-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const sectionId = e.currentTarget.dataset.section;
+
+                // Update active state
+                document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+
+                // Animate scroll to section
+                const targetSection = document.getElementById(sectionId === 'contact' ? 'contact' : sectionId);
+                if (targetSection) {
+                    // Add transition effect
+                    gsap.to(window, {
+                        scrollTo: { y: targetSection, offsetY: 80 },
+                        duration: 1.2,
+                        ease: 'power3.inOut'
+                    });
+                }
+            });
+        });
+
+        // Update navigation dots on scroll
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            const sections = navSections.map(id => document.getElementById(id));
+
+            sections.forEach((section, index) => {
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+
+                    if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
+                        document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+                        document.querySelector(`.nav-dot[data-section="${navSections[index]}"]`).classList.add('active');
                     }
                 }
             });
         });
 
-        document.querySelectorAll('[data-src]').forEach(img => {
-            imageObserver.observe(img);
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        navigateToPreviousSection();
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        navigateToNextSection();
+                        break;
+                }
+            }
+        });
+
+        function navigateToNextSection() {
+            const currentIndex = navSections.indexOf(currentPage);
+            const nextIndex = (currentIndex + 1) % navSections.length;
+            const nextSectionId = navSections[nextIndex];
+            updateNavigation(nextSectionId);
+        }
+
+        function navigateToPreviousSection() {
+            const currentIndex = navSections.indexOf(currentPage);
+            const prevIndex = (currentIndex - 1 + navSections.length) % navSections.length;
+            const prevSectionId = navSections[prevIndex];
+            updateNavigation(prevSectionId);
+        }
+
+        function updateNavigation(sectionId) {
+            currentPage = sectionId;
+
+            // Update active state
+            document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+            document.querySelector(`.nav-dot[data-section="${sectionId}"]`).classList.add('active');
+
+            // Scroll to section
+            const targetSection = document.getElementById(sectionId === 'contact' ? 'contact' : sectionId);
+            if (targetSection) {
+                gsap.to(window, {
+                    scrollTo: { y: targetSection, offsetY: 80 },
+                    duration: 1.2,
+                    ease: 'power3.inOut'
+                });
+            }
+        }
+
+        // Add parallax effect to header
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+
+            if (header) {
+                header.style.transform = `translateY(${rate}px)`;
+            }
         });
 
         // Add fade-in animation for footer elements
