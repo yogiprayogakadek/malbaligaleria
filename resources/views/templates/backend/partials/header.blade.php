@@ -568,11 +568,11 @@
                                         </a>
                                     </div>
                                     <div class="d-grid py-4 px-7 pt-8">
-                                        <a href="{{ route('auth.logout') }}"
+                                        <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit()"
                                             class="btn btn-primary">Log Out</a>
 
-                                        <form id="logout-form" method="POST" action="{{ route('auth.logout') }}"
+                                        <form id="logout-form" method="POST" action="{{ route('logout') }}"
                                             class="d-none">
                                             @csrf
                                         </form>

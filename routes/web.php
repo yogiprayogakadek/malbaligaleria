@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Backend\Admin\DashboardController;
+use App\Http\Controllers\Backend\StatusUserController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 // landing fix
@@ -18,14 +21,38 @@ Route::get('/directory', function () {
     return view('frontend.directory.index');
 })->name('directory');
 
-Route::get('/login', function () {
-    return view('auth.login');
+
+// BACKEND
+// ADMIN DASHBOARD
+Route::controller(DashboardController::class)->middleware(['auth', 'verified', 'checkUserStatus'])->group(function () {
+    Route::prefix('/dashboard')->group(function () {
+        Route::get('/', 'index')->name('tenant.dashboard');
+    });
 });
 
-Route::post('login', ["AuthController::class", 'login'])->name('login');
-Route::post('register', ["AuthController::class", 'register'])->name('register');
-Route::post('logout', ["AuthController::class", 'logout'])->name('auth.logout');
 
-Route::get('/dashboard', function () {
-    return view('backend.dashboard.index');
+//Login Route
+//Others default route are handled by Fortify
+Route::controller(AuthController::class)->group(function () {
+    // Verify Email
+    Route::prefix('/email')->middleware('auth')->group(function () {
+        Route::get('/verify', 'verifyEmail')->name('verification.notice');
+        Route::get('/verify/{id}/{hash}', 'verificationVerify')->middleware('signed')->name('verification.verify');
+        Route::post('/verification-notification', 'verificationNotification')->middleware('throttle:6,1')->name('verification.send');
+    });
+});
+
+// Route check status user
+Route::controller(StatusUserController::class)->name('status.')->prefix('/status')->group(function () {
+    Route::get('/pending', 'pending')->name('pending');
+    Route::get('/rejected', 'rejected')->name('rejected');
+})->middleware('auth');
+
+
+Route::get('/test-email', function () {
+    Mail::raw('Email test OK', function ($message) {
+        $message->to('info@e-undanganku.my.id')->subject('Email tester');
+    });
+
+    return 'Sent!';
 });
