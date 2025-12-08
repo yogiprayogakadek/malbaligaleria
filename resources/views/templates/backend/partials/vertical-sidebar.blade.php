@@ -29,7 +29,7 @@
                     </li>
 
                     <!-- ---------------------------------- -->
-                    <!-- Tenants -->
+                    <!-- Category Tenants -->
                     <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
@@ -41,21 +41,73 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                             <iconify-icon icon="solar:wheel-line-duotone"></iconify-icon>
-                            <span class="hide-menu">Tenants</span>
+                            <span class="hide-menu">Category Tenants</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="javascript:void(0)">
+                                <a class="sidebar-link" href="{{ route('admin.category.index') }}">
                                     <span class="icon-small"></span>
                                     <span class="hide-menu">List</span>
 
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="javascript:void(0)">
+                                <a class="sidebar-link" href="{{ route('admin.category.create') }}">
                                     <span class="icon-small"></span>
                                     <span class="hide-menu">Create</span>
 
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- ---------------------------------- -->
+                    <!-- Tenants -->
+                    <!-- ---------------------------------- -->
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <iconify-icon icon="solar:wheel-line-duotone"></iconify-icon>
+                            <span class="hide-menu">Tenants</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse first-level">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.tenant.index') }}">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">List</span>
+
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.tenant.create') }}">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">Create</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- ---------------------------------- -->
+                    <!-- Tenants Photo -->
+                    <!-- ---------------------------------- -->
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <iconify-icon icon="solar:wheel-line-duotone"></iconify-icon>
+                            <span class="hide-menu">Tenant Photos</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse first-level">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.tenant.photo.index') }}">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">List</span>
+
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.tenant.photo.create') }}">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">Create</span>
                                 </a>
                             </li>
                         </ul>

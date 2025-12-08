@@ -12,4 +12,9 @@ class TenantPhoto extends Model
         'caption',
         'is_primary'
     ];
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 }

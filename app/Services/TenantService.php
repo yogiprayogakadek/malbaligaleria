@@ -21,7 +21,7 @@ class TenantService
         return $this->tenantRepository->getAll($fields);
     }
 
-    public function getTenantsByStatus(array $fields = ['*'], bool $is_active)
+    public function getTenantsByStatus(array $fields = ['*'], bool $is_active = true)
     {
         return $this->tenantRepository->getTenantsByStatus($fields, $is_active);
     }
@@ -29,6 +29,16 @@ class TenantService
     public function findById(int $id, array $fields = ['*'])
     {
         return $this->tenantRepository->findById($id, $fields);
+    }
+
+    public function findByUuid(string $uuid, array $fields = ['*'])
+    {
+        return $this->tenantRepository->findByUuid($uuid, $fields);
+    }
+
+    public function findEmptyPhotoTenants(array $fields = ['*'])
+    {
+        return $this->tenantRepository->findEmptyPhotoTenants($fields);
     }
 
     public function create(array $data)
@@ -40,9 +50,17 @@ class TenantService
         return $this->tenantRepository->create($data);
     }
 
-    public function update(array $data, int $id)
+    public function update(array $data, string $uuid)
     {
-        return $this->tenantRepository->update($data, $id);
+        $tenant = $this->tenantRepository->findByUuid($uuid, ['id', 'logo']);
+
+        if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
+            if (!empty($tenant->logo)) {
+                $this->deleteImage($tenant->logo);
+            }
+            $data['logo'] = $this->uploadImage($data['logo']);
+        }
+        return $this->tenantRepository->update($data, $uuid);
     }
 
     public function delete(int $id)

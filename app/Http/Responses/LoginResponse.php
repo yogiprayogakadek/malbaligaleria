@@ -10,11 +10,11 @@ class LoginResponse implements LoginResponseContract
     {
         $user = $request->user();
 
-        if ($user->role === 'admin') {
+        if ($user->getRoleNames()->first() === 'admin') {
             return redirect()->intended(route('admin.dashboard'));
         }
 
-        if ($user->role === 'tenant') {
+        if ($user->getRoleNames()->first() === 'tenant') {
             return redirect()->intended(route('tenant.dashboard'));
         }
 

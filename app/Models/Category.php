@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Tenant extends Model
+class Category extends Model
 {
     use SoftDeletes;
 
@@ -14,21 +14,8 @@ class Tenant extends Model
 
     protected $fillable = [
         'uuid',
-        'category_id',
         'name',
-        'phone',
-        'email',
-        'map_coords',
-        'map_original_size',
-        'logo',
-        'description',
-        'is_active',
-        'website',
-    ];
-
-    protected $casts = [
-        'map_coords' => 'array',
-        'map_original_size' => 'array',
+        'is_active'
     ];
 
     protected static function boot()
@@ -40,11 +27,6 @@ class Tenant extends Model
                 $model->uuid = (string) Str::uuid();
             }
         });
-    }
-
-    public function photos()
-    {
-        return $this->hasMany(TenantPhoto::class);
     }
 
     // public function getRouteKeyName()

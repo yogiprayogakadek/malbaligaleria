@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Backend\Admin\DashboardController;
+use App\Http\Controllers\Backend\Admin\CategoryController;
+use App\Http\Controllers\Backend\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Backend\Admin\TenantController;
+use App\Http\Controllers\Backend\Admin\TenantPhotoController;
 use App\Http\Controllers\Backend\StatusUserController;
+use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -22,16 +26,67 @@ Route::get('/directory', function () {
 })->name('directory');
 
 
-// BACKEND
-// ADMIN DASHBOARD
-Route::controller(DashboardController::class)->middleware(['auth', 'verified', 'checkUserStatus'])->group(function () {
-    Route::prefix('/dashboard')->group(function () {
-        Route::get('/', 'index')->name('tenant.dashboard');
+// ADMIN
+Route::controller(AdminDashboardController::class)
+    ->middleware(['auth', 'verified', 'checkUserStatus', 'role:admin'])
+    ->prefix('/admin')
+    ->name('admin.')
+    ->group(function () {
+        // DASHBOARD
+        Route::prefix('/dashboard')->group(function () {
+            Route::get('/', 'index')->name('dashboard');
+        });
+
+        // CATEGORY
+        Route::controller(CategoryController::class)->prefix('/category')
+            ->name('category.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/{uuid}/edit', 'edit')->name('edit');
+                Route::put('/{uuid}/update', 'update')->name('update');
+            });
+
+        // TENANT
+        Route::controller(TenantController::class)->prefix('/tenant')
+            ->name('tenant.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{uuid}', 'edit')->name('edit');
+                Route::put('/update/{uuid}', 'update')->name('update');
+            });
+
+        // TENANT PHOTO
+        Route::controller(TenantPhotoController::class)->prefix('/tenant-photo')
+            ->name('tenant.photo.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::put('/{id}/update', 'update')->name('update');
+                Route::delete('/delete/{id}', 'delete')->name('delete');
+            });
     });
-});
+
+// BACKEND
+// TENANT
+Route::controller(TenantDashboardController::class)
+    ->middleware(['auth', 'verified', 'checkUserStatus', 'role:tenant'])
+    ->prefix('/tenant')
+    ->name('tenant.')
+    ->group(function () {
+        Route::prefix('/dashboard')->group(function () {
+            Route::get('/', 'index')->name('dashboard');
+        });
+    });
 
 
-//Login Route
+
+//LOGIN
 //Others default route are handled by Fortify
 Route::controller(AuthController::class)->group(function () {
     // Verify Email
@@ -43,10 +98,13 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // Route check status user
-Route::controller(StatusUserController::class)->name('status.')->prefix('/status')->group(function () {
-    Route::get('/pending', 'pending')->name('pending');
-    Route::get('/rejected', 'rejected')->name('rejected');
-})->middleware('auth');
+Route::controller(StatusUserController::class)
+    ->name('status.')
+    ->prefix('/status')
+    ->group(function () {
+        Route::get('/pending', 'pending')->name('pending');
+        Route::get('/rejected', 'rejected')->name('rejected');
+    })->middleware('auth');
 
 
 Route::get('/test-email', function () {
@@ -55,4 +113,9 @@ Route::get('/test-email', function () {
     });
 
     return 'Sent!';
+});
+
+
+Route::get('quote', function () {
+    return view('backend.admin.quotation');
 });

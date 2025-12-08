@@ -11,17 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenants', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->uuid()->unique()->index();
             $table->string('name', 100);
-            $table->string('phone', 20)->nullable();
-            $table->string('email')->nullable();
-            $table->json('map_coords')->nullable();
-            $table->json('map_original_size')->nullable();
-            $table->string('logo')->nullable();
-            $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
@@ -33,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tenants');
+        Schema::dropIfExists('categories');
     }
 };

@@ -36,7 +36,8 @@ class TenantSeeder extends Seeder
         foreach ($tenants as $tenant) {
             $model = Tenant::firstOrNew([
                 'name' => $tenant,
-                'uuid' => (string) Str::uuid()
+                'uuid' => (string) Str::uuid(),
+                'category_id' => rand(1, 4)
             ]);
             $model->save();
         }

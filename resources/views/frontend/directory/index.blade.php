@@ -26,7 +26,12 @@
         }
 
         /* Typography enhancements */
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Playfair Display', serif;
             line-height: 1.2;
             margin-bottom: 0.5em;
@@ -1346,8 +1351,8 @@
             backdrop-filter: blur(10px);
             border-radius: 1.5rem;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                        box-shadow 0.3s ease,
-                        filter 0.3s ease;
+                box-shadow 0.3s ease,
+                filter 0.3s ease;
         }
 
         body.dark-mode .tenant-card {
@@ -1456,8 +1461,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Pull to refresh styles */
@@ -1489,7 +1499,8 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            display: none; /* Only show on mobile */
+            display: none;
+            /* Only show on mobile */
             background: rgba(95, 207, 218, 0.2);
             color: #5fcfda;
             padding: 8px 16px;
@@ -1519,22 +1530,52 @@
             animation: fadeInUp 0.6s ease forwards;
         }
 
-        .stagger-card:nth-child(1) { animation-delay: 0.1s; }
-        .stagger-card:nth-child(2) { animation-delay: 0.2s; }
-        .stagger-card:nth-child(3) { animation-delay: 0.3s; }
-        .stagger-card:nth-child(4) { animation-delay: 0.4s; }
-        .stagger-card:nth-child(5) { animation-delay: 0.5s; }
-        .stagger-card:nth-child(6) { animation-delay: 0.6s; }
+        .stagger-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .stagger-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
 
         @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         @keyframes shimmer-highlight {
-            0% { left: -100%; }
-            20% { left: -50%; }
-            100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            20% {
+                left: -50%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         .tenant-logo {
@@ -2937,17 +2978,24 @@
                         <div class="filter-group">
                             <label>Categories</label>
                             <div class="filter-input multi-select-container">
-                                <div class="multi-select-header" id="multiSelectHeader" style="display: flex; align-items: center; gap: 5px; flex-wrap: wrap; min-height: 24px;">
-                                    <span style="color: #999; font-size: 14px;" id="multiSelectPlaceholder">Select categories...</span>
+                                <div class="multi-select-header" id="multiSelectHeader"
+                                    style="display: flex; align-items: center; gap: 5px; flex-wrap: wrap; min-height: 24px;">
+                                    <span style="color: #999; font-size: 14px;" id="multiSelectPlaceholder">Select
+                                        categories...</span>
                                     <div class="filter-tags" id="selectedCategoriesContainer"></div>
                                 </div>
                                 <input type="hidden" id="categoryFilter" value="">
                                 <div class="multi-select-dropdown" id="multiSelectDropdown">
-                                    <div class="multi-select-option" data-value="Fashion & Apparel">Fashion & Apparel</div>
-                                    <div class="multi-select-option" data-value="Fashion & Accessories">Fashion & Accessories</div>
-                                    <div class="multi-select-option" data-value="Beauty & Health">Beauty & Health</div>
-                                    <div class="multi-select-option" data-value="Jewelry & Watches">Jewelry & Watches</div>
-                                    <div class="multi-select-option" data-value="Food & Beverage">Food & Beverage</div>
+                                    <div class="multi-select-option" data-value="Fashion & Apparel">Fashion & Apparel
+                                    </div>
+                                    <div class="multi-select-option" data-value="Fashion & Accessories">Fashion &
+                                        Accessories</div>
+                                    <div class="multi-select-option" data-value="Beauty & Health">Beauty & Health
+                                    </div>
+                                    <div class="multi-select-option" data-value="Jewelry & Watches">Jewelry & Watches
+                                    </div>
+                                    <div class="multi-select-option" data-value="Food & Beverage">Food & Beverage
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3661,7 +3709,8 @@
                 if (existingCountMatch) {
                     btn.innerHTML = btn.innerHTML.replace(/\(\d+\)/, `(${count})`);
                 } else {
-                    btn.innerHTML = `${originalText} <span style="margin-left: 5px; font-size: 12px;">(${count})</span>`;
+                    btn.innerHTML =
+                        `${originalText} <span style="margin-left: 5px; font-size: 12px;">(${count})</span>`;
                 }
             });
         }
@@ -3958,7 +4007,12 @@
                     if (tenant.mapCoords && tenant.mapOriginalSize) {
                         const position = calculateResponsivePosition(tenant.mapCoords, tenant.mapOriginalSize,
                             currentWidth, currentHeight);
-                        return { tenant, position, x: position.x, y: position.y };
+                        return {
+                            tenant,
+                            position,
+                            x: position.x,
+                            y: position.y
+                        };
                     }
                     return null;
                 }).filter(Boolean);
@@ -4208,15 +4262,15 @@
                 <div class="map-tooltip-enhanced-body">
                     <div style="max-height: 200px; overflow-y: auto;">
                         ${tenantList.map(tenant => `
-                            <div class="suggestion-item" style="padding: 8px 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer;">
-                                <div class="suggestion-icon" style="width: 20px; height: 20px; font-size: 10px;">${tenant.name.charAt(0)}</div>
-                                <div class="suggestion-text" style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 600;">${tenant.name}</div>
-                                    <div class="suggestion-category" style="font-size: 10px;">${tenant.category}</div>
+                                <div class="suggestion-item" style="padding: 8px 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer;">
+                                    <div class="suggestion-icon" style="width: 20px; height: 20px; font-size: 10px;">${tenant.name.charAt(0)}</div>
+                                    <div class="suggestion-text" style="flex: 1;">
+                                        <div style="font-size: 13px; font-weight: 600;">${tenant.name}</div>
+                                        <div class="suggestion-category" style="font-size: 10px;">${tenant.category}</div>
+                                    </div>
+                                    <div class="suggestion-floor" style="font-size: 9px;">${tenant.floor}</div>
                                 </div>
-                                <div class="suggestion-floor" style="font-size: 9px;">${tenant.floor}</div>
-                            </div>
-                        `).join('')}
+                            `).join('')}
                     </div>
                 </div>
             `;
@@ -4442,7 +4496,8 @@
                     const rotateY = (x - centerX) / 25; // Reduced sensitivity
                     const rotateX = (centerY - y) / 25; // Reduced sensitivity
 
-                    card.style.transform = `translateY(-12px) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    card.style.transform =
+                        `translateY(-12px) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                     card.style.transition = 'transform 0.1s ease';
                 });
 
@@ -4504,7 +4559,9 @@
             mainContent.addEventListener('touchstart', (e) => {
                 startY = e.touches[0].pageY;
                 isPulling = true;
-            }, { passive: true });
+            }, {
+                passive: true
+            });
 
             mainContent.addEventListener('touchmove', (e) => {
                 if (!isPulling) return;
@@ -4535,7 +4592,9 @@
                         `;
                     }
                 }
-            }, { passive: false });
+            }, {
+                passive: false
+            });
 
             mainContent.addEventListener('touchend', () => {
                 if (!isPulling) return;
@@ -4570,7 +4629,9 @@
                 }
 
                 isPulling = false;
-            }, { passive: true });
+            }, {
+                passive: true
+            });
         }
 
         // Swipe gesture functionality for mobile
@@ -4580,12 +4641,16 @@
 
             document.addEventListener('touchstart', e => {
                 touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
+            }, {
+                passive: true
+            });
 
             document.addEventListener('touchend', e => {
                 touchEndX = e.changedTouches[0].screenX;
                 handleSwipeGesture();
-            }, { passive: true });
+            }, {
+                passive: true
+            });
 
             function handleSwipeGesture() {
                 const minSwipeDistance = 50;
@@ -4655,10 +4720,6 @@
             }
         `;
         document.head.appendChild(style);
-
-        console.log('%c🏬 Welcome to Mal Bali Galeria Tenant Directory! ',
-            'background: #5fcfda; color: white; font-size: 16px; padding: 10px;');
-        console.log('%c✓ Responsive Map Pin System Loaded!', 'background: #2ecc71; color: white; padding: 8px;');
     </script>
 </body>
 

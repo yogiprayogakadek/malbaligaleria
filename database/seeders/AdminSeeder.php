@@ -21,7 +21,8 @@ class AdminSeeder extends Seeder
             'phone' => '082237188923',
             'avatar' => null,
             'status' => 'approved',
-            'is_active' => true
+            'is_active' => true,
+            'email_verified_at' => '2025-11-28 02:48:51',
         ]);
 
         $user->assignRole('admin');
