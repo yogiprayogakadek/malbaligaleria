@@ -5,6 +5,8 @@ use App\Http\Controllers\Backend\Admin\CategoryController;
 use App\Http\Controllers\Backend\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Backend\Admin\TenantController;
 use App\Http\Controllers\Backend\Admin\TenantPhotoController;
+use App\Http\Controllers\Backend\Admin\EventController;
+use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use Illuminate\Support\Facades\Mail;
@@ -62,6 +64,29 @@ Route::controller(AdminDashboardController::class)
         // TENANT PHOTO
         Route::controller(TenantPhotoController::class)->prefix('/tenant-photo')
             ->name('tenant.photo.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::put('/{id}/update', 'update')->name('update');
+                Route::delete('/delete/{id}', 'delete')->name('delete');
+            });
+
+        // EVENT
+        Route::controller(EventController::class)->prefix('/event')
+            ->name('event.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{uuid}', 'edit')->name('edit');
+                Route::put('/update/{uuid}', 'update')->name('update');
+            });
+
+        // EVENT PHOTO
+        Route::controller(EventPhotoController::class)->prefix('/event-photo')
+            ->name('event.photo.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');

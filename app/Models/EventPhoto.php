@@ -12,4 +12,9 @@ class EventPhoto extends Model
         'caption',
         'is_primary'
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 }

@@ -33,4 +33,9 @@ class Event extends Model
             }
         });
     }
+
+    public function photos()
+    {
+        return $this->hasMany(EventPhoto::class);
+    }
 }

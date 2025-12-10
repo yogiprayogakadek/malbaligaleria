@@ -1,7 +1,7 @@
 @extends('templates.backend.master')
 
-@section('page-title', 'Edit Tenant Photo - ' . $tenantPhoto->tenant->name)
-@section('page-link', route('admin.tenant.photo.edit', $tenant->uuid))
+@section('page-title', 'Create Event Photo')
+@section('page-link', route('admin.event.photo.create'))
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/select2.css') }}">
@@ -12,10 +12,28 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin.tenant.photo.update', $tenantPhoto->id) }}" method="POST"
-                        enctype="multipart/form-data" id="form">
-                        @method('PUT')
+                    <form action="{{ route('admin.event.photo.store') }}" method="POST" enctype="multipart/form-data"
+                        id="form">
                         @csrf
+
+                        {{-- Event ID --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="name" class="form-label col-sm-3 col-form-label">Event</label>
+                            <div class="col-sm-12">
+                                <select name="event_id" id="eventId"
+                                    class="form-control @error('event_id') is-invalid @enderror">
+                                    <option value="">Select event...</option>
+                                    @foreach ($events as $event)
+                                        <option value="{{ $event->id }}"
+                                            {{ old('event_id') == $event->id ? 'selected' : '' }}>{{ $event->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('event_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
                         {{-- Primary Image --}}
                         <div class="mb-4 row align-items-center">
@@ -27,7 +45,6 @@
                                         <input type="file" class="form-control @error('path') is-invalid @enderror"
                                             id="path" name="path" placeholder="Enter image path"
                                             value="{{ old('path') }}">
-                                        <small>Leave blank if you do not want to change the current image.</small>
                                         @error('path')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -37,7 +54,7 @@
                                     <label for="caption" class="form-label col-sm-3 col-form-label">Caption</label>
                                     <input type="text" class="form-control @error('caption') is-invalid @enderror"
                                         id="caption" name="caption" placeholder="Enter image caption"
-                                        value="{{ $tenantPhoto->caption }}">
+                                        value="{{ old('caption') }}">
                                     @error('caption')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -62,8 +79,8 @@
     <script src="{{ asset('assets/backend/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/select2.min.js') }}"></script>
     <script>
-        $("#tenantId").select2({
-            placeholder: "Select a tenant",
+        $("#eventId").select2({
+            placeholder: "Select a event",
             allowClear: true,
         });
     </script>

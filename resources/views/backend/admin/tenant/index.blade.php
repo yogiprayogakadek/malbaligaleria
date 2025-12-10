@@ -44,7 +44,9 @@
                                         <td>{{ $tenant->phone ?? '-' }}</td>
                                         <td>{{ $tenant->map_coords['floor'] == 1 ? $tenant->map_coords['floor'] . 'st Floor' : $tenant->map_coords['floor'] . 'nd Floor' }}
                                         </td>
-                                        <td>{{ $tenant->is_active == true ? 'Active' : 'Not Active' }}</td>
+                                        <td>{!! $tenant->is_active == true
+                                            ? '<span class="badge bg-primary">Active</span>'
+                                            : '<span class="badge bg-danger">Not Active</span>' !!}</td>
                                         <td>
                                             <a href="{{ route('admin.tenant.edit', $tenant->uuid) }}">
                                                 <button type="button"

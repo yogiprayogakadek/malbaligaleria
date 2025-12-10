@@ -1,7 +1,7 @@
 @extends('templates.backend.master')
 
-@section('page-title', 'Category Tenant Management')
-@section('page-link', route('admin.category.index'))
+@section('page-title', 'Event Management')
+@section('page-link', route('admin.tenant.index'))
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dataTables.bootstrap5.min.css') }}">
@@ -30,20 +30,28 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($categories as $category)
+                                @foreach ($events as $event)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $category->name }}</td>
-                                        <td>{!! $category->is_active == true
+                                        <td>{{ $event->name }}</td>
+                                        <td>{{ $event->start_date }}</td>
+                                        <td>{{ $event->end_date }}</td>
+                                        <td>{{ $event->start_time }}</td>
+                                        <td>{{ $event->end_time }}</td>
+                                        <td>{!! $event->is_active == true
                                             ? '<span class="badge bg-primary">Active</span>'
                                             : '<span class="badge bg-danger">Not Active</span>' !!}</td>
                                         <td>
-                                            <a href="{{ route('admin.category.edit', $category->uuid) }}">
+                                            <a href="{{ route('admin.event.edit', $event->uuid) }}">
                                                 <button type="button"
                                                     class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
                                                     <i class="ti ti-pencil fs-4 me-2"></i>
