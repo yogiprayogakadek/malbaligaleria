@@ -18,6 +18,11 @@ class TenantRepository
         return $this->model::select($fields)->where('is_active', $is_active)->get();
     }
 
+    public function getTenantsWithRelationship(array $fields, array $relationship)
+    {
+        return $this->model::select($fields)->with($relationship)->where('is_active', true)->get();
+    }
+
     public function findById(int $id, array $fields)
     {
         return $this->model::select($fields)->where('id', $id)->firstOrFail();

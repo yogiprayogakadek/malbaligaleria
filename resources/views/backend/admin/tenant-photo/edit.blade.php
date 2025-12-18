@@ -1,7 +1,7 @@
 @extends('templates.backend.master')
 
 @section('page-title', 'Edit Tenant Photo - ' . $tenantPhoto->tenant->name)
-@section('page-link', route('admin.tenant.photo.edit', $tenant->uuid))
+@section('page-link', route('admin.tenant.photo.edit', $tenantPhoto->id))
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/select2.css') }}">

@@ -26,6 +26,11 @@ class TenantService
         return $this->tenantRepository->getTenantsByStatus($fields, $is_active);
     }
 
+    public function getTenantsWithRelationship(array $fields = ['*'], array $relationship)
+    {
+        return $this->tenantRepository->getTenantsWithRelationship($fields, $relationship);
+    }
+
     public function findById(int $id, array $fields = ['*'])
     {
         return $this->tenantRepository->findById($id, $fields);

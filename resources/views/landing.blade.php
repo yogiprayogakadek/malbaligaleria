@@ -20,11 +20,28 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-gradient: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
+            --secondary-gradient: linear-gradient(135deg, #7d9d9c 0%, #5a7c7a 100%);
+            --accent-gradient: linear-gradient(135deg, #a8c5c3 0%, #8ba9a7 100%);
+            --primary-color: #2c5f5d;
+            --secondary-color: #5a7c7a;
+            --accent-color: #8ba9a7;
+            --highlight-color: #c9a96e;
+            --text-dark: #2c3e50;
+            --text-light: #e8ebe9;
+            --bg-light: #fafaf8;
+            --bg-dark: #1a1f1e;
+            --card-light: #f5f6f4;
+            --card-dark: #252a29;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            letter-spacing: 0.3px;
         }
 
         body.loaded {
@@ -33,8 +50,8 @@
         }
 
         body.dark-mode {
-            background-color: #1a1a1a;
-            color: #e0e0e0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
         }
 
         body.menu-open {
@@ -54,17 +71,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f5f3ed 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #fafaf8 0%, #f5f6f4 50%, #e8ebe9 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.dark-mode .page-loader {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background: linear-gradient(135deg, #1a1f1e 0%, #252a29 50%, #2c3e3c 100%);
         }
 
         .page-loader.hidden {
@@ -79,34 +96,62 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            max-width: 500px;
+            padding: 0 20px;
         }
 
         .loader-logo {
             opacity: 0;
             animation: logoFadeIn 1s ease forwards 0.3s;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .loader-logo-circle {
+            width: 150px;
+            height: 150px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(44, 95, 93, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .loader-logo-image {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
         }
 
         .loader-logo h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            font-weight: 300;
+            font-size: 42px;
+            font-weight: 400;
             letter-spacing: 3px;
             text-transform: lowercase;
-            color: #2c3e50;
+            color: var(--primary-color);
             margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(44, 95, 93, 0.1);
         }
 
         body.dark-mode .loader-logo h1 {
-            color: #e0e0e0;
+            color: var(--text-light);
         }
 
         .loader-logo span {
             display: block;
             font-size: 12px;
             letter-spacing: 5px;
-            color: #5fcfda;
+            color: var(--secondary-color);
             margin-top: 0;
+            text-shadow: 0 1px 5px rgba(90, 124, 122, 0.1);
+            text-transform: uppercase;
         }
 
         @keyframes logoFadeIn {
@@ -134,9 +179,10 @@
             width: 100%;
             height: 100%;
             border: 3px solid transparent;
-            border-top-color: #5fcfda;
+            border-top-color: var(--primary-color);
             border-radius: 50%;
             animation: spinnerRotate 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            box-shadow: 0 0 15px rgba(44, 95, 93, 0.2);
         }
 
         .spinner-ring:nth-child(1) {
@@ -145,12 +191,12 @@
 
         .spinner-ring:nth-child(2) {
             animation-delay: -0.3s;
-            border-top-color: rgba(95, 207, 218, 0.6);
+            border-top-color: var(--secondary-color);
         }
 
         .spinner-ring:nth-child(3) {
             animation-delay: -0.15s;
-            border-top-color: rgba(95, 207, 218, 0.3);
+            border-top-color: var(--accent-color);
         }
 
         @keyframes spinnerRotate {
@@ -165,23 +211,25 @@
 
         /* Progress Bar */
         .loader-progress {
-            width: 280px;
+            width: 300px;
             height: 3px;
-            background: rgba(95, 207, 218, 0.2);
+            background: rgba(44, 95, 93, 0.15);
             border-radius: 10px;
             overflow: hidden;
             position: relative;
             margin: 0 auto 25px;
+            box-shadow: 0 2px 8px rgba(44, 95, 93, 0.08);
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #5fcfda 0%, #4db8c3 100%);
+            background: var(--primary-gradient);
             border-radius: 10px;
             width: 0%;
             animation: progressLoad 3s ease-in-out forwards;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 15px rgba(44, 95, 93, 0.3);
         }
 
         .progress-bar::after {
@@ -228,9 +276,9 @@
         }
 
         .loader-text {
-            font-size: 13px;
-            color: #5a5a5a;
-            letter-spacing: 3px;
+            font-size: 12px;
+            color: #6a7a78;
+            letter-spacing: 2px;
             opacity: 0;
             animation: textFadeIn 0.5s ease forwards 1s;
             margin: 0;
@@ -238,7 +286,7 @@
         }
 
         body.dark-mode .loader-text {
-            color: #b0b0b0;
+            color: #b8c4c2;
         }
 
         @keyframes textFadeIn {
@@ -274,15 +322,17 @@
             align-items: center;
             padding: 20px 40px;
             z-index: 100;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
         }
 
         header.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(20px);
+            background: rgba(250, 250, 248, 0.98);
+            box-shadow: 0 4px 20px rgba(44, 95, 93, 0.08);
+            backdrop-filter: blur(30px);
             padding: 15px 40px;
+            border-bottom: 1px solid rgba(44, 95, 93, 0.08);
         }
 
         body.dark-mode header {
@@ -290,8 +340,9 @@
         }
 
         body.dark-mode header.scrolled {
-            background: rgba(26, 26, 26, 0.95);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(26, 31, 30, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(168, 197, 195, 0.1);
         }
 
         header.scrolled .search-bar {
@@ -337,7 +388,10 @@
         }
 
         header.scrolled .logo span {
-            color: #5fcfda;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         header.scrolled .menu-btn span {
@@ -354,24 +408,24 @@
             bottom: 30px;
             right: 30px;
             z-index: 101;
-            background: rgba(95, 207, 218, 0.9);
+            background: var(--primary-gradient);
             border: none;
             border-radius: 50%;
             width: 60px;
             height: 60px;
             padding: 0;
             cursor: pointer;
-            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(44, 95, 93, 0.25), 0 0 0 0 rgba(44, 95, 93, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .dark-mode-toggle:hover {
-            background: #4db8c3;
-            box-shadow: 0 6px 20px rgba(95, 207, 218, 0.4);
-            transform: scale(1.1);
+            background: var(--secondary-gradient);
+            box-shadow: 0 6px 25px rgba(44, 95, 93, 0.35), 0 0 30px rgba(44, 95, 93, 0.15);
+            transform: scale(1.08);
         }
 
         .dark-mode-toggle:active {
@@ -427,9 +481,10 @@
         }
 
         .search-bar:focus-within {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: #5fcfda;
-            box-shadow: 0 0 20px rgba(95, 207, 218, 0.3);
+            background: rgba(255, 255, 255, 0.35);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(44, 95, 93, 0.2), 0 0 40px rgba(44, 95, 93, 0.1);
+            transform: translateY(-2px);
         }
 
         .search-bar svg {
@@ -455,9 +510,20 @@
             transition: color 0.3s ease;
         }
 
-        /* Mobile: Search di sidebar */
+        /* Header Logo Circle */
+        .header-logo-circle {
+            display: flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(44, 95, 93, 0.2);
+            transition: all 0.3s ease;
+        }
+        .header-logo-circle:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(44, 95, 93, 0.3); }
+
+        /* Mobile: Search/Logo di sidebar */
         @media (max-width: 768px) {
-            .search-container {
+            .search-container, .header-left {
                 display: none;
             }
         }
@@ -486,6 +552,10 @@
             letter-spacing: 5px;
             margin-top: -5px;
             transition: color 0.3s ease;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Mobile: Logo di kiri */
@@ -596,7 +666,10 @@
             font-size: 9px;
             letter-spacing: 4px;
             margin-top: -3px;
-            color: #5fcfda;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Sidebar Close Button */
@@ -643,7 +716,7 @@
         }
 
         .sidebar-close:hover span {
-            background: #5fcfda;
+            background: var(--primary-color);
         }
 
         /* Sidebar Search - Mobile only */
@@ -762,12 +835,13 @@
         }
 
         .sidebar nav ul li a:hover {
-            color: #5fcfda;
+            color: var(--primary-color);
             transform: translateX(10px);
         }
 
         .sidebar nav ul li a:hover::after {
-            width: 50px;
+            width: 60px;
+            background: var(--primary-gradient);
         }
 
         /* Hero Section with Parallax */
@@ -863,7 +937,7 @@
             top: 0;
             width: 50px;
             height: 50px;
-            background: #5fcfda;
+            background: var(--primary-gradient);
             border-radius: 50%;
             transition: all 0.4s ease;
             z-index: -1;
@@ -876,7 +950,7 @@
             top: 0;
             width: 50px;
             height: 50px;
-            background: #5fcfda;
+            background: var(--primary-gradient);
             border-radius: 50%;
             z-index: -2;
             opacity: 0;
@@ -931,7 +1005,7 @@
         .explore-btn:hover::before {
             width: calc(100% + 35px);
             border-radius: 50px;
-            box-shadow: 0 0 30px rgba(95, 207, 218, 0.6), 0 0 60px rgba(95, 207, 218, 0.4);
+            box-shadow: 0 0 30px rgba(44, 95, 93, 0.4), 0 0 60px rgba(44, 95, 93, 0.2), 0 8px 25px rgba(44, 95, 93, 0.25);
         }
 
         .explore-btn:hover .arrow {
@@ -1313,12 +1387,14 @@
 
         .tenant-card-tag {
             display: inline-block;
-            padding: 5px 15px;
-            background: #5fcfda;
+            padding: 6px 18px;
+            background: var(--primary-gradient);
             color: white;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 12px rgba(44, 95, 93, 0.25);
         }
 
         .carousel-controls {
@@ -1332,21 +1408,22 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #5fcfda;
+            background: var(--primary-gradient);
             border: none;
             color: white;
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 3px 12px rgba(44, 95, 93, 0.25);
         }
 
         .carousel-btn:hover {
-            background: #4db8c3;
-            transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(95, 207, 218, 0.4);
+            background: var(--secondary-gradient);
+            transform: scale(1.12);
+            box-shadow: 0 5px 20px rgba(44, 95, 93, 0.35), 0 0 30px rgba(44, 95, 93, 0.15);
         }
 
         .carousel-btn:disabled {
@@ -1425,7 +1502,7 @@
             top: 0;
             width: 50px;
             height: 50px;
-            background: #5fcfda;
+            background: var(--primary-gradient);
             border-radius: 50%;
             transition: all 0.4s ease;
             z-index: 0;
@@ -1470,7 +1547,7 @@
         .all-experience-btn:hover::before {
             width: calc(100% + 35px);
             border-radius: 50px;
-            box-shadow: 0 0 30px rgba(95, 207, 218, 0.6);
+            box-shadow: 0 0 30px rgba(44, 95, 93, 0.4), 0 0 60px rgba(44, 95, 93, 0.2);
         }
 
         .all-experience-btn:hover .arrow {
@@ -1573,23 +1650,25 @@
         .experience-card-button {
             display: inline-flex;
             align-items: center;
-            background: #5fcfda;
+            background: var(--primary-gradient);
             color: white;
-            padding: 12px 25px;
+            padding: 14px 28px;
             border-radius: 50px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            gap: 8px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 10px;
+            box-shadow: 0 3px 12px rgba(44, 95, 93, 0.25);
+            letter-spacing: 0.5px;
         }
 
         .experience-card-button:hover {
-            background: #4db8c3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(95, 207, 218, 0.4), 0 0 30px rgba(95, 207, 218, 0.3);
+            background: var(--secondary-gradient);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(44, 95, 93, 0.35), 0 0 40px rgba(44, 95, 93, 0.15);
         }
 
         .experience-card-button .arrow {
@@ -1680,10 +1759,10 @@
             background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800');
         }
 
-        /* Event Highlight Section */
+        /* Event Highlight Section with Slider */
         .event-section {
             min-height: 100vh;
-            background: #ffffff;
+            background: var(--bg-light);
             padding: 100px 40px;
             display: flex;
             align-items: center;
@@ -1691,7 +1770,7 @@
         }
 
         body.dark-mode .event-section {
-            background: #1a1a1a;
+            background: var(--bg-dark);
         }
 
         .event-container {
@@ -1702,14 +1781,15 @@
 
         .event-container h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            font-weight: 400;
-            color: #2c3e50;
-            margin-bottom: 60px;
+            font-size: 52px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 70px;
             text-align: center;
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
         }
 
         .reveal.active .event-container h2 {
@@ -1718,48 +1798,68 @@
         }
 
         body.dark-mode .event-container h2 {
-            color: #e0e0e0;
+            color: var(--text-light);
+        }
+
+        /* Event Slider Wrapper */
+        .event-slider-wrapper {
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .reveal.active .event-slider-wrapper {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .event-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
             gap: 30px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Desktop: Show 2 cards */
+        @media (min-width: 769px) {
+            .event-card {
+                flex: 0 0 calc(50% - 15px);
+                min-width: calc(50% - 15px);
+            }
+        }
+
+        /* Mobile: Show 1 card */
+        @media (max-width: 768px) {
+            .event-card {
+                flex: 0 0 100%;
+                min-width: 100%;
+            }
         }
 
         .event-card {
             position: relative;
-            height: 400px;
-            border-radius: 15px;
+            height: 450px;
+            border-radius: 20px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.4s ease;
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-        }
-
-        .reveal.active .event-card:nth-child(1) {
-            animation: slideUpScale 0.8s ease forwards 0.2s;
-        }
-
-        .reveal.active .event-card:nth-child(2) {
-            animation: slideUpScale 0.8s ease forwards 0.3s;
-        }
-
-        @keyframes slideUpScale {
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         }
 
         .event-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(44, 95, 93, 0.2), 0 0 60px rgba(44, 95, 93, 0.08);
+        }
+
+        body.dark-mode .event-card {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         body.dark-mode .event-card:hover {
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 60px rgba(168, 197, 195, 0.1);
         }
 
         .event-card-bg {
@@ -1767,11 +1867,11 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            transition: transform 0.4s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .event-card:hover .event-card-bg {
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
         .event-card::before {
@@ -1781,8 +1881,19 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.8));
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(0, 0, 0, 0.3) 40%, 
+                rgba(0, 0, 0, 0.85) 100%);
             z-index: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .event-card:hover::before {
+            background: linear-gradient(to bottom, 
+                rgba(44, 95, 93, 0.08) 0%, 
+                rgba(44, 95, 93, 0.2) 40%, 
+                rgba(0, 0, 0, 0.88) 100%);
         }
 
         .event-card-content {
@@ -1790,51 +1901,159 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 30px;
+            padding: 35px;
             z-index: 2;
             color: white;
         }
 
         .event-date {
             display: inline-block;
-            background: #5fcfda;
+            background: var(--primary-gradient);
             color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            box-shadow: 0 3px 15px rgba(44, 95, 93, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .event-card:hover .event-date {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(44, 95, 93, 0.4);
         }
 
         .event-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 500;
-            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
             color: white;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
         }
 
         .event-card p {
-            font-size: 14px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 15px;
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 18px;
+            letter-spacing: 0.3px;
         }
 
         .event-link {
             display: inline-flex;
             align-items: center;
-            color: #5fcfda;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            gap: 8px;
-            transition: gap 0.3s ease;
+            font-size: 15px;
+            font-weight: 600;
+            gap: 10px;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .event-link::before {
+            content: '';
+            position: absolute;
+            bottom: 28px;
+            left: 35px;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.4s ease;
+        }
+
+        .event-card:hover .event-link::before {
+            width: 120px;
         }
 
         .event-link:hover {
-            gap: 12px;
+            gap: 15px;
+            transform: translateX(5px);
+        }
+
+        /* Event Navigation Controls */
+        .event-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        .reveal.active .event-controls {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .event-nav-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 15px rgba(44, 95, 93, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .event-nav-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .event-nav-btn:hover {
+            background: var(--secondary-gradient);
+            transform: scale(1.12);
+            box-shadow: 0 5px 25px rgba(44, 95, 93, 0.4), 0 0 40px rgba(44, 95, 93, 0.2);
+        }
+
+        .event-nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .event-nav-btn:disabled {
+            background: linear-gradient(135deg, #ccc 0%, #999 100%);
+            cursor: not-allowed;
+            transform: scale(1);
+            opacity: 0.5;
+        }
+
+        .event-nav-btn:disabled:hover {
+            transform: scale(1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hide controls if not needed */
+        .event-controls.hidden {
+            display: none;
         }
 
         /* Mall Map Section */
@@ -1939,15 +2158,16 @@
         }
 
         .map-icon {
-            width: 80px;
-            height: 80px;
-            background: #5fcfda;
+            width: 90px;
+            height: 90px;
+            background: var(--primary-gradient);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 36px;
+            font-size: 40px;
+            box-shadow: 0 6px 25px rgba(44, 95, 93, 0.3);
         }
 
         .map-floors {
@@ -2478,6 +2698,9 @@
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
             <div class="loader-logo">
+                <div class="loader-logo-circle">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image" onerror="this.style.display='none'">
+                </div>
                 <h1>mal bali galeria</h1>
                 <span>SHOPPING CENTER</span>
             </div>
@@ -2513,14 +2736,10 @@
 
     <!-- Header -->
     <header>
-        <div class="search-container">
-            <div class="search-bar">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="8" stroke-width="2" />
-                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <input type="text" placeholder="Search">
-            </div>
+        <div class="header-left">
+            <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
+            </a>
         </div>
 
         <div class="logo">
@@ -2621,68 +2840,23 @@
             <h2>Featured Tenants</h2>
             <div class="carousel-wrapper">
                 <div class="carousel-container" id="carouselContainer">
-                    <div class="tenant-card">
-                        <a href="{{ route('tenant') }}">
-                            <div class="tenant-card-image"
-                                style="background-image: url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400');">
-                            </div>
-                            <div class="tenant-card-content">
-                                <h3>Zara</h3>
-                                <p>Fashion & Apparel</p>
-                                <span class="tenant-card-tag">Ground Floor</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400');">
+                    @forelse ($tenants as $tenant)
+                        <div class="tenant-card">
+                            <a href="{{ route('tenant') }}" style="text-decoration: none;">
+                                <div class="tenant-card-image"
+                                    style="background-image: url({{ asset('storage/' . $tenant->primaryPhoto->path) }});">
+                                </div>
+                                <div class="tenant-card-content">
+                                    <h3>{{ $tenant->name }}</h3>
+                                    <p>{{ $tenant->category->name }}</p>
+                                    <span
+                                        class="tenant-card-tag">{{ $tenant->map_coords['floor'] == 1 ? $tenant->map_coords['floor'] . 'st Floor' : $tenant->map_coords['floor'] . 'nd Floor' }}</span>
+                                </div>
+                            </a>
                         </div>
-                        <div class="tenant-card-content">
-                            <h3>H&M</h3>
-                            <p>Fashion & Lifestyle</p>
-                            <span class="tenant-card-tag">Level 1</span>
-                        </div>
-                    </div>
-                    <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400');">
-                        </div>
-                        <div class="tenant-card-content">
-                            <h3>Sephora</h3>
-                            <p>Beauty & Cosmetics</p>
-                            <span class="tenant-card-tag">Ground Floor</span>
-                        </div>
-                    </div>
-                    <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400');">
-                        </div>
-                        <div class="tenant-card-content">
-                            <h3>Starbucks</h3>
-                            <p>Café & Coffee</p>
-                            <span class="tenant-card-tag">Level 2</span>
-                        </div>
-                    </div>
-                    <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400');">
-                        </div>
-                        <div class="tenant-card-content">
-                            <h3>Nike</h3>
-                            <p>Sports & Athleisure</p>
-                            <span class="tenant-card-tag">Level 1</span>
-                        </div>
-                    </div>
-                    <div class="tenant-card">
-                        <div class="tenant-card-image"
-                            style="background-image: url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400');">
-                        </div>
-                        <div class="tenant-card-content">
-                            <h3>Dining Hall</h3>
-                            <p>Food Court</p>
-                            <span class="tenant-card-tag">Level 3</span>
-                        </div>
-                    </div>
+                    @empty
+                        <h3 class="text-center">No data available</h3>
+                    @endforelse
                 </div>
             </div>
             <div class="carousel-controls">
@@ -2778,31 +2952,28 @@
     <section class="event-section reveal" id="events">
         <div class="event-container">
             <h2>Upcoming Events</h2>
-            <div class="event-grid">
-                <div class="event-card">
-                    <div class="event-card-bg"
-                        style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800');">
-                    </div>
-                    <div class="event-card-content">
-                        <span class="event-date">25 DEC 2024</span>
-                        <h3>Christmas Grand Sale</h3>
-                        <p>Get up to 70% off on selected items from your favorite brands. Exclusive Christmas deals you
-                            don't want to miss!</p>
-                        <a href="#" class="event-link">Learn More →</a>
-                    </div>
+            <div class="event-slider-wrapper">
+                <div class="event-grid" id="eventGrid">
+                    @forelse ($events as $event)
+                        <div class="event-card">
+                            <div class="event-card-bg"
+                                style="background-image: url({{ asset('storage/' . $event->primaryPhoto->path) }});">
+                            </div>
+                            <div class="event-card-content">
+                                <span class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <h3>{{ $event->name }}</h3>
+                                <p>{{ $event->description }}</p>
+                                <a href="#" class="event-link">Learn More →</a>
+                            </div>
+                        </div>
+                    @empty
+                        <h3 class="text-center">No data available</h3>
+                    @endforelse
                 </div>
-                <div class="event-card">
-                    <div class="event-card-bg"
-                        style="background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800');">
-                    </div>
-                    <div class="event-card-content">
-                        <span class="event-date">01 JAN 2025</span>
-                        <h3>New Year Festival</h3>
-                        <p>Ring in the new year with live music, food festival, and spectacular fireworks display at Mal
-                            Bali Galeria.</p>
-                        <a href="#" class="event-link">Learn More →</a>
-                    </div>
-                </div>
+            </div>
+            <div class="event-controls" id="eventControls">
+                <button class="event-nav-btn" id="eventPrevBtn">←</button>
+                <button class="event-nav-btn" id="eventNextBtn">→</button>
             </div>
         </div>
     </section>
@@ -3185,6 +3356,111 @@
         // Initial setup
         updateCardsPerView();
 
+        // Event Slider
+        const eventGrid = document.getElementById('eventGrid');
+        const eventPrevBtn = document.getElementById('eventPrevBtn');
+        const eventNextBtn = document.getElementById('eventNextBtn');
+        const eventControls = document.getElementById('eventControls');
+        const eventCards = document.querySelectorAll('.event-card');
+
+        let eventCurrentIndex = 0;
+        let eventCardsPerView = 2;
+
+        // Update cards per view based on screen size
+        const updateEventCardsPerView = () => {
+            if (window.innerWidth <= 768) {
+                eventCardsPerView = 1;
+            } else {
+                eventCardsPerView = 2;
+            }
+            updateEventSlider();
+            updateEventControlsVisibility();
+        };
+
+        const updateEventSlider = () => {
+            if (!eventGrid || eventCards.length === 0) return;
+
+            const cardWidth = eventCards[0].offsetWidth;
+            const gap = 30;
+            const offset = -(eventCurrentIndex * (cardWidth + gap));
+            eventGrid.style.transform = `translateX(${offset}px)`;
+
+            // Update button states
+            if (eventPrevBtn && eventNextBtn) {
+                eventPrevBtn.disabled = eventCurrentIndex === 0;
+                eventNextBtn.disabled = eventCurrentIndex >= eventCards.length - eventCardsPerView;
+            }
+        };
+
+        const updateEventControlsVisibility = () => {
+            if (!eventControls) return;
+
+            // Hide controls if:
+            // - Desktop (2 cards per view) and 2 or fewer events
+            // - Mobile (1 card per view) and 1 or fewer events
+            const shouldHideControls = eventCards.length <= eventCardsPerView;
+
+            if (shouldHideControls) {
+                eventControls.classList.add('hidden');
+            } else {
+                eventControls.classList.remove('hidden');
+            }
+        };
+
+        if (eventPrevBtn && eventNextBtn && eventGrid) {
+            eventPrevBtn.addEventListener('click', () => {
+                if (eventCurrentIndex > 0) {
+                    eventCurrentIndex--;
+                    updateEventSlider();
+                }
+            });
+
+            eventNextBtn.addEventListener('click', () => {
+                if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
+                    eventCurrentIndex++;
+                    updateEventSlider();
+                }
+            });
+
+            // Auto-play event slider
+            let eventAutoplayInterval = setInterval(() => {
+                if (eventCards.length > eventCardsPerView) {
+                    if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
+                        eventCurrentIndex++;
+                    } else {
+                        eventCurrentIndex = 0;
+                    }
+                    updateEventSlider();
+                }
+            }, 6000);
+
+            // Pause autoplay on hover
+            eventGrid.addEventListener('mouseenter', () => {
+                clearInterval(eventAutoplayInterval);
+            });
+
+            eventGrid.addEventListener('mouseleave', () => {
+                eventAutoplayInterval = setInterval(() => {
+                    if (eventCards.length > eventCardsPerView) {
+                        if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
+                            eventCurrentIndex++;
+                        } else {
+                            eventCurrentIndex = 0;
+                        }
+                        updateEventSlider();
+                    }
+                }, 6000);
+            });
+
+            // Update on window resize
+            window.addEventListener('resize', () => {
+                updateEventCardsPerView();
+            });
+
+            // Initial setup
+            updateEventCardsPerView();
+        }
+
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -3423,8 +3699,8 @@
 
         // Console easter egg
         console.log('%c🏬 Welcome to Mal Bali Galeria Shopping Center! ',
-            'background: #5fcfda; color: white; font-size: 20px; padding: 10px;');
-        console.log('%cExperience the finest shopping in Denpasar, Bali', 'color: #2c3e50; font-size: 14px;');
+            'background: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%); color: white; font-size: 20px; padding: 10px; border-radius: 5px;');
+        console.log('%cExperience the finest shopping in Denpasar, Bali', 'color: #2c5f5d; font-size: 14px; font-weight: 600;');
     </script>
 </body>
 

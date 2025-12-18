@@ -9,23 +9,34 @@ use App\Http\Controllers\Backend\Admin\EventController;
 use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
+use App\Http\Controllers\Frontend\LandingPageController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 // landing fix
-Route::get('/', function () {
-    return view('landing');
-});
+
 Route::get('/maintenance', function () {
     return view('maintenance');
 });
 Route::get('/tenant', function () {
     return view('frontend.tenant.index');
 })->name('tenant');
+Route::get('/event', function () {
+    return view('frontend.event.index');
+})->name('event');
 
 Route::get('/directory', function () {
     return view('frontend.directory.index');
 })->name('directory');
+
+
+// FRONTEND
+Route::controller(LandingPageController::class)
+    ->name('frontend.')
+    ->group(function () {
+        Route::get('/', 'index')->name('landing');
+    });
+
 
 
 // ADMIN

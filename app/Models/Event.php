@@ -38,4 +38,9 @@ class Event extends Model
     {
         return $this->hasMany(EventPhoto::class);
     }
+
+    public function primaryPhoto()
+    {
+        return $this->hasOne(EventPhoto::class)->where('is_primary', true);
+    }
 }

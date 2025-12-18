@@ -29,6 +29,11 @@ class Category extends Model
         });
     }
 
+    public function tenants()
+    {
+        return $this->hasMany(Tenant::class);
+    }
+
     // public function getRouteKeyName()
     // {
     //     return 'uuid';

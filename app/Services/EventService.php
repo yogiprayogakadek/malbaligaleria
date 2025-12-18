@@ -26,6 +26,11 @@ class EventService
         return $this->eventRepository->getEventsByStatus($fields, $is_active);
     }
 
+    public function getEventsWithRelationship(array $fields = ['*'], array $relationship)
+    {
+        return $this->eventRepository->getEventsWithRelationship($fields, $relationship);
+    }
+
     public function findById(int $id, array $fields = ['*'])
     {
         return $this->eventRepository->findById($id, $fields);
