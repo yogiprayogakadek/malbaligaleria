@@ -86,4 +86,24 @@ class TenantService
             Storage::disk('public')->delete($relativePath);
         }
     }
+
+    // Custom
+    public function getDataByFloor(array $fields, array $relationship, string $cat)
+    {
+        $tenants = $this->getTenantsWithRelationship($fields, $relationship, $cat)->map(function ($tenant) {
+            $data = [
+                'id' => $tenant['id'],
+                'name' => $tenant['name'],
+                'category' => $tenant['category']['name'],
+                'floor' => $tenant['map_coords']['floor'] == 1 ? $tenant['map_coords']['floor'] . 'st Floor' : $tenant['map_coords']['floor'] . 'nd Floor',
+                'unit' => $tenant['map_coords']['unit'],
+                'logo' => asset('storage/' . $tenant['logo']),
+                'hours' => "10:00 AM - 10:00 PM"
+            ];
+
+            return $data;
+        });
+
+        return $tenants;
+    }
 }

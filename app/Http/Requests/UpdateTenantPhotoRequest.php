@@ -22,7 +22,7 @@ class UpdateTenantPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'path'              => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'path'              => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
             'caption'           => 'required|string',
         ];
     }

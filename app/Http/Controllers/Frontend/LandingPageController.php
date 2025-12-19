@@ -37,4 +37,17 @@ class LandingPageController extends Controller
 
         return view('landing', compact('tenants', 'events'));
     }
+
+    public function tenantData($cat = "new store")
+    {
+        $tenants = $this->tenantService->getDataByFloor(
+            ['id', 'name', 'map_coords', 'category_id', 'logo'],
+            [
+                'category:id,name',
+            ],
+            $cat
+        );
+
+        return response()->json($tenants);
+    }
 }

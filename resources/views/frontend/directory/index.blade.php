@@ -125,7 +125,7 @@
         }
 
         /* Hide content until loaded */
-        body:not(.loaded) > *:not(.page-loader) {
+        body:not(.loaded)>*:not(.page-loader) {
             opacity: 0;
             visibility: hidden;
         }
@@ -283,6 +283,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -325,6 +326,7 @@
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
@@ -364,16 +366,35 @@
         }
 
         @keyframes progressLoad {
-            0% { width: 0%; }
-            30% { width: 30%; }
-            60% { width: 60%; }
-            90% { width: 90%; }
-            100% { width: 100%; }
+            0% {
+                width: 0%;
+            }
+
+            30% {
+                width: 30%;
+            }
+
+            60% {
+                width: 60%;
+            }
+
+            90% {
+                width: 90%;
+            }
+
+            100% {
+                width: 100%;
+            }
         }
 
         @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .loader-text {
@@ -391,7 +412,9 @@
         }
 
         @keyframes textFadeIn {
-            to { opacity: 1; }
+            to {
+                opacity: 1;
+            }
         }
 
         /* Header */
@@ -622,15 +645,22 @@
 
         /* Header Logo Circle */
         .header-logo-circle {
-            display: flex; align-items: center; justify-content: center;
-            width: 50px; height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
             background: var(--primary-gradient);
             border-radius: 50%;
             box-shadow: 0 4px 10px rgba(44, 95, 93, 0.2);
             transition: all 0.3s ease;
         }
-        .header-logo-circle:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(44, 95, 93, 0.3); }
-        
+
+        .header-logo-circle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(44, 95, 93, 0.3);
+        }
+
 
         /* Sidebar Menu */
         .sidebar {
@@ -842,7 +872,7 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            z-index: 101;
+            z-index: 2000;
             background: var(--primary-gradient);
             border: none;
             border-radius: 50%;
@@ -3082,8 +3112,11 @@
                 text-align: center;
             }
         }
+
         @media (max-width: 768px) {
-            .header-left { display: none; }
+            .header-left {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -3094,7 +3127,8 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image" onerror="this.style.display='none'">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                        onerror="this.style.display='none'">
                 </div>
                 <h1>mal bali galeria</h1>
                 <span>SHOPPING CENTER</span>
@@ -3822,7 +3856,7 @@
         // Map View State
         let currentView = 'list';
         let currentFloorMap = 'floor1';
-        
+
         // Filter State (Simplified to native inputs)
 
         // ===== HELPER FUNCTION =====
@@ -4457,15 +4491,15 @@
                 <div class="map-tooltip-enhanced-body">
                     <div style="max-height: 200px; overflow-y: auto;">
                         ${tenantList.map(tenant => `
-                                <div class="suggestion-item" style="padding: 8px 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer;">
-                                    <div class="suggestion-icon" style="width: 20px; height: 20px; font-size: 10px;">${tenant.name.charAt(0)}</div>
-                                    <div class="suggestion-text" style="flex: 1;">
-                                        <div style="font-size: 13px; font-weight: 600;">${tenant.name}</div>
-                                        <div class="suggestion-category" style="font-size: 10px;">${tenant.category}</div>
+                                    <div class="suggestion-item" style="padding: 8px 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer;">
+                                        <div class="suggestion-icon" style="width: 20px; height: 20px; font-size: 10px;">${tenant.name.charAt(0)}</div>
+                                        <div class="suggestion-text" style="flex: 1;">
+                                            <div style="font-size: 13px; font-weight: 600;">${tenant.name}</div>
+                                            <div class="suggestion-category" style="font-size: 10px;">${tenant.category}</div>
+                                        </div>
+                                        <div class="suggestion-floor" style="font-size: 9px;">${tenant.floor}</div>
                                     </div>
-                                    <div class="suggestion-floor" style="font-size: 9px;">${tenant.floor}</div>
-                                </div>
-                            `).join('')}
+                                `).join('')}
                     </div>
                 </div>
             `;
