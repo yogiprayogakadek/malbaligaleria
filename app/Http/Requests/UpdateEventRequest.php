@@ -29,7 +29,18 @@ class UpdateEventRequest extends FormRequest
                 'max:255',
                 Rule::unique('events', 'name')->ignore($this->uuid, 'uuid'),
             ],
-            'start_date'    => 'required|date|after_or_equal:today',
+            // 'start_date'    => 'required|date|after_or_equal:today',
+            'start_date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $currentEvent = \DB::table('events')->where('uuid', $this->uuid)->first();
+
+                    if ($currentEvent && $value !== $currentEvent->start_date && strtotime($value) < strtotime(today())) {
+                        $fail('The ' . $attribute . ' must be a date after or equal to today.');
+                    }
+                },
+            ],
             'end_date'  => 'required|date|after_or_equal:today|after_or_equal:start_date',
             'start_time'    => 'required',
             'end_time'  => 'required',
