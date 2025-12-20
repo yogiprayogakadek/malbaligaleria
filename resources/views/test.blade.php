@@ -8,10 +8,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}"> --}}
     <style>
         @font-face {
-            font-family: 'Argesta Display';
-            src: url('https://fonts.cdnfonts.com/css/argesta-display');
+            font-family: "Argesta Display";
+            src: url("https://fonts.cdnfonts.com/css/argesta-display");
         }
 
         * {
@@ -37,9 +38,10 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: "Montserrat", sans-serif;
             overflow-x: hidden;
-            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             letter-spacing: 0.3px;
         }
@@ -77,7 +79,8 @@
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.dark-mode .page-loader {
@@ -130,7 +133,7 @@
         }
 
         .loader-logo h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 42px;
             font-weight: 400;
             letter-spacing: 3px;
@@ -233,13 +236,16 @@
         }
 
         .progress-bar::after {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.4),
+                    transparent);
             animation: progressShine 1.5s infinite;
         }
 
@@ -322,7 +328,9 @@
             align-items: center;
             padding: 20px 40px;
             z-index: 100;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
+            background: linear-gradient(to bottom,
+                    rgba(0, 0, 0, 0.6),
+                    rgba(0, 0, 0, 0.3));
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(5px);
         }
@@ -336,7 +344,9 @@
         }
 
         body.dark-mode header {
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+            background: linear-gradient(to bottom,
+                    rgba(0, 0, 0, 0.7),
+                    rgba(0, 0, 0, 0.4));
         }
 
         body.dark-mode header.scrolled {
@@ -424,7 +434,8 @@
 
         .dark-mode-toggle:hover {
             background: var(--secondary-gradient);
-            box-shadow: 0 6px 25px rgba(44, 95, 93, 0.35), 0 0 30px rgba(44, 95, 93, 0.15);
+            box-shadow: 0 6px 25px rgba(44, 95, 93, 0.35),
+                0 0 30px rgba(44, 95, 93, 0.15);
             transform: scale(1.08);
         }
 
@@ -512,18 +523,27 @@
 
         /* Header Logo Circle */
         .header-logo-circle {
-            display: flex; align-items: center; justify-content: center;
-            width: 50px; height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
             background: var(--primary-gradient);
             border-radius: 50%;
             box-shadow: 0 4px 10px rgba(44, 95, 93, 0.2);
             transition: all 0.3s ease;
         }
-        .header-logo-circle:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(44, 95, 93, 0.3); }
+
+        .header-logo-circle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(44, 95, 93, 0.3);
+        }
 
         /* Mobile: Search/Logo di sidebar */
         @media (max-width: 768px) {
-            .search-container, .header-left {
+
+            .search-container,
+            .header-left {
                 display: none;
             }
         }
@@ -542,7 +562,7 @@
             font-weight: 300;
             letter-spacing: 3px;
             text-transform: lowercase;
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             transition: all 0.3s ease;
         }
 
@@ -654,7 +674,7 @@
             font-weight: 300;
             letter-spacing: 2px;
             text-transform: lowercase;
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
         }
 
         body.dark-mode .sidebar-logo h2 {
@@ -824,7 +844,7 @@
         }
 
         .sidebar nav ul li a::after {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             bottom: -5px;
@@ -864,19 +884,21 @@
             left: 0;
             width: 100%;
             height: 120%;
-            background: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920') center/cover no-repeat;
+            background: url("../../backgorund.webp") center/cover no-repeat;
             will-change: transform;
             transform: translateZ(0);
         }
 
         .hero::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+            background: linear-gradient(to bottom,
+                    rgba(0, 0, 0, 0.3),
+                    rgba(0, 0, 0, 0.5));
             z-index: 1;
         }
 
@@ -897,11 +919,11 @@
         }
 
         .hero h2 {
-            font-size: 56px;
+            font-size: 50px;
             font-weight: 400;
             margin-bottom: 20px;
             line-height: 1.2;
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
         }
 
         .hero p {
@@ -931,7 +953,7 @@
         }
 
         .explore-btn::before {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             top: 0;
@@ -944,7 +966,7 @@
         }
 
         .explore-btn::after {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             top: 0;
@@ -992,7 +1014,7 @@
         }
 
         .explore-btn .text::after {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             bottom: -2px;
@@ -1005,7 +1027,8 @@
         .explore-btn:hover::before {
             width: calc(100% + 35px);
             border-radius: 50px;
-            box-shadow: 0 0 30px rgba(44, 95, 93, 0.4), 0 0 60px rgba(44, 95, 93, 0.2), 0 8px 25px rgba(44, 95, 93, 0.25);
+            box-shadow: 0 0 30px rgba(44, 95, 93, 0.4), 0 0 60px rgba(44, 95, 93, 0.2),
+                0 8px 25px rgba(44, 95, 93, 0.25);
         }
 
         .explore-btn:hover .arrow {
@@ -1145,7 +1168,7 @@
         }
 
         .about-container h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 48px;
             font-weight: 400;
             color: #2c3e50;
@@ -1213,7 +1236,7 @@
         }
 
         .info-item h3 {
-            font-family: 'Montserrat', sans-serif;
+            font-family: "Montserrat", sans-serif;
             font-size: 16px;
             font-weight: 600;
             color: #2c3e50;
@@ -1273,7 +1296,7 @@
         }
 
         .tenant-container h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 48px;
             font-weight: 400;
             color: #2c3e50;
@@ -1344,7 +1367,7 @@
         }
 
         .tenant-card-image::after {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -1364,7 +1387,7 @@
         }
 
         .tenant-card h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 22px;
             font-weight: 500;
             color: #2c3e50;
@@ -1423,7 +1446,8 @@
         .carousel-btn:hover {
             background: var(--secondary-gradient);
             transform: scale(1.12);
-            box-shadow: 0 5px 20px rgba(44, 95, 93, 0.35), 0 0 30px rgba(44, 95, 93, 0.15);
+            box-shadow: 0 5px 20px rgba(44, 95, 93, 0.35),
+                0 0 30px rgba(44, 95, 93, 0.15);
         }
 
         .carousel-btn:disabled {
@@ -1488,7 +1512,7 @@
             overflow: visible;
             font-weight: 500;
             height: 50px;
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
         }
 
         body.dark-mode .all-experience-btn {
@@ -1496,7 +1520,7 @@
         }
 
         .all-experience-btn::before {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             top: 0;
@@ -1530,7 +1554,7 @@
         }
 
         .all-experience-btn .text::after {
-            content: '';
+            content: "";
             position: absolute;
             left: 0;
             bottom: 0px;
@@ -1592,7 +1616,8 @@
         }
 
         .experience-card:not(.promotion):not(.expanded) {
-            flex: 1; /* Changed from 0.5 to 1 to match default stability */
+            flex: 1;
+            /* Changed from 0.5 to 1 to match default stability */
         }
 
         .experience-card {
@@ -1606,7 +1631,8 @@
             }
 
             .experience-cards:hover .experience-card:not(:hover) {
-                flex: 0.8 !important; /* Less aggressive shrinking */
+                flex: 0.8 !important;
+                /* Less aggressive shrinking */
             }
         }
 
@@ -1617,26 +1643,29 @@
                 overflow-x: auto;
                 padding-bottom: 10px;
             }
-            
+
             .experience-card {
-                flex: 0 0 280px !important; /* Fixed width carousels are safer/better UX on small screens */
+                flex: 0 0 280px !important;
+                /* Fixed width carousels are safer/better UX on small screens */
                 min-width: 280px;
-                height: 450px; /* Ensure consistent height */
+                height: 450px;
+                /* Ensure consistent height */
             }
-            
+
             /* Remove the complex hover interactions that cause blinking */
             .experience-cards:hover .experience-card:not(:hover) {
                 flex: 0 0 280px !important;
             }
-            
+
             .experience-card:hover {
                 flex: 0 0 280px !important;
-                transform: translateY(-5px); /* Simple subtle lift instead */
+                transform: translateY(-5px);
+                /* Simple subtle lift instead */
             }
         }
 
         .experience-card::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -1666,7 +1695,7 @@
         }
 
         .experience-card h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 32px;
             font-weight: 400;
             color: white;
@@ -1700,7 +1729,8 @@
         .experience-card-button:hover {
             background: var(--secondary-gradient);
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(44, 95, 93, 0.35), 0 0 40px rgba(44, 95, 93, 0.15);
+            box-shadow: 0 6px 20px rgba(44, 95, 93, 0.35),
+                0 0 40px rgba(44, 95, 93, 0.15);
         }
 
         .experience-card-button .arrow {
@@ -1724,7 +1754,7 @@
         }
 
         .experience-card-title-vertical h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 28px;
             font-weight: 400;
             color: white;
@@ -1776,19 +1806,19 @@
         }
 
         .experience-card.promotion {
-            background-image: url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800');
+            background-image: url("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800");
         }
 
         .experience-card.events {
-            background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800');
+            background-image: url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800");
         }
 
         .experience-card.destinations {
-            background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800');
+            background-image: url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800");
         }
 
         .experience-card.new-store {
-            background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800');
+            background-image: url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800");
         }
 
         /* Event Highlight Section with Slider */
@@ -1812,7 +1842,7 @@
         }
 
         .event-container h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 52px;
             font-weight: 500;
             color: var(--text-dark);
@@ -1883,7 +1913,8 @@
 
         .event-card:hover {
             transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(44, 95, 93, 0.2), 0 0 60px rgba(44, 95, 93, 0.08);
+            box-shadow: 0 20px 50px rgba(44, 95, 93, 0.2),
+                0 0 60px rgba(44, 95, 93, 0.08);
         }
 
         body.dark-mode .event-card {
@@ -1891,7 +1922,8 @@
         }
 
         body.dark-mode .event-card:hover {
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 60px rgba(168, 197, 195, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                0 0 60px rgba(168, 197, 195, 0.1);
         }
 
         .event-card-bg {
@@ -1907,25 +1939,25 @@
         }
 
         .event-card::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: linear-gradient(to bottom,
-                transparent 0%,
-                rgba(0, 0, 0, 0.3) 40%,
-                rgba(0, 0, 0, 0.85) 100%);
+                    transparent 0%,
+                    rgba(0, 0, 0, 0.3) 40%,
+                    rgba(0, 0, 0, 0.85) 100%);
             z-index: 1;
             transition: opacity 0.4s ease;
         }
 
         .event-card:hover::before {
             background: linear-gradient(to bottom,
-                rgba(44, 95, 93, 0.08) 0%,
-                rgba(44, 95, 93, 0.2) 40%,
-                rgba(0, 0, 0, 0.88) 100%);
+                    rgba(44, 95, 93, 0.08) 0%,
+                    rgba(44, 95, 93, 0.2) 40%,
+                    rgba(0, 0, 0, 0.88) 100%);
         }
 
         .event-card-content {
@@ -1959,7 +1991,7 @@
         }
 
         .event-card h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 32px;
             font-weight: 600;
             margin-bottom: 12px;
@@ -1990,7 +2022,7 @@
         }
 
         .event-link::before {
-            content: '';
+            content: "";
             position: absolute;
             bottom: 28px;
             left: 35px;
@@ -2044,7 +2076,7 @@
         }
 
         .event-nav-btn::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 50%;
             left: 50%;
@@ -2109,7 +2141,7 @@
         }
 
         .map-container h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 48px;
             font-weight: 400;
             color: #2c3e50;
@@ -2318,7 +2350,7 @@
         }
 
         .floor-item h4 {
-            font-family: 'Montserrat', sans-serif;
+            font-family: "Montserrat", sans-serif;
             font-size: 18px;
             font-weight: 600;
             color: #2c3e50;
@@ -2338,8 +2370,6 @@
         body.dark-mode .floor-item p {
             color: #b0b0b0;
         }
-
-
 
         /* Responsive untuk section baru */
         @media (max-width: 1024px) {
@@ -2404,7 +2434,7 @@
         }
 
         footer::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -2433,7 +2463,7 @@
         }
 
         .footer-column h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 24px;
             font-weight: 500;
             margin-bottom: 25px;
@@ -2465,7 +2495,7 @@
         }
 
         .footer-links a::before {
-            content: '→';
+            content: "→";
             position: absolute;
             left: -20px;
             opacity: 0;
@@ -2571,7 +2601,7 @@
         }
 
         .footer-brand-logo {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 20px;
             font-weight: 500;
             color: white;
@@ -2722,11 +2752,13 @@
                 flex: 0 0 100%;
             }
         }
+
         /* Tenant Grid in Landing */
         .tenant-content {
             width: 100%;
             position: relative;
-            padding-right: 20px; /* Prevent overlap with map-floors */
+            padding-right: 20px;
+            /* Prevent overlap with map-floors */
         }
 
         @media (max-width: 1023px) {
@@ -2750,36 +2782,39 @@
             transition: all 0.3s ease;
             z-index: 5;
             pointer-events: none;
-            
+
             /* Enhanced Glassmorphism Effect */
-            background: rgba(255, 255, 255, 0.85); /* More solid background */
-            backdrop-filter: saturate(180%) blur(12px); /* iOS-style frosted glass */
+            background: rgba(255, 255, 255, 0.85);
+            /* More solid background */
+            backdrop-filter: saturate(180%) blur(12px);
+            /* iOS-style frosted glass */
             -webkit-backdrop-filter: saturate(180%) blur(12px);
-            padding: 10px 20px; /* Slightly larger padding */
+            padding: 10px 20px;
+            /* Slightly larger padding */
             border-radius: 30px;
-            box-shadow: 
-                0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-                0 2px 4px -1px rgba(0, 0, 0, 0.06),
-                0 0 0 1px rgba(255, 255, 255, 0.5); /* Inner border ring */
-            border: none; /* Removed standard border for shadow ring approach */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            /* Inner border ring */
+            border: none;
+            /* Removed standard border for shadow ring approach */
         }
-        
+
         .tenant-scroll-indicator.right {
             right: 20px;
         }
-        
+
         .tenant-scroll-indicator.left {
             left: 20px;
-            flex-direction: row; /* Default row */
+            flex-direction: row;
+            /* Default row */
         }
-        
+
         body.dark-mode .tenant-scroll-indicator {
             color: var(--text-light);
             background: rgba(30, 30, 30, 0.85);
             backdrop-filter: saturate(180%) blur(12px);
             -webkit-backdrop-filter: saturate(180%) blur(12px);
-            box-shadow: 
-                0 4px 6px -1px rgba(0, 0, 0, 0.3), 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
                 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
@@ -2792,7 +2827,8 @@
         .tenant-scroll-indicator svg {
             width: 20px;
             height: 20px;
-            fill: none; /* Changed to none for stroke path */
+            fill: none;
+            /* Changed to none for stroke path */
             stroke: currentColor;
             stroke-width: 2;
             stroke-linecap: round;
@@ -2800,11 +2836,11 @@
         }
 
         .tenant-scroll-indicator.right svg {
-             animation: bounceRight 2s ease-in-out infinite;
+            animation: bounceRight 2s ease-in-out infinite;
         }
-        
+
         .tenant-scroll-indicator.left svg {
-             animation: bounceLeft 2s ease-in-out infinite;
+            animation: bounceLeft 2s ease-in-out infinite;
         }
 
         body.dark-mode .tenant-scroll-indicator svg {
@@ -2813,13 +2849,27 @@
         }
 
         @keyframes bounceRight {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
         }
-        
+
         @keyframes bounceLeft {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(-5px);
+            }
         }
 
         @media (max-width: 768px) {
@@ -2835,21 +2885,143 @@
             }
         }
 
-
         .tenant-grid {
             display: flex;
             gap: 1.5rem;
             overflow-x: auto;
             scroll-behavior: smooth;
             padding-bottom: 20px;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
             scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling on iOS */
         }
 
         .tenant-grid::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
+
+        /* Tenant Grid Wrapper with Navigation */
+        .tenant-grid-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .tenant-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(44, 95, 93, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .tenant-grid-wrapper:hover .tenant-nav-btn {
+            opacity: 1;
+        }
+
+        .tenant-nav-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(44, 95, 93, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        .tenant-nav-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .tenant-nav-btn.prev {
+            left: 10px;
+        }
+
+        .tenant-nav-btn.next {
+            right: 10px;
+        }
+
+        .tenant-nav-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--primary-color);
+            transition: stroke 0.3s ease;
+        }
+
+        .tenant-nav-btn:hover svg {
+            stroke: var(--secondary-color);
+        }
+
+        body.dark-mode .tenant-nav-btn {
+            background: rgba(40, 40, 40, 0.95);
+            border-color: rgba(168, 197, 195, 0.2);
+        }
+
+        body.dark-mode .tenant-nav-btn:hover {
+            background: rgba(50, 50, 50, 1);
+            border-color: var(--accent-color);
+        }
+
+        body.dark-mode .tenant-nav-btn svg {
+            stroke: var(--accent-color);
+        }
+
+        body.dark-mode .tenant-nav-btn:hover svg {
+            stroke: var(--text-light);
+        }
+
+        /* Mobile: Adjust button positioning and always show */
+        @media (max-width: 1024px) {
+            .tenant-nav-btn {
+                opacity: 1; /* Always visible on mobile */
+                width: 40px;
+                height: 40px;
+            }
+
+            .tenant-nav-btn.prev {
+                left: 5px;
+            }
+
+            .tenant-nav-btn.next {
+                right: 5px;
+            }
+
+            .tenant-nav-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tenant-nav-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .tenant-nav-btn.prev {
+                left: 5px;
+            }
+
+            .tenant-nav-btn.next {
+                right: 5px;
+            }
+
+            .tenant-nav-btn svg {
+                width: 18px;
+                height: 18px;
+            }
         }
 
         .tenant-card {
@@ -2864,16 +3036,19 @@
             display: flex;
             flex-direction: column;
             opacity: 1 !important;
-            transform: none !important; /* Force visible */
+            transform: none !important;
+            /* Force visible */
             flex-shrink: 0;
             scroll-snap-align: start;
-            touch-action: pan-y pinch-zoom; /* Allow vertical scroll and pinch zoom */
+            touch-action: pan-y pinch-zoom;
+            /* Allow vertical scroll and pinch zoom */
         }
 
         /* Desktop: Show 3 cards */
         @media (min-width: 1024px) {
             .tenant-card {
-                min-width: calc((100% - 3rem) / 3); /* 3 cards with 1.5rem gap between */
+                min-width: calc((100% - 3rem) / 3);
+                /* 3 cards with 1.5rem gap between */
                 max-width: calc((100% - 3rem) / 3);
             }
         }
@@ -2881,7 +3056,8 @@
         /* Tablet: Show 2 cards */
         @media (min-width: 768px) and (max-width: 1023px) {
             .tenant-card {
-                min-width: calc((100% - 1.5rem) / 2); /* 2 cards */
+                min-width: calc((100% - 1.5rem) / 2);
+                /* 2 cards */
                 max-width: calc((100% - 1.5rem) / 2);
             }
         }
@@ -2957,7 +3133,7 @@
         }
 
         .tenant-info h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: "Playfair Display", serif;
             font-size: 20px;
             margin-bottom: 8px;
             color: #2c3e50;
@@ -2991,11 +3167,11 @@
             font-size: 12px;
             color: #666;
             padding-top: 15px;
-            border-top: 1px solid rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         body.dark-mode .tenant-meta {
-            border-top-color: rgba(255,255,255,0.1);
+            border-top-color: rgba(255, 255, 255, 0.1);
         }
 
         .meta-item {
@@ -3033,13 +3209,16 @@
         }
 
         .see-details-btn::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
             transition: left 0.5s ease;
         }
 
@@ -3060,7 +3239,536 @@
         }
 
         .see-details-btn:hover svg {
-            transform: translateX(4px);
+            transform: translateX(3px);
+        }
+
+        /* Tenant Details Modal */
+        .tenant-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tenant-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .modal-overlay {
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .modal-container {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9) translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tenant-modal.active .modal-container {
+            transform: scale(1) translateY(0);
+        }
+
+        body.dark-mode .modal-container {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        body.dark-mode .modal-close {
+            background: rgba(50, 50, 50, 0.9);
+        }
+
+        body.dark-mode .modal-close:hover {
+            background: rgba(60, 60, 60, 1);
+        }
+
+        .modal-close svg {
+            width: 20px;
+            height: 20px;
+            stroke: #2c3e50;
+        }
+
+        body.dark-mode .modal-close svg {
+            stroke: #e0e0e0;
+        }
+
+        .modal-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+            }
+        }
+
+        /* Modal Carousel */
+        .modal-carousel {
+            position: relative;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        body.dark-mode .modal-carousel {
+            background: rgba(20, 20, 20, 0.8);
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+        }
+
+        .carousel-image {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .carousel-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+        }
+
+        .modal-carousel:hover .carousel-nav {
+            opacity: 1;
+        }
+
+        .carousel-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .carousel-nav.prev {
+            left: 20px;
+        }
+
+        .carousel-nav.next {
+            right: 20px;
+        }
+
+        body.dark-mode .carousel-nav {
+            background: rgba(50, 50, 50, 0.9);
+        }
+
+        body.dark-mode .carousel-nav:hover {
+            background: rgba(60, 60, 60, 1);
+        }
+
+        .carousel-nav svg {
+            width: 24px;
+            height: 24px;
+            stroke: #2c3e50;
+        }
+
+        body.dark-mode .carousel-nav svg {
+            stroke: #e0e0e0;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .carousel-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: white;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        body.dark-mode .carousel-indicator {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        body.dark-mode .carousel-indicator.active {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Carousel Swipe Hint */
+        .carousel-swipe-hint {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .carousel-swipe-hint.hidden {
+            opacity: 0;
+        }
+
+        body.dark-mode .carousel-swipe-hint {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .carousel-swipe-hint svg {
+            width: 16px;
+            height: 16px;
+            stroke: white;
+            animation: swipeHintBounce 2s ease-in-out infinite;
+        }
+
+        .carousel-swipe-hint svg:first-child {
+            animation-delay: 0s;
+        }
+
+        .carousel-swipe-hint svg:last-child {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes swipeHintBounce {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(-3px);
+            }
+        }
+
+        .carousel-swipe-hint svg:last-child {
+            animation-name: swipeHintBounceRight;
+        }
+
+        @keyframes swipeHintBounceRight {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(3px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .carousel-swipe-hint {
+                font-size: 10px;
+                padding: 10px 18px;
+                gap: 8px;
+            }
+
+            .carousel-swipe-hint svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        /* Modal Details */
+        .modal-details {
+            padding: 40px;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        @media (max-width: 768px) {
+            .modal-details {
+                padding: 30px 20px;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .modal-header {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-logo {
+            width: 80px;
+            height: 80px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .modal-logo {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .modal-title {
+            flex: 1;
+        }
+
+        .modal-floor-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .modal-title h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .modal-title h2 {
+            color: var(--text-light);
+        }
+
+        .modal-category {
+            font-size: 14px;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-info {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .modal-info-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(44, 95, 93, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-info-item:hover {
+            background: rgba(44, 95, 93, 0.1);
+            transform: translateX(5px);
+        }
+
+        body.dark-mode .modal-info-item {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark-mode .modal-info-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .modal-info-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .modal-info-item svg {
+            stroke: var(--accent-color);
+        }
+
+        .modal-info-item div {
+            flex: 1;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 12px;
+            color: var(--secondary-color);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .info-value {
+            color: var(--text-light);
+        }
+
+        .modal-description {
+            padding: 20px;
+            background: rgba(44, 95, 93, 0.03);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        body.dark-mode .modal-description {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-description p {
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .modal-description p {
+            color: var(--text-light);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .modal-container {
+                width: 95%;
+                max-height: 95vh;
+                border-radius: 16px;
+            }
+
+            .modal-carousel {
+                min-height: 300px;
+            }
+
+            .carousel-image {
+                padding: 20px;
+            }
+
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+            }
+
+            .carousel-nav.prev {
+                left: 10px;
+            }
+
+            .carousel-nav.next {
+                right: 10px;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .modal-logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .modal-title h2 {
+                font-size: 22px;
+            }
         }
 
         /* Empty State */
@@ -3087,9 +3795,11 @@
         body.dark-mode .empty-state h3 {
             color: #ddd;
         }
+
         /* Map Floors Styling */
         .map-floors {
-            background: white; /* White background request */
+            background: white;
+            /* White background request */
             border-radius: 1.5rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             height: fit-content;
@@ -3097,11 +3807,14 @@
             flex-direction: column;
             border: 1px solid rgba(0, 0, 0, 0.05);
             color: #2c3e50;
-            position: relative; /* For absolute indicators */
-            overflow: hidden; /* Contain inner scroll */
-            padding: 0; /* Remove padding from container, move to wrapper */
+            position: relative;
+            /* For absolute indicators */
+            overflow: hidden;
+            /* Contain inner scroll */
+            padding: 0;
+            /* Remove padding from container, move to wrapper */
         }
-        
+
         .floor-list-wrapper {
             padding: 1.5rem;
             max-height: 450px;
@@ -3109,12 +3822,15 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* simple IE */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* simple IE */
         }
-        
+
         .floor-list-wrapper::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+            display: none;
+            /* Chrome/Safari */
         }
 
         /* Vertical Scroll Indicators for Floors */
@@ -3134,7 +3850,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             opacity: 1;
             pointer-events: none;
@@ -3142,25 +3858,25 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-        
+
         body.dark-mode .floor-scroll-indicator {
             background: rgba(40, 40, 40, 0.85);
             color: white;
         }
-        
+
         .floor-scroll-indicator svg {
             width: 14px;
             height: 14px;
             fill: currentColor;
         }
-        
-        .floor-scroll-indicator.up { 
-            top: 15px; 
+
+        .floor-scroll-indicator.up {
+            top: 15px;
             animation: bounceUp 2s infinite;
         }
-        
-        .floor-scroll-indicator.down { 
-            bottom: 15px; 
+
+        .floor-scroll-indicator.down {
+            bottom: 15px;
             animation: bounceDown 2s infinite;
         }
 
@@ -3169,17 +3885,31 @@
             visibility: hidden;
             transform: translateX(-50%) translateY(10px);
         }
-        
+
         @keyframes bounceUp {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-5px); }
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-5px);
+            }
         }
-        
+
         @keyframes bounceDown {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(5px); }
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(5px);
+            }
         }
-        
+
         body.dark-mode .map-floors {
             background: rgba(40, 40, 40, 0.6);
             border-color: rgba(255, 255, 255, 0.05);
@@ -3200,7 +3930,8 @@
         }
 
         .floor-item.active {
-            background: var(--primary-gradient); /* Solid active background */
+            background: var(--primary-gradient);
+            /* Solid active background */
             border-color: transparent;
             box-shadow: 0 5px 15px rgba(95, 207, 218, 0.3);
             transform: translateX(5px);
@@ -3209,7 +3940,8 @@
         .floor-item h4 {
             font-size: 16px;
             font-weight: 700;
-            color: #2c3e50; /* Dark text for inactive items */
+            color: #2c3e50;
+            /* Dark text for inactive items */
             margin-bottom: 4px;
             transition: color 0.3s ease;
         }
@@ -3220,16 +3952,17 @@
 
         .floor-item p {
             font-size: 12px;
-            color: #6a7a78; /* Muted text for inactive items */
+            color: #6a7a78;
+            /* Muted text for inactive items */
             margin: 0;
             transition: color 0.3s ease;
         }
-        
+
         /* Active State Text Colors - White for constrast on gradient */
         .floor-item.active h4 {
             color: white !important;
         }
-        
+
         .floor-item.active p {
             color: rgba(255, 255, 255, 0.9) !important;
         }
@@ -3244,23 +3977,28 @@
         @media (min-width: 1024px) {
             .map-wrapper {
                 display: grid;
-                grid-template-columns: 1fr 400px; /* Widened to 400px */
+                grid-template-columns: 1fr 400px;
+                /* Widened to 400px */
                 align-items: start;
                 gap: 40px;
             }
-            .map-floors { 
-                order: 2; 
-                display: flex !important; /* Ensure it's visible */
+
+            .map-floors {
+                order: 2;
+                display: flex !important;
+                /* Ensure it's visible */
                 position: sticky;
                 top: 2rem;
             }
+
             .map-display {
                 order: 1;
                 background: transparent;
                 box-shadow: none;
                 height: auto;
                 overflow: visible;
-                min-width: 0; /* CRITICAL: Prevents grid item from expanding beyond its cell */
+                min-width: 0;
+                /* CRITICAL: Prevents grid item from expanding beyond its cell */
                 width: 100%;
             }
         }
@@ -3273,7 +4011,8 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image" onerror="this.style.display='none'">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                        onerror="this.style.display='none'">
                 </div>
                 <h1>mal bali galeria</h1>
                 <span>SHOPPING CENTER</span>
@@ -3367,8 +4106,8 @@
     <section class="hero" id="home">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <h2>Indonesia's Iconic Resort Lifestyle Destination</h2>
-            <p>Retail therapy for communities to connect with nature, leisure and recreations in modern way</p>
+            <h2>Bali’s Most Refined Luxury Lifestyle Destination</h2>
+            <p>An elevated sanctuary where you enjoy, play, eat, and shop with exceptional sophistication</p>
             <button class="explore-btn">
                 <span class="arrow">→</span>
                 <span class="text">Explore malbaligaleria</span>
@@ -3534,7 +4273,8 @@
                                 style="background-image: url({{ asset('storage/' . $event->primaryPhoto->path) }});">
                             </div>
                             <div class="event-card-content">
-                                <span class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <span
+                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p>{{ $event->description }}</p>
                                 <a href="#" class="event-link">Learn More →</a>
@@ -3560,172 +4300,29 @@
             <div class="map-wrapper">
                 <div class="map-display">
                     <div class="tenant-content">
-                        <div class="tenant-grid" id="landingTenantGrid">
-                            {{-- Nanti ganti dengan data dari database menggunakan @foreach --}}
-                            {{-- Contoh: @foreach($tenants as $tenant) --}}
-
-                            {{-- CONTOH TENANT CARD - Ganti dengan data dari database --}}
-                            <div class="tenant-card stagger-card">
-                                <div class="tenant-logo">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/UNIQLO_logo.svg" alt="Uniqlo">
-                                </div>
-                                <div class="tenant-info">
-                                    <span class="floor-badge">1st Floor</span>
-                                    <h3>Uniqlo</h3>
-                                    <p class="tenant-category">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
-                                        </svg>
-                                        Fashion & Apparel
-                                    </p>
-                                    <div class="tenant-meta">
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                                <circle cx="12" cy="10" r="3"/>
-                                            </svg>
-                                            <span>Unit 1C-89</span>
-                                        </div>
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <circle cx="12" cy="12" r="10"/>
-                                                <polyline points="12 6 12 12 16 14"/>
-                                            </svg>
-                                            <span>10:00 AM - 10:00 PM</span>
-                                        </div>
-                                    </div>
-                                    <button class="see-details-btn">
-                                        See Details
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                        <div class="tenant-grid-wrapper">
+                            <button class="tenant-nav-btn prev" id="tenantNavPrev">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </button>
+                            <div class="tenant-grid" id="landingTenantGrid">
+                                {{-- RENDER --}}
                             </div>
-
-                            <div class="tenant-card stagger-card">
-                                <div class="tenant-logo">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg" alt="Zara">
-                                </div>
-                                <div class="tenant-info">
-                                    <span class="floor-badge">1st Floor</span>
-                                    <h3>Zara</h3>
-                                    <p class="tenant-category">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
-                                        </svg>
-                                        Fashion & Apparel
-                                    </p>
-                                    <div class="tenant-meta">
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                                <circle cx="12" cy="10" r="3"/>
-                                            </svg>
-                                            <span>Unit 1C-73</span>
-                                        </div>
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <circle cx="12" cy="12" r="10"/>
-                                                <polyline points="12 6 12 12 16 14"/>
-                                            </svg>
-                                            <span>10:00 AM - 10:00 PM</span>
-                                        </div>
-                                    </div>
-                                    <button class="see-details-btn">
-                                        See Details
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="tenant-card stagger-card">
-                                <div class="tenant-logo">
-                                    <img src="https://logos-world.net/wp-content/uploads/2022/04/Tumi-Logo.png" alt="TUMI">
-                                </div>
-                                <div class="tenant-info">
-                                    <span class="floor-badge">1st Floor</span>
-                                    <h3>TUMI</h3>
-                                    <p class="tenant-category">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
-                                        </svg>
-                                        Fashion & Accessories
-                                    </p>
-                                    <div class="tenant-meta">
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                                <circle cx="12" cy="10" r="3"/>
-                                            </svg>
-                                            <span>Unit 1C-76</span>
-                                        </div>
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <circle cx="12" cy="12" r="10"/>
-                                                <polyline points="12 6 12 12 16 14"/>
-                                            </svg>
-                                            <span>10:00 AM - 10:00 PM</span>
-                                        </div>
-                                    </div>
-                                    <button class="see-details-btn">
-                                        See Details
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="tenant-card stagger-card">
-                                <div class="tenant-logo">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Pandora_Logo.svg" alt="Pandora">
-                                </div>
-                                <div class="tenant-info">
-                                    <span class="floor-badge">1st Floor</span>
-                                    <h3>Pandora</h3>
-                                    <p class="tenant-category">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
-                                        </svg>
-                                        Fashion & Accessories
-                                    </p>
-                                    <div class="tenant-meta">
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                                <circle cx="12" cy="10" r="3"/>
-                                            </svg>
-                                            <span>Unit 1C-79</span>
-                                        </div>
-                                        <div class="meta-item">
-                                            <svg viewBox="0 0 24 24">
-                                                <circle cx="12" cy="12" r="10"/>
-                                                <polyline points="12 6 12 12 16 14"/>
-                                            </svg>
-                                            <span>10:00 AM - 10:00 PM</span>
-                                        </div>
-                                    </div>
-                                    <button class="see-details-btn">
-                                        See Details
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            {{-- @endforeach --}}
+                            <button class="tenant-nav-btn next" id="tenantNavNext">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 18l6-6-6-6"/>
+                                </svg>
+                            </button>
                         </div>
                         <div class="empty-state" id="landingEmptyState" style="display: none;">
                             <svg viewBox="0 0 24 24">
-                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor"
+                                    stroke-width="2" fill="none" stroke-linecap="round" />
                             </svg>
                             <h3>No tenants found</h3>
                         </div>
-                        
+
                         {{-- Tenant Scroll Indicators --}}
                         <div class="tenant-scroll-indicator left hidden" id="tenantScrollBack">
                             <svg viewBox="0 0 24 24">
@@ -3733,7 +4330,7 @@
                             </svg>
                             SWIPE BACK
                         </div>
-                        
+
                         <div class="tenant-scroll-indicator right" id="tenantScrollIndicator">
                             SWIPE FOR MORE
                             <svg viewBox="0 0 24 24">
@@ -3745,10 +4342,6 @@
                 <div class="map-floors" id="mapFloors">
                     <div class="floor-list-wrapper" id="floorListWrapper">
                         <div class="floor-item active">
-                            <h4>Ground Floor</h4>
-                            <p>Fashion, Accessories, Cosmetics</p>
-                        </div>
-                        <div class="floor-item">
                             <h4>Level 1</h4>
                             <p>Electronics, Books, Sports</p>
                         </div>
@@ -3757,20 +4350,15 @@
                             <p>Restaurants, Cafés, Food Court</p>
                         </div>
                         <div class="floor-item">
-                            <h4>Level 3</h4>
+                            <h4>New Store</h4>
+                            <p>Fashion, Accessories, Cosmetics</p>
+                        </div>
+                        <div class="floor-item">
+                            <h4>All Floor</h4>
                             <p>Entertainment, Cinema, Kids Zone</p>
                         </div>
-                         {{-- Example of more floors to demonstrate scrolling --}}
-                        <div class="floor-item">
-                            <h4>Level 4</h4>
-                            <p>Rooftop Garden, Lounge</p>
-                        </div>
-                        <div class="floor-item">
-                            <h4>Basement</h4>
-                            <p>Parking, Supermarket, Services</p>
-                        </div>
                     </div>
-                    
+
                     {{-- Vertical Scroll Indicators --}}
                     <div class="floor-scroll-indicator up hidden" id="floorScrollUp">
                         <svg viewBox="0 0 24 24">
@@ -3788,6 +4376,98 @@
             </div>
         </div>
     </section>
+
+    <!-- Tenant Details Modal -->
+    <div class="tenant-modal" id="tenantModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+            
+            <div class="modal-content">
+                <div class="modal-carousel">
+                    <div class="carousel-images" id="modalCarouselImages">
+                        <!-- Images will be inserted here dynamically -->
+                    </div>
+                    <button class="carousel-nav prev" id="modalCarouselPrev">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-nav next" id="modalCarouselNext">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                    <div class="carousel-swipe-hint" id="carouselSwipeHint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                        <span>Swipe or use navigation buttons</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </div>
+                    <div class="carousel-indicators" id="modalCarouselIndicators">
+                        <!-- Indicators will be inserted here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="modal-details">
+                    <div class="modal-header">
+                        <div class="modal-logo" id="modalLogo">
+                            <!-- Logo will be inserted here -->
+                        </div>
+                        <div class="modal-title">
+                            <span class="modal-floor-badge" id="modalFloorBadge"></span>
+                            <h2 id="modalTenantName"></h2>
+                            <p class="modal-category" id="modalCategory"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-info">
+                        <div class="modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <div>
+                                <span class="info-label">Location</span>
+                                <span class="info-value" id="modalUnit"></span>
+                            </div>
+                        </div>
+                        <div class="modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <div>
+                                <span class="info-label">Operating Hours</span>
+                                <span class="info-value" id="modalHours"></span>
+                            </div>
+                        </div>
+                        <div class="modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            <div>
+                                <span class="info-label">Floor</span>
+                                <span class="info-value" id="modalFloor"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-description" id="modalDescription">
+                        <!-- Description will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="reveal" id="contact">
@@ -3891,124 +4571,128 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {{-- <script src="{{ asset('assets/frontend/js/landing.js') }}"></script> --}}
     <script>
         // Page Loader
-        const pageLoader = document.getElementById('pageLoader');
+        const pageLoader = document.getElementById("pageLoader");
 
         // Ensure loader shows first
         let minLoadTime = 3500; // Minimum 3.5 seconds
         let loadStartTime = Date.now();
 
-        window.addEventListener('load', () => {
+        window.addEventListener("load", () => {
             let loadTime = Date.now() - loadStartTime;
             let remainingTime = Math.max(0, minLoadTime - loadTime);
 
             // Hide loader after ensuring minimum display time
             setTimeout(() => {
-                pageLoader.classList.add('hidden');
-                document.body.classList.add('loaded');
+                pageLoader.classList.add("hidden");
+                document.body.classList.add("loaded");
 
                 // Remove from DOM after transition
                 setTimeout(() => {
-                    pageLoader.style.display = 'none';
+                    pageLoader.style.display = "none";
                 }, 500);
             }, remainingTime);
         });
 
         // Fallback: if load event doesn't fire within 5 seconds, hide loader anyway
         setTimeout(() => {
-            if (!document.body.classList.contains('loaded')) {
-                pageLoader.classList.add('hidden');
-                document.body.classList.add('loaded');
+            if (!document.body.classList.contains("loaded")) {
+                pageLoader.classList.add("hidden");
+                document.body.classList.add("loaded");
                 setTimeout(() => {
-                    pageLoader.style.display = 'none';
+                    pageLoader.style.display = "none";
                 }, 500);
             }
         }, 5000);
 
         // Menu toggle
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarClose = document.getElementById('sidebarClose');
-        const header = document.querySelector('header');
+        const menuBtn = document.getElementById("menuBtn");
+        const sidebar = document.getElementById("sidebar");
+        const sidebarClose = document.getElementById("sidebarClose");
+        const header = document.querySelector("header");
 
-        menuBtn.addEventListener('click', () => {
-            menuBtn.classList.toggle('active');
-            sidebar.classList.toggle('active');
+        menuBtn.addEventListener("click", () => {
+            menuBtn.classList.toggle("active");
+            sidebar.classList.toggle("active");
             // Toggle body scroll
-            document.body.classList.toggle('menu-open');
+            document.body.classList.toggle("menu-open");
         });
 
         // Close sidebar with close button
-        sidebarClose.addEventListener('click', () => {
-            menuBtn.classList.remove('active');
-            sidebar.classList.remove('active');
-            document.body.classList.remove('menu-open');
+        sidebarClose.addEventListener("click", () => {
+            menuBtn.classList.remove("active");
+            sidebar.classList.remove("active");
+            document.body.classList.remove("menu-open");
         });
 
         // Close sidebar when clicking on a link
-        const sidebarLinks = sidebar.querySelectorAll('a');
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuBtn.classList.remove('active');
-                sidebar.classList.remove('active');
-                document.body.classList.remove('menu-open');
+        const sidebarLinks = sidebar.querySelectorAll("a");
+        sidebarLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+                menuBtn.classList.remove("active");
+                sidebar.classList.remove("active");
+                document.body.classList.remove("menu-open");
             });
         });
 
         // Sticky Header - Always visible
         let lastScroll = 0;
 
-        window.addEventListener('scroll', () => {
+        window.addEventListener("scroll", () => {
             const currentScroll = window.pageYOffset;
 
             // Add scrolled class for background
             if (currentScroll > 100) {
-                header.classList.add('scrolled');
+                header.classList.add("scrolled");
             } else {
-                header.classList.remove('scrolled');
+                header.classList.remove("scrolled");
             }
 
             lastScroll = currentScroll;
         });
 
         // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeToggle = document.getElementById("darkModeToggle");
 
         // Check for saved dark mode preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
+        if (localStorage.getItem("darkMode") === "enabled") {
+            document.body.classList.add("dark-mode");
         }
 
-        darkModeToggle.addEventListener('click', function(e) {
+        darkModeToggle.addEventListener("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle("dark-mode");
 
             // Save preference
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
+            if (document.body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkMode", "enabled");
             } else {
-                localStorage.setItem('darkMode', 'disabled');
+                localStorage.setItem("darkMode", "disabled");
             }
         });
 
         // Enhanced Parallax Effect for Hero Section
-        const hero = document.querySelector('.hero');
-        const heroBg = document.querySelector('.hero-bg');
+        const hero = document.querySelector(".hero");
+        const heroBg = document.querySelector(".hero-bg");
 
-        window.addEventListener('scroll', () => {
+        window.addEventListener("scroll", () => {
             const scrolled = window.pageYOffset;
 
             if (hero && heroBg && scrolled < hero.offsetHeight) {
                 // Parallax untuk background - bergerak lebih lambat
                 const parallaxSpeed = 0.5;
-                heroBg.style.transform = `translateY(${scrolled * parallaxSpeed}px) scale(1.1)`;
+                heroBg.style.transform = `translateY(${
+            scrolled * parallaxSpeed
+        }px) scale(1.1)`;
 
                 // Fade out hero content saat scroll
-                const heroContent = document.querySelector('.hero-content');
-                const opacity = 1 - (scrolled / (hero.offsetHeight * 0.7));
+                const heroContent = document.querySelector(".hero-content");
+                const opacity = 1 - scrolled / (hero.offsetHeight * 0.7);
                 const translateY = scrolled * 0.3;
 
                 if (heroContent) {
@@ -4017,49 +4701,51 @@
                 }
 
                 // Zoom in effect pada background
-                const scale = 1.1 + (scrolled * 0.0001);
-                heroBg.style.transform = `translateY(${scrolled * parallaxSpeed}px) scale(${Math.min(scale, 1.3)})`;
+                const scale = 1.1 + scrolled * 0.0001;
+                heroBg.style.transform = `translateY(${
+            scrolled * parallaxSpeed
+        }px) scale(${Math.min(scale, 1.3)})`;
             }
         });
 
         // Reveal on Scroll Animation
-        const revealElements = document.querySelectorAll('.reveal');
+        const revealElements = document.querySelectorAll(".reveal");
 
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
             const revealPoint = 100;
 
-            revealElements.forEach(element => {
+            revealElements.forEach((element) => {
                 const elementTop = element.getBoundingClientRect().top;
 
                 if (elementTop < windowHeight - revealPoint) {
-                    element.classList.add('active');
+                    element.classList.add("active");
                 }
             });
         };
 
-        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener("scroll", revealOnScroll);
         revealOnScroll(); // Initial check
 
         // Tenant Carousel
         // Tenant Carousel - Infinite Loop
-        const carouselContainer = document.getElementById('carouselContainer');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        
+        const carouselContainer = document.getElementById("carouselContainer");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
         // Strategy: Try scoped first, fallback to global if empty (to match previous behavior)
         let cards = [];
         if (carouselContainer) {
-            cards = carouselContainer.querySelectorAll('.tenant-card');
+            cards = carouselContainer.querySelectorAll(".tenant-card");
         }
-        
+
         // Fallback to global if scoped is empty (restore previous functionality)
         if (cards.length === 0) {
-             cards = document.querySelectorAll('.tenant-card');
+            cards = document.querySelectorAll(".tenant-card");
         }
-            
+
         const originalCardsCount = cards.length;
-        
+
         let currentIndex = 0;
         let cardsPerView = 4;
         let isTransitioning = false;
@@ -4067,23 +4753,26 @@
         // Clone first 4 cards for infinite loop
         // Ensure container exists before appending
         if (originalCardsCount > 0 && carouselContainer) {
-            const clonesNeeded = 4; 
+            const clonesNeeded = 4;
             for (let i = 0; i < clonesNeeded; i++) {
                 // Use modulus to handle case where originalCardsCount < 4
                 const cardToClone = cards[i % originalCardsCount];
                 if (cardToClone) {
                     const clone = cardToClone.cloneNode(true);
-                    clone.classList.add('clone');
+                    clone.classList.add("clone");
                     carouselContainer.appendChild(clone);
                 }
             }
-            
+
             // Re-query cards after appending clones
             // We must maintain the same selector strategy
-            if (carouselContainer.querySelectorAll('.tenant-card').length > originalCardsCount) {
-                 cards = carouselContainer.querySelectorAll('.tenant-card');
+            if (
+                carouselContainer.querySelectorAll(".tenant-card").length >
+                originalCardsCount
+            ) {
+                cards = carouselContainer.querySelectorAll(".tenant-card");
             } else {
-                 cards = document.querySelectorAll('.tenant-card');
+                cards = document.querySelectorAll(".tenant-card");
             }
         }
 
@@ -4099,24 +4788,24 @@
                 cardsPerView = 4;
             }
             updateCarousel(true); // Instant update on resize
-            
+
             // Restart autoplay logic
-            if (typeof startAutoplay === 'function') startAutoplay();
+            if (typeof startAutoplay === "function") startAutoplay();
         };
 
         const updateCarousel = (instant = false) => {
             if (cards.length === 0) return;
-            
+
             const cardWidth = cards[0].offsetWidth;
             const gap = 30; // Match CSS gap
             const offset = -(currentIndex * (cardWidth + gap));
-            
+
             if (instant) {
-                carouselContainer.style.transition = 'none';
+                carouselContainer.style.transition = "none";
             } else {
-                carouselContainer.style.transition = 'transform 0.5s ease-in-out';
+                carouselContainer.style.transition = "transform 0.5s ease-in-out";
             }
-            
+
             carouselContainer.style.transform = `translateX(${offset}px)`;
 
             // Buttons always enabled for infinite loop if content exists
@@ -4130,7 +4819,7 @@
         };
 
         // Handle Infinite Loop Reset
-        carouselContainer.addEventListener('transitionend', () => {
+        carouselContainer.addEventListener("transitionend", () => {
             // If we've scrolled past the original set
             if (currentIndex >= originalCardsCount) {
                 currentIndex = currentIndex % originalCardsCount;
@@ -4139,7 +4828,7 @@
             isTransitioning = false;
         });
 
-        prevBtn.addEventListener('click', () => {
+        prevBtn.addEventListener("click", () => {
             if (isTransitioning) return;
             if (currentIndex > 0) {
                 currentIndex--;
@@ -4154,20 +4843,20 @@
             }
         });
 
-        nextBtn.addEventListener('click', () => {
-             // Allow clicking into clone territory
-             if (originalCardsCount > 0) {
-                 currentIndex++;
-                 updateCarousel();
-             }
+        nextBtn.addEventListener("click", () => {
+            // Allow clicking into clone territory
+            if (originalCardsCount > 0) {
+                currentIndex++;
+                updateCarousel();
+            }
         });
 
         // Auto-play carousel
         let autoplayInterval;
-        
+
         const startAutoplay = () => {
             if (autoplayInterval) clearInterval(autoplayInterval);
-            
+
             // Only autoplay if we have enough content (Infinite loop always active if content exists)
             if (originalCardsCount > 0) {
                 autoplayInterval = setInterval(() => {
@@ -4180,12 +4869,12 @@
 
         // Pause on hover
         if (carouselContainer) {
-            carouselContainer.addEventListener('mouseenter', () => {
+            carouselContainer.addEventListener("mouseenter", () => {
                 if (autoplayInterval) clearInterval(autoplayInterval);
             });
-            
-            carouselContainer.addEventListener('mouseleave', () => {
-                 startAutoplay();
+
+            carouselContainer.addEventListener("mouseleave", () => {
+                startAutoplay();
             });
         }
 
@@ -4193,7 +4882,7 @@
         startAutoplay();
 
         // Update on window resize
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
             updateCardsPerView();
         });
 
@@ -4201,11 +4890,11 @@
         updateCardsPerView();
 
         // Event Slider
-        const eventGrid = document.getElementById('eventGrid');
-        const eventPrevBtn = document.getElementById('eventPrevBtn');
-        const eventNextBtn = document.getElementById('eventNextBtn');
-        const eventControls = document.getElementById('eventControls');
-        const eventCards = document.querySelectorAll('.event-card');
+        const eventGrid = document.getElementById("eventGrid");
+        const eventPrevBtn = document.getElementById("eventPrevBtn");
+        const eventNextBtn = document.getElementById("eventNextBtn");
+        const eventControls = document.getElementById("eventControls");
+        const eventCards = document.querySelectorAll(".event-card");
 
         let eventCurrentIndex = 0;
         let eventCardsPerView = 2;
@@ -4232,7 +4921,8 @@
             // Update button states
             if (eventPrevBtn && eventNextBtn) {
                 eventPrevBtn.disabled = eventCurrentIndex === 0;
-                eventNextBtn.disabled = eventCurrentIndex >= eventCards.length - eventCardsPerView;
+                eventNextBtn.disabled =
+                    eventCurrentIndex >= eventCards.length - eventCardsPerView;
             }
         };
 
@@ -4245,21 +4935,21 @@
             const shouldHideControls = eventCards.length <= eventCardsPerView;
 
             if (shouldHideControls) {
-                eventControls.classList.add('hidden');
+                eventControls.classList.add("hidden");
             } else {
-                eventControls.classList.remove('hidden');
+                eventControls.classList.remove("hidden");
             }
         };
 
         if (eventPrevBtn && eventNextBtn && eventGrid) {
-            eventPrevBtn.addEventListener('click', () => {
+            eventPrevBtn.addEventListener("click", () => {
                 if (eventCurrentIndex > 0) {
                     eventCurrentIndex--;
                     updateEventSlider();
                 }
             });
 
-            eventNextBtn.addEventListener('click', () => {
+            eventNextBtn.addEventListener("click", () => {
                 if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
                     eventCurrentIndex++;
                     updateEventSlider();
@@ -4279,11 +4969,11 @@
             }, 6000);
 
             // Pause autoplay on hover
-            eventGrid.addEventListener('mouseenter', () => {
+            eventGrid.addEventListener("mouseenter", () => {
                 clearInterval(eventAutoplayInterval);
             });
 
-            eventGrid.addEventListener('mouseleave', () => {
+            eventGrid.addEventListener("mouseleave", () => {
                 eventAutoplayInterval = setInterval(() => {
                     if (eventCards.length > eventCardsPerView) {
                         if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
@@ -4297,7 +4987,7 @@
             });
 
             // Update on window resize
-            window.addEventListener('resize', () => {
+            window.addEventListener("resize", () => {
                 updateEventCardsPerView();
             });
 
@@ -4306,97 +4996,98 @@
         }
 
         // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener("click", function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(this.getAttribute("href"));
                 if (target) {
                     const headerHeight = header.offsetHeight;
                     const targetPosition = target.offsetTop - headerHeight;
 
                     window.scrollTo({
                         top: targetPosition,
-                        behavior: 'smooth'
+                        behavior: "smooth",
                     });
                 }
             });
         });
 
-
         // Experience cards - DISABLED to prevent blinking
         /*
-        const experienceCardsContainer = document.querySelector('.experience-cards');
-        const experienceCards = document.querySelectorAll('.experience-card');
-        let lastHoveredCard = document.querySelector('.experience-card.promotion');
-        let isHovering = false;
+                const experienceCardsContainer = document.querySelector('.experience-cards');
+                const experienceCards = document.querySelectorAll('.experience-card');
+                let lastHoveredCard = document.querySelector('.experience-card.promotion');
+                let isHovering = false;
 
-        experienceCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
-                lastHoveredCard = card;
-                isHovering = true;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.boxShadow = 'none';
-                isHovering = false;
-            });
-        });
-
-
-        if (experienceCardsContainer) {
-            experienceCardsContainer.addEventListener('mouseleave', () => {
                 experienceCards.forEach(card => {
-                    card.classList.remove('promotion', 'expanded');
+                    card.addEventListener('mouseenter', () => {
+                        card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
+                        lastHoveredCard = card;
+                        isHovering = true;
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.boxShadow = 'none';
+                        isHovering = false;
+                    });
                 });
-                if (lastHoveredCard) {
-                    lastHoveredCard.classList.add('expanded');
+
+
+                if (experienceCardsContainer) {
+                    experienceCardsContainer.addEventListener('mouseleave', () => {
+                        experienceCards.forEach(card => {
+                            card.classList.remove('promotion', 'expanded');
+                        });
+                        if (lastHoveredCard) {
+                            lastHoveredCard.classList.add('expanded');
+                        }
+                    });
                 }
-            });
-        }
-        */
+                */
 
         // Disabled scroll event to prevent blinking
         // The CSS hover states are sufficient for the experience cards behavior
         /*
-        let scrollTimeout;
-        let lastExpandedCard = null;
-        window.addEventListener('scroll', () => {
-            if (!isHovering && lastHoveredCard && experienceCardsContainer) {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    if (lastExpandedCard !== lastHoveredCard) {
-                        experienceCards.forEach(card => {
-                            card.classList.remove('promotion', 'expanded');
-                        });
-                        lastHoveredCard.classList.add('expanded');
-                        lastExpandedCard = lastHoveredCard;
+                let scrollTimeout;
+                let lastExpandedCard = null;
+                window.addEventListener('scroll', () => {
+                    if (!isHovering && lastHoveredCard && experienceCardsContainer) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            if (lastExpandedCard !== lastHoveredCard) {
+                                experienceCards.forEach(card => {
+                                    card.classList.remove('promotion', 'expanded');
+                                });
+                                lastHoveredCard.classList.add('expanded');
+                                lastExpandedCard = lastHoveredCard;
+                            }
+                        }, 500);
                     }
-                }, 500);
-            }
-        });
-        */
+                });
+                */
 
         // Mall Directory Scroll Indicator
-        const mapFloors = document.getElementById('mapFloors');
-        const scrollIndicator = document.getElementById('scrollIndicator');
+        const mapFloors = document.getElementById("mapFloors");
+        const scrollIndicator = document.getElementById("scrollIndicator");
 
         if (mapFloors && scrollIndicator) {
             // Check if scrollable
             const checkScrollable = () => {
                 const isScrollable = mapFloors.scrollHeight > mapFloors.clientHeight;
                 if (!isScrollable) {
-                    scrollIndicator.classList.add('hidden');
+                    scrollIndicator.classList.add("hidden");
                 }
             };
 
             // Hide indicator when scrolled to bottom
-            mapFloors.addEventListener('scroll', () => {
-                const isAtBottom = mapFloors.scrollHeight - mapFloors.scrollTop <= mapFloors.clientHeight + 10;
+            mapFloors.addEventListener("scroll", () => {
+                const isAtBottom =
+                    mapFloors.scrollHeight - mapFloors.scrollTop <=
+                    mapFloors.clientHeight + 10;
                 if (isAtBottom) {
-                    scrollIndicator.classList.add('hidden');
+                    scrollIndicator.classList.add("hidden");
                 } else {
-                    scrollIndicator.classList.remove('hidden');
+                    scrollIndicator.classList.remove("hidden");
                 }
             });
 
@@ -4406,32 +5097,34 @@
         // Add intersection observer for more advanced animations
         const observerOptions = {
             threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
+            rootMargin: "0px 0px -100px 0px",
         };
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    entry.target.classList.add("active");
                 }
             });
         }, observerOptions);
 
-        revealElements.forEach(element => {
+        revealElements.forEach((element) => {
             observer.observe(element);
         });
 
         // Add stagger animation to tenant cards
-        const tenantCards = document.querySelectorAll('.tenant-card');
+        const tenantCards = document.querySelectorAll(".tenant-card");
         tenantCards.forEach((card, index) => {
             card.style.animationDelay = `${index * 0.1}s`;
         });
 
         // Enhance button interactions with ripple effect
-        const buttons = document.querySelectorAll('button:not(#darkModeToggle), .explore-btn, .all-experience-btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
+        const buttons = document.querySelectorAll(
+            "button:not(#darkModeToggle), .explore-btn, .all-experience-btn"
+        );
+        buttons.forEach((button) => {
+            button.addEventListener("click", function(e) {
+                const ripple = document.createElement("span");
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
@@ -4451,10 +5144,10 @@
 
                 // Check if button already has position relative
                 const currentPosition = window.getComputedStyle(this).position;
-                if (currentPosition === 'static') {
-                    this.style.position = 'relative';
+                if (currentPosition === "static") {
+                    this.style.position = "relative";
                 }
-                this.style.overflow = 'hidden';
+                this.style.overflow = "hidden";
                 this.appendChild(ripple);
 
                 setTimeout(() => ripple.remove(), 600);
@@ -4462,7 +5155,7 @@
         });
 
         // Add ripple animation
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.textContent = `
             @keyframes ripple {
                 from {
@@ -4479,7 +5172,7 @@
 
         // Lazy loading for images
         const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
                     if (img.dataset.src) {
@@ -4490,33 +5183,37 @@
             });
         });
 
-        document.querySelectorAll('[data-src]').forEach(img => {
+        document.querySelectorAll("[data-src]").forEach((img) => {
             imageObserver.observe(img);
         });
 
         // Add fade-in animation for footer elements
-        const footerElements = document.querySelectorAll('footer .footer-links a, footer .footer-social-link');
+        const footerElements = document.querySelectorAll(
+            "footer .footer-links a, footer .footer-social-link"
+        );
         footerElements.forEach((element, index) => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            element.style.transition = 'all 0.5s ease';
+            element.style.opacity = "0";
+            element.style.transform = "translateY(20px)";
+            element.style.transition = "all 0.5s ease";
             element.style.transitionDelay = `${index * 0.05}s`;
         });
 
-        const footerObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    footerElements.forEach(element => {
-                        element.style.opacity = '1';
-                        element.style.transform = 'translateY(0)';
-                    });
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
+        const footerObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        footerElements.forEach((element) => {
+                            element.style.opacity = "1";
+                            element.style.transform = "translateY(0)";
+                        });
+                    }
+                });
+            }, {
+                threshold: 0.1,
+            }
+        );
 
-        const footer = document.querySelector('footer');
+        const footer = document.querySelector("footer");
         if (footer) {
             footerObserver.observe(footer);
         }
@@ -4536,12 +5233,12 @@
 
         // Apply debounce to scroll-heavy functions
         const debouncedReveal = debounce(revealOnScroll, 50);
-        window.removeEventListener('scroll', revealOnScroll);
-        window.addEventListener('scroll', debouncedReveal);
+        window.removeEventListener("scroll", revealOnScroll);
+        window.addEventListener("scroll", debouncedReveal);
 
         // Add loading state
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
+        window.addEventListener("load", () => {
+            document.body.classList.add("loaded");
 
             // Trigger initial animations
             setTimeout(() => {
@@ -4549,159 +5246,44 @@
             }, 100);
         });
 
-        // Console easter egg
-        console.log('%c🏬 Welcome to Mal Bali Galeria Shopping Center! ',
-            'background: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%); color: white; font-size: 20px; padding: 10px; border-radius: 5px;');
-        console.log('%cExperience the finest shopping in Denpasar, Bali', 'color: #2c5f5d; font-size: 14px; font-weight: 600;');
+        // MALL DIRECTORY TENANT
+        // Load data from database
 
-        // Landings Page Tenants Data
-        const landingTenants = [
-            {
-                name: 'Uniqlo',
-                category: 'Fashion & Apparel',
-                floor: '1st Floor',
-                unit: '1C-89',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/9/92/UNIQLO_logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Zara',
-                category: 'Fashion & Apparel',
-                floor: '1st Floor',
-                unit: '1C-73',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'TUMI',
-                category: 'Fashion & Accessories',
-                floor: '1st Floor',
-                unit: '1C-76',
-                logo: 'https://logos-world.net/wp-content/uploads/2022/04/Tumi-Logo.png',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Pandora',
-                category: 'Fashion & Accessories',
-                floor: '1st Floor',
-                unit: '1C-79',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Pandora_Logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Sephora',
-                category: 'Beauty & Health',
-                floor: '1st Floor',
-                unit: '1C-95',
-                logo: 'https://via.placeholder.com/150x80/000000/ffffff?text=SEPHORA',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Victoria\'s Secret',
-                category: 'Fashion & Accessories',
-                floor: '1st Floor',
-                unit: '1A-38',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/2/29/Victoria%27s_Secret_logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Mango',
-                category: 'Fashion & Apparel',
-                floor: '1st Floor',
-                unit: '1C-78',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Mango_Logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Matahari',
-                category: 'Department Store',
-                floor: '2nd Floor',
-                unit: '2A-01',
-                logo: 'https://via.placeholder.com/150x80/1e3a8a/ffffff?text=MATAHARI',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Casio G-Shock',
-                category: 'Jewelry & Watches',
-                floor: '2nd Floor',
-                unit: '1A-17',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Casio_G-Shock_logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Oysho',
-                category: 'Fashion & Accessories',
-                floor: '2nd Floor',
-                unit: '1C-95',
-                logo: 'https://via.placeholder.com/150x80/333333/ffffff?text=OYSHO',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Chatime',
-                category: 'Food & Beverage',
-                floor: '2nd Floor',
-                unit: '2C-T',
-                logo: 'https://via.placeholder.com/150x80/ff6b6b/ffffff?text=Chatime',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Dairy Queen',
-                category: 'Food & Beverage',
-                floor: '2nd Floor',
-                unit: 'D1',
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Dairy_Queen_logo.svg',
-                hours: '10:00 AM - 10:00 PM'
-            },
-            {
-                name: 'ACE Hardware',
-                category: 'Home & Lifestyle',
-                floor: '1st Floor',
-                unit: 'A1',
-                logo: 'https://via.placeholder.com/150x80/8b0000/ffffff?text=ACE',
-                hours: '9:00 AM - 10:00 PM'
-            },
-            {
-                name: 'Hypermart',
-                category: 'Supermarket',
-                floor: '2nd Floor',
-                unit: 'C1',
-                logo: 'https://via.placeholder.com/150x80/ffd700/333333?text=HYPERMART',
-                hours: '8:00 AM - 11:00 PM'
-            },
-            {
-                name: 'Gramedia',
-                category: 'Books & Stationery',
-                floor: '2nd Floor',
-                unit: 'C2',
-                logo: 'https://via.placeholder.com/150x80/ff9800/ffffff?text=GRAMEDIA',
-                hours: '10:00 AM - 10:00 PM'
+        async function loadTenantsOnDatabase(floor) {
+            try {
+                tenantData = await $.get("/tenant/" + floor);
+                return tenantData;
+            } catch (error) {
+                console.error("Gagal memuat data", error);
             }
-        ];
+        }
 
-        function renderLandingTenants(floor) {
-            const grid = document.getElementById('landingTenantGrid');
-            const emptyState = document.getElementById('landingEmptyState');
+        async function renderLandingTenants(floor) {
+            const tenantData = await loadTenantsOnDatabase(floor);
+            const grid = document.getElementById("landingTenantGrid");
+            const emptyState = document.getElementById("landingEmptyState");
 
-            if(!grid) return;
+            if (!grid) return;
 
-            grid.innerHTML = '';
+            grid.innerHTML = "";
 
             // Normalize floor comparison
             let searchFloor = floor;
-            if (floor === 'Ground Floor') searchFloor = '1st Floor'; // Map Ground to 1st if needed
+            // if (floor === "1st Floor") searchFloor = "1st Floor"; // Map Ground to 1st if needed
 
-            const filtered = landingTenants.filter(t => t.floor === searchFloor || t.floor === floor);
-
+            const filtered = tenantData.filter(
+                (t) => t.floor === searchFloor || t.floor === floor
+            );
             if (filtered.length === 0) {
-                if(emptyState) emptyState.style.display = 'block';
+                if (emptyState) emptyState.style.display = "block";
                 return;
             }
 
-            if(emptyState) emptyState.style.display = 'none';
+            if (emptyState) emptyState.style.display = "none";
 
             filtered.forEach((tenant, index) => {
-                const card = document.createElement('div');
-                card.className = 'tenant-card stagger-card';
+                const card = document.createElement("div");
+                card.className = "tenant-card stagger-card";
                 card.style.animationDelay = `${index * 0.1}s`;
 
                 card.innerHTML = `
@@ -4743,37 +5325,48 @@
                 `;
 
                 grid.appendChild(card);
-                setTimeout(() => card.classList.add('show'), 50);
+                setTimeout(() => card.classList.add("show"), 50);
             });
         }
 
         // Initialize Landing Directory
-        document.addEventListener('DOMContentLoaded', () => {
-            renderLandingTenants('1st Floor');
+        document.addEventListener("DOMContentLoaded", () => {
+            renderLandingTenants("1st Floor");
 
-            const floorItems = document.querySelectorAll('.map-floors .floor-item');
-            floorItems.forEach(item => {
+            const floorItems = document.querySelectorAll(".map-floors .floor-item");
+            floorItems.forEach((item) => {
                 // Initial check for active
-                if(item.classList.contains('active')) {
-                     const floor = item.querySelector('h4').textContent;
-                     // Or simplify if data-floor missing
-                     if (floor.includes('Ground') || floor.includes('1st')) renderLandingTenants('1st Floor');
-                     else if (floor.includes('2nd') || floor.includes('Level 1')) renderLandingTenants('2nd Floor');
+                if (item.classList.contains("active")) {
+                    const floor = item.querySelector("h4").textContent;
+                    // Or simplify if data-floor missing
+                    if (floor.includes("1st"))
+                        renderLandingTenants("1st Floor");
+                    else if (floor.includes("2nd"))
+                        renderLandingTenants("2nd Floor");
+                    else if (floor.includes("New Store"))
+                        renderLandingTenants("2nd Floor");
+                    else if (floor.includes("All Floor"))
+                        window.location.href = '/directory';
                 }
 
-                item.addEventListener('click', function() {
+                item.addEventListener("click", function() {
                     // Remove active class
-                    floorItems.forEach(i => i.classList.remove('active'));
+                    floorItems.forEach((i) => i.classList.remove("active"));
                     // Add active class
-                    this.classList.add('active');
+                    this.classList.add("active");
 
-                    const floorText = this.querySelector('h4').textContent;
-                    let targetFloor = '1st Floor';
+                    const floorText = this.querySelector("h4").textContent;
+                    let targetFloor = "1st Floor";
 
                     // Simple Mapping for now based on Text if data-floor not set
-                    if (floorText.includes('Ground') || floorText.includes('1st')) targetFloor = '1st Floor';
-                    else if (floorText.includes('2nd') || floorText.includes('Level 1')) targetFloor = '2nd Floor';
-                    else if (floorText.includes('3rd') || floorText.includes('Level 2')) targetFloor = '2nd Floor'; // Fallback
+                    if (floorText.includes("1st") || floorText.includes('Level 1'))
+                        targetFloor = "1st Floor";
+                    else if (floorText.includes("2nd") || floorText.includes('Level 2'))
+                        targetFloor = "2nd Floor";
+                    else if (floorText.includes("New Store"))
+                        targetFloor = "New Store";
+                    else if (floorText.includes("All Floor"))
+                        window.location.href = '/directory';
 
                     renderLandingTenants(targetFloor);
                 });
@@ -4781,9 +5374,9 @@
         });
 
         // Tenant Scroll Indicators
-        const tenantGrid = document.getElementById('landingTenantGrid');
-        const tenantScrollRight = document.getElementById('tenantScrollIndicator');
-        const tenantScrollLeft = document.getElementById('tenantScrollBack');
+        const tenantGrid = document.getElementById("landingTenantGrid");
+        const tenantScrollRight = document.getElementById("tenantScrollIndicator");
+        const tenantScrollLeft = document.getElementById("tenantScrollBack");
 
         if (tenantGrid) {
             // Function to check if scrollable and update indicator visibility
@@ -4797,25 +5390,25 @@
                 // Right Indicator Logic (Swipe For More)
                 if (tenantScrollRight) {
                     if (!isScrollable || isAtEnd) {
-                        tenantScrollRight.classList.add('hidden');
+                        tenantScrollRight.classList.add("hidden");
                     } else {
-                        tenantScrollRight.classList.remove('hidden');
+                        tenantScrollRight.classList.remove("hidden");
                     }
                 }
-                
+
                 // Left Indicator Logic (Swipe Back)
                 if (tenantScrollLeft) {
                     if (!isScrollable || isAtStart) {
-                        tenantScrollLeft.classList.add('hidden');
+                        tenantScrollLeft.classList.add("hidden");
                     } else {
-                        tenantScrollLeft.classList.remove('hidden');
+                        tenantScrollLeft.classList.remove("hidden");
                     }
                 }
             }
 
             // Update on scroll
             let scrollTimeout;
-            tenantGrid.addEventListener('scroll', () => {
+            tenantGrid.addEventListener("scroll", () => {
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(updateScrollIndicator, 100);
             });
@@ -4825,16 +5418,48 @@
 
             // Update on window resize
             let resizeTimeout;
-            window.addEventListener('resize', () => {
+            window.addEventListener("resize", () => {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(updateScrollIndicator, 200);
             });
         }
 
+        // Tenant Grid Navigation Buttons
+        const tenantNavPrev = document.getElementById('tenantNavPrev');
+        const tenantNavNext = document.getElementById('tenantNavNext');
+        const tenantGridForNav = document.getElementById('landingTenantGrid');
+
+        if (tenantNavPrev && tenantNavNext && tenantGridForNav) {
+            // Scroll amount (one card width + gap)
+            const getScrollAmount = () => {
+                const card = tenantGridForNav.querySelector('.tenant-card');
+                if (card) {
+                    return card.offsetWidth + 24; // card width + gap (1.5rem = 24px)
+                }
+                return 400; // fallback
+            };
+
+            tenantNavPrev.addEventListener('click', () => {
+                const scrollAmount = getScrollAmount();
+                tenantGridForNav.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+
+            tenantNavNext.addEventListener('click', () => {
+                const scrollAmount = getScrollAmount();
+                tenantGridForNav.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
         // Floor List Vertical Scroll Indicators
-        const floorWrapper = document.querySelector('.floor-list-wrapper');
-        const floorScrollUp = document.getElementById('floorScrollUp');
-        const floorScrollDown = document.getElementById('floorScrollDown');
+        const floorWrapper = document.querySelector(".floor-list-wrapper");
+        const floorScrollUp = document.getElementById("floorScrollUp");
+        const floorScrollDown = document.getElementById("floorScrollDown");
 
         if (floorWrapper && floorScrollUp && floorScrollDown) {
             function updateFloorIndicators() {
@@ -4845,28 +5470,193 @@
 
                 // Toggle Up Indicator
                 if (scrollTop > 10 && isScrollable) {
-                    floorScrollUp.classList.remove('hidden');
+                    floorScrollUp.classList.remove("hidden");
                 } else {
-                    floorScrollUp.classList.add('hidden');
+                    floorScrollUp.classList.add("hidden");
                 }
 
                 // Toggle Down Indicator
                 if (scrollTop + clientHeight < scrollHeight - 10 && isScrollable) {
-                    floorScrollDown.classList.remove('hidden');
+                    floorScrollDown.classList.remove("hidden");
                 } else {
-                    floorScrollDown.classList.add('hidden');
+                    floorScrollDown.classList.add("hidden");
                 }
             }
 
-            floorWrapper.addEventListener('scroll', updateFloorIndicators);
-            
+            floorWrapper.addEventListener("scroll", updateFloorIndicators);
+
             // Initial Check
             setTimeout(updateFloorIndicators, 500);
-            
+
             // Resize Check
-            window.addEventListener('resize', updateFloorIndicators);
+            window.addEventListener("resize", updateFloorIndicators);
         }
 
+        // Tenant Details Modal
+        const tenantModal = document.getElementById('tenantModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalCarouselImages = document.getElementById('modalCarouselImages');
+        const modalCarouselPrev = document.getElementById('modalCarouselPrev');
+        const modalCarouselNext = document.getElementById('modalCarouselNext');
+        const modalCarouselIndicators = document.getElementById('modalCarouselIndicators');
+        
+        let currentModalImageIndex = 0;
+        let modalImages = [];
+        let currentTenantData = null;
+
+        // Open modal function
+        function openTenantModal(tenantData) {
+            currentTenantData = tenantData;
+            
+            // Populate modal with tenant data
+            document.getElementById('modalTenantName').textContent = tenantData.name;
+            document.getElementById('modalFloorBadge').textContent = tenantData.floor;
+            document.getElementById('modalCategory').textContent = tenantData.category;
+            document.getElementById('modalUnit').textContent = 'Unit ' + tenantData.unit;
+            document.getElementById('modalHours').textContent = tenantData.hours;
+            document.getElementById('modalFloor').textContent = tenantData.floor;
+            
+            // Set logo
+            document.getElementById('modalLogo').innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+            
+            // Set description (if available)
+            const description = tenantData.description || 'Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!';
+            document.getElementById('modalDescription').innerHTML = `<p>${description}</p>`;
+            
+            // Setup carousel images
+            // For now, we'll use the logo as the main image and create placeholder images
+            // In production, you should have actual tenant photos from the database
+            modalImages = [
+                tenantData.logo,
+                tenantData.logo, // You can replace these with actual tenant photos
+                tenantData.logo
+            ];
+            
+            currentModalImageIndex = 0;
+            renderModalCarousel();
+            
+            // Show modal with animation
+            document.body.style.overflow = 'hidden';
+            tenantModal.classList.add('active');
+            
+            // Show swipe hint and auto-hide after 3 seconds
+            const swipeHint = document.getElementById('carouselSwipeHint');
+            if (swipeHint) {
+                swipeHint.classList.remove('hidden');
+                setTimeout(() => {
+                    swipeHint.classList.add('hidden');
+                }, 3000);
+            }
+        }
+
+        // Close modal function
+        function closeTenantModal() {
+            tenantModal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Reset after animation
+            setTimeout(() => {
+                currentModalImageIndex = 0;
+                modalImages = [];
+                currentTenantData = null;
+            }, 400);
+        }
+
+        // Render carousel
+        function renderModalCarousel() {
+            // Render images
+            modalCarouselImages.innerHTML = modalImages.map((img, index) => `
+                <div class="carousel-image">
+                    <img src="${img}" alt="${currentTenantData.name} - Image ${index + 1}">
+                </div>
+            `).join('');
+            
+            // Render indicators
+            modalCarouselIndicators.innerHTML = modalImages.map((_, index) => `
+                <div class="carousel-indicator ${index === currentModalImageIndex ? 'active' : ''}" data-index="${index}"></div>
+            `).join('');
+            
+            // Update carousel position
+            updateModalCarousel();
+            
+            // Add click events to indicators
+            document.querySelectorAll('.carousel-indicator').forEach(indicator => {
+                indicator.addEventListener('click', () => {
+                    currentModalImageIndex = parseInt(indicator.dataset.index);
+                    updateModalCarousel();
+                });
+            });
+        }
+
+        // Update carousel position
+        function updateModalCarousel() {
+            const offset = -currentModalImageIndex * 100;
+            modalCarouselImages.style.transform = `translateX(${offset}%)`;
+            
+            // Update indicators
+            document.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                if (index === currentModalImageIndex) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        // Carousel navigation
+        if (modalCarouselPrev) {
+            modalCarouselPrev.addEventListener('click', () => {
+                currentModalImageIndex = (currentModalImageIndex - 1 + modalImages.length) % modalImages.length;
+                updateModalCarousel();
+            });
+        }
+
+        if (modalCarouselNext) {
+            modalCarouselNext.addEventListener('click', () => {
+                currentModalImageIndex = (currentModalImageIndex + 1) % modalImages.length;
+                updateModalCarousel();
+            });
+        }
+
+        // Close modal events
+        if (modalClose) {
+            modalClose.addEventListener('click', closeTenantModal);
+        }
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', closeTenantModal);
+        }
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && tenantModal.classList.contains('active')) {
+                closeTenantModal();
+            }
+        });
+
+        // Attach click event to dynamically created see-details buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('see-details-btn') || e.target.closest('.see-details-btn')) {
+                const button = e.target.classList.contains('see-details-btn') ? e.target : e.target.closest('.see-details-btn');
+                const tenantCard = button.closest('.tenant-card');
+                
+                if (tenantCard) {
+                    // Extract tenant data from the card
+                    const tenantData = {
+                        name: tenantCard.querySelector('h3')?.textContent || '',
+                        floor: tenantCard.querySelector('.floor-badge')?.textContent || '',
+                        category: tenantCard.querySelector('.tenant-category')?.textContent?.trim() || '',
+                        unit: tenantCard.querySelector('.meta-item span')?.textContent?.replace('Unit ', '') || '',
+                        hours: tenantCard.querySelectorAll('.meta-item span')[1]?.textContent || '',
+                        logo: tenantCard.querySelector('.tenant-logo img')?.src || '',
+                        description: tenantCard.dataset.description || ''
+                    };
+                    
+                    openTenantModal(tenantData);
+                }
+            }
+        });
     </script>
 </body>
 
