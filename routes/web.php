@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\Admin\EventController;
 use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
+use App\Http\Controllers\Frontend\PromotionPageController;
 use App\Http\Controllers\Frontend\LandingPageController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -31,12 +32,28 @@ Route::get('/directory', function () {
 
 
 // FRONTEND
-Route::controller(LandingPageController::class)
-    ->name('frontend.')
+Route::name('frontend.')
     ->group(function () {
-        Route::get('/', 'index')->name('landing');
-        Route::get('/tenant/{cat}', 'tenantData');
+        Route::controller(LandingPageController::class)->group(function () {
+            Route::get('/', 'index')->name('landing');
+            Route::get('/tenant/{cat}', 'tenantData');
+        });
+
+        Route::controller(PromotionPageController::class)
+            ->prefix('/promotion')
+            ->name('promotion.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
+
+        Route::controller(PromotionPageController::class)
+            ->prefix('/promotion')
+            ->name('promotion.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
     });
+
 
 
 

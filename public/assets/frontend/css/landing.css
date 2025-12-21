@@ -843,7 +843,7 @@ body.dark-mode .sidebar nav ul li a {
     bottom: -5px;
     width: 0;
     height: 2px;
-    background: #5fcfda;
+    background: #F5F5DC;
     transition: width 0.3s ease;
 }
 
@@ -1036,7 +1036,7 @@ body.dark-mode .sidebar nav ul li a {
 
 .explore-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(95, 207, 218, 0.3);
+    box-shadow: 0 10px 25px rgba(245, 245, 220, 0.3);
 }
 
 /* Contact Circle */
@@ -1579,7 +1579,7 @@ body.dark-mode .all-experience-btn .text::after {
 
 .all-experience-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(95, 207, 218, 0.3);
+    box-shadow: 0 10px 25px rgba(245, 245, 220, 0.3);
 }
 
 .experience-cards {
@@ -2270,7 +2270,7 @@ body.dark-mode .map-placeholder {
     padding: 15px 0 0;
     text-align: center;
     font-size: 12px;
-    color: #5fcfda;
+    color: #F5F5DC;
     font-weight: 600;
     letter-spacing: 1px;
     pointer-events: none;
@@ -2289,7 +2289,7 @@ body.dark-mode .scroll-indicator {
 .scroll-indicator svg {
     width: 16px;
     height: 16px;
-    fill: #5fcfda;
+    fill: #F5F5DC;
     animation: bounceDown 1.5s infinite;
     display: block;
     margin: 5px auto 0;
@@ -2340,19 +2340,19 @@ body.dark-mode .floor-item {
 }
 
 .floor-item:hover {
-    border-color: #5fcfda;
+    border-color: #F5F5DC;
     transform: translateX(5px) scale(1.02);
-    box-shadow: 0 5px 15px rgba(95, 207, 218, 0.2);
+    box-shadow: 0 5px 15px rgba(245, 245, 220, 0.2);
 }
 
 .floor-item.active {
-    background: #5fcfda;
-    border-color: #5fcfda;
+    background: #F5F5DC;
+    border-color: #F5F5DC;
 }
 
 .floor-item.active h4,
 .floor-item.active p {
-    color: white;
+    color: #2c5f5d;
 }
 
 .floor-item h4 {
@@ -2430,7 +2430,7 @@ body.dark-mode .floor-item p {
 
 /* Footer */
 footer {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
     color: white;
     padding: 80px 40px 30px;
     width: 100%;
@@ -2445,7 +2445,7 @@ footer::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="rgba(95,207,218,0.02)"/><circle cx="50" cy="50" r="30" fill="rgba(95,207,218,0.03)"/></svg>');
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="rgba(245, 245, 220,0.02)"/><circle cx="50" cy="50" r="30" fill="rgba(245, 245, 220,0.03)"/></svg>');
     opacity: 0.5;
 }
 
@@ -2508,7 +2508,7 @@ body.dark-mode footer {
 }
 
 .footer-links a:hover {
-    color: #5fcfda;
+    color: #F5F5DC;
     transform: translateX(10px);
 }
 
@@ -2527,7 +2527,7 @@ body.dark-mode footer {
 .footer-contact-item svg {
     width: 20px;
     height: 20px;
-    fill: #5fcfda;
+    fill: #F5F5DC;
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -2546,7 +2546,7 @@ body.dark-mode footer {
 }
 
 .footer-contact-item a:hover {
-    color: #5fcfda;
+    color: #F5F5DC;
 }
 
 .footer-social {
@@ -2569,9 +2569,9 @@ body.dark-mode footer {
 }
 
 .footer-social-link:hover {
-    background: #5fcfda;
+    background: #F5F5DC;
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(95, 207, 218, 0.3);
+    box-shadow: 0 10px 25px rgba(245, 245, 220, 0.3);
 }
 
 .footer-social-link svg {
@@ -3124,15 +3124,15 @@ body.dark-mode .tenant-logo {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: linear-gradient(135deg, #5fcfda 0%, #4db8c3 100%);
-    color: white;
+    background: linear-gradient(135deg, #F5F5DC 0%, #E8E6CA 100%);
+    color: #2c5f5d;
     padding: 6px 16px;
     border-radius: 20px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.8px;
     z-index: 10;
-    box-shadow: 0 4px 12px rgba(95, 207, 218, 0.3);
+    box-shadow: 0 4px 12px rgba(245, 245, 220, 0.3);
 }
 
 .tenant-info h3 {
@@ -3160,7 +3160,7 @@ body.dark-mode .tenant-info h3 {
 .tenant-category svg {
     width: 14px;
     height: 14px;
-    fill: #5fcfda;
+    fill: #F5F5DC;
 }
 
 .tenant-meta {
@@ -3186,16 +3186,16 @@ body.dark-mode .tenant-meta {
 .meta-item svg {
     width: 14px;
     height: 14px;
-    fill: #5fcfda;
+    fill: #F5F5DC;
 }
 
 .see-details-btn {
     margin-top: 18px;
     width: 100%;
     padding: 12px 20px;
-    background: linear-gradient(135deg, #5fcfda 0%, #4db8c3 100%);
+    background: linear-gradient(135deg, #F5F5DC 0%, #E8E6CA 100%);
     border: none;
-    color: white;
+    color: #2c5f5d;
     border-radius: 10px;
     font-size: 12px;
     font-weight: 600;
@@ -3206,7 +3206,7 @@ body.dark-mode .tenant-meta {
     align-items: center;
     gap: 8px;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(95, 207, 218, 0.25);
+    box-shadow: 0 4px 15px rgba(245, 245, 220, 0.25);
     position: relative;
     overflow: hidden;
 }
@@ -3232,9 +3232,9 @@ body.dark-mode .tenant-meta {
 }
 
 .see-details-btn:hover {
-    background: linear-gradient(135deg, #4db8c3 0%, #3da3ad 100%);
+    background: linear-gradient(135deg, #E8E6CA 0%, #D6D4B6 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(95, 207, 218, 0.4);
+    box-shadow: 0 6px 20px rgba(245, 245, 220, 0.4);
 }
 
 .see-details-btn svg {
@@ -3789,7 +3789,7 @@ body.dark-mode .modal-description p {
 .empty-state svg {
     width: 80px;
     height: 80px;
-    fill: #5fcfda;
+    fill: #F5F5DC;
     opacity: 0.5;
     margin-bottom: 15px;
 }
@@ -3930,7 +3930,7 @@ body.dark-mode .map-floors {
 }
 
 .floor-item:hover {
-    background: rgba(95, 207, 218, 0.1);
+    background: rgba(245, 245, 220, 0.1);
     transform: translateX(5px);
 }
 
@@ -3938,7 +3938,7 @@ body.dark-mode .map-floors {
     background: var(--primary-gradient);
     /* Solid active background */
     border-color: transparent;
-    box-shadow: 0 5px 15px rgba(95, 207, 218, 0.3);
+    box-shadow: 0 5px 15px rgba(245, 245, 220, 0.3);
     transform: translateX(5px);
 }
 
