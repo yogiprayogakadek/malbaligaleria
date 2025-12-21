@@ -438,57 +438,57 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
 // Experience cards - DISABLED to prevent blinking
 /*
-        const experienceCardsContainer = document.querySelector('.experience-cards');
-        const experienceCards = document.querySelectorAll('.experience-card');
-        let lastHoveredCard = document.querySelector('.experience-card.promotion');
-        let isHovering = false;
+                const experienceCardsContainer = document.querySelector('.experience-cards');
+                const experienceCards = document.querySelectorAll('.experience-card');
+                let lastHoveredCard = document.querySelector('.experience-card.promotion');
+                let isHovering = false;
 
-        experienceCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
-                lastHoveredCard = card;
-                isHovering = true;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.boxShadow = 'none';
-                isHovering = false;
-            });
-        });
-
-
-        if (experienceCardsContainer) {
-            experienceCardsContainer.addEventListener('mouseleave', () => {
                 experienceCards.forEach(card => {
-                    card.classList.remove('promotion', 'expanded');
+                    card.addEventListener('mouseenter', () => {
+                        card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
+                        lastHoveredCard = card;
+                        isHovering = true;
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.boxShadow = 'none';
+                        isHovering = false;
+                    });
                 });
-                if (lastHoveredCard) {
-                    lastHoveredCard.classList.add('expanded');
+
+
+                if (experienceCardsContainer) {
+                    experienceCardsContainer.addEventListener('mouseleave', () => {
+                        experienceCards.forEach(card => {
+                            card.classList.remove('promotion', 'expanded');
+                        });
+                        if (lastHoveredCard) {
+                            lastHoveredCard.classList.add('expanded');
+                        }
+                    });
                 }
-            });
-        }
-        */
+                */
 
 // Disabled scroll event to prevent blinking
 // The CSS hover states are sufficient for the experience cards behavior
 /*
-        let scrollTimeout;
-        let lastExpandedCard = null;
-        window.addEventListener('scroll', () => {
-            if (!isHovering && lastHoveredCard && experienceCardsContainer) {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    if (lastExpandedCard !== lastHoveredCard) {
-                        experienceCards.forEach(card => {
-                            card.classList.remove('promotion', 'expanded');
-                        });
-                        lastHoveredCard.classList.add('expanded');
-                        lastExpandedCard = lastHoveredCard;
+                let scrollTimeout;
+                let lastExpandedCard = null;
+                window.addEventListener('scroll', () => {
+                    if (!isHovering && lastHoveredCard && experienceCardsContainer) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            if (lastExpandedCard !== lastHoveredCard) {
+                                experienceCards.forEach(card => {
+                                    card.classList.remove('promotion', 'expanded');
+                                });
+                                lastHoveredCard.classList.add('expanded');
+                                lastExpandedCard = lastHoveredCard;
+                            }
+                        }, 500);
                     }
-                }, 500);
-            }
-        });
-        */
+                });
+                */
 
 // Mall Directory Scroll Indicator
 const mapFloors = document.getElementById("mapFloors");
@@ -764,14 +764,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (item.classList.contains("active")) {
             const floor = item.querySelector("h4").textContent;
             // Or simplify if data-floor missing
-            if (floor.includes("1st"))
-                renderLandingTenants("1st Floor");
-            else if (floor.includes("2nd"))
-                renderLandingTenants("2nd Floor");
+            if (floor.includes("1st")) renderLandingTenants("1st Floor");
+            else if (floor.includes("2nd")) renderLandingTenants("2nd Floor");
             else if (floor.includes("New Store"))
                 renderLandingTenants("2nd Floor");
             else if (floor.includes("All Floor"))
-                window.location.href = '/directory';
+                window.location.href = "/directory";
         }
 
         item.addEventListener("click", function () {
@@ -784,14 +782,13 @@ document.addEventListener("DOMContentLoaded", () => {
             let targetFloor = "1st Floor";
 
             // Simple Mapping for now based on Text if data-floor not set
-            if (floorText.includes("1st") || floorText.includes('Level 1'))
+            if (floorText.includes("1st") || floorText.includes("Level 1"))
                 targetFloor = "1st Floor";
-            else if (floorText.includes("2nd") || floorText.includes('Level 2'))
+            else if (floorText.includes("2nd") || floorText.includes("Level 2"))
                 targetFloor = "2nd Floor";
-            else if (floorText.includes("New Store"))
-                targetFloor = "New Store";
+            else if (floorText.includes("New Store")) targetFloor = "New Store";
             else if (floorText.includes("All Floor"))
-                window.location.href = '/directory';
+                window.location.href = "/directory";
 
             renderLandingTenants(targetFloor);
         });
@@ -849,6 +846,38 @@ if (tenantGrid) {
     });
 }
 
+// Tenant Grid Navigation Buttons
+const tenantNavPrev = document.getElementById("tenantNavPrev");
+const tenantNavNext = document.getElementById("tenantNavNext");
+const tenantGridForNav = document.getElementById("landingTenantGrid");
+
+if (tenantNavPrev && tenantNavNext && tenantGridForNav) {
+    // Scroll amount (one card width + gap)
+    const getScrollAmount = () => {
+        const card = tenantGridForNav.querySelector(".tenant-card");
+        if (card) {
+            return card.offsetWidth + 24; // card width + gap (1.5rem = 24px)
+        }
+        return 400; // fallback
+    };
+
+    tenantNavPrev.addEventListener("click", () => {
+        const scrollAmount = getScrollAmount();
+        tenantGridForNav.scrollBy({
+            left: -scrollAmount,
+            behavior: "smooth",
+        });
+    });
+
+    tenantNavNext.addEventListener("click", () => {
+        const scrollAmount = getScrollAmount();
+        tenantGridForNav.scrollBy({
+            left: scrollAmount,
+            behavior: "smooth",
+        });
+    });
+}
+
 // Floor List Vertical Scroll Indicators
 const floorWrapper = document.querySelector(".floor-list-wrapper");
 const floorScrollUp = document.getElementById("floorScrollUp");
@@ -884,3 +913,293 @@ if (floorWrapper && floorScrollUp && floorScrollDown) {
     // Resize Check
     window.addEventListener("resize", updateFloorIndicators);
 }
+
+// Tenant Details Modal
+const tenantModal = document.getElementById("tenantModal");
+const modalOverlay = document.getElementById("modalOverlay");
+const modalClose = document.getElementById("modalClose");
+const modalCarouselImages = document.getElementById("modalCarouselImages");
+const modalCarouselPrev = document.getElementById("modalCarouselPrev");
+const modalCarouselNext = document.getElementById("modalCarouselNext");
+const modalCarouselIndicators = document.getElementById(
+    "modalCarouselIndicators"
+);
+
+let currentModalImageIndex = 0;
+let modalImages = [];
+let currentTenantData = null;
+
+// Open modal function
+function openTenantModal(tenantData) {
+    currentTenantData = tenantData;
+
+    // Populate modal with tenant data
+    document.getElementById("modalTenantName").textContent = tenantData.name;
+    document.getElementById("modalFloorBadge").textContent = tenantData.floor;
+    document.getElementById("modalCategory").textContent = tenantData.category;
+    document.getElementById("modalUnit").textContent =
+        "Unit " + tenantData.unit;
+    document.getElementById("modalHours").textContent = tenantData.hours;
+    document.getElementById("modalFloor").textContent = tenantData.floor;
+
+    // Set logo
+    document.getElementById(
+        "modalLogo"
+    ).innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+
+    // Set description (if available)
+    const description =
+        tenantData.description ||
+        "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
+    document.getElementById(
+        "modalDescription"
+    ).innerHTML = `<p>${description}</p>`;
+
+    // Setup carousel images
+    // For now, we'll use the logo as the main image and create placeholder images
+    // In production, you should have actual tenant photos from the database
+    modalImages = [
+        tenantData.logo,
+        tenantData.logo, // You can replace these with actual tenant photos
+        tenantData.logo,
+    ];
+
+    currentModalImageIndex = 0;
+    renderModalCarousel();
+
+    // Show modal with animation
+    document.body.style.overflow = "hidden";
+    tenantModal.classList.add("active");
+
+    // Show swipe hint and auto-hide after 3 seconds
+    const swipeHint = document.getElementById("carouselSwipeHint");
+    if (swipeHint) {
+        swipeHint.classList.remove("hidden");
+        setTimeout(() => {
+            swipeHint.classList.add("hidden");
+        }, 3000);
+    }
+}
+
+// Close modal function
+function closeTenantModal() {
+    tenantModal.classList.remove("active");
+    document.body.style.overflow = "";
+
+    // Reset after animation
+    setTimeout(() => {
+        currentModalImageIndex = 0;
+        modalImages = [];
+        currentTenantData = null;
+    }, 400);
+}
+
+// Render carousel
+function renderModalCarousel() {
+    // Render images
+    modalCarouselImages.innerHTML = modalImages
+        .map(
+            (img, index) => `
+                <div class="carousel-image">
+                    <img src="${img}" alt="${currentTenantData.name} - Image ${
+                index + 1
+            }">
+                </div>
+            `
+        )
+        .join("");
+
+    // Render indicators
+    modalCarouselIndicators.innerHTML = modalImages
+        .map(
+            (_, index) => `
+                <div class="carousel-indicator ${
+                    index === currentModalImageIndex ? "active" : ""
+                }" data-index="${index}"></div>
+            `
+        )
+        .join("");
+
+    // Update carousel position
+    updateModalCarousel();
+
+    // Add click events to indicators
+    document.querySelectorAll(".carousel-indicator").forEach((indicator) => {
+        indicator.addEventListener("click", () => {
+            currentModalImageIndex = parseInt(indicator.dataset.index);
+            updateModalCarousel();
+        });
+    });
+}
+
+// Update carousel position
+function updateModalCarousel() {
+    const offset = -currentModalImageIndex * 100;
+    modalCarouselImages.style.transform = `translateX(${offset}%)`;
+
+    // Update indicators
+    document
+        .querySelectorAll(".carousel-indicator")
+        .forEach((indicator, index) => {
+            if (index === currentModalImageIndex) {
+                indicator.classList.add("active");
+            } else {
+                indicator.classList.remove("active");
+            }
+        });
+}
+
+// Carousel navigation
+if (modalCarouselPrev) {
+    modalCarouselPrev.addEventListener("click", () => {
+        currentModalImageIndex =
+            (currentModalImageIndex - 1 + modalImages.length) %
+            modalImages.length;
+        updateModalCarousel();
+    });
+}
+
+if (modalCarouselNext) {
+    modalCarouselNext.addEventListener("click", () => {
+        currentModalImageIndex =
+            (currentModalImageIndex + 1) % modalImages.length;
+        updateModalCarousel();
+    });
+}
+
+// Add touch/swipe support for carousel
+let touchStartX = 0;
+let touchEndX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
+
+function handleSwipeGesture() {
+    const swipeThreshold = 50; // minimum distance for swipe
+    const horizontalSwipe = Math.abs(touchEndX - touchStartX);
+    const verticalSwipe = Math.abs(touchEndY - touchStartY);
+
+    // Only process if horizontal swipe is greater than vertical (to avoid conflict with scroll)
+    if (horizontalSwipe > verticalSwipe && horizontalSwipe > swipeThreshold) {
+        if (touchEndX < touchStartX) {
+            // Swipe left - next image
+            currentModalImageIndex =
+                (currentModalImageIndex + 1) % modalImages.length;
+            updateModalCarousel();
+        } else if (touchEndX > touchStartX) {
+            // Swipe right - previous image
+            currentModalImageIndex =
+                (currentModalImageIndex - 1 + modalImages.length) %
+                modalImages.length;
+            updateModalCarousel();
+        }
+    }
+}
+
+if (modalCarouselImages) {
+    // Touch events for mobile
+    modalCarouselImages.addEventListener(
+        "touchstart",
+        (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        },
+        { passive: true }
+    );
+
+    modalCarouselImages.addEventListener(
+        "touchend",
+        (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipeGesture();
+        },
+        { passive: true }
+    );
+
+    // Mouse events for desktop (drag to swipe)
+    let isDragging = false;
+
+    modalCarouselImages.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        touchStartX = e.screenX;
+        touchStartY = e.screenY;
+        modalCarouselImages.style.cursor = "grabbing";
+    });
+
+    modalCarouselImages.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+    });
+
+    modalCarouselImages.addEventListener("mouseup", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        touchEndX = e.screenX;
+        touchEndY = e.screenY;
+        handleSwipeGesture();
+        modalCarouselImages.style.cursor = "grab";
+    });
+
+    modalCarouselImages.addEventListener("mouseleave", () => {
+        if (isDragging) {
+            isDragging = false;
+            modalCarouselImages.style.cursor = "grab";
+        }
+    });
+
+    // Set initial cursor
+    modalCarouselImages.style.cursor = "grab";
+}
+
+// Close modal events
+if (modalClose) {
+    modalClose.addEventListener("click", closeTenantModal);
+}
+
+if (modalOverlay) {
+    modalOverlay.addEventListener("click", closeTenantModal);
+}
+
+// Close on ESC key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && tenantModal.classList.contains("active")) {
+        closeTenantModal();
+    }
+});
+
+// Attach click event to dynamically created see-details buttons
+document.addEventListener("click", (e) => {
+    if (
+        e.target.classList.contains("see-details-btn") ||
+        e.target.closest(".see-details-btn")
+    ) {
+        const button = e.target.classList.contains("see-details-btn")
+            ? e.target
+            : e.target.closest(".see-details-btn");
+        const tenantCard = button.closest(".tenant-card");
+
+        if (tenantCard) {
+            // Extract tenant data from the card
+            const tenantData = {
+                name: tenantCard.querySelector("h3")?.textContent || "",
+                floor:
+                    tenantCard.querySelector(".floor-badge")?.textContent || "",
+                category:
+                    tenantCard
+                        .querySelector(".tenant-category")
+                        ?.textContent?.trim() || "",
+                unit:
+                    tenantCard
+                        .querySelector(".meta-item span")
+                        ?.textContent?.replace("Unit ", "") || "",
+                hours:
+                    tenantCard.querySelectorAll(".meta-item span")[1]
+                        ?.textContent || "",
+                logo: tenantCard.querySelector(".tenant-logo img")?.src || "",
+                description: tenantCard.dataset.description || "",
+            };
+
+            openTenantModal(tenantData);
+        }
+    }
+});
