@@ -32,6 +32,7 @@ class StoreTenantRequest extends FormRequest
             'position_y'        => 'required|numeric',
             'floor'             => 'required|numeric|between:1,2',
             'unit'              => 'required|string|max:20',
+            'launched_at'       => 'nullable|date'
         ];
     }
 }

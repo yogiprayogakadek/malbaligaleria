@@ -7,8 +7,7 @@
 <body class="link-sidebar">
     <!-- Preloader -->
     <div class="preloader">
-        <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/favicon.png" alt="loader"
-            class="lds-ripple img-fluid" />
+        <img src="{{ asset('assets/images/logo.png') }}" alt="loader" class="lds-ripple img-fluid" />
     </div>
     <div id="main-wrapper">
         <!-- Sidebar Start -->

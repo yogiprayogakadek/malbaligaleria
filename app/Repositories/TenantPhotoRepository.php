@@ -18,6 +18,21 @@ class TenantPhotoRepository
         return $this->model::select($fields)->where('id', $id)->firstOrFail();
     }
 
+    public function findByTenantId(int $tenant_id, bool $is_primary, array $fields)
+    {
+        return $this->model::select($fields)->where('tenant_id', $tenant_id)->where('is_primary', $is_primary)->firstOrFail();
+    }
+
+    public function getByTenantId(int $tenant_id, array $fields)
+    {
+        return $this->model::select($fields)->where('tenant_id', $tenant_id)->get();
+    }
+
+    public function getPhotoIsPrimary(int $tenant_id, bool $is_primary, array $fields)
+    {
+        return $this->model::select($fields)->where('tenant_id', $tenant_id)->where('is_primary', $is_primary)->get();
+    }
+
     public function create(array $data)
     {
         $tenant = $this->model::create($data);

@@ -3,6 +3,9 @@
 @section('page-title', 'Create Tenant')
 @section('page-link', route('admin.tenant.create'))
 
+@push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
 
 @section('content')
     <div class="row">
@@ -185,18 +188,19 @@
                             </div>
                         </div>
 
-                        {{-- Tenant Image --}}
-                        {{-- <div class="mb-4 row align-items-center">
-                            <label for="displayImage" class="form-label col-sm-3 col-form-label">Display Image</label>
+                        {{-- Launched at --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="launchedAt" class="form-label col-sm-3 col-form-label">Launched at</label>
                             <div class="col-sm-12">
-                                <input type="file" class="form-control @error('display_image') is-invalid @enderror"
-                                    id="displayImage" name="display_image" placeholder="Enter tenant display image"
-                                    value="{{ old('display_image') }}">
-                                @error('display_image')
+                                <input type="text" class="form-control @error('launched_at') is-invalid @enderror"
+                                    id="launchedAt" name="launched_at" placeholder="Enter launched date of tenant"
+                                    value="{{ old('launched_at') }}">
+                                <small>Leave empty for existing stores</small>
+                                @error('launched_at')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div> --}}
+                        </div>
 
                         {{-- Tenant Description --}}
                         <div class="mb-4 row align-items-center">
@@ -224,7 +228,14 @@
 @endsection
 
 @push('script')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        flatpickr("#launchedAt", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+        });
+
         $('body').on('click', '.btn-map-image', function() {
             let floor = $(this).data('floor');
             let image = floor == '1st' ? "{{ asset('assets/images/floors/1st.png') }}" :

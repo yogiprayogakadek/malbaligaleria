@@ -960,7 +960,7 @@ function openTenantModal(tenantData) {
     // In production, you should have actual tenant photos from the database
     modalImages = [
         tenantData.logo,
-        tenantData.logo, // You can replace these with actual tenant photos
+        tenantData.logo,
         tenantData.logo,
     ];
 

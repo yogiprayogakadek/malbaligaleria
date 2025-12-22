@@ -55,7 +55,7 @@
                                             </a>
                                             <button type="button"
                                                 class="justify-content-center w-80 btn mb-1 bg-danger-subtle text-danger btn-delete"
-                                                data-id="{{ $tenantPhoto->id }}">
+                                                data-id="{{ $tenantPhoto->tenant_id }}">
                                                 <i class="ti ti-trash fs-4 me-2"></i>
                                                 Delete
                                             </button>

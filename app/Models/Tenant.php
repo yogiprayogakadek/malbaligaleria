@@ -52,6 +52,11 @@ class Tenant extends Model
         return $this->hasOne(TenantPhoto::class)->where('is_primary', true);
     }
 
+    public function albumPhoto()
+    {
+        return $this->hasMany(TenantPhoto::class);
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

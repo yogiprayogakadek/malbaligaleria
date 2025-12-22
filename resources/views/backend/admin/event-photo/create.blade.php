@@ -5,6 +5,9 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/select2.css') }}">
+
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -62,6 +65,31 @@
                             </div>
                         </div>
 
+                        <hr>
+
+                        {{-- Album Image --}}
+                        <div class="mb-4 row align-items-center">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="album"
+                                        class="form-label col-sm-3 col-form-label @error('album') is-invalid @enderror">Event
+                                        Album</label>
+                                    <div class="fallback">
+                                        <input name="album[]" type="file" multiple class="album filepond form-control"
+                                            id="album" data-allow-reorder="true" data-max-files="5" />
+                                    </div>
+                                    @error('album')
+                                        <div class="text-danger small mt-2">{{ $message }}</div>
+                                    @enderror
+                                    @if ($errors->has('album.*'))
+                                        <div class="text-danger small mt-2">
+                                            Some files do not meet the requirements (check size or format).
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Submit --}}
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary hstack gap-6 float-end">
@@ -78,10 +106,25 @@
 @push('script')
     <script src="{{ asset('assets/backend/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/select2.min.js') }}"></script>
+
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script>
         $("#eventId").select2({
             placeholder: "Select a event",
             allowClear: true,
+        });
+
+        FilePond.registerPlugin(FilePondPluginImagePreview);
+        const inputElements = document.querySelectorAll('.album');
+        inputElements.forEach(inputElement => {
+            FilePond.create(inputElement, {
+                allowMultiple: true,
+                allowImagePreview: true,
+                imagePreviewHeight: 170,
+                storeAsFile: true,
+                labelIdle: 'Drag or <span class="filepond--label-action">Browse</span> your photo'
+            });
         });
     </script>
 @endpush

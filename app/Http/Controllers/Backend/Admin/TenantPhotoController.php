@@ -39,7 +39,8 @@ class TenantPhotoController extends Controller
             'tenant_id' => $request->tenant_id,
             'caption'   => $request->caption,
             'is_primary'    => true,
-            'path'      => $request->path
+            'path'      => $request->path,
+            'album'     => $request->file('album')
         ];
 
         $this->tenantPhotoService->create($data);
@@ -47,17 +48,24 @@ class TenantPhotoController extends Controller
         return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo saved successfully');
     }
 
-    public function edit($id)
+    public function edit($tenant_id)
     {
-        $tenantPhoto = $this->tenantPhotoService->findById($id);
+        $tenantPhoto = $this->tenantPhotoService->findByTenantId($tenant_id, true);
+        $album = $this->tenantPhotoService->getPhotoIsPrimary($tenant_id, false)->map(function ($photo) {
+            return [
+                'path' => asset('storage/' . $photo->path),
+                'id' => $photo->id
+            ];
+        });
 
-        return view('backend.admin.tenant-photo.edit', compact('tenantPhoto'));
+        return view('backend.admin.tenant-photo.edit', compact('tenantPhoto', 'album'));
     }
 
-    public function update(UpdateTenantPhotoRequest $request, $id)
+    public function update(UpdateTenantPhotoRequest $request, $tenant_id)
     {
         $data = [
             'caption'   => $request->caption,
+            'album'     => $request->file('album')
             // 'path'      => $request->path
         ];
 
@@ -65,7 +73,7 @@ class TenantPhotoController extends Controller
             $data['path'] = $request->path;
         }
 
-        $this->tenantPhotoService->update($data, $id);
+        $this->tenantPhotoService->update($data, $tenant_id);
         return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo updated successfully');
     }
 

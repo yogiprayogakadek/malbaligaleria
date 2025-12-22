@@ -26,26 +26,90 @@ class TenantPhotoService
         return $this->tenantPhotoRepository->findById($id, $fields);
     }
 
-    public function create(array $data)
+    public function findByTenantId(int $tenant_id, bool $is_primary = false, array $fields = ['*'])
     {
-        if (isset($data['path']) && $data['path'] instanceof UploadedFile) {
-            $data['path'] = $this->uploadImage($data['path']);
-        }
-
-        return $this->tenantPhotoRepository->create($data);
+        return $this->tenantPhotoRepository->findByTenantId($tenant_id, $is_primary, $fields);
     }
 
-    public function update(array $data, int $id)
+    public function getPhotoIsPrimary(int $tenant_id, bool $is_primary = false, array $fields = ['*'])
     {
-        $tenantPhoto = $this->tenantPhotoRepository->findById($id, ['id', 'path']);
+        return $this->tenantPhotoRepository->getPhotoIsPrimary($tenant_id, $is_primary, $fields);
+    }
+
+    public function getByTenantId(int $tenant_id, array $fields = ['*'])
+    {
+        return $this->tenantPhotoRepository->getByTenantId($tenant_id, $fields);
+    }
+
+    public function create(array $data)
+    {
+        $tenantId = $data['tenant_id'];
+        $caption = $data['caption'] ?? 'tenant image';
+        $results = [];
+
+        if (isset($data['path']) && $data['path'] instanceof UploadedFile) {
+            $primaryData = [
+                'tenant_id'  => $tenantId,
+                'caption'    => $caption,
+                'is_primary' => true,
+                'path'       => $this->uploadImage($data['path'])
+            ];
+            $results[] = $this->tenantPhotoRepository->create($primaryData);
+        }
+
+        if (isset($data['album']) && is_array($data['album'])) {
+            foreach ($data['album'] as $file) {
+                if ($file instanceof UploadedFile) {
+                    $albumData = [
+                        'tenant_id'  => $tenantId,
+                        'caption'    => $caption,
+                        'is_primary' => false,
+                        'path'       => $this->uploadImage($file)
+                    ];
+                    $results[] = $this->tenantPhotoRepository->create($albumData);
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    public function update(array $data, int $tenant_id)
+    {
+        $album = $this->tenantPhotoRepository->getPhotoIsPrimary($tenant_id, false, ['id', 'path']);
+        $tenantPhotoPrimary = $this->tenantPhotoRepository->findByTenantId($tenant_id, true, ['id', 'path']);
+
+        $caption = $data['caption'];
+        $results = [];
 
         if (isset($data['path']) && $data['path'] instanceof UploadedFile) {
             if (!empty($tenantPhoto->path)) {
-                $this->deleteImage($tenantPhoto->path);
+                $this->deleteImage($tenantPhotoPrimary->path);
             }
             $data['path'] = $this->uploadImage($data['path']);
+            $results[] = $this->tenantPhotoRepository->update($data, $tenantPhotoPrimary->id);
         }
-        return $this->tenantPhotoRepository->update($data, $id);
+
+        if (isset($data['album']) && is_array($data['album'])) {
+            foreach ($album as $al) {
+                $this->deleteImage($al->path);
+                $this->delete($al->id);
+            }
+
+            foreach ($data['album'] as $file) {
+                if ($file instanceof UploadedFile) {
+                    $albumData = [
+                        'tenant_id'  => $tenant_id,
+                        'caption'    => $caption,
+                        'is_primary' => false,
+                        'path'       => $this->uploadImage($file)
+                    ];
+                    $results[] = $this->tenantPhotoRepository->create($albumData);
+                }
+            }
+        }
+
+        return $results;
     }
 
     public function delete(int $id)

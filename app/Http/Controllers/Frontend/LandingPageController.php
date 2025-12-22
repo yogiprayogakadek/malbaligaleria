@@ -44,9 +44,12 @@ class LandingPageController extends Controller
             ['id', 'name', 'map_coords', 'category_id', 'logo'],
             [
                 'category:id,name',
+                'albumPhoto:id,path,caption,tenant_id'
             ],
             $cat
         );
+
+        // dd($tenants);
 
         return response()->json($tenants);
     }

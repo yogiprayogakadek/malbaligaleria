@@ -40,7 +40,7 @@
 
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <iconify-icon icon="solar:wheel-line-duotone"></iconify-icon>
+                            <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>
                             <span class="hide-menu">Category Tenants</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
@@ -66,7 +66,7 @@
                     <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <iconify-icon icon="solar:wheel-angle-broken"></iconify-icon>
+                            <iconify-icon icon="solar:bag-4-line-duotone"></iconify-icon>
                             <span class="hide-menu">Tenants</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
@@ -86,7 +86,7 @@
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <span class="icon-small"></span>
+                                    <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
                                     <span class="hide-menu">Photo</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse two-level">
@@ -115,7 +115,7 @@
                     <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <iconify-icon icon="solar:wheel-angle-broken"></iconify-icon>
+                            <iconify-icon icon="solar:bell-outline"></iconify-icon>
                             <span class="hide-menu">Events</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
@@ -135,7 +135,7 @@
                             </li>
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <span class="icon-small"></span>
+                                    <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
                                     <span class="hide-menu">Photo</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse two-level">
@@ -162,7 +162,7 @@
                     <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <iconify-icon icon="solar:wheel-angle-broken"></iconify-icon>
+                            <iconify-icon icon="solar:chat-round-money-outline"></iconify-icon>
                             <span class="hide-menu">Promo</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
@@ -188,7 +188,7 @@
                     <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <iconify-icon icon="solar:wheel-angle-broken"></iconify-icon>
+                            <iconify-icon icon="solar:settings-linear"></iconify-icon>
                             <span class="hide-menu">Settings</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">

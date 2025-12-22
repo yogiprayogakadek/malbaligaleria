@@ -97,7 +97,7 @@ Route::controller(AdminDashboardController::class)
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
-                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::get('/{tenant_id}/edit', 'edit')->name('edit');
                 Route::put('/{id}/update', 'update')->name('update');
                 Route::delete('/delete/{id}', 'delete')->name('delete');
             });
@@ -120,7 +120,7 @@ Route::controller(AdminDashboardController::class)
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
-                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::get('/{event_id}/edit', 'edit')->name('edit');
                 Route::put('/{id}/update', 'update')->name('update');
                 Route::delete('/delete/{id}', 'delete')->name('delete');
             });

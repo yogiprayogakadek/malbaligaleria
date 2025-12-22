@@ -46,7 +46,7 @@
                                                 style="width: 200px; height: 200px">
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.event.photo.edit', $eventPhoto->id) }}">
+                                            <a href="{{ route('admin.event.photo.edit', $eventPhoto->event_id) }}">
                                                 <button type="button"
                                                     class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
                                                     <i class="ti ti-pencil fs-4 me-2"></i>

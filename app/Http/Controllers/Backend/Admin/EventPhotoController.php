@@ -39,7 +39,8 @@ class EventPhotoController extends Controller
             'event_id' => $request->event_id,
             'caption'   => $request->caption,
             'is_primary'    => true,
-            'path'      => $request->path
+            'path'      => $request->path,
+            'album'     => $request->file('album')
         ];
 
         $this->eventPhotoService->create($data);
@@ -47,25 +48,33 @@ class EventPhotoController extends Controller
         return redirect()->route('admin.event.photo.index')->with('success', 'Photo saved successfully');
     }
 
-    public function edit($id)
+    public function edit($event_id)
     {
-        $eventPhoto = $this->eventPhotoService->findById($id);
+        $eventPhoto = $this->eventPhotoService->findByEventId($event_id, true);
 
-        return view('backend.admin.event-photo.edit', compact('eventPhoto'));
+        $album = $this->eventPhotoService->getPhotoIsPrimary($event_id, false)->map(function ($photo) {
+            return [
+                'path' => asset('storage/' . $photo->path),
+                'id' => $photo->id
+            ];
+        });
+
+
+        return view('backend.admin.event-photo.edit', compact('eventPhoto', 'album'));
     }
 
-    public function update(UpdateEventPhotoRequest $request, $id)
+    public function update(UpdateEventPhotoRequest $request, $event_id)
     {
         $data = [
             'caption'   => $request->caption,
-            // 'path'      => $request->path
+            'album'     => $request->file('album')
         ];
 
         if ($request->path != '') {
             $data['path'] = $request->path;
         }
 
-        $this->eventPhotoService->update($data, $id);
+        $this->eventPhotoService->update($data, $event_id);
         return redirect()->route('admin.event.photo.index')->with('success', 'Photo updated successfully');
     }
 

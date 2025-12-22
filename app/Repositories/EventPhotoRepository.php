@@ -18,6 +18,16 @@ class EventPhotoRepository
         return $this->model::select($fields)->where('id', $id)->firstOrFail();
     }
 
+    public function findByEventId(int $event_id, bool $is_primary, array $fields)
+    {
+        return $this->model::select($fields)->where('event_id', $event_id)->where('is_primary', $is_primary)->firstOrFail();
+    }
+
+    public function getPhotoIsPrimary(int $event_id, bool $is_primary, array $fields)
+    {
+        return $this->model::select($fields)->where('event_id', $event_id)->where('is_primary', $is_primary)->get();
+    }
+
     public function create(array $data)
     {
         $tenant = $this->model::create($data);

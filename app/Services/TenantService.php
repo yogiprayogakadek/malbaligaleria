@@ -98,7 +98,14 @@ class TenantService
                 'floor' => $tenant['map_coords']['floor'] == 1 ? $tenant['map_coords']['floor'] . 'st Floor' : $tenant['map_coords']['floor'] . 'nd Floor',
                 'unit' => $tenant['map_coords']['unit'],
                 'logo' => asset('storage/' . $tenant['logo']),
-                'hours' => "10:00 AM - 10:00 PM"
+                'hours' => "10:00 AM - 10:00 PM",
+                'album' => $tenant->albumPhoto->map(function ($photo) {
+                    return [
+                        'id' => $photo->id,
+                        'path' => $photo->path,
+                        'caption' => $photo->caption
+                    ];
+                })
             ];
 
             return $data;

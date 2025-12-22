@@ -21,7 +21,7 @@ class TenantController extends Controller
 
     public function index()
     {
-        $tenants = $this->tenantService->getTenantsByStatus(['uuid', 'name', 'phone', 'is_active', 'map_coords'], true);
+        $tenants = $this->tenantService->getTenantsByStatus(['uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at'], true);
         return view('backend.admin.tenant.index', compact('tenants'));
     }
 
@@ -47,7 +47,8 @@ class TenantController extends Controller
                 'y' => $request->position_y,
                 'floor' => $request->floor,
                 'unit' => $request->unit,
-            ]
+            ],
+            'launched_at' => $request->launched_at
         ];
 
         $this->tenantService->create($data);
@@ -76,7 +77,8 @@ class TenantController extends Controller
                 'y' => $request->position_y,
                 'floor' => $request->floor,
                 'unit' => $request->unit,
-            ]
+            ],
+            'launched_at' => $request->launched_at
         ];
 
         if ($request->logo != '') {
