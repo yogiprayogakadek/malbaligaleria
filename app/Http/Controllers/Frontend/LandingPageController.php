@@ -7,6 +7,8 @@ use App\Services\EventService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
 
+use function PHPSTORM_META\map;
+
 class LandingPageController extends Controller
 {
 
@@ -52,5 +54,36 @@ class LandingPageController extends Controller
         // dd($tenants);
 
         return response()->json($tenants);
+    }
+
+    public function findTenantById($tenant_id)
+    {
+        $tenant = $this->tenantService->getTenantsWithRelationshipAndCondition(
+            ['id', 'name', 'map_coords', 'category_id', 'logo', 'description'],
+            [
+                'category:id,name',
+                'primaryPhoto:id,path,caption,tenant_id',
+                'albumPhoto:id,tenant_id,path,caption'
+            ],
+            'id',
+            $tenant_id
+        )->map(function ($t) {
+            return [
+                'name' => $t['name'],
+                'floor' => $t['map_coords']['floor'] == 1 ? $t['map_coords']['floor'] . 'st Floor' : $t['map_coords']['floor'] . 'nd Floor',
+                'category' => $t['category']['name'],
+                'unit' => $t['map_coords']['unit'],
+                'hours' => "10:00 AM - 10:00 PM",
+                'logo' => asset('storage/' . $t['logo']),
+                'description' => $t['description'],
+                'album' => collect([asset('storage/' . $t->primaryPhoto->path)])->concat(
+                    $t->albumPhoto->map(function ($photo) {
+                        return asset('storage/' . $photo->path);
+                    })
+                )->all(),
+            ];
+        });
+
+        return response()->json($tenant[0]);
     }
 }

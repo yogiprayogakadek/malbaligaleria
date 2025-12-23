@@ -679,7 +679,7 @@ async function loadTenantsOnDatabase(floor) {
         tenantData = await $.get("/tenant/" + floor);
         return tenantData;
     } catch (error) {
-        console.error("Gagal memuat data", error);
+        console.error("Failed to load data", error);
     }
 }
 
@@ -740,7 +740,7 @@ async function renderLandingTenants(floor) {
                                 <span>${tenant.hours}</span>
                             </div>
                         </div>
-                        <button class="see-details-btn">
+                        <button class="see-details-btn" data-id="${tenant.id}">
                             See Details
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -927,12 +927,19 @@ const modalCarouselIndicators = document.getElementById(
 
 let currentModalImageIndex = 0;
 let modalImages = [];
-let currentTenantData = null;
+
+
+async function getDataByTenantId(tenant_id) {
+    try {
+        return await $.get("/find/tenant/"+tenant_id);
+    } catch (error) {
+        console.log("Failed to load data", error);
+    }
+}
 
 // Open modal function
-function openTenantModal(tenantData) {
-    currentTenantData = tenantData;
-
+async function openTenantModal(tenant_id) {
+    tenantData = await getDataByTenantId(tenant_id);
     // Populate modal with tenant data
     document.getElementById("modalTenantName").textContent = tenantData.name;
     document.getElementById("modalFloorBadge").textContent = tenantData.floor;
@@ -958,11 +965,8 @@ function openTenantModal(tenantData) {
     // Setup carousel images
     // For now, we'll use the logo as the main image and create placeholder images
     // In production, you should have actual tenant photos from the database
-    modalImages = [
-        tenantData.logo,
-        tenantData.logo,
-        tenantData.logo,
-    ];
+    modalImages = tenantData.album
+        // tenantData.primaryPhoto,
 
     currentModalImageIndex = 0;
     renderModalCarousel();
@@ -990,7 +994,7 @@ function closeTenantModal() {
     setTimeout(() => {
         currentModalImageIndex = 0;
         modalImages = [];
-        currentTenantData = null;
+        tenantData = null;
     }, 400);
 }
 
@@ -1001,7 +1005,7 @@ function renderModalCarousel() {
         .map(
             (img, index) => `
                 <div class="carousel-image">
-                    <img src="${img}" alt="${currentTenantData.name} - Image ${
+                    <img src="${img}" alt="${tenantData.name} - Image ${
                 index + 1
             }">
                 </div>
@@ -1176,30 +1180,9 @@ document.addEventListener("click", (e) => {
         const button = e.target.classList.contains("see-details-btn")
             ? e.target
             : e.target.closest(".see-details-btn");
-        const tenantCard = button.closest(".tenant-card");
 
-        if (tenantCard) {
-            // Extract tenant data from the card
-            const tenantData = {
-                name: tenantCard.querySelector("h3")?.textContent || "",
-                floor:
-                    tenantCard.querySelector(".floor-badge")?.textContent || "",
-                category:
-                    tenantCard
-                        .querySelector(".tenant-category")
-                        ?.textContent?.trim() || "",
-                unit:
-                    tenantCard
-                        .querySelector(".meta-item span")
-                        ?.textContent?.replace("Unit ", "") || "",
-                hours:
-                    tenantCard.querySelectorAll(".meta-item span")[1]
-                        ?.textContent || "",
-                logo: tenantCard.querySelector(".tenant-logo img")?.src || "",
-                description: tenantCard.dataset.description || "",
-            };
+        const tenantId = e.target.dataset.id;
 
-            openTenantModal(tenantData);
-        }
+        openTenantModal(tenantId);
     }
 });

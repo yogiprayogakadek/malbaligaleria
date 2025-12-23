@@ -37,6 +37,7 @@ Route::name('frontend.')
         Route::controller(LandingPageController::class)->group(function () {
             Route::get('/', 'index')->name('landing');
             Route::get('/tenant/{cat}', 'tenantData');
+            Route::get('/find/tenant/{tenant_id}', 'findTenantById');
         });
 
         Route::controller(PromotionPageController::class)

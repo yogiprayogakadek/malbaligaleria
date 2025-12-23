@@ -23,6 +23,11 @@ class TenantRepository
         return $this->model::select($fields)->with($relationship)->where('is_active', true)->get();
     }
 
+    public function getTenantsWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
+    {
+        return $this->model::select($fields)->with($relationship)->where($column, $condition)->where('is_active', true)->get();
+    }
+
     public function findById(int $id, array $fields)
     {
         return $this->model::select($fields)->where('id', $id)->firstOrFail();

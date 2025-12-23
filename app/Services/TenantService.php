@@ -31,6 +31,11 @@ class TenantService
         return $this->tenantRepository->getTenantsWithRelationship($fields, $relationship);
     }
 
+    public function getTenantsWithRelationshipAndCondition(array $fields = ['*'], array $relationship, string $column, string $condition)
+    {
+        return $this->tenantRepository->getTenantsWithRelationshipAndCondition($fields, $relationship, $column, $condition);
+    }
+
     public function findById(int $id, array $fields = ['*'])
     {
         return $this->tenantRepository->findById($id, $fields);
