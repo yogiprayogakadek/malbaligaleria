@@ -7,7 +7,9 @@
     <title>Mega Sale - Event Details | Mal Bali Galeria</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/event.css') }}">
     <style>
         * {
             margin: 0;
@@ -523,136 +525,7 @@
 
         main { padding-top: 80px; }
 
-        /* ================== EVENT SPECIFIC STYLES ================== */
-        .carousel-section {
-            width: 100%;
-            height: 80vh;
-            min-height: 500px;
-            position: relative;
-            overflow: hidden;
-            background: #000;
-            clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
-        }
 
-        .carousel-images {
-            display: flex;
-            height: 100%;
-            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-        }
-
-        .carousel-image {
-            flex: 0 0 100%; height: 100%; background-size: cover; background-position: center; position: relative;
-            animation: kenBurns 20s ease-in-out infinite alternate;
-        }
-
-        @keyframes kenBurns {
-            0% { transform: scale(1) translateX(0); }
-            100% { transform: scale(1.1) translateX(-20px); }
-        }
-
-        .carousel-image::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, transparent 60%, rgba(26, 31, 30, 0.6));
-        }
-
-        .carousel-controls {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 10;
-        }
-
-        .carousel-dot {
-            width: 12px; height: 12px; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
-            border: 2px solid rgba(255,255,255,0.8); cursor: pointer; transition: all 0.3s ease;
-        }
-
-        .carousel-dot.active {
-            background: var(--secondary-color); border-color: var(--secondary-color); transform: scale(1.2);
-        }
-
-        .carousel-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); width: 50px; height: 50px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
-            transition: all 0.3s ease; z-index: 10; color: white; font-size: 24px;
-        }
-        .carousel-arrow:hover {
-            background: var(--secondary-color); border-color: var(--secondary-color); transform: translateY(-50%) scale(1.1);
-        }
-        .carousel-arrow.prev { left: 30px; }
-        .carousel-arrow.next { right: 30px; }
-
-        .detail-section { padding: 100px 40px; background: var(--bg-light); position: relative; }
-        body.dark-mode .detail-section { background: var(--bg-dark); }
-        .detail-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 60px; width: 100%; }
-        .detail-left { display: grid; grid-template-columns: 200px 1fr; gap: 40px; }
-        .tenant-logo-wrapper { display: flex; flex-direction: column; gap: 30px; }
-        
-        .tenant-logo {
-            width: 200px; height: 200px; background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden;
-            padding: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); position: relative;
-        }
-        body.dark-mode .tenant-logo { background: linear-gradient(135deg, #2a2a2a 0%, #333333 100%); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
-        .tenant-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
-
-        .tenant-location { background: var(--card-light); border-radius: 15px; padding: 25px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); }
-        body.dark-mode .tenant-location { background: var(--card-dark); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); }
-        .tenant-location h4 { font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        body.dark-mode .tenant-location h4 { color: var(--text-light); }
-        .location-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 14px; color: #5a5a5a; }
-        body.dark-mode .location-item { color: #b0b0b0; }
-        .location-item svg { width: 18px; height: 18px; fill: var(--secondary-color); flex-shrink: 0; }
-
-        .tenant-info { display: flex; flex-direction: column; gap: 30px; }
-        .tenant-info h1 {
-            font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 500; margin-bottom: 10px;
-            background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        body.dark-mode .tenant-info h1 { background: linear-gradient(135deg, #e0e0e0 0%, #a8c5c3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .tenant-category {
-            display: inline-block; background: var(--secondary-color); color: white; padding: 8px 20px;
-            border-radius: 20px; font-size: 14px; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px;
-        }
-        .tenant-description { font-size: 16px; line-height: 1.8; color: #5a5a5a; margin-bottom: 30px; }
-        body.dark-mode .tenant-description { color: #b0b0b0; }
-        .tenant-details-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
-        .detail-item { display: flex; flex-direction: column; gap: 8px; }
-        .detail-item label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary-color); }
-        .detail-item p { font-size: 15px; color: var(--text-dark); font-weight: 500; }
-        body.dark-mode .detail-item p { color: var(--text-light); }
-        
-        .tenant-actions { display: flex; gap: 15px; margin-top: 30px; }
-        .action-btn {
-            flex: 1; padding: 15px 30px; border-radius: 50px; font-size: 14px; font-weight: 600; text-decoration: none;
-            text-align: center; transition: all 0.3s ease; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .action-btn.primary { background: var(--primary-color); color: white; }
-        .action-btn.primary:hover { background: #1e4544; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(44, 95, 93, 0.4); }
-        .action-btn.secondary { background: transparent; color: var(--text-dark); border: 2px solid var(--text-dark); }
-        body.dark-mode .action-btn.secondary { color: var(--text-light); border-color: var(--text-light); }
-        .action-btn.secondary:hover { background: var(--text-dark); color: white; transform: translateY(-2px); }
-        body.dark-mode .action-btn.secondary:hover { background: var(--text-light); color: var(--bg-dark); }
-
-        .similar-section { display: flex; flex-direction: column; gap: 20px; }
-        .similar-header h3 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 500; color: var(--text-dark); }
-        body.dark-mode .similar-header h3 { color: var(--text-light); }
-        .similar-tenants { display: flex; flex-direction: column; gap: 20px; }
-        .similar-tenant-card {
-            position: relative; width: 100%; height: 250px; border-radius: 15px; overflow: hidden; cursor: pointer;
-            transition: all 0.4s ease; background-size: cover; background-position: center;
-        }
-        .similar-tenant-card::before {
-            content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8)); transition: background 0.3s ease;
-        }
-        .similar-tenant-card:hover::before { background: linear-gradient(to bottom, rgba(44, 95, 93, 0.3), rgba(0, 0, 0, 0.9)); }
-        .similar-tenant-content {
-            position: absolute; bottom: 0; left: 0; right: 0; padding: 25px; transform: translateY(10px); opacity: 0; transition: all 0.3s ease;
-        }
-        .similar-tenant-card:hover .similar-tenant-content { transform: translateY(0); opacity: 1; }
-        .similar-tenant-content h4 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; color: white; margin-bottom: 5px; }
-        .similar-tenant-date { font-size: 12px; color: var(--accent-color); margin-bottom: 10px; display: block; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-        .similar-tenant-link { display: inline-flex; align-items: center; gap: 8px; color: var(--secondary-color); text-decoration: none; font-size: 14px; font-weight: 600; transition: gap 0.3s ease; }
-        body.dark-mode .similar-tenant-link { color: var(--accent-color); }
-        .similar-tenant-link:hover { gap: 12px; }
 
         /* Footer (Matched with Landing) */
         footer {
@@ -850,16 +723,7 @@
             .sidebar { padding: 100px 30px 120px; }
             .sidebar-logo { left: 40px; top: 30px; }
             
-            /* Event Specifics */
-            .detail-container { grid-template-columns: 1fr; }
-            .detail-left { grid-template-columns: 1fr; }
-            .tenant-logo-wrapper { flex-direction: row; align-items: flex-start; }
-            .tenant-logo { width: 150px; height: 150px; }
-            
-            /* Prevent Grid Blowout for horizontal scroll */
-            .similar-section { min-width: 0; width: 100%; } 
-            .similar-tenants { flex-direction: row; overflow-x: auto; max-height: none; padding-bottom: 20px; max-width: 100%; scroll-snap-type: x mandatory; }
-            .similar-tenant-card { flex: 0 0 300px; height: 200px; scroll-snap-align: start; margin-right: 20px; }
+
             
             .footer-content { grid-template-columns: 1fr 1fr; gap: 40px; }
         }
@@ -878,11 +742,7 @@
             .footer-content { grid-template-columns: 1fr; gap: 40px; }
             .footer-bottom { flex-direction: column; text-align: center; }
             
-            /* Event Specifics */
-            .tenant-logo-wrapper { flex-direction: column; align-items: center; text-align: center; }
-            .tenant-logo { width: 100%; height: auto; aspect-ratio: 1/1; max-width: 300px; }
-            .carousel-section { height: 60vh; min-height: 400px; }
-            .detail-section { padding: 60px 20px; overflow: hidden; /* Extra safety */ }
+
         }
     </style>
 </head>
@@ -1114,7 +974,7 @@
         </section>
     </main>
 
-    <!-- Footer (Matched with Landing) -->
+    <!-- Footer (Synced with Landing) -->
     <footer id="contact">
         <div class="footer-container">
             <div class="footer-content">
@@ -1169,11 +1029,11 @@
                 <div class="footer-column">
                     <h3>Services</h3>
                     <ul class="footer-links">
-                        <li><a href="#valet">Valet Parking</a></li>
-                        <li><a href="#concierge">Concierge</a></li>
-                        <li><a href="#gift">Gift Cards</a></li>
-                        <li><a href="#member">Membership</a></li>
-                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="{{ url('/') }}#valet">Valet Parking</a></li>
+                        <li><a href="{{ url('/') }}#concierge">Concierge</a></li>
+                        <li><a href="{{ url('/') }}#gift">Gift Cards</a></li>
+                        <li><a href="{{ url('/') }}#member">Membership</a></li>
+                        <li><a href="{{ url('/') }}#faq">FAQ</a></li>
                     </ul>
                 </div>
 
@@ -1216,6 +1076,7 @@
         </div>
     </footer>
 
+    <script src="{{ asset('assets/frontend/js/event/event.js') }}"></script>
     <script>
         // Page Loader Logic (Matching Directory)
         const pageLoader = document.getElementById('pageLoader');
@@ -1264,43 +1125,7 @@
             });
         }
 
-        // Image Carousel
-        const carouselImages = document.getElementById('carouselImages');
-        const carouselDots = document.querySelectorAll('.carousel-dot');
-        const carouselPrev = document.getElementById('carouselPrev');
-        const carouselNext = document.getElementById('carouselNext');
-        let currentSlide = 0;
-        const totalSlides = 3;
 
-        function updateCarousel() {
-            carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
-            carouselDots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
-        }
-
-        if (carouselNext && carouselPrev) {
-            carouselNext.addEventListener('click', nextSlide);
-            carouselPrev.addEventListener('click', prevSlide);
-        }
-
-        // Auto-play
-        let autoplay = setInterval(nextSlide, 5000);
-        const carouselSection = document.querySelector('.carousel-section');
-        if (carouselSection) {
-            carouselSection.addEventListener('mouseenter', () => clearInterval(autoplay));
-            carouselSection.addEventListener('mouseleave', () => autoplay = setInterval(nextSlide, 5000));
-        }
     </script>
 </body>
 </html>

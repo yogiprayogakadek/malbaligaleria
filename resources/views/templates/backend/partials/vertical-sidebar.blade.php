@@ -167,14 +167,14 @@
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="javascript:void(0)">
+                                <a class="sidebar-link" href="{{ route('admin.promo.index') }}">
                                     <span class="icon-small"></span>
                                     <span class="hide-menu">List</span>
 
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="javascript:void(0)">
+                                <a class="sidebar-link" href="{{ route('admin.promo.create') }}">
                                     <span class="icon-small"></span>
                                     <span class="hide-menu">Create</span>
 

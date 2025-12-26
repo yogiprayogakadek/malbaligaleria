@@ -1036,12 +1036,11 @@ function renderModalCarousel() {
     });
 }
 
-// Update carousel position
+
 function updateModalCarousel() {
     const offset = -currentModalImageIndex * 100;
     modalCarouselImages.style.transform = `translateX(${offset}%)`;
 
-    // Update indicators
     document
         .querySelectorAll(".carousel-indicator")
         .forEach((indicator, index) => {
@@ -1053,7 +1052,7 @@ function updateModalCarousel() {
         });
 }
 
-// Carousel navigation
+
 if (modalCarouselPrev) {
     modalCarouselPrev.addEventListener("click", () => {
         currentModalImageIndex =
@@ -1070,8 +1069,6 @@ if (modalCarouselNext) {
         updateModalCarousel();
     });
 }
-
-// Add touch/swipe support for carousel
 let touchStartX = 0;
 let touchEndX = 0;
 let touchStartY = 0;

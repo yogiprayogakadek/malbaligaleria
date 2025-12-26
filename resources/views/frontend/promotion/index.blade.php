@@ -119,7 +119,8 @@
                         </button>
                         <h3>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
+                                <path
+                                    d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
                             </svg>
                             Filter by Tenant
                         </h3>
@@ -130,7 +131,7 @@
                         <div class="category-filter-section">
                             <h4 class="filter-section-title">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>
+                                    <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />
                                 </svg>
                                 Categories
                             </h4>
@@ -138,12 +139,14 @@
                                 <!-- Category chips will be populated by JavaScript -->
                             </div>
                         </div>
-                        
+
                         <!-- Favorites Filter -->
                         <div class="tenant-filter-item" data-filter-type="favorites" id="favoritesFilter">
-                            <div class="tenant-filter-icon" style="background: linear-gradient(135deg, #2c5f5d 0%, #F5F5DC 100%);">
+                            <div class="tenant-filter-icon"
+                                style="background: linear-gradient(135deg, #2c5f5d 0%, #F5F5DC 100%);">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                                 </svg>
                             </div>
                             <div class="tenant-filter-info">
@@ -157,16 +160,17 @@
                         <!-- Tenant Search -->
                         <div class="tenant-search-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"/>
-                                <path d="M21 21l-4.35-4.35"/>
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="M21 21l-4.35-4.35" />
                             </svg>
-                            <input type="text" id="tenantSearchInput" placeholder="Search tenant..." autocomplete="off">
+                            <input type="text" id="tenantSearchInput" placeholder="Search tenant..."
+                                autocomplete="off">
                         </div>
                         <div class="tenant-filter-item active" data-tenant="all">
                             <div class="tenant-filter-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                    <polyline points="9 22 9 12 15 12 15 22"/>
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                    <polyline points="9 22 9 12 15 12 15 22" />
                                 </svg>
                             </div>
                             <div class="tenant-filter-info">
@@ -191,15 +195,15 @@
                         <div class="toolbar-left">
                             <button class="mobile-filter-toggle" id="mobileFilterToggle">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="4" y1="21" x2="4" y2="14"/>
-                                    <line x1="4" y1="10" x2="4" y2="3"/>
-                                    <line x1="12" y1="21" x2="12" y2="12"/>
-                                    <line x1="12" y1="8" x2="12" y2="3"/>
-                                    <line x1="20" y1="21" x2="20" y2="16"/>
-                                    <line x1="20" y1="12" x2="20" y2="3"/>
-                                    <line x1="1" y1="14" x2="7" y2="14"/>
-                                    <line x1="9" y1="8" x2="15" y2="8"/>
-                                    <line x1="17" y1="16" x2="23" y2="16"/>
+                                    <line x1="4" y1="21" x2="4" y2="14" />
+                                    <line x1="4" y1="10" x2="4" y2="3" />
+                                    <line x1="12" y1="21" x2="12" y2="12" />
+                                    <line x1="12" y1="8" x2="12" y2="3" />
+                                    <line x1="20" y1="21" x2="20" y2="16" />
+                                    <line x1="20" y1="12" x2="20" y2="3" />
+                                    <line x1="1" y1="14" x2="7" y2="14" />
+                                    <line x1="9" y1="8" x2="15" y2="8" />
+                                    <line x1="17" y1="16" x2="23" y2="16" />
                                 </svg>
                                 Filter
                             </button>
@@ -209,8 +213,9 @@
                                     <option value="ending_soon">Ending Soon</option>
                                     <option value="title_asc">A-Z</option>
                                 </select>
-                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M6 9l6 6 6-6"/>
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M6 9l6 6 6-6" />
                                 </svg>
                             </div>
                         </div>
@@ -218,20 +223,20 @@
                             <div class="view-toggle">
                                 <button class="view-btn active" data-view="grid" aria-label="Grid View">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="3" width="7" height="7"/>
-                                        <rect x="14" y="3" width="7" height="7"/>
-                                        <rect x="14" y="14" width="7" height="7"/>
-                                        <rect x="3" y="14" width="7" height="7"/>
+                                        <rect x="3" y="3" width="7" height="7" />
+                                        <rect x="14" y="3" width="7" height="7" />
+                                        <rect x="14" y="14" width="7" height="7" />
+                                        <rect x="3" y="14" width="7" height="7" />
                                     </svg>
                                 </button>
                                 <button class="view-btn" data-view="list" aria-label="List View">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="8" y1="6" x2="21" y2="6"/>
-                                        <line x1="8" y1="12" x2="21" y2="12"/>
-                                        <line x1="8" y1="18" x2="21" y2="18"/>
-                                        <line x1="3" y1="6" x2="3.01" y2="6"/>
-                                        <line x1="3" y1="12" x2="3.01" y2="12"/>
-                                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                                        <line x1="8" y1="6" x2="21" y2="6" />
+                                        <line x1="8" y1="12" x2="21" y2="12" />
+                                        <line x1="8" y1="18" x2="21" y2="18" />
+                                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                                        <line x1="3" y1="18" x2="3.01" y2="18" />
                                     </svg>
                                 </button>
                             </div>
@@ -241,13 +246,13 @@
                     <div class="promotion-grid" id="promotionGrid">
                         <!-- Promotion cards will be populated by JavaScript -->
                     </div>
-                    
+
                     <!-- Empty State -->
                     <div class="empty-state" id="emptyState" style="display: none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="12"/>
-                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
                         </svg>
                         <h3>No promotions found</h3>
                         <p>Check back later for new deals or try changing your filters</p>
@@ -261,7 +266,7 @@
                         <button class="load-more-btn" id="loadMoreBtn">
                             <span>Load More Promotions</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                                <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                             </svg>
                         </button>
                     </div>
@@ -324,10 +329,10 @@
                     <div class="modal-info">
                         <div class="modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
                             </svg>
                             <div>
                                 <span class="info-label">Valid Period</span>
@@ -336,8 +341,8 @@
                         </div>
                         <div class="modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
                             </svg>
                             <div>
                                 <span class="info-label">Location</span>
@@ -459,10 +464,11 @@
     <!-- Scroll to Top Button -->
     <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
+            <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
     </button>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/promotion/promotion.js') }}?v={{ time() }}"></script>
 
 </body>

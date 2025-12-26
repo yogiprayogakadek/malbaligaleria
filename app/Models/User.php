@@ -60,6 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
     // protected static function boot()
     // {
     //     parent::boot();

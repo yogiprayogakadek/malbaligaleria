@@ -1,146 +1,12 @@
-// ===== SAMPLE PROMOTION DATA =====
-const promotions = [
-    {
-        id: 1,
-        title: 'Grand Opening Sale - Up to 70% Off',
-        tenant: 'Uniqlo',
-        tenantLogo: 'https://upload.wikimedia.org/wikipedia/commons/9/92/UNIQLO_logo.svg',
-        category: 'Fashion & Apparel',
-        floor: '1st Floor',
-        unit: '1C-89',
-        validFrom: '2024-12-01',
-        validUntil: '2024-12-31',
-        createdAt: '2024-11-25',
-        description: 'Celebrate our grand opening with massive discounts on all items! Get up to 70% off on selected fashion items, accessories, and more. Limited time only!',
-        images: [
-            'https://via.placeholder.com/800x600?text=Uniqlo+Sale+1',
-            'https://via.placeholder.com/800x600?text=Uniqlo+Sale+2',
-            'https://via.placeholder.com/800x600?text=Uniqlo+Sale+3'
-        ]
-    },
-    {
-        id: 2,
-        title: 'Buy 2 Get 1 Free - All Items',
-        tenant: 'Zara',
-        tenantLogo: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg',
-        category: 'Fashion & Apparel',
-        floor: '1st Floor',
-        unit: '1C-73',
-        validFrom: '2024-12-15',
-        validUntil: '2024-12-25',
-        createdAt: '2024-12-18',
-        description: 'Shop more, save more! Buy any 2 items and get 1 free. Mix and match from our entire collection. Perfect time to update your wardrobe!',
-        images: [
-            'https://via.placeholder.com/800x600?text=Zara+Promo+1',
-            'https://via.placeholder.com/800x600?text=Zara+Promo+2'
-        ]
-    },
-    {
-        id: 3,
-        title: 'Holiday Beauty Bonanza - 50% Off',
-        tenant: 'Sephora',
-        tenantLogo: 'https://via.placeholder.com/150x80/000000/ffffff?text=SEPHORA',
-        category: 'Beauty & Health',
-        floor: '1st Floor',
-        unit: '1C-95',
-        validFrom: '2024-12-10',
-        validUntil: '2024-12-30',
-        createdAt: '2024-12-05',
-        description: 'Get ready for the holidays with our beauty bonanza! Enjoy 50% off on selected makeup, skincare, and fragrance products. Treat yourself or find the perfect gift!',
-        images: [
-            'https://via.placeholder.com/800x600?text=Sephora+Beauty+1',
-            'https://via.placeholder.com/800x600?text=Sephora+Beauty+2',
-            'https://via.placeholder.com/800x600?text=Sephora+Beauty+3'
-        ]
-    },
-    {
-        id: 4,
-        title: 'New Collection Launch - 30% Off',
-        tenant: 'Mango',
-        tenantLogo: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Mango_Logo.svg',
-        category: 'Fashion & Apparel',
-        floor: '1st Floor',
-        unit: '1C-78',
-        validFrom: '2024-12-01',
-        validUntil: '2024-12-20',
-        createdAt: '2024-11-28',
-        description: 'Discover our latest collection with exclusive launch discounts! Get 30% off on all new arrivals. Be the first to own the latest trends!',
-        images: [
-            'https://via.placeholder.com/800x600?text=Mango+Collection+1',
-            'https://via.placeholder.com/800x600?text=Mango+Collection+2'
-        ]
-    },
-    {
-        id: 5,
-        title: 'Jewelry Sale - Special Prices',
-        tenant: 'Pandora',
-        tenantLogo: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Pandora_Logo.svg',
-        category: 'Fashion & Accessories',
-        floor: '1st Floor',
-        unit: '1C-79',
-        validFrom: '2024-12-05',
-        validUntil: '2024-12-31',
-        createdAt: '2024-12-01',
-        description: 'Find the perfect gift with our jewelry sale! Special prices on rings, bracelets, necklaces, and charms. Make this holiday season sparkle!',
-        images: [
-            'https://via.placeholder.com/800x600?text=Pandora+Jewelry+1',
-            'https://via.placeholder.com/800x600?text=Pandora+Jewelry+2',
-            'https://via.placeholder.com/800x600?text=Pandora+Jewelry+3'
-        ]
-    },
-    {
-        id: 6,
-        title: 'Year-End Clearance - Up to 60% Off',
-        tenant: 'Victoria\'s Secret',
-        tenantLogo: 'https://upload.wikimedia.org/wikipedia/commons/2/29/Victoria%27s_Secret_logo.svg',
-        category: 'Fashion & Accessories',
-        floor: '1st Floor',
-        unit: '1A-38',
-        validFrom: '2024-12-20',
-        validUntil: '2024-12-31',
-        createdAt: '2024-12-19',
-        description: 'Clear out the old, welcome the new! Enjoy up to 60% off on selected lingerie, sleepwear, and beauty products. Don\'t miss this amazing deal!',
-        images: [
-            'https://via.placeholder.com/800x600?text=VS+Clearance+1',
-            'https://via.placeholder.com/800x600?text=VS+Clearance+2'
-        ]
-    },
-    {
-        id: 7,
-        title: 'Premium Luggage Sale - 40% Off',
-        tenant: 'TUMI',
-        tenantLogo: 'https://logos-world.net/wp-content/uploads/2022/04/Tumi-Logo.png',
-        category: 'Fashion & Accessories',
-        floor: '1st Floor',
-        unit: '1C-76',
-        validFrom: '2024-12-01',
-        validUntil: '2024-12-25',
-        createdAt: '2024-11-26',
-        description: 'Travel in style with our premium luggage sale! Get 40% off on selected suitcases, bags, and travel accessories. Perfect for your holiday travels!',
-        images: [
-            'https://via.placeholder.com/800x600?text=TUMI+Luggage+1',
-            'https://via.placeholder.com/800x600?text=TUMI+Luggage+2',
-            'https://via.placeholder.com/800x600?text=TUMI+Luggage+3'
-        ]
-    },
-    {
-        id: 8,
-        title: 'Festive Lingerie Collection - Buy 3 Get 1',
-        tenant: 'La Senza',
-        tenantLogo: 'https://via.placeholder.com/150x80/e91e63/ffffff?text=LA+SENZA',
-        category: 'Fashion & Accessories',
-        floor: '1st Floor',
-        unit: '1A-26',
-        validFrom: '2024-12-10',
-        validUntil: '2024-12-28',
-        createdAt: '2024-12-08',
-        description: 'Celebrate the festive season with our special collection! Buy 3 items and get 1 free. Mix and match from our entire range of lingerie and sleepwear!',
-        images: [
-            'https://via.placeholder.com/800x600?text=La+Senza+Festive+1',
-            'https://via.placeholder.com/800x600?text=La+Senza+Festive+2'
-        ]
+async function loadPromotions()
+{
+    try {
+        promotionData = await $.get("/promotion/load-promotion");
+        return promotionData;
+    } catch (error) {
+        console.error("Failed to load data", error);
     }
-];
+}
 
 // ===== STATE MANAGEMENT =====
 let currentFilter = 'all';
@@ -184,7 +50,7 @@ function toggleFavorite(id) {
         showToast('Added to favorites', 'success');
     }
     saveFavorites();
-    
+
     // Re-render if currently viewing favorites to remove the item immediately
     if (currentCategoryFilter === 'favorites' || document.querySelector('.tenant-filter-item[data-filter-type="favorites"].active')) {
         renderPromotions(currentFilter, 'favorites');
@@ -328,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializePage() {
     showShimmerCards();
     updateFavoritesCount();
-    
+
     setTimeout(() => {
         populateCategoryFilter();
         populateTenantFilter();
@@ -338,12 +204,13 @@ function initializePage() {
 }
 
 // ===== CATEGORY FILTER =====
-function populateCategoryFilter() {
+async function populateCategoryFilter() {
+    const promoData = await loadPromotions();
     const categoryChips = document.getElementById('categoryFilterChips');
     if (!categoryChips) return;
 
     const categoryMap = new Map();
-    promotions.forEach(promo => {
+    promoData.forEach(promo => {
         if (categoryMap.has(promo.category)) {
             categoryMap.get(promo.category).count++;
         } else {
@@ -353,10 +220,10 @@ function populateCategoryFilter() {
 
     let html = `
         <div class="category-chip active" data-category="all">
-            All <span class="category-chip-count">${promotions.length}</span>
+            All <span class="category-chip-count">${promoData.length}</span>
         </div>
     `;
-    
+
     categoryMap.forEach((data, category) => {
         html += `
             <div class="category-chip" data-category="${category}">
@@ -369,12 +236,13 @@ function populateCategoryFilter() {
 }
 
 // ===== TENANT FILTER =====
-function populateTenantFilter() {
+async function populateTenantFilter() {
     const tenantList = document.getElementById('tenantFilterList');
+    const promoData = await loadPromotions();
     if (!tenantList) return;
 
     const tenantMap = new Map();
-    promotions.forEach(promo => {
+    promoData.forEach(promo => {
         if (tenantMap.has(promo.tenant)) {
             tenantMap.get(promo.tenant).count++;
         } else {
@@ -388,7 +256,7 @@ function populateTenantFilter() {
 
     const allPromoCount = document.getElementById('allPromoCount');
     if (allPromoCount) {
-        allPromoCount.textContent = `${promotions.length} promos`;
+        allPromoCount.textContent = `${promoData.length} promos`;
     }
 
     let html = '';
@@ -410,8 +278,9 @@ function populateTenantFilter() {
 }
 
 // ===== RENDER PROMOTIONS =====
-function renderPromotions(filter = 'all', category = 'all') {
+async function renderPromotions(filter = 'all', category = 'all') {
     // If selecting favorites, force reset tenant filter to 'all' for logic
+    const promoData = await loadPromotions();
     if (category === 'favorites') {
         currentCategoryFilter = 'favorites';
         currentFilter = 'all'; // Reset tenant filter internally
@@ -421,10 +290,10 @@ function renderPromotions(filter = 'all', category = 'all') {
             currentCategoryFilter = category;
         }
     }
-    
+
     currentPage = 1;
 
-    let filtered = promotions;
+    let filtered = promoData;
 
     // Apply category & favorites filter first
     if (currentCategoryFilter === 'favorites') {
@@ -496,10 +365,11 @@ function updateActiveFilter(filter) {
     });
 }
 
-function displayPromotions() {
+async function displayPromotions() {
     const grid = document.getElementById('promotionGrid');
     const emptyState = document.getElementById('emptyState');
     const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const promoData = await loadPromotions();
 
     if (!grid) return;
 
@@ -531,9 +401,9 @@ function displayPromotions() {
                 `).join('')}
             </div>
         ` : '';
-        
+
         const isFav = isFavorite(promo.id);
-        
+
         return `
         <div class="promotion-card" data-promo-id="${promo.id}" style="animation-delay: ${index * 0.1}s">
             <div class="promotion-image" style="background-image: url('${promo.images[0]}')">
@@ -598,7 +468,7 @@ function displayPromotions() {
             card.addEventListener('click', (e) => {
                 if (!e.target.closest('.share-btn') && !e.target.closest('.bookmark-btn')) {
                     const promoId = parseInt(card.dataset.promoId);
-                    const promo = promotions.find(p => p.id === promoId);
+                    const promo = promoData.find(p => p.id === promoId);
                     if (promo) showPromotionModal(promo);
                 }
             });
@@ -649,7 +519,7 @@ function setupScrollToTop() {
 // ===== SHARE FUNCTION =====
 function sharePromotion(promoId, promoTitle) {
     const url = `${window.location.origin}${window.location.pathname}?promo=${promoId}`;
-    
+
     if (navigator.share) {
         navigator.share({
             title: promoTitle,
@@ -682,7 +552,7 @@ function copyToClipboard(text) {
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
-    
+
     // Icon based on type
     let icon = '';
     if (type === 'success') {
@@ -834,7 +704,7 @@ function setupEventListeners() {
         tenantSearchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase().trim();
             const tenantItems = document.querySelectorAll('#tenantFilterList .tenant-filter-item');
-            
+
             tenantItems.forEach(item => {
                 const tenantName = item.querySelector('h4').textContent.toLowerCase();
                 if (tenantName.includes(searchTerm)) {
@@ -862,7 +732,7 @@ function setupEventListeners() {
         if (categoryItem) {
             const category = categoryItem.dataset.category;
             renderPromotions(currentFilter, category);
-            
+
             // Update active state
             document.querySelectorAll('.category-chip').forEach(chip => {
                 if (chip.dataset.category === category) {
@@ -896,11 +766,11 @@ function setupEventListeners() {
         btn.addEventListener('click', (e) => {
             const view = btn.dataset.view;
             currentView = view;
-            
+
             // Update active state
             document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             renderPromotions(currentFilter, currentCategoryFilter);
         });
     });
@@ -946,7 +816,7 @@ function setupEventListeners() {
              currentCategoryFilter = 'all';
              const searchInput = document.getElementById('tenantSearchInput');
              if (searchInput) searchInput.value = '';
-             
+
              // Reset UI Active States
              document.querySelectorAll('.tenant-filter-item').forEach(i => i.classList.remove('active'));
              const allFilter = document.querySelector('.tenant-filter-item[data-tenant="all"]');
