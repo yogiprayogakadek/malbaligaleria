@@ -31,6 +31,16 @@ class EventService
         return $this->eventRepository->getEventsWithRelationship($fields, $relationship);
     }
 
+    public function getEventsWithRelationshipAndCondition(array $fields = ['*'], array $relationship, string $column, string $condition)
+    {
+        return $this->eventRepository->getEventsWithRelationshipAndCondition($fields, $relationship, $column, $condition);
+    }
+
+    public function getUpcomingEvents(array $fields = ['*'], array $relationship, string $uuid)
+    {
+        return $this->eventRepository->getUpcomingEvents($fields, $relationship, $uuid);
+    }
+
     public function findById(int $id, array $fields = ['*'])
     {
         return $this->eventRepository->findById($id, $fields);

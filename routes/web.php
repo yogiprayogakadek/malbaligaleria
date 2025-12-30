@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
+use App\Http\Controllers\Frontend\EventController as FrontendEventController;
 use App\Http\Controllers\Frontend\PromotionPageController;
 use App\Http\Controllers\Frontend\LandingPageController;
 use Illuminate\Support\Facades\Mail;
@@ -23,9 +24,9 @@ Route::get('/maintenance', function () {
 Route::get('/tenant', function () {
     return view('frontend.tenant.index');
 })->name('tenant');
-Route::get('/event', function () {
-    return view('frontend.event.index');
-})->name('event');
+// Route::get('/event', function () {
+//     return view('frontend.event.index');
+// })->name('event');
 
 Route::get('/directory', function () {
     return view('frontend.directory.index');
@@ -54,6 +55,13 @@ Route::name('frontend.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/load-promotion', 'loadPromotion')->name('load.promotion');
+            });
+
+        Route::controller(FrontendEventController::class)
+            ->prefix('/event')
+            ->name('event.')
+            ->group(function () {
+                Route::get('/{uuid}', 'index')->name('index');
             });
     });
 

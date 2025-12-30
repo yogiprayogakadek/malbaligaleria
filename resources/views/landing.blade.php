@@ -284,7 +284,8 @@
                                     class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p>{{ $event->description }}</p>
-                                <a href="#" class="event-link">Learn More →</a>
+                                <a href="{{ route('frontend.event.index', $event->uuid) }}" class="event-link">Learn
+                                    More →</a>
                             </div>
                         </div>
                     @empty

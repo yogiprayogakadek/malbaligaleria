@@ -31,7 +31,7 @@ class LandingPageController extends Controller
         );
 
         $events = $this->eventService->getEventsWithRelationship(
-            ['id', 'name', 'start_date', 'description'],
+            ['id', 'uuid', 'name', 'start_date', 'description'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
@@ -50,8 +50,6 @@ class LandingPageController extends Controller
             ],
             $cat
         );
-
-        // dd($tenants);
 
         return response()->json($tenants);
     }

@@ -1,169 +1,176 @@
-/**
- * Event Page Logic
- * Handles Carousel, Calendar Export, and Social Sharing
- */
+// Page Loader Logic
+const pageLoader = document.getElementById('pageLoader');
+let minLoadTime = 2500;
+let loadStartTime = Date.now();
 
-document.addEventListener('DOMContentLoaded', () => {
-    initCarousel();
-    initCalendar();
-    initShare();
+window.addEventListener('load', () => {
+    let loadTime = Date.now() - loadStartTime;
+    let remainingTime = Math.max(0, minLoadTime - loadTime);
+
+    setTimeout(() => {
+        if (pageLoader) {
+            pageLoader.classList.add('hidden');
+            document.body.classList.add('loaded');
+        }
+    }, remainingTime);
 });
 
-/**
- * Enhanced Carousel Logic
- */
-function initCarousel() {
-    const track = document.getElementById('carouselImages');
-    const prevBtn = document.getElementById('carouselPrev');
-    const nextBtn = document.getElementById('carouselNext');
-    const dots = document.querySelectorAll('.carousel-dot');
-    
-    if (!track || !prevBtn || !nextBtn) return;
+// Menu toggle
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+const sidebarClose = document.getElementById('sidebarClose');
 
-    const slides = track.children;
-    const totalSlides = slides.length;
-    let currentSlide = 0;
-    let autoplayTimer;
-
-    function updateSlide(index) {
-        if (index < 0) index = totalSlides - 1;
-        if (index >= totalSlides) index = 0;
-        
-        currentSlide = index;
-        track.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-        // Update dots
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === currentSlide);
-        });
-    }
-
-    function nextSlide() {
-        updateSlide(currentSlide + 1);
-    }
-
-    function startAutoplay() {
-        if (autoplayTimer) clearInterval(autoplayTimer);
-        autoplayTimer = setInterval(nextSlide, 5000);
-    }
-
-    function pauseAutoplay() {
-        if (autoplayTimer) clearInterval(autoplayTimer);
-    }
-
-    // Event Listeners
-    prevBtn.addEventListener('click', () => {
-        updateSlide(currentSlide - 1);
-        startAutoplay(); // Reset timer
+if (menuBtn && sidebar && sidebarClose) {
+    menuBtn.addEventListener('click', () => {
+        menuBtn.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        document.body.classList.toggle('menu-open');
     });
 
-    nextBtn.addEventListener('click', () => {
-        updateSlide(currentSlide + 1);
-        startAutoplay();
-    });
-
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            updateSlide(index);
-            startAutoplay();
-        });
-    });
-
-    // Pause on hover
-    const section = document.querySelector('.carousel-section');
-    if (section) {
-        section.addEventListener('mouseenter', pauseAutoplay);
-        section.addEventListener('mouseleave', startAutoplay);
-    }
-
-    // Init
-    startAutoplay();
-}
-
-/**
- * Add to Calendar Functionality
- * Generates an .ics file for download
- */
-function initCalendar() {
-    const addToCalendarBtn = document.querySelector('.action-btn.primary');
-    
-    if (!addToCalendarBtn) return;
-
-    addToCalendarBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        // Extract data from DOM (Assuming static structure for now)
-        const title = document.querySelector('.tenant-info h1')?.innerText || 'Event at Mal Bali Galeria';
-        const description = document.querySelector('.tenant-description')?.innerText || '';
-        const location = "Mal Bali Galeria, Jl. Sunset Road No. 89, Kuta";
-        
-        // Hardcoded dates for demo purposes (matching the static HTML: 14-28 Dec 2025)
-        // In a real app, these would come from data attributes
-        const startDate = '20251214T100000';
-        const endDate = '20251228T220000';
-
-        const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-URL:${window.location.href}
-DTSTART:${startDate}
-DTEND:${endDate}
-SUMMARY:${title}
-DESCRIPTION:${description.replace(/\n/g, '\\n')}
-LOCATION:${location}
-END:VEVENT
-END:VCALENDAR`;
-
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.setAttribute('download', 'event-details.ics');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    sidebarClose.addEventListener('click', () => {
+        menuBtn.classList.remove('active');
+        sidebar.classList.remove('active');
+        document.body.classList.remove('menu-open');
     });
 }
 
-/**
- * Share Event Functionality
- * Uses Web Share API or Clipboard Fallback
- */
-function initShare() {
-    const shareBtn = document.querySelector('.action-btn.secondary');
-    
-    if (!shareBtn) return;
+// Dark Mode
+const darkModeToggle = document.getElementById('darkModeToggle');
+if (localStorage.getItem('darkMode') === 'enabled') {
+    document.body.classList.add('dark-mode');
+}
 
-    shareBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        
-        const shareData = {
-            title: document.querySelector('.tenant-info h1')?.innerText || 'Mal Bali Galeria Event',
-            text: 'Check out this amazing event at Mal Bali Galeria!',
-            url: window.location.href
-        };
+if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    });
+}
 
-        try {
-            if (navigator.share) {
-                await navigator.share(shareData);
-            } else {
-                // Fallback: Copy to Clipboard
-                await navigator.clipboard.writeText(window.location.href);
-                
-                // Show temporary feedback
-                const originalText = shareBtn.innerHTML;
-                shareBtn.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    Link Copied!
-                `;
-                
-                setTimeout(() => {
-                    shareBtn.innerHTML = originalText;
-                }, 2000);
-            }
-        } catch (err) {
-            console.error('Error sharing:', err);
+// Sidebar Search (Mobile)
+const sidebarSearch = document.getElementById('sidebarSearch');
+if (sidebarSearch) {
+    sidebarSearch.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            // Implement search logic here if needed
+            console.log('Searching for:', this.value);
         }
     });
 }
+
+/**
+ * Custom Carousel Logic (if not using a library)
+ * Supports basic dot navigation and auto-play
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelector('.carousel-images');
+    const imageCount = document.querySelectorAll('.carousel-image').length;
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.querySelector('.carousel-arrow.prev'); // If added to HTML
+    const nextBtn = document.querySelector('.carousel-arrow.next'); // If added to HTML
+    
+    let currentIndex = 0;
+    let interval;
+
+    function showImage(index) {
+        if (index >= imageCount) index = 0;
+        if (index < 0) index = imageCount - 1;
+        
+        currentIndex = index;
+        
+        if (images) {
+            images.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[currentIndex]) {
+            dots[currentIndex].classList.add('active');
+        }
+    }
+
+    function startAutoSlide() {
+        interval = setInterval(() => {
+            showImage(currentIndex + 1);
+        }, 5000);
+    }
+
+    function stopAutoSlide() {
+        clearInterval(interval);
+    }
+
+    // Dot Click Events
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            stopAutoSlide();
+            const index = parseInt(dot.getAttribute('data-index'));
+            showImage(index);
+            startAutoSlide();
+        });
+    });
+
+    // Arrow Click Events (if exist)
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            showImage(currentIndex - 1);
+            startAutoSlide();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            showImage(currentIndex + 1);
+            startAutoSlide();
+        });
+    }
+
+    // Initialize
+    if (imageCount > 0) {
+        startAutoSlide();
+    }
+});
+
+// Reveal on Scroll Animation
+const revealElements = document.querySelectorAll('.reveal');
+
+const revealOnScroll = () => {
+    const windowHeight = window.innerHeight;
+    const revealPoint = 100;
+
+    revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - revealPoint) {
+            element.classList.add('active');
+        }
+    });
+};
+
+window.addEventListener('scroll', revealOnScroll);
+// Trigger once on load
+window.addEventListener('load', revealOnScroll);
+revealOnScroll();
+
+// Footer Animation (Fade in links)
+const footerElements = document.querySelectorAll('footer .footer-links a, footer .footer-social-link');
+if (footerElements.length > 0) {
+    const footerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                footerElements.forEach((element, index) => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                    element.style.transition = 'all 0.5s ease';
+                    element.style.transitionDelay = `${index * 0.05}s`;
+                });
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const footer = document.querySelector('footer');
+    if (footer) {
+        footerObserver.observe(footer);
+    }
+}
+
