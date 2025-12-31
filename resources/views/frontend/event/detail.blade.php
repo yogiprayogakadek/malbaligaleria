@@ -4,82 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events | Mal Bali Galeria</title>
+    <title>{{ $event['name'] }} - Event Details | Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Argesta+Display&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
-    <style>
-        /* Internal CSS for Event Listing Specifics to avoid creating a new file for now */
-        .page-header {
-            padding-top: 150px;
-            padding-bottom: 50px;
-            text-align: center;
-            background: var(--bg-light);
-        }
-
-        body.dark-mode .page-header {
-            background: var(--bg-dark);
-        }
-
-        .page-header h1 {
-            font-family: "Playfair Display", serif;
-            font-size: 48px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        body.dark-mode .page-header h1 {
-            color: var(--text-light);
-        }
-
-        .page-header p {
-            color: #666;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-        }
-
-        body.dark-mode .page-header p {
-            color: #aaa;
-        }
-
-        .events-grid-section {
-            padding: 0 40px 100px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .page-header {
-                padding-top: 120px;
-            }
-
-            .page-header h1 {
-                font-size: 36px;
-            }
-
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .event-card {
-                min-width: 0; /* Reset flex min-width override if present */
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/detail.css') }}?v={{ time() }}">
 </head>
 
 <body>
@@ -133,7 +67,7 @@
         </div>
 
         <div class="logo">
-            <h1>mal bali galeria<span>EVENTS</span></h1>
+            <h1>mal bali galeria<span>EVENT DETAILS</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -167,36 +101,160 @@
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
             </ul>
         </nav>
+
+        <!-- Search in Sidebar for Mobile -->
+        <div class="sidebar-search">
+            <div class="search-bar">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke-width="2" />
+                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <input type="text" placeholder="Search" id="sidebarSearch">
+            </div>
+        </div>
     </div>
 
-    <!-- Main Content -->
     <main>
-        <section class="page-header">
-            <h1>Upcoming Events</h1>
-            <p>Discover the latest happenings at Mal Bali Galeria</p>
+        <!-- Hero Carousel -->
+        <section class="carousel-section">
+            <div class="carousel-images" id="carouselImages">
+                @if (isset($event['photos']) && count($event['photos']) > 0)
+                    @foreach ($event['photos'] as $photo)
+                        <div class="carousel-image" style="background-image: url({{ $photo }});"></div>
+                    @endforeach
+                @else
+                    <div class="carousel-image" style="background-image: url({{ $event['primaryPhoto'] }});"></div>
+                @endif
+            </div>
+
+            @if (isset($event['photos']) && count($event['photos']) > 1)
+                <button class="carousel-arrow prev" id="carouselPrev">‹</button>
+                <button class="carousel-arrow next" id="carouselNext">›</button>
+
+                <div class="carousel-controls">
+                    @foreach ($event['photos'] as $index => $photo)
+                        <div class="carousel-dot {{ $index == 0 ? 'active' : '' }}"
+                            data-index="{{ $index }}"></div>
+                    @endforeach
+                </div>
+            @endif
         </section>
 
-        <section class="events-grid-section">
-            <div class="events-grid">
-                @forelse ($events as $event)
-                    <div class="event-card">
-                        <div class="event-card-bg"
-                            style="background-image: url({{ asset('storage/' . $event->primaryPhoto->path) }});">
+        <!-- Details -->
+        <section class="detail-section">
+            <div class="detail-container">
+                <div class="detail-left">
+                    <div class="tenant-logo-wrapper">
+                        <!-- Square Event Poster/Thumbnail -->
+                        <div class="tenant-logo">
+                            <img src="{{ $event['primaryPhoto'] }}" alt="Event Thumbnail">
                         </div>
-                        <div class="event-card-content">
-                            <span
-                                class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
-                            <h3>{{ $event->name }}</h3>
-                            <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
-                                More →</a>
+
+                        <div class="tenant-location">
+                            <h4>Date & Time</h4>
+                            <div class="location-item">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                </svg>
+                                <span>{{ $event['start_date'] }} - {{ $event['end_date'] }}</span>
+                            </div>
+                            <div class="location-item">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>{{ $event['start_time'] }} - {{ $event['end_time'] }}</span>
+                            </div>
+                        </div>
+
+                        <div class="tenant-location">
+                            <h4>Location</h4>
+                            <div class="location-item">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <span>Main Atrium, Ground Floor</span>
+                            </div>
                         </div>
                     </div>
-                @empty
-                    <div class="no-events" style="grid-column: 1 / -1; text-align: center; padding: 50px;">
-                        <h3>No upcoming events at the moment.</h3>
-                        <p>Stay tuned for updates!</p>
+
+                    <div class="tenant-info">
+                        <div class="tenant-header-group">
+                            <h1>{{ $event['name'] }}</h1>
+                            <span class="tenant-category">Event</span>
+                        </div>
+
+                        <div class="tenant-description">
+                            {!! nl2br(e($event['description'])) !!}
+                        </div>
+
+                        <div class="tenant-details-grid">
+                            <div class="detail-item">
+                                <label>Entrance Fee</label>
+                                <p>Free Admission</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Organizer</label>
+                                <p>Mal Bali Galeria</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Target Audience</label>
+                                <p>Family & General</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Highlights</label>
+                                <p>Live Music & Midnight Sale</p>
+                            </div>
+                        </div>
+
+                        <div class="tenant-actions">
+                            <a href="#" class="action-btn primary">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                Add to Calendar
+                            </a>
+                            <a href="#" class="action-btn secondary">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                                    <polyline points="16 6 12 2 8 6" />
+                                    <line x1="12" y1="2" x2="12" y2="15" />
+                                </svg>
+                                Share Event
+                            </a>
+                        </div>
                     </div>
-                @endforelse
+                </div>
+
+                <div class="similar-section">
+                    <div class="similar-header">
+                        <h3>Upcoming Events</h3>
+                    </div>
+                    <div class="similar-tenants">
+                        @forelse ($upcomingEvents as $upcoming)
+                            <div class="similar-tenant-card"
+                                style="background-image: url({{ asset('storage/' . $upcoming->primaryPhoto->path) }});">
+                                <div class="similar-tenant-content">
+                                    <span
+                                        class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
+                                    <h4>{{ $upcoming->name }}</h4>
+                                    <!-- Using # for now as we might be on the same route structure or need named route -->
+                                    <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
+                                        class="similar-tenant-link">View Details<span>→</span></a>
+                                </div>
+                            </div>
+                        @empty
+                            <p>No upcoming events available.</p>
+                        @endforelse
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -305,7 +363,8 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
+    <!-- Use separate event logic -->
+    <script src="{{ asset('assets/frontend/js/event/detail.js') }}"></script>
 </body>
 
 </html>

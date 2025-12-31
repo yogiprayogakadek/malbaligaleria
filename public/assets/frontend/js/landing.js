@@ -674,17 +674,17 @@ window.addEventListener("load", () => {
 // MALL DIRECTORY TENANT
 // Load data from database
 
-async function loadTenantsOnDatabase(floor) {
+async function loadTenantsOnDatabase(floor, isNew = false) {
     try {
-        tenantData = await $.get("/tenant/" + floor);
+        tenantData = await $.get("/tenant/" + floor + '/' + isNew);
         return tenantData;
     } catch (error) {
         console.error("Failed to load data", error);
     }
 }
 
-async function renderLandingTenants(floor) {
-    const tenantData = await loadTenantsOnDatabase(floor);
+async function renderLandingTenants(floor, isNew = false) {
+    const tenantData = await loadTenantsOnDatabase(floor, isNew);
     const grid = document.getElementById("landingTenantGrid");
     const emptyState = document.getElementById("landingEmptyState");
 
@@ -766,8 +766,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Or simplify if data-floor missing
             if (floor.includes("1st")) renderLandingTenants("1st Floor");
             else if (floor.includes("2nd")) renderLandingTenants("2nd Floor");
-            else if (floor.includes("New Store"))
-                renderLandingTenants("2nd Floor");
+            else if (floor.includes("New Store")) renderLandingTenants("2nd Floor");
             else if (floor.includes("All Floor"))
                 window.location.href = "/directory";
         }
@@ -780,17 +779,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const floorText = this.querySelector("h4").textContent;
             let targetFloor = "1st Floor";
+            let isNew = false;
 
             // Simple Mapping for now based on Text if data-floor not set
-            if (floorText.includes("1st") || floorText.includes("Level 1"))
+            if (floorText.includes("1st") || floorText.includes("Level 1")) {
                 targetFloor = "1st Floor";
-            else if (floorText.includes("2nd") || floorText.includes("Level 2"))
+            } else if (floorText.includes("2nd") || floorText.includes("Level 2")) {
                 targetFloor = "2nd Floor";
-            else if (floorText.includes("New Store")) targetFloor = "New Store";
-            else if (floorText.includes("All Floor"))
+            } else if (floorText.includes("New Store")) {
+                targetFloor = "New Store";
+                isNew = true;
+            } else if (floorText.includes("All Floor")){
                 window.location.href = "/directory";
+            }
 
-            renderLandingTenants(targetFloor);
+            renderLandingTenants(targetFloor, isNew);
         });
     });
 });
@@ -1172,14 +1175,20 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("click", (e) => {
     if (
         e.target.classList.contains("see-details-btn") ||
-        e.target.closest(".see-details-btn")
+        e.target.closest(".see-details-btn") ||
+        e.target.classList.contains("featured-tenant-trigger") ||
+        e.target.closest(".featured-tenant-trigger")
     ) {
-        const button = e.target.classList.contains("see-details-btn")
-            ? e.target
-            : e.target.closest(".see-details-btn");
+        let button = e.target;
+        if (e.target.closest(".see-details-btn")) {
+            button = e.target.closest(".see-details-btn");
+        } else if (e.target.closest(".featured-tenant-trigger")) {
+            button = e.target.closest(".featured-tenant-trigger");
+        }
 
-        const tenantId = e.target.dataset.id;
-
-        openTenantModal(tenantId);
+        const tenantId = button.dataset.id;
+        if (tenantId) {
+            openTenantModal(tenantId);
+        }
     }
 });

@@ -93,14 +93,16 @@ class TenantService
     }
 
     // Custom
-    public function getDataByFloor(array $fields, array $relationship, string $cat)
+    public function getDataByFloor(array $fields, array $relationship, string $cat, bool $isNew)
     {
-        $tenants = $this->getTenantsWithRelationship($fields, $relationship, $cat)->map(function ($tenant) {
+        $tenants = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew)->map(function ($tenant) {
             $data = [
                 'id' => $tenant['id'],
                 'name' => $tenant['name'],
                 'category' => $tenant['category']['name'],
-                'floor' => $tenant['map_coords']['floor'] == 1 ? $tenant['map_coords']['floor'] . 'st Floor' : $tenant['map_coords']['floor'] . 'nd Floor',
+                'floor' => $tenant['isNew']
+                    ? 'New Store'
+                    : ($tenant['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor'),
                 'unit' => $tenant['map_coords']['unit'],
                 'logo' => asset('storage/' . $tenant['logo']),
                 'hours' => "10:00 AM - 10:00 PM",

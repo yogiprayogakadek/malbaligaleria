@@ -32,7 +32,15 @@ class StoreTenantRequest extends FormRequest
             'position_y'        => 'required|numeric',
             'floor'             => 'required|numeric|between:1,2',
             'unit'              => 'required|string|max:20',
-            'launched_at'       => 'nullable|date'
+            'launched_at'       => 'nullable|date',
+            'is_new'            => 'nullable|required_with:launched_at|boolean',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'is_new.required_with' => 'The new store field is required when launched at is present.'
         ];
     }
 }

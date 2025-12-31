@@ -90,7 +90,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -162,7 +162,8 @@
                 <div class="carousel-container" id="carouselContainer">
                     @forelse ($tenants as $tenant)
                         <div class="tenant-card">
-                            <a href="{{ route('tenant') }}" style="text-decoration: none;">
+                            <a href="javascript:void(0);" class="featured-tenant-trigger"
+                                data-id="{{ $tenant->id }}" style="text-decoration: none;">
                                 <div class="tenant-card-image"
                                     style="background-image: url({{ asset('storage/' . $tenant->primaryPhoto->path) }});">
                                 </div>
@@ -206,10 +207,11 @@
                             <h4>Promotion</h4>
                         </div>
                         <div class="experience-card-button-wrapper">
-                            <button class="experience-card-button">
+                            <a href="{{ route('frontend.promotion.index') }}" class="experience-card-button"
+                                style="text-decoration: none;">
                                 <span class="text">See More</span>
                                 <span class="arrow">→</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -223,27 +225,29 @@
                             <h4>D&E Events</h4>
                         </div>
                         <div class="experience-card-button-wrapper">
-                            <button class="experience-card-button">
+                            <a href="{{ route('frontend.event.index') }}" class="experience-card-button"
+                                style="text-decoration: none;">
                                 <span class="text">See More</span>
                                 <span class="arrow">→</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
 
-                <div class="experience-card destinations">
+                <div class="experience-card dining">
                     <div class="experience-card-title-vertical">
-                        <h4>Destinations</h4>
+                        <h4>Dining</h4>
                     </div>
                     <div class="experience-card-content">
                         <div class="experience-card-title">
-                            <h4>Destinations</h4>
+                            <h4>Dining</h4>
                         </div>
                         <div class="experience-card-button-wrapper">
-                            <button class="experience-card-button">
+                            <a href="{{ url('/dining') }}" class="experience-card-button"
+                                style="text-decoration: none;">
                                 <span class="text">See More</span>
                                 <span class="arrow">→</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -257,10 +261,11 @@
                             <h4>New Store</h4>
                         </div>
                         <div class="experience-card-button-wrapper">
-                            <button class="experience-card-button">
+                            <a href="{{ url('/new-store') }}" class="experience-card-button"
+                                style="text-decoration: none;">
                                 <span class="text">See More</span>
                                 <span class="arrow">→</span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -284,7 +289,7 @@
                                     class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p>{{ $event->description }}</p>
-                                <a href="{{ route('frontend.event.index', $event->uuid) }}" class="event-link">Learn
+                                <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
                                     More →</a>
                             </div>
                         </div>

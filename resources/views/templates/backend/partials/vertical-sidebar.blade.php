@@ -29,7 +29,7 @@
                     </li>
 
                     <!-- ---------------------------------- -->
-                    <!-- Category Tenants -->
+                    <!-- Dashboard -->
                     <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
@@ -38,6 +38,35 @@
                         </a>
                     </li>
 
+                    <!-- ---------------------------------- -->
+                    <!-- Users -->
+                    <!-- ---------------------------------- -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>
+                            <span class="hide-menu">User</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse first-level">
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.user.index') }}">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">List</span>
+
+                                </a>
+                            </li>
+                            {{-- <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.user.create') }}">
+                                    <span class="icon-small"></span>
+                                    <span class="hide-menu">Create</span>
+
+                                </a>
+                            </li> --}}
+                        </ul>
+                    </li>
+
+                    <!-- ---------------------------------- -->
+                    <!-- Category Tenants -->
+                    <!-- ---------------------------------- -->
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                             <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>

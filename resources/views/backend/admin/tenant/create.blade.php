@@ -29,7 +29,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('name')
+                                @error('category_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -199,6 +199,26 @@
                                 @error('launched_at')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+                        </div>
+
+                        {{-- Is new --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="isNew" class="form-label col-sm-3 col-form-label">New Store</label>
+                            <div class="col-sm-12">
+                                <div class="col-sm-12">
+                                    <select name="is_new" id="isNew"
+                                        class="form-control @error('is_new') is-invalid @enderror">
+                                        <option value="">Choose if this is new store...</option>
+                                        <option value="1" {{ old('is_new') }}>
+                                            Yes, it is new
+                                        </option>
+                                    </select>
+                                    <small>Leave empty for existing stores</small>
+                                    @error('is_new')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 

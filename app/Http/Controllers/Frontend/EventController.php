@@ -15,7 +15,21 @@ class EventController extends Controller
         $this->eventService = $eventService;
     }
 
-    public function index($uuid)
+    public function index()
+    {
+        $events = $this->eventService->getEventsWithRelationshipAndCondition(
+            ['id', 'uuid', 'name', 'start_date'],
+            [
+                'primaryPhoto:id,event_id,path',
+            ],
+            'is_active',
+            true
+        );
+
+        return view('frontend.event.index', compact('events'));
+    }
+
+    public function detail($uuid)
     {
         $event = $this->eventService->getEventsWithRelationshipAndCondition(
             ['id', 'uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description'],
@@ -51,6 +65,6 @@ class EventController extends Controller
         );
 
 
-        return view('frontend.event.index', compact('event', 'upcomingEvents'));
+        return view('frontend.event.detail', compact('event', 'upcomingEvents'));
     }
 }

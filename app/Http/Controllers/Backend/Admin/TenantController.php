@@ -48,7 +48,8 @@ class TenantController extends Controller
                 'floor' => $request->floor,
                 'unit' => $request->unit,
             ],
-            'launched_at' => $request->launched_at
+            'launched_at' => $request->launched_at,
+            'isNew' => $request->is_new ?? false
         ];
 
         $this->tenantService->create($data);
@@ -78,7 +79,8 @@ class TenantController extends Controller
                 'floor' => $request->floor,
                 'unit' => $request->unit,
             ],
-            'launched_at' => $request->launched_at
+            'launched_at' => $request->launched_at,
+            'isNew' => $request->is_new ?? false
         ];
 
         if ($request->logo != '') {

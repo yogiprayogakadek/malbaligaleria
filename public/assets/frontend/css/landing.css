@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Argesta Display";
-    src: url("https://fonts.cdnfonts.com/css/argesta-display");
+    src: url("../../fonts/Argesta/Argesta\ Display.otf");
 }
 
 * {
@@ -843,7 +843,7 @@ body.dark-mode .sidebar nav ul li a {
     bottom: -5px;
     width: 0;
     height: 2px;
-    background: #F5F5DC;
+    background: #f5f5dc;
     transition: width 0.3s ease;
 }
 
@@ -1594,44 +1594,82 @@ body.dark-mode .all-experience-btn .text::after {
 .experience-card {
     position: relative;
     flex: 1;
-    border-radius: 10px;
+    border-radius: 0px; /* Sharper edges for editorial feel, or small radius */
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    background-size: cover;
-    background-position: center;
+    transition: flex 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Smoother bezier */
+    margin: 0 2px; /* Tiny gap for separation */
 }
 
 .experience-card.expanded {
-    flex: 2 !important;
+    flex: 3 !important; /* increased expansion ratio */
 }
 
 .experience-card.promotion {
-    flex: 2;
+    flex: 3;
 }
 
 .experience-card:not(.promotion):not(.expanded) {
     flex: 1;
-    /* Changed from 0.5 to 1 to match default stability */
 }
 
-.experience-card {
-    will-change: flex;
+/* Background Image Layer (Parallax Zoom Effect) */
+.experience-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 0;
+    filter: brightness(0.9);
 }
 
-/* Only apply hover expand effect on devices that support hover properly and are wide enough */
+/* Hover Effect: Zoom Background */
+.experience-card:hover::before {
+    transform: scale(1.15);
+    filter: brightness(1);
+}
+
+/* Overlay Layer */
+.experience-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+    z-index: 1;
+    opacity: 0.8;
+    transition: opacity 0.5s ease;
+}
+
+.experience-card:hover::after {
+    opacity: 0.6; /* Lighten overlay on hover */
+}
+
+/* Only apply hover expand effect on devices that support hover properly */
 @media (min-width: 1025px) {
     .experience-card:hover {
-        flex: 2 !important;
+        flex: 3 !important;
     }
 
     .experience-cards:hover .experience-card:not(:hover) {
         flex: 0.8 !important;
-        /* Less aggressive shrinking */
+        filter: grayscale(0.4); /* Subtle focus on active */
     }
 }
 
-/* On smaller screens (Tablets/Laptops < 1025px), disable the confusing resizing behavior */
+/* Mobile Styling */
 @media (max-width: 1024px) {
     .experience-cards {
         gap: 15px;
@@ -1641,145 +1679,118 @@ body.dark-mode .all-experience-btn .text::after {
 
     .experience-card {
         flex: 0 0 280px !important;
-        /* Fixed width carousels are safer/better UX on small screens */
         min-width: 280px;
         height: 450px;
-        /* Ensure consistent height */
+        border-radius: 10px;
     }
-
-    /* Remove the complex hover interactions that cause blinking */
-    .experience-cards:hover .experience-card:not(:hover) {
-        flex: 0 0 280px !important;
-    }
-
-    .experience-card:hover {
-        flex: 0 0 280px !important;
-        transform: translateY(-5px);
-        /* Simple subtle lift instead */
-    }
-}
-
-.experience-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.8));
-    z-index: 1;
 }
 
 .experience-card-content {
     position: absolute;
-    bottom: 40px;
-    left: 40px;
-    z-index: 2;
+    bottom: 30px;
+    left: 30px;
+    right: 30px; /* Constrain width */
+    z-index: 3;
     text-align: left;
     opacity: 0;
-    transition: opacity 0.4s ease;
-    max-width: calc(100% - 80px);
+    transition: all 0.6s ease 0.1s;
+    transform: translateY(20px);
+
+    /* Glassmorphism Panel */
+    background: rgba(255, 255, 255, 0.05); /* Ultra subtle wash */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px; /* Editorial box feel */
 }
 
 .experience-card-content.active {
     pointer-events: auto;
 }
 
-.experience-card-title {
-    margin-bottom: 20px;
-}
-
 .experience-card h4 {
-    font-family: "Playfair Display", serif;
-    font-size: 32px;
+    font-family: "Argesta Display", "Playfair Display", serif; /* Use fancier font if available */
+    font-size: 38px;
     font-weight: 400;
     color: white;
-    margin: 0;
-    letter-spacing: 1px;
-    line-height: 1.2;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.5px; /* Tighter modern serif tracking */
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.experience-card-button-wrapper {
-    display: inline-block;
-}
-
+/* Button Refinement */
 .experience-card-button {
     display: inline-flex;
     align-items: center;
-    background: var(--primary-gradient);
-    color: white;
-    padding: 14px 28px;
-    border-radius: 50px;
-    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a1a1a; /* Dark text on white btn */
+    padding: 12px 30px;
+    border-radius: 0px; /* Sharp editorial button */
+    font-size: 11px;
+    text-transform: uppercase;
     font-weight: 600;
-    text-decoration: none;
+    letter-spacing: 2px;
     border: none;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s ease;
     gap: 10px;
-    box-shadow: 0 3px 12px rgba(44, 95, 93, 0.25);
-    letter-spacing: 0.5px;
 }
 
 .experience-card-button:hover {
-    background: var(--secondary-gradient);
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 6px 20px rgba(44, 95, 93, 0.35),
-        0 0 40px rgba(44, 95, 93, 0.15);
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.experience-card-button .arrow {
-    font-size: 16px;
-    transition: transform 0.3s ease;
-}
-
-.experience-card-button:hover .arrow {
-    transform: translateX(3px);
-}
-
+/* Vertical Title Refinement */
 .experience-card-title-vertical {
     position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    text-align: center;
+    bottom: 0;
+    left: 0;
+    top: 0;
     width: 100%;
-    padding: 0 20px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+
+    /* Vertical Gradient Overlay when collapsed */
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.2),
+        transparent,
+        rgba(0, 0, 0, 0.2)
+    );
 }
 
 .experience-card-title-vertical h4 {
-    font-family: "Playfair Display", serif;
-    font-size: 28px;
+    font-family: "Argesta Display", "Playfair Display", serif;
+    font-size: 32px;
     font-weight: 400;
-    color: white;
+    color: rgba(255, 255, 255, 0.9);
     margin: 0;
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    margin: 0 auto;
-    letter-spacing: 3px;
+    transform: rotate(180deg); /* Fix rotation if needed, or keep standard */
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 24px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.experience-card.promotion .experience-card-content {
-    opacity: 1;
-}
-
-.experience-card.promotion .experience-card-title-vertical {
-    opacity: 0;
-}
-
-.experience-card.expanded .experience-card-content {
-    opacity: 1;
-}
-
-.experience-card.expanded .experience-card-title-vertical {
-    opacity: 0;
-}
-
+/* Visibility States */
+.experience-card.promotion .experience-card-content,
+.experience-card.expanded .experience-card-content,
 .experience-card:hover .experience-card-content {
     opacity: 1;
+    transform: translateY(0);
 }
 
+.experience-card.promotion .experience-card-title-vertical,
+.experience-card.expanded .experience-card-title-vertical,
 .experience-card:hover .experience-card-title-vertical {
     opacity: 0;
 }
@@ -1788,6 +1799,7 @@ body.dark-mode .all-experience-btn .text::after {
     .experience-card.promotion:not(:hover):not(.expanded)
     .experience-card-content {
     opacity: 0;
+    transform: translateY(20px);
 }
 
 .experience-cards:hover
@@ -1796,32 +1808,29 @@ body.dark-mode .all-experience-btn .text::after {
     opacity: 1;
 }
 
-.experience-cards:hover
-    .experience-card.expanded:not(:hover)
-    .experience-card-content {
-    opacity: 0;
-}
-
-.experience-cards:hover
-    .experience-card.expanded:not(:hover)
-    .experience-card-title-vertical {
-    opacity: 1;
-}
-
-.experience-card.promotion {
+/* Move Background Images to ::before */
+.experience-card.promotion::before {
     background-image: url("https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800");
 }
 
-.experience-card.events {
+.experience-card.events::before {
     background-image: url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800");
 }
 
-.experience-card.destinations {
-    background-image: url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800");
+.experience-card.dining::before {
+    background-image: url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"); /* Dining/Restaurant image */
 }
 
-.experience-card.new-store {
+.experience-card.new-store::before {
     background-image: url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800");
+}
+
+/* Cleanup old background styles if any remain on the element itself */
+.experience-card.promotion,
+.experience-card.events,
+.experience-card.dining,
+.experience-card.new-store {
+    background-image: none;
 }
 
 /* Event Highlight Section with Slider */
@@ -2270,7 +2279,7 @@ body.dark-mode .map-placeholder {
     padding: 15px 0 0;
     text-align: center;
     font-size: 12px;
-    color: #F5F5DC;
+    color: #f5f5dc;
     font-weight: 600;
     letter-spacing: 1px;
     pointer-events: none;
@@ -2289,7 +2298,7 @@ body.dark-mode .scroll-indicator {
 .scroll-indicator svg {
     width: 16px;
     height: 16px;
-    fill: #F5F5DC;
+    fill: #f5f5dc;
     animation: bounceDown 1.5s infinite;
     display: block;
     margin: 5px auto 0;
@@ -2340,14 +2349,14 @@ body.dark-mode .floor-item {
 }
 
 .floor-item:hover {
-    border-color: #F5F5DC;
+    border-color: #f5f5dc;
     transform: translateX(5px) scale(1.02);
     box-shadow: 0 5px 15px rgba(245, 245, 220, 0.2);
 }
 
 .floor-item.active {
-    background: #F5F5DC;
-    border-color: #F5F5DC;
+    background: #f5f5dc;
+    border-color: #f5f5dc;
 }
 
 .floor-item.active h4,
@@ -2508,7 +2517,7 @@ body.dark-mode footer {
 }
 
 .footer-links a:hover {
-    color: #F5F5DC;
+    color: #f5f5dc;
     transform: translateX(10px);
 }
 
@@ -2527,7 +2536,7 @@ body.dark-mode footer {
 .footer-contact-item svg {
     width: 20px;
     height: 20px;
-    fill: #F5F5DC;
+    fill: #f5f5dc;
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -2546,7 +2555,7 @@ body.dark-mode footer {
 }
 
 .footer-contact-item a:hover {
-    color: #F5F5DC;
+    color: #f5f5dc;
 }
 
 .footer-social {
@@ -2569,7 +2578,7 @@ body.dark-mode footer {
 }
 
 .footer-social-link:hover {
-    background: #F5F5DC;
+    background: #f5f5dc;
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(245, 245, 220, 0.3);
 }
@@ -3124,7 +3133,7 @@ body.dark-mode .tenant-logo {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: linear-gradient(135deg, #F5F5DC 0%, #E8E6CA 100%);
+    background: linear-gradient(135deg, #f5f5dc 0%, #e8e6ca 100%);
     color: #2c5f5d;
     padding: 6px 16px;
     border-radius: 20px;
@@ -3160,7 +3169,7 @@ body.dark-mode .tenant-info h3 {
 .tenant-category svg {
     width: 14px;
     height: 14px;
-    fill: #F5F5DC;
+    fill: #f5f5dc;
 }
 
 .tenant-meta {
@@ -3186,14 +3195,14 @@ body.dark-mode .tenant-meta {
 .meta-item svg {
     width: 14px;
     height: 14px;
-    fill: #F5F5DC;
+    fill: #f5f5dc;
 }
 
 .see-details-btn {
     margin-top: 18px;
     width: 100%;
     padding: 12px 20px;
-    background: linear-gradient(135deg, #F5F5DC 0%, #E8E6CA 100%);
+    background: linear-gradient(135deg, #f5f5dc 0%, #e8e6ca 100%);
     border: none;
     color: #2c5f5d;
     border-radius: 10px;
@@ -3232,7 +3241,7 @@ body.dark-mode .tenant-meta {
 }
 
 .see-details-btn:hover {
-    background: linear-gradient(135deg, #E8E6CA 0%, #D6D4B6 100%);
+    background: linear-gradient(135deg, #e8e6ca 0%, #d6d4b6 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(245, 245, 220, 0.4);
 }
@@ -3789,7 +3798,7 @@ body.dark-mode .modal-description p {
 .empty-state svg {
     width: 80px;
     height: 80px;
-    fill: #F5F5DC;
+    fill: #f5f5dc;
     opacity: 0.5;
     margin-bottom: 15px;
 }

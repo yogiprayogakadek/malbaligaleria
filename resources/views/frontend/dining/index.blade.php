@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events | Mal Bali Galeria</title>
+    <title>Dining | Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <!-- Fonts -->
     <link
@@ -12,74 +12,10 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Argesta+Display&display=swap" rel="stylesheet">
 
+
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
-    <style>
-        /* Internal CSS for Event Listing Specifics to avoid creating a new file for now */
-        .page-header {
-            padding-top: 150px;
-            padding-bottom: 50px;
-            text-align: center;
-            background: var(--bg-light);
-        }
-
-        body.dark-mode .page-header {
-            background: var(--bg-dark);
-        }
-
-        .page-header h1 {
-            font-family: "Playfair Display", serif;
-            font-size: 48px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        body.dark-mode .page-header h1 {
-            color: var(--text-light);
-        }
-
-        .page-header p {
-            color: #666;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-        }
-
-        body.dark-mode .page-header p {
-            color: #aaa;
-        }
-
-        .events-grid-section {
-            padding: 0 40px 100px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .page-header {
-                padding-top: 120px;
-            }
-
-            .page-header h1 {
-                font-size: 36px;
-            }
-
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .event-card {
-                min-width: 0; /* Reset flex min-width override if present */
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/dining.css') }}?v={{ time() }}">
 </head>
 
 <body>
@@ -133,7 +69,7 @@
         </div>
 
         <div class="logo">
-            <h1>mal bali galeria<span>EVENTS</span></h1>
+            <h1>mal bali galeria<span>SHOPPING CENTER</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -162,42 +98,61 @@
                 <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
                 <li><a href="{{ route('directory') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
-                <li><a href="{{ url('/') }}#events" class="active"
-                        style="color: var(--secondary-color); transform: translateX(10px);">Events</a></li>
+                <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
             </ul>
         </nav>
+        
+        <!-- Search in Sidebar for Mobile -->
+        <div class="sidebar-search">
+            <div class="search-bar">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke-width="2" />
+                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <input type="text" placeholder="Search">
+            </div>
+        </div>
     </div>
 
     <!-- Main Content -->
     <main>
         <section class="page-header">
-            <h1>Upcoming Events</h1>
-            <p>Discover the latest happenings at Mal Bali Galeria</p>
+            <h1>Culinary Collection</h1>
+            <p>Savor the exquisite flavors of Bali</p>
         </section>
 
-        <section class="events-grid-section">
-            <div class="events-grid">
-                @forelse ($events as $event)
-                    <div class="event-card">
-                        <div class="event-card-bg"
-                            style="background-image: url({{ asset('storage/' . $event->primaryPhoto->path) }});">
-                        </div>
-                        <div class="event-card-content">
-                            <span
-                                class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
-                            <h3>{{ $event->name }}</h3>
-                            <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
-                                More →</a>
+        <!-- Filter Placeholder -->
+        <div class="dining-filter">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Fine Dining</button>
+            <button class="filter-btn">Casual</button>
+            <button class="filter-btn">Cafe</button>
+            <button class="filter-btn">Bars</button>
+        </div>
+
+        <section class="dining-grid">
+            @forelse($tenants as $tenant)
+                 <div class="dining-card" onclick="window.location.href='javascript:void(0)'"> <!-- Placeholder link for now -->
+                    <div class="dining-img" style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/'.$tenant->primaryPhoto->path) : asset('assets/images/placeholder-dining.jpg') }}')"></div>
+                    <div class="dining-overlay">
+                        <div class="dining-content">
+                            <div class="dining-category">{{ $tenant->category->name ?? 'Gastronomy' }}</div>
+                            <h3 class="dining-title">{{ $tenant->name }}</h3>
+                            <div class="dining-meta">
+                                <span>{{ $tenant->map_coords['floor'] == 1 ? '1st Floor' : '2nd Floor' }}</span>
+                                <span>&bull;</span>
+                                <span>Open 10 AM - 10 PM</span>
+                            </div>
                         </div>
                     </div>
-                @empty
-                    <div class="no-events" style="grid-column: 1 / -1; text-align: center; padding: 50px;">
-                        <h3>No upcoming events at the moment.</h3>
-                        <p>Stay tuned for updates!</p>
-                    </div>
-                @endforelse
-            </div>
+                </div>
+            @empty
+                <div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+                    <h3>No Dining Tenants Found</h3>
+                    <p>We are currently updating our directory. Please check back soon.</p>
+                </div>
+            @endforelse
         </section>
     </main>
 
@@ -245,9 +200,9 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ url('/directory') }}">Store Directory</a></li>
+                        <li><a href="{{ route('directory') }}">Store Directory</a></li>
                         <li><a href="{{ url('/') }}#experience">Experiences</a></li>
-                        <li><a href="{{ url('/') }}#events">Events</a></li>
+                        <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                         <li><a href="{{ url('/') }}#career">Careers</a></li>
                     </ul>
                 </div>
@@ -303,9 +258,7 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
 </body>
-
 </html>

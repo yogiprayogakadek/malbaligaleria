@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events | Mal Bali Galeria</title>
+    <title>New Stores | Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <!-- Fonts -->
     <link
@@ -12,74 +12,10 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Argesta+Display&display=swap" rel="stylesheet">
 
+
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
-    <style>
-        /* Internal CSS for Event Listing Specifics to avoid creating a new file for now */
-        .page-header {
-            padding-top: 150px;
-            padding-bottom: 50px;
-            text-align: center;
-            background: var(--bg-light);
-        }
-
-        body.dark-mode .page-header {
-            background: var(--bg-dark);
-        }
-
-        .page-header h1 {
-            font-family: "Playfair Display", serif;
-            font-size: 48px;
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        body.dark-mode .page-header h1 {
-            color: var(--text-light);
-        }
-
-        .page-header p {
-            color: #666;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-        }
-
-        body.dark-mode .page-header p {
-            color: #aaa;
-        }
-
-        .events-grid-section {
-            padding: 0 40px 100px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .page-header {
-                padding-top: 120px;
-            }
-
-            .page-header h1 {
-                font-size: 36px;
-            }
-
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .event-card {
-                min-width: 0; /* Reset flex min-width override if present */
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/new-store.css') }}?v={{ time() }}">
 </head>
 
 <body>
@@ -106,55 +42,30 @@
         </div>
     </div>
 
-    <!-- Dark Mode Toggle -->
-    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-        <svg class="moon-icon" viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-        <svg class="sun-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5" />
-            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" />
-            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" />
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" />
-            <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
-            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
-        </svg>
+    <!-- Toggle & Header -->
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" /></svg>
     </button>
 
-    <!-- Header -->
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
             </a>
         </div>
-
         <div class="logo">
-            <h1>mal bali galeria<span>EVENTS</span></h1>
+            <h1>mal bali galeria<span>SHOPPING CENTER</span></h1>
         </div>
-
-        <button class="menu-btn" id="menuBtn">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
     </header>
 
-    <!-- Sidebar Menu -->
+    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
         </div>
-
-        <button class="sidebar-close" id="sidebarClose">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
+        <button class="sidebar-close" id="sidebarClose"><span></span><span></span><span></span></button>
         <nav>
             <ul>
                 <li><a href="{{ url('/') }}#home">Home</a></li>
@@ -162,42 +73,52 @@
                 <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
                 <li><a href="{{ route('directory') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
-                <li><a href="{{ url('/') }}#events" class="active"
-                        style="color: var(--secondary-color); transform: translateX(10px);">Events</a></li>
+                <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
             </ul>
         </nav>
+        
+         <!-- Search in Sidebar for Mobile -->
+        <div class="sidebar-search">
+            <div class="search-bar">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke-width="2" />
+                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <input type="text" placeholder="Search">
+            </div>
+        </div>
     </div>
 
-    <!-- Main Content -->
     <main>
         <section class="page-header">
-            <h1>Upcoming Events</h1>
-            <p>Discover the latest happenings at Mal Bali Galeria</p>
+            <h1>Latest Additions</h1>
+            <p>Welcome our newest brands and stores</p>
         </section>
 
-        <section class="events-grid-section">
-            <div class="events-grid">
-                @forelse ($events as $event)
-                    <div class="event-card">
-                        <div class="event-card-bg"
-                            style="background-image: url({{ asset('storage/' . $event->primaryPhoto->path) }});">
-                        </div>
-                        <div class="event-card-content">
-                            <span
-                                class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
-                            <h3>{{ $event->name }}</h3>
-                            <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
-                                More →</a>
-                        </div>
+        <section class="new-store-grid">
+            @forelse($tenants as $tenant)
+                @php
+                    $isNew = $tenant->created_at->diffInDays(now()) < 30;
+                    $badgeText = $isNew ? 'Just Opened' : 'New Concept';
+                    $badgeClass = $isNew ? 'store-badge' : 'store-badge coming-soon'; // Example logic reuse
+                @endphp
+                 <a href="#" class="store-card">
+                    <div class="store-image-wrapper">
+                        <div class="{{ $badgeClass }}">{{ $badgeText }}</div>
+                        <div class="store-img" style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/'.$tenant->primaryPhoto->path) : asset('assets/images/placeholder-store.jpg') }}')"></div>
                     </div>
-                @empty
-                    <div class="no-events" style="grid-column: 1 / -1; text-align: center; padding: 50px;">
-                        <h3>No upcoming events at the moment.</h3>
-                        <p>Stay tuned for updates!</p>
+                    <div class="store-info">
+                        <h3 class="store-title">{{ $tenant->name }}</h3>
+                        <div class="store-meta">{{ $tenant->map_coords['floor'] == 1 ? 'Ground Floor' : 'Level 2' }} &bull; {{ $tenant->category->name }}</div>
                     </div>
-                @endforelse
-            </div>
+                </a>
+            @empty
+                 <div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+                    <h3>No new stores to display yet.</h3>
+                    <p>Stay tuned for exciting new arrivals!</p>
+                </div>
+            @endforelse
         </section>
     </main>
 
@@ -245,9 +166,9 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ url('/directory') }}">Store Directory</a></li>
+                        <li><a href="{{ route('directory') }}">Store Directory</a></li>
                         <li><a href="{{ url('/') }}#experience">Experiences</a></li>
-                        <li><a href="{{ url('/') }}#events">Events</a></li>
+                        <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                         <li><a href="{{ url('/') }}#career">Careers</a></li>
                     </ul>
                 </div>
@@ -303,9 +224,7 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
 </body>
-
 </html>

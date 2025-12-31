@@ -30,7 +30,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('name')
+                                @error('category_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

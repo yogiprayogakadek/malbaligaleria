@@ -41,7 +41,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="end_date">Start Date</label>
+                                    <label for="end_date">End Date</label>
                                     <input type="text" class="form-control @error('end_date') is-invalid @enderror"
                                         id="end_date" name="end_date" placeholder="Enter end date event"
                                         value="{{ $event->end_date }}">
@@ -65,7 +65,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="end_time">Start Date</label>
+                                    <label for="end_time">End Time</label>
                                     <input type="text" class="form-control @error('end_time') is-invalid @enderror"
                                         id="end_time" name="end_time" placeholder="Enter end time event"
                                         value="{{ $event->end_time }}">

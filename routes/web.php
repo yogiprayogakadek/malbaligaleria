@@ -10,9 +10,13 @@ use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Frontend\DiningController;
+use App\Http\Controllers\Frontend\DirectoryController;
 use App\Http\Controllers\Frontend\EventController as FrontendEventController;
 use App\Http\Controllers\Frontend\PromotionPageController;
 use App\Http\Controllers\Frontend\LandingPageController;
+use App\Http\Controllers\Frontend\NewStoreController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -21,24 +25,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/maintenance', function () {
     return view('maintenance');
 });
-Route::get('/tenant', function () {
-    return view('frontend.tenant.index');
-})->name('tenant');
-// Route::get('/event', function () {
-//     return view('frontend.event.index');
-// })->name('event');
-
-Route::get('/directory', function () {
-    return view('frontend.directory.index');
-})->name('directory');
-
 
 // FRONTEND
 Route::name('frontend.')
     ->group(function () {
         Route::controller(LandingPageController::class)->group(function () {
             Route::get('/', 'index')->name('landing');
-            Route::get('/tenant/{cat}', 'tenantData');
+            Route::get('/tenant/{cat}/{isNew}', 'tenantData');
             Route::get('/find/tenant/{tenant_id}', 'findTenantById');
         });
 
@@ -61,7 +54,32 @@ Route::name('frontend.')
             ->prefix('/event')
             ->name('event.')
             ->group(function () {
-                Route::get('/{uuid}', 'index')->name('index');
+                Route::get('/', 'index')->name('index');
+                Route::get('/{uuid}', 'detail')->name('detail');
+            });
+
+        Route::controller(DirectoryController::class)
+            ->prefix('/directory')
+            ->name('directory.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/category-tenant', 'getCategoryTenant')->name('get.category');
+                Route::get('/tenants', 'getTenants')->name('get.tenants');
+            });
+
+
+        // EXAMPLES
+        Route::controller(DiningController::class)
+            ->prefix('/dining')
+            ->name('dining.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
+        Route::controller(NewStoreController::class)
+            ->prefix('/new-store')
+            ->name('new-store.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
             });
     });
 
@@ -78,6 +96,17 @@ Route::controller(AdminDashboardController::class)
         Route::prefix('/dashboard')->group(function () {
             Route::get('/', 'index')->name('dashboard');
         });
+
+        // User
+        Route::controller(UserController::class)->prefix('/user')
+            ->name('user.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/{uuid}/edit', 'edit')->name('edit');
+                Route::put('/{uuid}/update', 'update')->name('update');
+            });
 
         // CATEGORY
         Route::controller(CategoryController::class)->prefix('/category')
