@@ -36,29 +36,6 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($tenants as $tenant)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $tenant->name }}</td>
-                                        <td>{{ $tenant->phone ?? '-' }}</td>
-                                        <td>{{ $tenant->map_coords['floor'] == 1 ? $tenant->map_coords['floor'] . 'st Floor' : $tenant->map_coords['floor'] . 'nd Floor' }}
-                                        </td>
-                                        <td>{!! $tenant->is_active == true
-                                            ? '<span class="badge bg-primary">Active</span>'
-                                            : '<span class="badge bg-danger">Not Active</span>' !!}</td>
-                                        <td>
-                                            <a href="{{ route('admin.tenant.edit', $tenant->uuid) }}">
-                                                <button type="button"
-                                                    class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                                                    <i class="ti ti-pencil fs-4 me-2"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -72,7 +49,40 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable();
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                searchDelay: 500,
+                ajax: "{{ route('admin.tenant.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone',
+                        defaultContent: '-'
+                    },
+                    {
+                        data: 'map_coords',
+                        name: 'map_coords'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
         });
     </script>
 @endpush

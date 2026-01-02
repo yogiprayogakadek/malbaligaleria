@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTenantRequest;
 use App\Services\CategoryService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class TenantController extends Controller
 {
@@ -19,10 +20,34 @@ class TenantController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tenants = $this->tenantService->getTenantsByStatus(['uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at'], true);
-        return view('backend.admin.tenant.index', compact('tenants'));
+        if ($request->ajax()) {
+            $tenants = $this->tenantService->getTenantsByStatus(['uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at'], true);
+
+            return DataTables::of($tenants)
+                ->addIndexColumn()
+                ->addColumn('is_active', function ($row) {
+                    return $row->is_active == true
+                        ? '<span class="badge bg-primary">Active</span>'
+                        : '<span class="badge bg-danger">Not Active</span>';
+                })
+                ->addColumn('map_coords', function ($row) {
+                    return $row->map_coords['floor'] == 1 ? $row->map_coords['floor'] . 'st Floor' : $row->map_coords['floor'] . 'nd Floor';
+                })
+                ->addColumn('action', function ($row) {
+                    return '<a href="' . route('admin.tenant.edit', $row->uuid) . '">
+                        <button type="button"
+                            class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
+                            <i class="ti ti-pencil fs-4 me-2"></i>
+                            Edit
+                        </button>
+                    </a>';
+                })
+                ->rawColumns(['action', 'is_active'])
+                ->make(true);
+        }
+        return view('backend.admin.tenant.index');
     }
 
     public function create()
