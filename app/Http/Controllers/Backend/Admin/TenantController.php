@@ -49,7 +49,11 @@ class TenantController extends Controller
                 'unit' => $request->unit,
             ],
             'launched_at' => $request->launched_at,
-            'isNew' => $request->is_new ?? false
+            'isNew' => $request->is_new ?? false,
+            'map_original_size' => [
+                'width' => $request->map_original_width,
+                'height' => $request->map_original_height,
+            ]
         ];
 
         $this->tenantService->create($data);
@@ -80,7 +84,11 @@ class TenantController extends Controller
                 'unit' => $request->unit,
             ],
             'launched_at' => $request->launched_at,
-            'isNew' => $request->is_new ?? false
+            'isNew' => $request->is_new ?? false,
+            'map_original_size' => [
+                'width' => $request->map_original_width,
+                'height' => $request->map_original_height,
+            ]
         ];
 
         if ($request->logo != '') {

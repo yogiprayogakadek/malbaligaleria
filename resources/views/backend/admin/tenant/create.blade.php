@@ -100,9 +100,11 @@
                                                     Floor</button>
                                             </div>
                                         </div>
-                                        <img src="{{ asset('assets/images/floors/1st.png') }}" alt="1st floor"
-                                            srcset="{{ asset('assets/images/floors/1st.png') }}" width="100%"
-                                            class="map-image" id="floorMapImage">
+                                        <div id="mapContainer" style="position: relative;">
+                                            <img src="{{ asset('assets/images/floors/1st_floor.png') }}" alt="1st floor"
+                                                srcset="{{ asset('assets/images/floors/1st_floor.png') }}" width="100%"
+                                                class="map-image" id="floorMapImage" style="cursor: crosshair;">
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -152,13 +154,15 @@
                                     @error('position_y')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <input type="hidden" name="map_original_width" id="map_original_width">
+                                    <input type="hidden" name="map_original_height" id="map_original_height">
                                 </div>
-                                {{-- <div class="col-sm-2">
+                                <div class="col-sm-2">
                                     <button class="btn btn-info btn-map" type="button" style="width: 100%"
                                         data-bs-toggle="modal" data-bs-target="#modalMap">
                                         <i class="fa fa-map-pin"></i> Open Map
                                     </button>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
 
@@ -258,81 +262,77 @@
 
         $('body').on('click', '.btn-map-image', function() {
             let floor = $(this).data('floor');
-            let image = floor == '1st' ? "{{ asset('assets/images/floors/1st.png') }}" :
-                "{{ asset('assets/images/floors/2nd.png') }}";
+            let image = floor == '1st' ? "{{ asset('assets/images/floors/1st_floor.png') }}" :
+                "{{ asset('assets/images/floors/2nd_floor.png') }}";
             $('.map-image').attr({
                 src: image,
                 srcset: image
             });
             $('.btn-map-image').removeClass('btn-primary').addClass('btn-outline-primary');
             $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+
+            // Remove existing markers when switching floors
+            $('.map-marker').remove();
+
+            // Update floor input
+            $('#floor').val(floor == '1st' ? 1 : 2);
         });
 
-        // ===== COORDINATE PICKER =====
-        function enableCoordinatePicker() {
-            const mapImage = document.getElementById('floorMapImage');
-            if (!mapImage) {
-                alert('Please switch to Map View first!');
-                return;
-            }
+        // Coordinate Picker Logic
+        const mapImage = document.getElementById('floorMapImage');
+        const mapContainer = document.getElementById('mapContainer');
 
-            console.clear();
-            console.log('%c📍 COORDINATE PICKER ENABLED',
-                'background: #5fcfda; color: white; font-size: 16px; padding: 10px; font-weight: bold;');
-            console.log('%cClick anywhere on the map to get coordinates', 'font-size: 14px; color: #666;');
-            console.log('Image Natural Size:', mapImage.naturalWidth, 'x', mapImage.naturalHeight);
-            console.log('Image Display Size:', mapImage.width, 'x', mapImage.height);
+        mapImage.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
 
-            mapImage.style.cursor = 'crosshair';
+            // Calculate scale based on natural size vs displayed size
+            const scaleX = this.naturalWidth / this.width;
+            const scaleY = this.naturalHeight / this.height;
 
-            if (mapImage._coordinateListener) {
-                mapImage.removeEventListener('click', mapImage._coordinateListener);
-            }
+            const originalX = Math.round(clickX * scaleX);
+            const originalY = Math.round(clickY * scaleY);
 
-            const clickHandler = function(e) {
-                const rect = this.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const clickY = e.clientY - rect.top;
-                const scaleX = this.naturalWidth / this.width;
-                const scaleY = this.naturalHeight / this.height;
-                const originalX = Math.round(clickX * scaleX);
-                const originalY = Math.round(clickY * scaleY);
+            // Calculate percentage for responsive marker
+            const percentX = (clickX / this.width) * 100;
+            const percentY = (clickY / this.height) * 100;
 
-                console.log('%c✓ COORDINATES', 'background: #2ecc71; color: white; padding: 8px; font-weight: bold;');
-                console.log(`mapCoords: { x: ${originalX}, y: ${originalY} },`);
-                console.log(`mapOriginalSize: { width: ${this.naturalWidth}, height: ${this.naturalHeight} }`);
+            // Update Input Fields
+            $('#positionX').val(originalX);
+            $('#positionY').val(originalY);
+            
+            // Update Original Size Fields
+            $('#map_original_width').val(this.naturalWidth);
+            $('#map_original_height').val(this.naturalHeight);
 
-                const marker = document.createElement('div');
-                marker.style.cssText = `
-                    position: absolute; left: ${clickX}px; top: ${clickY}px; width: 12px; height: 12px;
-                    background: #ff4757; border: 3px solid white; border-radius: 50%;
-                    transform: translate(-50%, -50%); pointer-events: none; z-index: 9999;
-                    box-shadow: 0 0 0 0 rgba(255, 71, 87, 1); animation: pulse 1.5s infinite;
-                `;
+            // Visual Marker
+            // Remove existing marker
+            $('.map-marker').remove();
 
-                const wrapper = this.parentElement;
-                wrapper.style.position = 'relative';
-                wrapper.appendChild(marker);
-                setTimeout(() => marker.remove(), 3000);
-            };
+            // Create new marker
+            const marker = document.createElement('div');
+            marker.className = 'map-marker';
+            marker.style.cssText = `
+                position: absolute;
+                left: ${percentX}%;
+                top: ${percentY}%;
+                width: 12px;
+                height: 12px;
+                background: #ff4757;
+                border: 3px solid white;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 10;
+                box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.3);
+            `;
 
-            mapImage._coordinateListener = clickHandler;
-            mapImage.addEventListener('click', clickHandler);
+            mapContainer.appendChild(marker);
+        });
 
-            if (!document.getElementById('pulseAnimation')) {
-                const style = document.createElement('style');
-                style.id = 'pulseAnimation';
-                style.textContent = `
-                    @keyframes pulse {
-                        0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
-                        70% { box-shadow: 0 0 0 20px rgba(255, 71, 87, 0); }
-                        100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
-            showToastr('Coordinate Picker', 'Click on map to get coordinates. Check console!', 4000);
-        }
+        // Also update floor input on button click (already handling visual switch, but let's be explicit about the form input)
+        // Note: The existing code for buttons didn't update the #floor input, which might be a good ID to check.
+        // Checking existing file: #floor input exists (lines 121-124).
     </script>
 @endpush

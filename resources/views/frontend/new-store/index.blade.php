@@ -44,8 +44,12 @@
 
     <!-- Toggle & Header -->
     <button class="dark-mode-toggle" id="darkModeToggle">
-        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-        <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" /></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5" />
+        </svg>
     </button>
 
     <header>
@@ -71,14 +75,14 @@
                 <li><a href="{{ url('/') }}#home">Home</a></li>
                 <li><a href="{{ url('/') }}#about">About</a></li>
                 <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
                 <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
             </ul>
         </nav>
-        
-         <!-- Search in Sidebar for Mobile -->
+
+        <!-- Search in Sidebar for Mobile -->
         <div class="sidebar-search">
             <div class="search-bar">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -103,18 +107,21 @@
                     $badgeText = $isNew ? 'Just Opened' : 'New Concept';
                     $badgeClass = $isNew ? 'store-badge' : 'store-badge coming-soon'; // Example logic reuse
                 @endphp
-                 <a href="#" class="store-card">
+                <a href="#" class="store-card">
                     <div class="store-image-wrapper">
                         <div class="{{ $badgeClass }}">{{ $badgeText }}</div>
-                        <div class="store-img" style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/'.$tenant->primaryPhoto->path) : asset('assets/images/placeholder-store.jpg') }}')"></div>
+                        <div class="store-img"
+                            style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/placeholder-store.jpg') }}')">
+                        </div>
                     </div>
                     <div class="store-info">
                         <h3 class="store-title">{{ $tenant->name }}</h3>
-                        <div class="store-meta">{{ $tenant->map_coords['floor'] == 1 ? 'Ground Floor' : 'Level 2' }} &bull; {{ $tenant->category->name }}</div>
+                        <div class="store-meta">{{ $tenant->map_coords['floor'] == 1 ? 'Ground Floor' : 'Level 2' }}
+                            &bull; {{ $tenant->category->name }}</div>
                     </div>
                 </a>
             @empty
-                 <div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+                <div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
                     <h3>No new stores to display yet.</h3>
                     <p>Stay tuned for exciting new arrivals!</p>
                 </div>
@@ -166,7 +173,7 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ route('directory') }}">Store Directory</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Store Directory</a></li>
                         <li><a href="{{ url('/') }}#experience">Experiences</a></li>
                         <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                         <li><a href="{{ url('/') }}#career">Careers</a></li>
@@ -227,4 +234,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
 </body>
+
 </html>

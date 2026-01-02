@@ -1120,9 +1120,17 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .morphing-button {
@@ -1212,8 +1220,8 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(45deg,
-                rgba(95, 207, 218, 0.1) 0%,
-                rgba(77, 184, 195, 0.1) 100%);
+                    rgba(95, 207, 218, 0.1) 0%,
+                    rgba(77, 184, 195, 0.1) 100%);
             z-index: -1;
             border-radius: inherit;
         }
@@ -1252,8 +1260,13 @@
         }
 
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Navigation dots */
@@ -2911,7 +2924,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -3376,20 +3389,20 @@
             const revealElements = gsap.utils.toArray('.reveal');
 
             revealElements.forEach(element => {
-                gsap.fromTo(element,
-                    { opacity: 0, y: 50 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 1.2,
-                        scrollTrigger: {
-                            trigger: element,
-                            start: 'top 85%',
-                            end: 'bottom 15%',
-                            toggleActions: 'play none none none'
-                        }
+                gsap.fromTo(element, {
+                    opacity: 0,
+                    y: 50
+                }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 85%',
+                        end: 'bottom 15%',
+                        toggleActions: 'play none none none'
                     }
-                );
+                });
             });
 
             // Enhanced parallax for hero section
@@ -3407,37 +3420,37 @@
             // Animated counters for about section
             const infoItems = gsap.utils.toArray('.info-item');
             infoItems.forEach((item, i) => {
-                gsap.fromTo(item,
-                    { opacity: 0, y: 30 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.8,
-                        delay: i * 0.2,
-                        scrollTrigger: {
-                            trigger: item,
-                            start: 'top 85%'
-                        }
+                gsap.fromTo(item, {
+                    opacity: 0,
+                    y: 30
+                }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 85%'
                     }
-                );
+                });
             });
 
             // Enhanced experience cards animation
             const experienceCards = gsap.utils.toArray('.experience-card');
             experienceCards.forEach((card, i) => {
-                gsap.fromTo(card,
-                    { opacity: 0, scale: 0.8 },
-                    {
-                        opacity: 1,
-                        scale: 1,
-                        duration: 0.8,
-                        delay: i * 0.1,
-                        scrollTrigger: {
-                            trigger: card,
-                            start: 'top 85%'
-                        }
+                gsap.fromTo(card, {
+                    opacity: 0,
+                    scale: 0.8
+                }, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 85%'
                     }
-                );
+                });
             });
 
             // Add scroll progress indicator
@@ -3810,7 +3823,8 @@
                             // Change content based on selected floor
                             const floorType = item.dataset.floor;
                             const floorData = getFloorContent(floorType);
-                            mapPlaceholder.innerHTML = floorData.icon + '<p>' + floorData.name + '</p>';
+                            mapPlaceholder.innerHTML = floorData.icon + '<p>' + floorData.name +
+                                '</p>';
 
                             gsap.to(mapPlaceholder, {
                                 duration: 0.3,
@@ -3868,14 +3882,32 @@
         // Function to get floor-specific content
         function getFloorContent(floorType) {
             const floors = {
-                'ground': { name: 'Ground Floor', icon: '👕' },
-                '1': { name: 'Level 1', icon: '🎮' },
-                '2': { name: 'Level 2', icon: '🍽️' },
-                '3': { name: 'Level 3', icon: '🎬' },
-                'basement': { name: 'Basement', icon: '🛒' }
+                'ground': {
+                    name: 'Ground Floor',
+                    icon: '👕'
+                },
+                '1': {
+                    name: 'Level 1',
+                    icon: '🎮'
+                },
+                '2': {
+                    name: 'Level 2',
+                    icon: '🍽️'
+                },
+                '3': {
+                    name: 'Level 3',
+                    icon: '🎬'
+                },
+                'basement': {
+                    name: 'Basement',
+                    icon: '🛒'
+                }
             };
 
-            return floors[floorType] || { name: 'Unknown Floor', icon: '🏢' };
+            return floors[floorType] || {
+                name: 'Unknown Floor',
+                icon: '🏢'
+            };
         }
 
         // Add intersection observer for more advanced animations
@@ -4038,7 +4070,8 @@
         }
 
         // Add micro-interactions to buttons and interactive elements
-        const interactiveElements = document.querySelectorAll('button, a, .tenant-card, .event-card, .experience-card, .floor-item');
+        const interactiveElements = document.querySelectorAll(
+            'button, a, .tenant-card, .event-card, .experience-card, .floor-item');
         interactiveElements.forEach((element, index) => {
             // Add ripple effect on click
             element.addEventListener('click', (e) => {
@@ -4203,11 +4236,15 @@
                 e.currentTarget.classList.add('active');
 
                 // Animate scroll to section
-                const targetSection = document.getElementById(sectionId === 'contact' ? 'contact' : sectionId);
+                const targetSection = document.getElementById(sectionId === 'contact' ? 'contact' :
+                    sectionId);
                 if (targetSection) {
                     // Add transition effect
                     gsap.to(window, {
-                        scrollTo: { y: targetSection, offsetY: 80 },
+                        scrollTo: {
+                            y: targetSection,
+                            offsetY: 80
+                        },
                         duration: 1.2,
                         ease: 'power3.inOut'
                     });
@@ -4227,7 +4264,8 @@
 
                     if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
                         document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
-                        document.querySelector(`.nav-dot[data-section="${navSections[index]}"]`).classList.add('active');
+                        document.querySelector(`.nav-dot[data-section="${navSections[index]}"]`).classList
+                            .add('active');
                     }
                 }
             });
@@ -4236,7 +4274,7 @@
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
+                switch (e.key) {
                     case 'ArrowUp':
                         e.preventDefault();
                         navigateToPreviousSection();
@@ -4274,7 +4312,10 @@
             const targetSection = document.getElementById(sectionId === 'contact' ? 'contact' : sectionId);
             if (targetSection) {
                 gsap.to(window, {
-                    scrollTo: { y: targetSection, offsetY: 80 },
+                    scrollTo: {
+                        y: targetSection,
+                        offsetY: 80
+                    },
                     duration: 1.2,
                     ease: 'power3.inOut'
                 });

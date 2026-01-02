@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenant Directory - Mal Bali Galeria</title>
+    <title>Tenant Directory | Mal Bali Galeria</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -102,8 +103,10 @@
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get
-                        Coordinates</a></li>
+                @role('admin')
+                    <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get
+                            Coordinates</a></li>
+                @endrole
             </ul>
         </nav>
 

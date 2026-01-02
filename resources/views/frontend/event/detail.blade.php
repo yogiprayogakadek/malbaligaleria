@@ -94,7 +94,7 @@
                 <li><a href="{{ url('/') }}#home">Home</a></li>
                 <li><a href="{{ url('/') }}#about">About</a></li>
                 <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
                 <li><a href="{{ url('/') }}#events" class="active"
                         style="color: var(--secondary-color); transform: translateX(10px);">Events</a></li>

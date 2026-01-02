@@ -54,8 +54,8 @@ class DirectoryController extends Controller
                     'y' => $data['map_coords']['y'],
                 ],
                 'mapOriginalSize' => [
-                    'width' => 1400,
-                    'height' => 800,
+                    'width' => $data['map_original_size']['width'] ?? ($data['map_coords']['floor'] == 1 ? 1216 : 1024),
+                    'height' => $data['map_original_size']['height'] ?? ($data['map_coords']['floor'] == 1 ? 880 : 1024),
                 ],
                 'images' => collect([asset('storage/' . $data->primaryPhoto->path)])->concat(
                     $data->albumPhoto->map(function ($photo) {

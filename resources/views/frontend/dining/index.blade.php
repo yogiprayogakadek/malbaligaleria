@@ -96,13 +96,13 @@
                 <li><a href="{{ url('/') }}#home">Home</a></li>
                 <li><a href="{{ url('/') }}#about">About</a></li>
                 <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
                 <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
             </ul>
         </nav>
-        
+
         <!-- Search in Sidebar for Mobile -->
         <div class="sidebar-search">
             <div class="search-bar">
@@ -133,8 +133,11 @@
 
         <section class="dining-grid">
             @forelse($tenants as $tenant)
-                 <div class="dining-card" onclick="window.location.href='javascript:void(0)'"> <!-- Placeholder link for now -->
-                    <div class="dining-img" style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/'.$tenant->primaryPhoto->path) : asset('assets/images/placeholder-dining.jpg') }}')"></div>
+                <div class="dining-card" onclick="window.location.href='javascript:void(0)'">
+                    <!-- Placeholder link for now -->
+                    <div class="dining-img"
+                        style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/placeholder-dining.jpg') }}')">
+                    </div>
                     <div class="dining-overlay">
                         <div class="dining-content">
                             <div class="dining-category">{{ $tenant->category->name ?? 'Gastronomy' }}</div>
@@ -200,7 +203,7 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ route('directory') }}">Store Directory</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Store Directory</a></li>
                         <li><a href="{{ url('/') }}#experience">Experiences</a></li>
                         <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                         <li><a href="{{ url('/') }}#career">Careers</a></li>
@@ -261,4 +264,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
 </body>
+
 </html>

@@ -18,7 +18,7 @@
             @include('templates.backend.partials.header')
             <!--  Header End -->
 
-            @include('templates.backend.partials.horizontal-sidebar')
+            {{-- @include('templates.backend.partials.horizontal-sidebar') --}}
 
             <div class="body-wrapper">
                 <div class="container-fluid">
@@ -359,7 +359,7 @@
         <div class="dark-transparent sidebartoggler"></div>
         <!-- Import Js Files -->
         @include('templates.backend.partials.script')
-        
+
         <!-- Additional Scripts from Child Views -->
         @stack('scripts')
 </body>

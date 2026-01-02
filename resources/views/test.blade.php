@@ -2985,7 +2985,8 @@
         /* Mobile: Adjust button positioning and always show */
         @media (max-width: 1024px) {
             .tenant-nav-btn {
-                opacity: 1; /* Always visible on mobile */
+                opacity: 1;
+                /* Always visible on mobile */
                 width: 40px;
                 height: 40px;
             }
@@ -3256,7 +3257,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tenant-modal.active {
@@ -3526,9 +3527,12 @@
         }
 
         @keyframes swipeHintBounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateX(0);
             }
+
             50% {
                 transform: translateX(-3px);
             }
@@ -3539,9 +3543,12 @@
         }
 
         @keyframes swipeHintBounceRight {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateX(0);
             }
+
             50% {
                 transform: translateX(3px);
             }
@@ -4083,7 +4090,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -4303,7 +4310,7 @@
                         <div class="tenant-grid-wrapper">
                             <button class="tenant-nav-btn prev" id="tenantNavPrev">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M15 18l-6-6 6-6"/>
+                                    <path d="M15 18l-6-6 6-6" />
                                 </svg>
                             </button>
                             <div class="tenant-grid" id="landingTenantGrid">
@@ -4311,7 +4318,7 @@
                             </div>
                             <button class="tenant-nav-btn next" id="tenantNavNext">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 18l6-6-6-6"/>
+                                    <path d="M9 18l6-6-6-6" />
                                 </svg>
                             </button>
                         </div>
@@ -4383,10 +4390,10 @@
         <div class="modal-container">
             <button class="modal-close" id="modalClose">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+                    <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
             </button>
-            
+
             <div class="modal-content">
                 <div class="modal-carousel">
                     <div class="carousel-images" id="modalCarouselImages">
@@ -4394,28 +4401,28 @@
                     </div>
                     <button class="carousel-nav prev" id="modalCarouselPrev">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 18l-6-6 6-6"/>
+                            <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
                     <button class="carousel-nav next" id="modalCarouselNext">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18l6-6-6-6"/>
+                            <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
                     <div class="carousel-swipe-hint" id="carouselSwipeHint">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 18l-6-6 6-6"/>
+                            <path d="M15 18l-6-6 6-6" />
                         </svg>
                         <span>Swipe or use navigation buttons</span>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18l6-6-6-6"/>
+                            <path d="M9 18l6-6-6-6" />
                         </svg>
                     </div>
                     <div class="carousel-indicators" id="modalCarouselIndicators">
                         <!-- Indicators will be inserted here dynamically -->
                     </div>
                 </div>
-                
+
                 <div class="modal-details">
                     <div class="modal-header">
                         <div class="modal-logo" id="modalLogo">
@@ -4427,12 +4434,12 @@
                             <p class="modal-category" id="modalCategory"></p>
                         </div>
                     </div>
-                    
+
                     <div class="modal-info">
                         <div class="modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
                             </svg>
                             <div>
                                 <span class="info-label">Location</span>
@@ -4441,8 +4448,8 @@
                         </div>
                         <div class="modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
                             </svg>
                             <div>
                                 <span class="info-label">Operating Hours</span>
@@ -4451,8 +4458,8 @@
                         </div>
                         <div class="modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                <polyline points="9 22 9 12 15 12 15 22"/>
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
                             </svg>
                             <div>
                                 <span class="info-label">Floor</span>
@@ -4460,7 +4467,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="modal-description" id="modalDescription">
                         <!-- Description will be inserted here -->
                     </div>
@@ -5500,7 +5507,7 @@
         const modalCarouselPrev = document.getElementById('modalCarouselPrev');
         const modalCarouselNext = document.getElementById('modalCarouselNext');
         const modalCarouselIndicators = document.getElementById('modalCarouselIndicators');
-        
+
         let currentModalImageIndex = 0;
         let modalImages = [];
         let currentTenantData = null;
@@ -5508,7 +5515,7 @@
         // Open modal function
         function openTenantModal(tenantData) {
             currentTenantData = tenantData;
-            
+
             // Populate modal with tenant data
             document.getElementById('modalTenantName').textContent = tenantData.name;
             document.getElementById('modalFloorBadge').textContent = tenantData.floor;
@@ -5516,14 +5523,15 @@
             document.getElementById('modalUnit').textContent = 'Unit ' + tenantData.unit;
             document.getElementById('modalHours').textContent = tenantData.hours;
             document.getElementById('modalFloor').textContent = tenantData.floor;
-            
+
             // Set logo
             document.getElementById('modalLogo').innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
-            
+
             // Set description (if available)
-            const description = tenantData.description || 'Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!';
+            const description = tenantData.description ||
+                'Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!';
             document.getElementById('modalDescription').innerHTML = `<p>${description}</p>`;
-            
+
             // Setup carousel images
             // For now, we'll use the logo as the main image and create placeholder images
             // In production, you should have actual tenant photos from the database
@@ -5532,14 +5540,14 @@
                 tenantData.logo, // You can replace these with actual tenant photos
                 tenantData.logo
             ];
-            
+
             currentModalImageIndex = 0;
             renderModalCarousel();
-            
+
             // Show modal with animation
             document.body.style.overflow = 'hidden';
             tenantModal.classList.add('active');
-            
+
             // Show swipe hint and auto-hide after 3 seconds
             const swipeHint = document.getElementById('carouselSwipeHint');
             if (swipeHint) {
@@ -5554,7 +5562,7 @@
         function closeTenantModal() {
             tenantModal.classList.remove('active');
             document.body.style.overflow = '';
-            
+
             // Reset after animation
             setTimeout(() => {
                 currentModalImageIndex = 0;
@@ -5571,15 +5579,15 @@
                     <img src="${img}" alt="${currentTenantData.name} - Image ${index + 1}">
                 </div>
             `).join('');
-            
+
             // Render indicators
             modalCarouselIndicators.innerHTML = modalImages.map((_, index) => `
                 <div class="carousel-indicator ${index === currentModalImageIndex ? 'active' : ''}" data-index="${index}"></div>
             `).join('');
-            
+
             // Update carousel position
             updateModalCarousel();
-            
+
             // Add click events to indicators
             document.querySelectorAll('.carousel-indicator').forEach(indicator => {
                 indicator.addEventListener('click', () => {
@@ -5593,7 +5601,7 @@
         function updateModalCarousel() {
             const offset = -currentModalImageIndex * 100;
             modalCarouselImages.style.transform = `translateX(${offset}%)`;
-            
+
             // Update indicators
             document.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
                 if (index === currentModalImageIndex) {
@@ -5638,21 +5646,23 @@
         // Attach click event to dynamically created see-details buttons
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('see-details-btn') || e.target.closest('.see-details-btn')) {
-                const button = e.target.classList.contains('see-details-btn') ? e.target : e.target.closest('.see-details-btn');
+                const button = e.target.classList.contains('see-details-btn') ? e.target : e.target.closest(
+                    '.see-details-btn');
                 const tenantCard = button.closest('.tenant-card');
-                
+
                 if (tenantCard) {
                     // Extract tenant data from the card
                     const tenantData = {
                         name: tenantCard.querySelector('h3')?.textContent || '',
                         floor: tenantCard.querySelector('.floor-badge')?.textContent || '',
                         category: tenantCard.querySelector('.tenant-category')?.textContent?.trim() || '',
-                        unit: tenantCard.querySelector('.meta-item span')?.textContent?.replace('Unit ', '') || '',
+                        unit: tenantCard.querySelector('.meta-item span')?.textContent?.replace('Unit ', '') ||
+                            '',
                         hours: tenantCard.querySelectorAll('.meta-item span')[1]?.textContent || '',
                         logo: tenantCard.querySelector('.tenant-logo img')?.src || '',
                         description: tenantCard.dataset.description || ''
                     };
-                    
+
                     openTenantModal(tenantData);
                 }
             }

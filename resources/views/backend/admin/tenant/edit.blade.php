@@ -101,9 +101,11 @@
                                                     Floor</button>
                                             </div>
                                         </div>
-                                        <img src="{{ asset('assets/images/floors/1st.png') }}" alt="1st floor"
-                                            srcset="{{ asset('assets/images/floors/1st.png') }}" width="100%"
-                                            class="map-image" id="floorMapImage">
+                                        <div id="mapContainer" style="position: relative;">
+                                            <img src="{{ asset('assets/images/floors/1st_floor.png') }}" alt="1st floor"
+                                                srcset="{{ asset('assets/images/floors/1st_floor.png') }}" width="100%"
+                                                class="map-image" id="floorMapImage" style="cursor: crosshair;">
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -153,7 +155,17 @@
                                     @error('position_y')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <input type="hidden" name="map_original_width" id="map_original_width" value="{{ $tenant->map_original_size['width'] ?? '' }}">
+                                    <input type="hidden" name="map_original_height" id="map_original_height" value="{{ $tenant->map_original_size['height'] ?? '' }}">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                            <div class="col-sm-2">
+                                <button class="btn btn-info btn-map" type="button" style="width: 100%"
+                                    data-bs-toggle="modal" data-bs-target="#modalMap">
+                                    <i class="fa fa-map-pin"></i> Open Map
+                                </button>
                             </div>
                         </div>
 
@@ -230,6 +242,77 @@
             dateFormat: "Y-m-d",
             altInput: true,
             altFormat: "F j, Y",
+        });
+
+        $('body').on('click', '.btn-map-image', function() {
+            let floor = $(this).data('floor');
+            let image = floor == '1st' ? "{{ asset('assets/images/floors/1st_floor.png') }}" :
+                "{{ asset('assets/images/floors/2nd_floor.png') }}";
+            $('.map-image').attr({
+                src: image,
+                srcset: image
+            });
+            $('.btn-map-image').removeClass('btn-primary').addClass('btn-outline-primary');
+            $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+
+            // Remove existing markers when switching floors
+            $('.map-marker').remove();
+
+            // Update floor input
+            $('#floor').val(floor == '1st' ? 1 : 2);
+        });
+
+        // Coordinate Picker Logic
+        const mapImage = document.getElementById('floorMapImage');
+        const mapContainer = document.getElementById('mapContainer');
+
+        mapImage.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            // Calculate scale based on natural size vs displayed size
+            const scaleX = this.naturalWidth / this.width;
+            const scaleY = this.naturalHeight / this.height;
+
+            const originalX = Math.round(clickX * scaleX);
+            const originalY = Math.round(clickY * scaleY);
+
+            // Calculate percentage for responsive marker
+            const percentX = (clickX / this.width) * 100;
+            const percentY = (clickY / this.height) * 100;
+
+            // Update Input Fields
+            $('#positionX').val(originalX);
+            $('#positionY').val(originalY);
+            
+            // Update Original Size Fields
+            $('#map_original_width').val(this.naturalWidth);
+            $('#map_original_height').val(this.naturalHeight);
+
+            // Visual Marker
+            // Remove existing marker
+            $('.map-marker').remove();
+
+            // Create new marker
+            const marker = document.createElement('div');
+            marker.className = 'map-marker';
+            marker.style.cssText = `
+                position: absolute;
+                left: ${percentX}%;
+                top: ${percentY}%;
+                width: 12px;
+                height: 12px;
+                background: #ff4757;
+                border: 3px solid white;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 10;
+                box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.3);
+            `;
+
+            mapContainer.appendChild(marker);
         });
     </script>
 @endpush

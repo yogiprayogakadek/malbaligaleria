@@ -89,7 +89,7 @@
                 <li><a href="{{ url('/') }}">Home</a></li>
                 <li><a href="{{ url('/') }}#about">About</a></li>
                 <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('directory') }}">Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
                 <li><a href="{{ url('/') }}#events">Events</a></li>
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
@@ -403,7 +403,7 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ route('directory') }}">Store Directory</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Store Directory</a></li>
                         <li><a href="{{ url('/') }}#experience">Experiences</a></li>
                         <li><a href="{{ url('/') }}#events">Events</a></li>
                         <li><a href="#career">Careers</a></li>
