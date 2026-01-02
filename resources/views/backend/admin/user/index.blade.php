@@ -5,6 +5,7 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/backend/css/sweetalert2.min.css') }}">
 @endpush
 
 @section('content')
@@ -38,34 +39,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($users as $user)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->tenant->name ?? '' }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->phone }}</td>
-                                        <td>{!! $user->status == 'pending'
-                                            ? '<span class="badge bg-info">Pending</span>'
-                                            : ($user->status == 'approved'
-                                                ? '<span class="badge bg-success">Approved</span>'
-                                                : '<span class="badge bg-danger">Rejected</span>') !!}</td>
-                                        <td>{!! $user->is_active == true
-                                            ? '<span class="badge bg-primary">Active</span>'
-                                            : '<span class="badge bg-danger">Not Active</span>' !!}</td>
-                                        <td>
-                                            <a href="{{ route('admin.user.edit', $user->id) }}">
-                                                <button type="button"
-                                                    class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                                                    <i class="ti ti-pencil fs-4 me-2"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -76,10 +50,110 @@
 
 @push('script')
     <script src="{{ asset('assets/backend/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/sweetalert2.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable();
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                searchDelay: 500,
+                ajax: "{{ route('admin.user.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'tenant.name',
+                        name: 'tenant.name',
+                        defaultContent: '-'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone',
+                        defaultContent: '-'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
+
+            $('body').on('click', '.btn-approve', function(e) {
+                let userId = $(this).data('user-id');
+                confirmAction(userId, 'approved', 'Data will approved!', '#2fb344');
+            });
+
+            $('body').on('click', '.btn-reject', function(e) {
+                let userId = $(this).data('user-id');
+                confirmAction(userId, 'rejected', 'Data will rejected!', '#d63939');
+            });
+
+            function confirmAction(userId, action, message, color) {
+                let url = "{{ route('admin.user.activate', ':id') }}";
+                url = url.replace(':id', userId);
+
+
+                Swal.fire({
+                    title: 'Activate this account?',
+                    text: message,
+                    input: action === 'rejected' ? 'textarea' : null,
+                    inputPlaceholder: 'Type your reason here...',
+                    icon: action === 'approved' ? 'success' : 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: color,
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update!',
+                    cancelButtonText: 'Cancel',
+                    inputValidator: (value) => {
+                        if (action === 'rejected' && !value) {
+                            return 'You must provide a reason for rejection!';
+                        }
+                    }
+                }).then((result) => {
+                    let reason = result.value;
+                    if (result.isConfirmed || result.isDenied) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                _method: "PUT",
+                                action: action,
+                                reason: reason
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    'Success', 'Status updated.', 'success'
+                                ).then(() => location.reload());
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Error!', 'Something went wrong.', 'error');
+                            }
+                        });
+                    }
+                })
+            };
         });
     </script>
 @endpush

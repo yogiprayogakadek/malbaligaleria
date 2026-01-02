@@ -359,6 +359,9 @@
         <div class="dark-transparent sidebartoggler"></div>
         <!-- Import Js Files -->
         @include('templates.backend.partials.script')
+        
+        <!-- Additional Scripts from Child Views -->
+        @stack('scripts')
 </body>
 
 </html>

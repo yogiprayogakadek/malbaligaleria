@@ -22,7 +22,11 @@ class StorePromoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tenant_id' => 'required|exists:tenants,id|numeric',
+            'tenant_id' => [
+                auth()->user()->hasRole('admin') ? 'required' : 'nullable',
+                'exists:tenants,id',
+                'numeric'
+            ],
             'name' => 'required|string',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:today|after_or_equal:start_date',

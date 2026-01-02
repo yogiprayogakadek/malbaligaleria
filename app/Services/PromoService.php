@@ -26,6 +26,11 @@ class PromoService
         return $this->promoRepository->getPromoWithRelationship($fields, $relationship);
     }
 
+    public function getPromoWithRelationshipAndCondition(array $fields = ['*'], array $relationship, string $column, string $condition)
+    {
+        return $this->promoRepository->getPromoWithRelationshipAndCondition($fields, $relationship, $column, $condition);
+    }
+
     public function getPromoByStatus(array $fields = ['*'], bool $is_active = true)
     {
         return $this->promoRepository->getPromoByStatus($fields, $is_active);

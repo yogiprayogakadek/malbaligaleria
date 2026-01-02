@@ -22,7 +22,11 @@ class UpdatePromoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tenant_id' => 'required|exists:tenants,id|numeric',
+            'tenant_id' => [
+                auth()->user()->hasRole('admin') ? 'required' : 'nullable',
+                'exists:tenants,id',
+                'numeric'
+            ],
             'name' => 'required|string',
             'start_date' => [
                 'required',

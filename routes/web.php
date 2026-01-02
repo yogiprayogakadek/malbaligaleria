@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
+use App\Http\Controllers\Backend\Tenant\PromoController as TenantPromoController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\DiningController;
 use App\Http\Controllers\Frontend\DirectoryController;
@@ -31,16 +32,9 @@ Route::name('frontend.')
     ->group(function () {
         Route::controller(LandingPageController::class)->group(function () {
             Route::get('/', 'index')->name('landing');
-            Route::get('/tenant/{cat}/{isNew}', 'tenantData');
-            Route::get('/find/tenant/{tenant_id}', 'findTenantById');
+            Route::get('/tenants/{cat}/{isNew}', 'tenantData');
+            Route::get('/find/tenants/{tenant_id}', 'findTenantById');
         });
-
-        Route::controller(PromotionPageController::class)
-            ->prefix('/promotion')
-            ->name('promotion.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-            });
 
         Route::controller(PromotionPageController::class)
             ->prefix('/promotion')
@@ -83,9 +77,6 @@ Route::name('frontend.')
             });
     });
 
-
-
-
 // ADMIN
 Route::controller(AdminDashboardController::class)
     ->middleware(['auth', 'verified', 'checkUserStatus', 'role:admin'])
@@ -104,8 +95,9 @@ Route::controller(AdminDashboardController::class)
                 Route::get('/', 'index')->name('index');
                 Route::get('/create', 'create')->name('create');
                 Route::post('/store', 'store')->name('store');
-                Route::get('/{uuid}/edit', 'edit')->name('edit');
-                Route::put('/{uuid}/update', 'update')->name('update');
+                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::put('/{id}/update', 'update')->name('update');
+                Route::put('/{id}/activate', 'activate')->name('activate');
             });
 
         // CATEGORY
@@ -187,6 +179,17 @@ Route::controller(TenantDashboardController::class)
         Route::prefix('/dashboard')->group(function () {
             Route::get('/', 'index')->name('dashboard');
         });
+
+        // PROMO
+        Route::controller(TenantPromoController::class)->prefix('/promo')
+            ->name('promo.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/edit/{uuid}', 'edit')->name('edit');
+                Route::put('/update/{uuid}', 'update')->name('update');
+            });
     });
 
 

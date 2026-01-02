@@ -15,7 +15,12 @@ class PromoRepository
 
     public function getPromoWithRelationship(array $fields, array $relationship)
     {
-        return $this->model::select($fields)->with($relationship)->where('is_active', true)->get();
+        return $this->model::select($fields)->with($relationship)->get();
+    }
+
+    public function getPromoWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
+    {
+        return $this->model::select($fields)->with($relationship)->where($column, $condition)->get();
     }
 
     public function getPromoByStatus(array $fields, bool $is_active)

@@ -676,7 +676,7 @@ window.addEventListener("load", () => {
 
 async function loadTenantsOnDatabase(floor, isNew = false) {
     try {
-        tenantData = await $.get("/tenant/" + floor + '/' + isNew);
+        tenantData = await $.get("/tenants/" + floor + '/' + isNew);
         return tenantData;
     } catch (error) {
         console.error("Failed to load data", error);
@@ -934,7 +934,7 @@ let modalImages = [];
 
 async function getDataByTenantId(tenant_id) {
     try {
-        return await $.get("/find/tenant/"+tenant_id);
+        return await $.get("/find/tenants/"+tenant_id);
     } catch (error) {
         console.log("Failed to load data", error);
     }

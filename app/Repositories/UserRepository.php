@@ -28,26 +28,21 @@ class UserRepository
         return $this->model::select($fields)->where('id', $id)->firstOrFail();
     }
 
-    public function findByUuid(string $uuid, array $fields)
-    {
-        return $this->model::select($fields)->where('uuid', $uuid)->firstOrFail();
-    }
-
     public function create(array $data)
     {
-        $category = $this->model::create($data);
-        return $category;
+        $user = $this->model::create($data);
+        return $user;
     }
 
-    public function update(array $data, string $uuid)
+    public function update(array $data, int $id)
     {
-        $category = $this->model::where('uuid', $uuid)->firstOrFail();
-        return $category->update($data);
+        $user = $this->model::where('id', $id)->firstOrFail();
+        return $user->update($data);
     }
 
-    public function delete(string $uuid)
+    public function delete(string $id)
     {
-        $category = $this->model::find($uuid);
-        $category->delete();
+        $user = $this->model::find($id);
+        $user->delete();
     }
 }

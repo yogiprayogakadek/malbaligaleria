@@ -36,23 +36,18 @@ class UserService
         return $this->userRepository->findById($id, $fields);
     }
 
-    public function findByUuid(string $uuid, array $fields = ['*'])
-    {
-        return $this->userRepository->findByUuid($uuid, $fields);
-    }
-
     public function create(array $data)
     {
         return $this->userRepository->create($data);
     }
 
-    public function update(array $data, string $uuid)
+    public function update(array $data, int $id)
     {
-        return $this->userRepository->update($data, $uuid);
+        return $this->userRepository->update($data, $id);
     }
 
-    public function delete(string $uuid)
+    public function delete(int $id)
     {
-        return $this->userRepository->delete($uuid);
+        return $this->userRepository->delete($id);
     }
 }
