@@ -23,6 +23,18 @@ use Illuminate\Support\Facades\Route;
 
 // landing fix
 
+// NOTIFICATIONS
+Route::controller(\App\Http\Controllers\Backend\NotificationController::class)
+    ->middleware(['auth', 'verified'])
+    ->prefix('/notifications')
+    ->name('notifications.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/latest', 'getLatest')->name('latest');
+        Route::post('/{id}/read', 'markAsRead')->name('read');
+        Route::post('/read-all', 'markAllAsRead')->name('readAll');
+    });
+
 Route::get('/maintenance', function () {
     return view('maintenance');
 });

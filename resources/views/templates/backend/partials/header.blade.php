@@ -387,109 +387,29 @@
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
                                 aria-expanded="false">
                                 <iconify-icon icon="solar:bell-bing-line-duotone" class="fs-6"></iconify-icon>
-                                <div class="notification text-bg-danger rounded-circle fs-1">5</div>
+                                <div class="notification text-bg-danger rounded-circle fs-1" id="notification-badge"
+                                    style="display: none;">0</div>
                             </a>
                             <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
                                 aria-labelledby="drop2">
                                 <div class="d-flex align-items-center justify-content-between py-3 px-7">
                                     <h5 class="mb-0 fs-5 fw-semibold">Notifications</h5>
-                                    <span class="badge text-bg-primary rounded-4 px-3 py-1 lh-sm">5
-                                        new</span>
+                                    <span class="badge text-bg-primary rounded-4 px-3 py-1 lh-sm"
+                                        id="notification-count-text">0 new</span>
                                 </div>
-                                <div class="message-body" data-simplebar>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item gap-3">
-                                        <span
-                                            class="flex-shrink-0 bg-danger-subtle rounded-circle round d-flex align-items-center justify-content-center fs-6 text-danger">
-                                            <iconify-icon icon="solar:widget-3-line-duotone"></iconify-icon>
-                                        </span>
-                                        <div class="w-75 d-inline-block v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1 fw-semibold">Launch Admin</h6>
-                                                <span class="d-block fs-2">9:30 AM</span>
-                                            </div>
-                                            <span class="d-block text-truncate text-truncate">Just see the
-                                                my new admin!</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item gap-3">
-                                        <span
-                                            class="flex-shrink-0 bg-primary-subtle rounded-circle round d-flex align-items-center justify-content-center fs-6 text-primary">
-                                            <iconify-icon icon="solar:calendar-line-duotone"></iconify-icon>
-                                        </span>
-                                        <div class="w-75 d-inline-block v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1 fw-semibold">Event today</h6>
-                                                <span class="d-block fs-2">9:15 AM</span>
-                                            </div>
-                                            <span class="d-block text-truncate text-truncate">Just a
-                                                reminder that you have event</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item gap-3">
-                                        <span
-                                            class="flex-shrink-0 bg-secondary-subtle rounded-circle round d-flex align-items-center justify-content-center fs-6 text-secondary">
-                                            <iconify-icon icon="solar:settings-line-duotone"></iconify-icon>
-                                        </span>
-                                        <div class="w-75 d-inline-block v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1 fw-semibold">Settings</h6>
-                                                <span class="d-block fs-2">4:36 PM</span>
-                                            </div>
-                                            <span class="d-block text-truncate text-truncate">You can
-                                                customize this template as you want</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item gap-3">
-                                        <span
-                                            class="flex-shrink-0 bg-warning-subtle rounded-circle round d-flex align-items-center justify-content-center fs-6 text-warning">
-                                            <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>
-                                        </span>
-                                        <div class="w-75 d-inline-block v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1 fw-semibold">Launch Admin</h6>
-                                                <span class="d-block fs-2">9:30 AM</span>
-                                            </div>
-                                            <span class="d-block text-truncate text-truncate">Just see the
-                                                my new admin!</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item gap-3">
-                                        <span
-                                            class="flex-shrink-0 bg-primary-subtle rounded-circle round d-flex align-items-center justify-content-center fs-6 text-primary">
-                                            <iconify-icon icon="solar:calendar-line-duotone"></iconify-icon>
-                                        </span>
-                                        <div class="w-75 d-inline-block v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1 fw-semibold">Event today</h6>
-                                                <span class="d-block fs-2">9:15 AM</span>
-                                            </div>
-                                            <span class="d-block text-truncate text-truncate">Just a
-                                                reminder that you have event</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item gap-3">
-                                        <span
-                                            class="flex-shrink-0 bg-secondary-subtle rounded-circle round d-flex align-items-center justify-content-center fs-6 text-secondary">
-                                            <iconify-icon icon="solar:settings-line-duotone"></iconify-icon>
-                                        </span>
-                                        <div class="w-75 d-inline-block v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1 fw-semibold">Settings</h6>
-                                                <span class="d-block fs-2">4:36 PM</span>
-                                            </div>
-                                            <span class="d-block text-truncate text-truncate">You can
-                                                customize this template as you want</span>
-                                        </div>
-                                    </a>
+                                <div class="message-body" data-simplebar id="notification-list">
+                                    <!-- Notifications will be loaded here -->
+                                    <div class="py-6 px-7 text-center text-muted" id="notification-loading">
+                                        Loading...
+                                    </div>
+                                    <div class="py-6 px-7 text-center text-muted" id="notification-empty"
+                                        style="display: none;">
+                                        No new notifications
+                                    </div>
                                 </div>
                                 <div class="py-6 px-7 mb-1">
-                                    <button class="btn btn-outline-primary w-100">See All
+                                    <button class="btn btn-outline-primary w-100"
+                                        onclick="window.location.href='{{ route('notifications.index') }}'">See All
                                         Notifications</button>
                                 </div>
                             </div>
@@ -498,13 +418,143 @@
                         <!-- end notification Dropdown -->
                         <!-- ------------------------------- -->
 
+                        @push('scripts')
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    fetchNotifications();
+
+                                    // Refresh every 60 seconds
+                                    setInterval(fetchNotifications, 60000);
+                                });
+
+                                function fetchNotifications() {
+                                    fetch('{{ route('notifications.latest') }}')
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            updateNotificationBadge(data.unread_count);
+                                            updateNotificationList(data.notifications);
+                                        })
+                                        .catch(error => console.error('Error fetching notifications:', error));
+                                }
+
+                                function updateNotificationBadge(count) {
+                                    const badge = document.getElementById('notification-badge');
+                                    const countText = document.getElementById('notification-count-text');
+
+                                    if (count > 0) {
+                                        badge.textContent = count;
+                                        badge.style.display = 'block';
+                                        countText.textContent = count + ' new';
+                                    } else {
+                                        badge.style.display = 'none';
+                                        countText.textContent = '0 new';
+                                    }
+                                }
+
+                                function updateNotificationList(notifications) {
+                                    const list = document.getElementById('notification-list');
+                                    const loading = document.getElementById('notification-loading');
+                                    const empty = document.getElementById('notification-empty');
+
+                                    // Remove existing notifications but keep loading/empty placeholders
+                                    Array.from(list.children).forEach(child => {
+                                        if (!child.id || (child.id !== 'notification-loading' && child.id !== 'notification-empty')) {
+                                            list.removeChild(child);
+                                        }
+                                    });
+
+                                    loading.style.display = 'none';
+
+                                    if (notifications.length === 0) {
+                                        empty.style.display = 'block';
+                                        return;
+                                    }
+
+                                    empty.style.display = 'none';
+
+                                    notifications.forEach(notification => {
+                                        const item = document.createElement('a');
+                                        item.href = 'javascript:void(0)';
+                                        item.className = 'py-6 px-7 d-flex align-items-center dropdown-item gap-3';
+                                        item.onclick = function() {
+                                            markAsRead(notification.id, notification.link)
+                                        };
+
+                                        let icon = 'solar:bell-bing-line-duotone';
+                                        let colorClass = 'bg-primary-subtle text-primary';
+
+                                        if (notification.type === 'promo_expiring') {
+                                            icon = 'solar:calendar-date-line-duotone';
+                                            colorClass = 'bg-warning-subtle text-warning';
+                                        } else if (notification.type === 'event_upcoming') {
+                                            icon = 'solar:calendar-line-duotone';
+                                            colorClass = 'bg-success-subtle text-success';
+                                        }
+
+                                        // Format time using a simple relative time function or library if available
+                                        // Here using a simple placeholder or raw date
+                                        const date = new Date(notification.created_at).toLocaleString();
+
+                                        item.innerHTML = `
+                <span class="flex-shrink-0 ${colorClass} rounded-circle round d-flex align-items-center justify-content-center fs-6">
+                    <iconify-icon icon="${icon}"></iconify-icon>
+                </span>
+                <div class="w-75 d-inline-block v-middle">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h6 class="mb-1 fw-semibold">${notification.title}</h6>
+                        <span class="d-block fs-2 text-muted">${getTimeAgo(new Date(notification.created_at))}</span>
+                    </div>
+                    <span class="d-block text-truncate text-truncate">${notification.message}</span>
+                </div>
+            `;
+
+                                        list.insertBefore(item, loading); // Insert before loading (which is hidden)
+                                    });
+                                }
+
+                                function markAsRead(id, link) {
+                                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                    fetch(`/notifications/${id}/read`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': token
+                                        }
+                                    }).then(() => {
+                                        if (link) {
+                                            window.location.href = link;
+                                        } else {
+                                            fetchNotifications(); // Refresh list
+                                        }
+                                    });
+                                }
+
+                                function getTimeAgo(date) {
+                                    const seconds = Math.floor((new Date() - date) / 1000);
+
+                                    let interval = seconds / 31536000;
+                                    if (interval > 1) return Math.floor(interval) + " years ago";
+                                    interval = seconds / 2592000;
+                                    if (interval > 1) return Math.floor(interval) + " months ago";
+                                    interval = seconds / 86400;
+                                    if (interval > 1) return Math.floor(interval) + " days ago";
+                                    interval = seconds / 3600;
+                                    if (interval > 1) return Math.floor(interval) + " hours ago";
+                                    interval = seconds / 60;
+                                    if (interval > 1) return Math.floor(interval) + " minutes ago";
+                                    return Math.floor(seconds) + " seconds ago";
+                                }
+                            </script>
+                        @endpush
+
                         <!-- ------------------------------- -->
                         <!-- start profile Dropdown -->
                         <!-- ------------------------------- -->
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center gap-2 lh-base">
-                                    <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg"
+                                    <img src="{{ Auth::user()->avatar ?? 'https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg' }}"
                                         class="rounded-circle" width="35" height="35" alt="MaterialM-img" />
                                 </div>
                             </a>
@@ -515,14 +565,15 @@
                                         <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                        <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg"
+                                        <img src="{{ Auth::user()->avatar ?? 'https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg' }}"
                                             class="rounded-circle" width="80" height="80"
                                             alt="MaterialM-img" />
                                         <div class="ms-3">
-                                            <h5 class="mb-0 fs-4">Jonathan Deo</h5>
-                                            <span class="mb-1 d-block">Admin</span>
+                                            <h5 class="mb-0 fs-4">{{ Auth::user()->name }}</h5>
+                                            <span
+                                                class="mb-1 d-block">{{ Auth::user()->getRoleNames()->first() }}</span>
                                             <p class="mb-0 d-flex align-items-center gap-2">
-                                                <i class="ti ti-mail fs-4"></i> info@MaterialM.com
+                                                <i class="ti ti-mail fs-4"></i> {{ Auth::user()->email }}
                                             </p>
                                         </div>
                                     </div>
