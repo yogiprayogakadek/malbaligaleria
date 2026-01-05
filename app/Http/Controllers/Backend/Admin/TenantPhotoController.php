@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTenantPhotoRequest;
 use App\Services\TenantPhotoService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class TenantPhotoController extends Controller
 {
@@ -19,11 +20,43 @@ class TenantPhotoController extends Controller
         $this->tenantService = $tenantService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tenantPhotos = $this->tenantPhotoService->getAll();
+        if ($request->ajax()) {
+            $tenantPhotos = $this->tenantPhotoService->getAll();
 
-        return view('backend.admin.tenant-photo.index', compact('tenantPhotos'));
+            return DataTables::of($tenantPhotos)
+                ->addIndexColumn()
+                ->addColumn('photo', function ($row) {
+                    return '<img src="' . asset("storage/" . $row->path) . '"
+                    alt="' . $row->caption . '" class="rounded-1"
+                    style="width: 200px; height: 200px">';
+                })
+                ->addColumn('name', function ($row) {
+                    return $row->tenant->name;
+                })
+                ->addColumn('action', function ($row) {
+                    return '<a href="' . route('admin.tenant.photo.edit', $row->id) . '">
+                        <button type="button"
+                            class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
+                            <i class="ti ti-pencil fs-4 me-2"></i>
+                            Edit
+                        </button>
+                    </a>
+
+                    <button type="button"
+                        class="justify-content-center w-80 btn mb-1 bg-danger-subtle text-danger btn-delete"
+                        data-id="' . $row->tenant_id . '">
+                        <i class="ti ti-trash fs-4 me-2"></i>
+                        Delete
+                    </button>
+                    ';
+                })
+                ->rawColumns(['photo', 'action'])
+                ->make(true);
+        }
+
+        return view('backend.admin.tenant-photo.index');
     }
 
     public function create()

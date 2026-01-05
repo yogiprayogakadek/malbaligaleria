@@ -1,7 +1,7 @@
 @extends('templates.backend.master')
 
 @section('page-title', 'Event Management')
-@section('page-link', route('admin.tenant.index'))
+@section('page-link', route('admin.event.index'))
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dataTables.bootstrap5.min.css') }}">
@@ -38,30 +38,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($events as $event)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $event->name }}</td>
-                                        <td>{{ $event->start_date }}</td>
-                                        <td>{{ $event->end_date }}</td>
-                                        <td>{{ $event->start_time }}</td>
-                                        <td>{{ $event->end_time }}</td>
-                                        <td>{!! $event->is_active == true
-                                            ? '<span class="badge bg-primary">Active</span>'
-                                            : '<span class="badge bg-danger">Not Active</span>' !!}</td>
-                                        <td>
-                                            <a href="{{ route('admin.event.edit', $event->uuid) }}">
-                                                <button type="button"
-                                                    class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                                                    <i class="ti ti-pencil fs-4 me-2"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -75,7 +52,47 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable();
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                searchDelay: 500,
+                ajax: "{{ route('admin.event.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'start_date',
+                        name: 'start_date',
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date',
+                    },
+                    {
+                        data: 'start_time',
+                        name: 'start_time',
+                    },
+                    {
+                        data: 'end_time',
+                        name: 'end_time',
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
         });
     </script>
 @endpush

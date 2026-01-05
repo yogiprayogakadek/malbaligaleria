@@ -35,34 +35,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($eventPhotos as $eventPhoto)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $eventPhoto->event->name }}</td>
-                                        <td>
-                                            <img src="{{ asset('storage/' . $eventPhoto->path) }}"
-                                                alt="{{ $eventPhoto->caption }}" class="rounded-1"
-                                                style="width: 200px; height: 200px">
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('admin.event.photo.edit', $eventPhoto->event_id) }}">
-                                                <button type="button"
-                                                    class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                                                    <i class="ti ti-pencil fs-4 me-2"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                            <button type="button"
-                                                class="justify-content-center w-80 btn mb-1 bg-danger-subtle text-danger btn-delete"
-                                                data-id="{{ $eventPhoto->id }}">
-                                                <i class="ti ti-trash fs-4 me-2"></i>
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -76,7 +49,31 @@
     <script src="{{ asset('assets/backend/js/sweetalert2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#table').DataTable();
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                searchDelay: 500,
+                ajax: "{{ route('admin.event.photo.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'photo',
+                        name: 'photo'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
         });
 
         $('body').on('click', '.btn-delete', function() {

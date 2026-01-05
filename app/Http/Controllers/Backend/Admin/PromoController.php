@@ -9,6 +9,7 @@ use App\Services\PromoService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class PromoController extends Controller
 {
@@ -21,10 +22,37 @@ class PromoController extends Controller
         $this->role = Auth::user()->getRoleNames()->first();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $promos = $this->promoService->getPromoWithRelationship(['id', 'tenant_id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'is_active'], ['tenant:id,name']);
-        return view('backend.admin.promo.index', compact('promos'));
+        if ($request->ajax()) {
+            $promos = $this->promoService->getPromoWithRelationship(['id', 'tenant_id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'is_active'], ['tenant:id,name']);
+
+            return DataTables::of($promos)
+                ->addIndexColumn()
+                ->addColumn('start_date', function ($row) {
+                    return date_format(date_create($row->start_date), 'd M Y');
+                })
+                ->addColumn('end_date', function ($row) {
+                    return date_format(date_create($row->end_date), 'd M Y');
+                })
+                ->addColumn('is_active', function ($row) {
+                    return $row->is_active == true
+                        ? '<span class="badge bg-primary">Active</span>'
+                        : '<span class="badge bg-danger">Not Active</span>';
+                })
+                ->addColumn('action', function ($row) {
+                    return '<a href="' . route('admin.promo.edit', $row->uuid) . '">
+                        <button type="button"
+                            class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
+                            <i class="ti ti-pencil fs-4 me-2"></i>
+                            Edit
+                        </button>
+                    </a>';
+                })
+                ->rawColumns(['start_date', 'end_date', 'is_active', 'action'])
+                ->make(true);
+        }
+        return view('backend.admin.promo.index');
     }
 
     public function create()

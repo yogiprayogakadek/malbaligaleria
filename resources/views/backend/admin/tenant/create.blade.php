@@ -157,12 +157,14 @@
                                     <input type="hidden" name="map_original_width" id="map_original_width">
                                     <input type="hidden" name="map_original_height" id="map_original_height">
                                 </div>
-                                <div class="col-sm-2">
-                                    <button class="btn btn-info btn-map" type="button" style="width: 100%"
-                                        data-bs-toggle="modal" data-bs-target="#modalMap">
-                                        <i class="fa fa-map-pin"></i> Open Map
-                                    </button>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                            <div class="col-sm-2">
+                                <button class="btn btn-info btn-map" type="button" style="width: 100%"
+                                    data-bs-toggle="modal" data-bs-target="#modalMap">
+                                    <i class="fa fa-map-pin"></i> Open Map
+                                </button>
                             </div>
                         </div>
 
@@ -301,7 +303,7 @@
             // Update Input Fields
             $('#positionX').val(originalX);
             $('#positionY').val(originalY);
-            
+
             // Update Original Size Fields
             $('#map_original_width').val(this.naturalWidth);
             $('#map_original_height').val(this.naturalHeight);

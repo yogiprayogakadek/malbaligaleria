@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEventPhotoRequest;
 use App\Services\EventService;
 use App\Services\EventPhotoService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class EventPhotoController extends Controller
 {
@@ -19,11 +20,44 @@ class EventPhotoController extends Controller
         $this->eventService = $eventService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $eventPhotos = $this->eventPhotoService->getAll();
+        if ($request->ajax()) {
+            $eventPhotos = $this->eventPhotoService->getAll();
 
-        return view('backend.admin.event-photo.index', compact('eventPhotos'));
+            return DataTables::of($eventPhotos)
+                ->addIndexColumn()
+                ->addColumn('photo', function ($row) {
+                    return '<img src="' . asset("storage/" . $row->path) . '"
+                    alt="' . $row->caption . '" class="rounded-1"
+                    style="width: 200px; height: 200px">';
+                })
+                ->addColumn('name', function ($row) {
+                    return $row->event->name;
+                })
+                ->addColumn('action', function ($row) {
+                    return '<a href="' . route('admin.event.photo.edit', $row->id) . '">
+                        <button type="button"
+                            class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
+                            <i class="ti ti-pencil fs-4 me-2"></i>
+                            Edit
+                        </button>
+                    </a>
+
+                    <button type="button"
+                        class="justify-content-center w-80 btn mb-1 bg-danger-subtle text-danger btn-delete"
+                        data-id="' . $row->event_id . '">
+                        <i class="ti ti-trash fs-4 me-2"></i>
+                        Delete
+                    </button>
+                    ';
+                })
+                ->rawColumns(['photo', 'action'])
+                ->make(true);
+        }
+
+
+        return view('backend.admin.event-photo.index');
     }
 
     public function create()

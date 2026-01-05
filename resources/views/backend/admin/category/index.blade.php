@@ -34,26 +34,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($categories as $category)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $category->name }}</td>
-                                        <td>{!! $category->is_active == true
-                                            ? '<span class="badge bg-primary">Active</span>'
-                                            : '<span class="badge bg-danger">Not Active</span>' !!}</td>
-                                        <td>
-                                            <a href="{{ route('admin.category.edit', $category->uuid) }}">
-                                                <button type="button"
-                                                    class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                                                    <i class="ti ti-pencil fs-4 me-2"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -67,7 +48,31 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable();
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                searchDelay: 500,
+                ajax: "{{ route('admin.category.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
         });
     </script>
 @endpush

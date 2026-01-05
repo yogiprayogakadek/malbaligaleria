@@ -35,12 +35,6 @@
                                 <iconify-icon icon="solar:sort-line-duotone" class="fs-7"></iconify-icon>
                             </a>
                         </li>
-                        <li class="nav-item nav-icon-hover d-none d-xl-block">
-                            <a class="nav-link" href="javascript:void(0)" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                                <iconify-icon icon="solar:magnifer-line-duotone" class="fs-6"></iconify-icon>
-                            </a>
-                        </li>
                         <li class="nav-item nav-icon-hover">
                             <a class="nav-link moon dark-layout" href="javascript:void(0)">
                                 <iconify-icon icon="solar:moon-line-duotone" class="moon fs-6"></iconify-icon>
@@ -109,8 +103,7 @@
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3 position-relative">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-3.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
+                                                alt="user" class="rounded-circle" width="45" height="45" />
                                             <span
                                                 class="position-absolute top-25 start-75 translate-middle-x p-1 bg-success border border-light rounded-circle">
                                                 <span class="visually-hidden">New alerts</span>
@@ -709,12 +702,6 @@
                                 type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar"
                                 aria-controls="offcanvasWithBothOptions">
                                 <iconify-icon icon="solar:sort-line-duotone" class="fs-7"></iconify-icon>
-                            </a>
-                        </li>
-                        <li class="nav-item nav-icon-hover d-none d-lg-block">
-                            <a class="nav-link" href="javascript:void(0)" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                                <iconify-icon icon="solar:magnifer-line-duotone" class="fs-6"></iconify-icon>
                             </a>
                         </li>
                         <li class="nav-item nav-icon-hover">

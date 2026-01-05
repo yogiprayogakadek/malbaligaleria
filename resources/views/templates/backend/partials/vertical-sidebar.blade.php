@@ -44,7 +44,7 @@
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>
+                                <iconify-icon icon="solar:user-circle-line-duotone"></iconify-icon>
                                 <span class="hide-menu">User</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">

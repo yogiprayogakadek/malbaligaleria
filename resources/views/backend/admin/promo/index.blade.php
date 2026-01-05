@@ -37,29 +37,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($promos as $promo)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $promo->tenant->name }}</td>
-                                        <td>{{ $promo->name }}</td>
-                                        <td>{{ date_format(date_create($promo->start_date), 'd M Y') }}</td>
-                                        <td>{{ date_format(date_create($promo->end_date), 'd M Y') }}</td>
-                                        <td>{!! $promo->is_active == true
-                                            ? '<span class="badge bg-primary">Active</span>'
-                                            : '<span class="badge bg-danger">Not Active</span>' !!}</td>
-                                        <td>
-                                            <a href="{{ route('admin.promo.edit', $promo->uuid) }}">
-                                                <button type="button"
-                                                    class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                                                    <i class="ti ti-pencil fs-4 me-2"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -73,7 +51,43 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable();
+            $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                searchDelay: 500,
+                ajax: "{{ route('admin.promo.index') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tenant.name',
+                        name: 'tenant.name'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'start_date',
+                        name: 'start_date'
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
         });
     </script>
 @endpush
