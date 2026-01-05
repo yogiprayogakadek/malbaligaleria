@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Services\TenantService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    protected $userService;
+    protected $userService, $tenantService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, TenantService $tenantService)
     {
         $this->userService = $userService;
+        $this->tenantService = $tenantService;
     }
 
     public function index(Request $request)
@@ -72,6 +76,54 @@ class UserController extends Controller
         }
 
         return view('backend.admin.user.index');
+    }
+
+    public function edit($id)
+    {
+        $user = $this->userService->findById($id);
+        $tenants = $this->tenantService->getAll(['uuid', 'id', 'name']);
+
+        return view('backend.admin.user.edit', compact('user', 'tenants'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'nullable|string|max:20',
+            'tenant_id' => 'nullable|exists:tenants,id',
+            'password' => 'nullable|min:6|confirmed',
+            'is_active' => 'nullable|in:0,1'
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'tenant_id' => $request->tenant_id,
+            ];
+
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            }
+
+            // Secure status update: Only allow changing is_active if user is approved
+            $user = $this->userService->findById($id);
+            if ($user->status == 'approved') {
+                $data['is_active'] = $request->is_active;
+            }
+
+            $this->userService->update($data, $id);
+
+            DB::commit();
+            return redirect()->route('admin.user.index')->with('success', 'User updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error updating user: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function activate(Request $request, $id)

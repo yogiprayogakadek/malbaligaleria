@@ -25,6 +25,11 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <iconify-icon icon="solar:info-circle-line-duotone" class="fs-5 me-2 align-middle"></iconify-icon>
+                        <span class="align-middle">To activate a user, the user must have already validated their email.</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     <div class="table-responsive">
                         <table id="table" class="table table-striped table-bordered text-nowrap align-middle">
                             <thead>

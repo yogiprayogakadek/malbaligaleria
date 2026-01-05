@@ -29,6 +29,7 @@ class UpdateCategoryRequest extends FormRequest
                 'max:100',
                 Rule::unique('categories', 'name')->ignore($this->uuid, 'uuid')
             ],
+            'is_active' => 'required|numeric|between:0,1'
         ];
     }
 }

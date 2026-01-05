@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Backend\Admin\ActivityController;
 use App\Http\Controllers\Backend\Admin\CategoryController;
 use App\Http\Controllers\Backend\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Backend\Admin\TenantController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Backend\Admin\TenantPhotoController;
 use App\Http\Controllers\Backend\Admin\EventController;
 use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
+use App\Http\Controllers\Backend\Admin\SettingController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Backend\Tenant\PromoController as TenantPromoController;
@@ -178,6 +180,28 @@ Route::controller(AdminDashboardController::class)
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{uuid}', 'edit')->name('edit');
                 Route::put('/update/{uuid}', 'update')->name('update');
+            });
+
+        // Activity
+        Route::controller(ActivityController::class)->prefix('/activity')
+            ->name('activity.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::delete('/destroy-all', 'destroyAll')->name('destroyAll');
+                Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
+                Route::delete('/{id}', 'destroy')->name('destroy');
+            });
+
+        // Setting
+        Route::controller(SettingController::class)->prefix('/setting')
+            ->name('setting.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::put('/{id}/update', 'update')->name('update');
+                Route::delete('/{id}/destroy', 'destroy')->name('destroy');
             });
     });
 

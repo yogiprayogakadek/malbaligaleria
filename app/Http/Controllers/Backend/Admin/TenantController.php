@@ -23,10 +23,21 @@ class TenantController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $tenants = $this->tenantService->getTenantsByStatus(['uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at'], true);
+            $tenants = $this->tenantService->getAll(
+                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id'],
+            );
 
             return DataTables::of($tenants)
                 ->addIndexColumn()
+                ->addColumn('category', function ($row) {
+                    if (!$row->category->is_active) {
+                        return '<div class="d-flex align-items-center">
+                                    <span class="text-muted me-2">' . $row->category->name . '</span>
+                                    <span class="badge bg-danger-subtle text-danger" style="font-size: 0.75em">Inactive</span>
+                                </div>';
+                    }
+                    return $row->category->name;
+                })
                 ->addColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
@@ -44,7 +55,7 @@ class TenantController extends Controller
                         </button>
                     </a>';
                 })
-                ->rawColumns(['action', 'is_active'])
+                ->rawColumns(['action', 'is_active', 'category'])
                 ->make(true);
         }
         return view('backend.admin.tenant.index');

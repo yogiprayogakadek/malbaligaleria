@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Category</th>
                                     <th>Name</th>
                                     <th>Phone</th>
                                     <th>Map Coord</th>
@@ -59,6 +60,10 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'category',
+                        name: 'category'
                     },
                     {
                         data: 'name',

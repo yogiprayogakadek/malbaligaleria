@@ -9,10 +9,12 @@ class Setting extends Model
     protected $fillable = [
         'name',
         'payload',
-        'description'
+        'description',
+        'is_active'
     ];
 
     protected $casts = [
-        'payload' => 'array'
+        'payload' => 'array',
+        'is_active' => 'boolean'
     ];
 }

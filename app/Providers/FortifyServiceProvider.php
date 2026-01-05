@@ -51,6 +51,19 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = User::where('email', $request->email)->first();
+
+            if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+                if (!$user->is_active) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        Fortify::username() => ['Your account is inactive. Please contact the administrator.'],
+                    ]);
+                }
+                return $user;
+            }
+        });
+
         Fortify::loginView(function () {
             $tenantService = app(\App\Services\TenantService::class);
             $tenants = $tenantService->getTenantsByStatus(['id', 'name'], true);

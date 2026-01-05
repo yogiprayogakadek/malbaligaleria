@@ -21,7 +21,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $categories = $this->categoryService->getCategoriesByStatus(['uuid', 'name', 'is_active'], true);
+            $categories = $this->categoryService->getAll(['uuid', 'name', 'is_active'], true);
 
             return DataTables::of($categories)
                 ->addIndexColumn()
@@ -53,7 +53,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = [
-            'name' => $request->name
+            'name' => $request->name,
         ];
 
         $this->categoryService->create($data);
@@ -63,14 +63,15 @@ class CategoryController extends Controller
 
     public function edit($uuid)
     {
-        $category = $this->categoryService->findByUuid($uuid, ['name', 'uuid']);
+        $category = $this->categoryService->findByUuid($uuid, ['name', 'uuid', 'is_active']);
         return view('backend.admin.category.edit', compact('category'));
     }
 
     public function update(UpdateCategoryRequest $request, $uuid)
     {
         $data = [
-            'name' => $request->name
+            'name' => $request->name,
+            'is_active' => $request->is_active
         ];
 
         $this->categoryService->update($data, $uuid);

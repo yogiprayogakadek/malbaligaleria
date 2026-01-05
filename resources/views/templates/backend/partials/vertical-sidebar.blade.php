@@ -6,12 +6,10 @@
         <div>
 
             <div class="brand-logo d-flex align-items-center justify-content-between">
-                <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/index.html"
-                    class="text-nowrap logo-img">
-                    <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                        class="dark-logo" alt="MaterialM-img" />
-                    <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/light-logo.svg"
-                        class="light-logo" alt="MaterialM-img" />
+                <a href="{{ url('/') }}" class="text-nowrap logo-img">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" style="height: 40px; width: auto;" />
+                    <span class="hide-menu ms-2 fw-bold text-dark fs-5"
+                        style="font-family: 'Plus Jakarta Sans', sans-serif;">Mal Bali Galeria</span>
                 </a>
             </div>
 
@@ -70,7 +68,7 @@
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:widget-4-line-duotone"></iconify-icon>
+                                <iconify-icon icon="solar:layers-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Category Tenants</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
@@ -96,7 +94,7 @@
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:bag-4-line-duotone"></iconify-icon>
+                                <iconify-icon icon="solar:shop-2-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Tenants</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
@@ -141,9 +139,11 @@
                         <!-- ---------------------------------- -->
                         <!-- Events -->
                         <!-- ---------------------------------- -->
+                        <!-- Events -->
+                        <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:bell-outline"></iconify-icon>
+                                <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Events</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
@@ -190,7 +190,7 @@
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:chat-round-money-outline"></iconify-icon>
+                                <iconify-icon icon="solar:tag-price-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Promo</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
@@ -212,6 +212,20 @@
                         </li>
 
                         <!-- ---------------------------------- -->
+                        <!-- Activity Logs -->
+                        <!-- ---------------------------------- -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.activity.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:history-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Activity Logs</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">OTHER</span>
+                        </li>
+                        <!-- ---------------------------------- -->
                         <!-- Settings -->
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
@@ -221,14 +235,14 @@
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link" href="javascript:void(0)">
+                                    <a class="sidebar-link" href="{{ route('admin.setting.index') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">List</span>
 
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link" href="javascript:void(0)">
+                                    <a class="sidebar-link" href="{{ route('admin.setting.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
 
@@ -255,7 +269,7 @@
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:chat-round-money-outline"></iconify-icon>
+                                <iconify-icon icon="solar:tag-price-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Promo</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
