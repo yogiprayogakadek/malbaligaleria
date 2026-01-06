@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promotions - Mal Bali Galeria Shopping Center</title>
+    <title>Promotions | Mal Bali Galeria</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/promotion/promotion.css') }}?v={{ time() + 14 }}">
 </head>
 
@@ -92,6 +93,7 @@
                 <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="{{ url('/') }}#experience">Experience</a></li>
                 <li><a href="{{ url('/') }}#events">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="{{ url('/') }}#contact">Contact</a></li>
             </ul>
         </nav>

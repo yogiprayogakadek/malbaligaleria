@@ -42,7 +42,7 @@ class UserController extends Controller
                 ->addColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
-                        : '<span class="badge bg-danger">Not Active</span>';
+                        : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
                     $button = '';

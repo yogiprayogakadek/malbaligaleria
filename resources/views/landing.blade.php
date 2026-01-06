@@ -93,6 +93,7 @@
                 <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>

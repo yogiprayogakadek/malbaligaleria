@@ -67,7 +67,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             $tenantService = app(\App\Services\TenantService::class);
             $tenants = $tenantService->getTenantsByStatus(['id', 'name'], true);
-            return view('auth.login', compact('tenants'));
+            return view('auth.new_login_v3', compact('tenants'));
         });
     }
 }

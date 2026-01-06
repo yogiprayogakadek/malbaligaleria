@@ -23,7 +23,9 @@ use App\Http\Controllers\Frontend\NewStoreController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-// landing fix
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+});
 
 // NOTIFICATIONS
 Route::controller(\App\Http\Controllers\Backend\NotificationController::class)

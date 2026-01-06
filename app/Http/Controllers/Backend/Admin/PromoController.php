@@ -29,16 +29,16 @@ class PromoController extends Controller
 
             return DataTables::of($promos)
                 ->addIndexColumn()
-                ->addColumn('start_date', function ($row) {
+                ->editColumn('start_date', function ($row) {
                     return date_format(date_create($row->start_date), 'd M Y');
                 })
-                ->addColumn('end_date', function ($row) {
+                ->editColumn('end_date', function ($row) {
                     return date_format(date_create($row->end_date), 'd M Y');
                 })
-                ->addColumn('is_active', function ($row) {
+                ->editColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
-                        : '<span class="badge bg-danger">Not Active</span>';
+                        : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.promo.edit', $row->uuid) . '">

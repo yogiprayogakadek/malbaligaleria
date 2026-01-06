@@ -38,10 +38,10 @@ class TenantController extends Controller
                     }
                     return $row->category->name;
                 })
-                ->addColumn('is_active', function ($row) {
+                ->editColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
-                        : '<span class="badge bg-danger">Not Active</span>';
+                        : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->addColumn('map_coords', function ($row) {
                     return $row->map_coords['floor'] == 1 ? $row->map_coords['floor'] . 'st Floor' : $row->map_coords['floor'] . 'nd Floor';

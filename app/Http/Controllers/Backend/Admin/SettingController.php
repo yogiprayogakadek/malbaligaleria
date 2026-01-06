@@ -80,15 +80,8 @@ class SettingController extends Controller
         if ($isActive) {
             Setting::where('is_active', true)->update(['is_active' => false]);
         } else {
-            // Check if there are any active settings. If not, maybe force this one?
-            // User requirement: "Only one setting active". Ideally one MUST be active.
-            // If DB is empty, logic implies first one should probably be active or allowed to be.
-            // But strict requirement: "ketika hanya ada 1 setting yang aktif ... user nonaktifkan ... tampilkan notifikasi"
-            // So if I create a new INACTIVE setting, it's allowed as long as there is ALREADY an active one?
-            // If there are NO active settings (first run), maybe we should force it active? 
-            // For now, I'll allow creating inactive setting if others exist.
             if (Setting::count() === 0) {
-                 $isActive = true; // First setting ever, force active
+                 $isActive = true;
             }
         }
 

@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fokus ke input search saat diklik
     searchInput.addEventListener('focus', function() {
         this.style.borderColor = 'var(--primary-color)';
-        this.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+        this.style.boxShadow = '0 0 0 4px rgba(44, 95, 93, 0.1)';
         optionsContainer.style.display = 'block';
     });
 

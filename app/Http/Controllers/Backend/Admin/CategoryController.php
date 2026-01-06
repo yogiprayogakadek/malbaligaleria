@@ -25,10 +25,10 @@ class CategoryController extends Controller
 
             return DataTables::of($categories)
                 ->addIndexColumn()
-                ->addColumn('is_active', function ($row) {
+                ->editColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
-                        : '<span class="badge bg-danger">Not Active</span>';
+                        : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.category.edit', $row->uuid) . '">

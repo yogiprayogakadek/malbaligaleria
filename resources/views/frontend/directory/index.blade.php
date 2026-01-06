@@ -100,8 +100,10 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="#contact">Contact</a></li>
                 @role('admin')
                     <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get

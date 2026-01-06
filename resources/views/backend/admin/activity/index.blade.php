@@ -23,19 +23,23 @@
                             <label for="log_name" class="form-label">Filter by Log Name</label>
                             <select id="log_name" class="form-control">
                                 <option value="">All Logs</option>
-                                @foreach($logNames as $name)
+                                @foreach ($logNames as $name)
                                     <option value="{{ $name }}">{{ ucfirst($name) }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-6 d-flex align-items-end justify-content-between">
                             <div>
-                                <button id="filter" class="btn btn-primary me-2"><i class="ti ti-filter"></i> Filter</button>
-                                <button id="reset" class="btn btn-secondary"><i class="ti ti-refresh"></i> Reset</button>
+                                <button id="filter" class="btn btn-primary me-2"><i class="ti ti-filter"></i>
+                                    Filter</button>
+                                <button id="reset" class="btn btn-secondary"><i class="ti ti-refresh"></i>
+                                    Reset</button>
                             </div>
                             <div>
-                                <button id="delete_selected" class="btn btn-danger me-2" style="display: none;"><i class="ti ti-trash"></i> Delete Selected</button>
-                                <button id="delete_all" class="btn btn-danger"><i class="ti ti-trash-x"></i> Delete All</button>
+                                <button id="delete_selected" class="btn btn-danger me-2" style="display: none;"><i
+                                        class="ti ti-trash"></i> Delete Selected</button>
+                                <button id="delete_all" class="btn btn-danger"><i class="ti ti-trash-x"></i> Delete
+                                    All</button>
                             </div>
                         </div>
                     </div>
@@ -80,29 +84,62 @@
                 serverSide: true,
                 ajax: {
                     url: "{{ route('admin.activity.index') }}",
-                    data: function (d) {
+                    data: function(d) {
                         d.date_filter = $('#date_filter').val();
                         d.log_name = $('#log_name').val();
                     }
                 },
-                columns: [
-                    { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'log_name', name: 'log_name' },
-                    { data: 'description', name: 'description' },
-                    { data: 'causer', name: 'causer_id' },
-                    { data: 'properties', name: 'properties', orderable: false, searchable: false },
-                    { data: 'action', name: 'action', orderable: false, searchable: false },
+                columns: [{
+                        data: 'checkbox',
+                        name: 'checkbox',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'log_name',
+                        name: 'log_name'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'causer',
+                        name: 'causer_id'
+                    },
+                    {
+                        data: 'properties',
+                        name: 'properties',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
-                order: [[2, 'desc']] // Sort by Date column (index 2)
+                order: [
+                    [2, 'desc']
+                ]
             });
 
-            $('#filter').click(function(){
+            $('#filter').click(function() {
                 table.draw();
             });
 
-            $('#reset').click(function(){
+            $('#reset').click(function() {
                 $('#date_filter').val('');
                 $('#log_name').val('');
                 table.draw();
@@ -110,16 +147,18 @@
 
             // Select All Checkbox
             $('#select_all').on('click', function() {
-                var rows = table.rows({ 'search': 'applied' }).nodes();
+                var rows = table.rows({
+                    'search': 'applied'
+                }).nodes();
                 $('input[type="checkbox"]', rows).prop('checked', this.checked);
                 toggleDeleteSelectedButton();
             });
 
             // Individual Checkbox Click
-            $('#table tbody').on('change', 'input[type="checkbox"]', function(){
-                if(!this.checked){
+            $('#table tbody').on('change', 'input[type="checkbox"]', function() {
+                if (!this.checked) {
                     var el = $('#select_all').get(0);
-                    if(el && el.checked && ('indeterminate' in el)){
+                    if (el && el.checked && ('indeterminate' in el)) {
                         el.indeterminate = true;
                     }
                 }
@@ -188,7 +227,9 @@
                         $.ajax({
                             url: "{{ route('admin.activity.destroyAll') }}",
                             type: 'DELETE',
-                            data: { _token: '{{ csrf_token() }}' },
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
                             success: function(response) {
                                 Swal.fire('Deleted!', response.success, 'success');
                                 table.draw();
@@ -219,7 +260,9 @@
                         $.ajax({
                             url: url,
                             type: 'DELETE',
-                            data: { _token: '{{ csrf_token() }}' },
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
                             success: function(response) {
                                 Swal.fire('Deleted!', response.success, 'success');
                                 table.draw();
