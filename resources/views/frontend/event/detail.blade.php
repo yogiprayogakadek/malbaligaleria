@@ -67,7 +67,7 @@
         </div>
 
         <div class="logo">
-            <h1>mal bali galeria<span>EVENT DETAILS</span></h1>
+            <h1>Mal Bali Galeria<span>EVENT DETAILS</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -80,7 +80,7 @@
     <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
+            <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
         <button class="sidebar-close" id="sidebarClose">
@@ -91,14 +91,14 @@
 
         <nav>
             <ul>
-                <li><a href="{{ url('/') }}#home">Home</a></li>
-                <li><a href="{{ url('/') }}#about">About</a></li>
-                <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
-                <li><a href="{{ url('/') }}#experience">Experience</a></li>
-                <li><a href="{{ url('/') }}#events" class="active"
-                        style="color: var(--secondary-color); transform: translateX(10px);">Events</a></li>
-                <li><a href="{{ url('/') }}#contact">Contact</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                {{-- <li><a href="#tenants">Tenants</a></li> --}}
+                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                {{-- <li><a href="#experience">Experience</a></li> --}}
+                <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
 
@@ -266,8 +266,7 @@
                 <!-- About Column -->
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
-                    <p>Your premier shopping destination in Bali, offering luxury brands, dining, and entertainment
-                        experiences in a modern and comfortable environment.</p>
+                    <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
                     <div class="footer-social">
                         <a href="#" class="footer-social-link" aria-label="Instagram">
                             <svg viewBox="0 0 24 24">
@@ -302,15 +301,16 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
-                        <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ url('/directory') }}">Store Directory</a></li>
-                        <li><a href="{{ url('/') }}#experience">Experiences</a></li>
-                        <li><a href="{{ url('/') }}#events">Events</a></li>
-                        <li><a href="{{ url('/') }}#career">Careers</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
+                        {{-- <li><a href="#experience">Experiences</a></li> --}}
+                        <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#career">Careers</a></li>
                     </ul>
                 </div>
 
-                <!-- Services -->
+                {{-- <!-- Services -->
                 <div class="footer-column">
                     <h3>Services</h3>
                     <ul class="footer-links">
@@ -320,7 +320,7 @@
                         <li><a href="{{ url('/') }}#member">Membership</a></li>
                         <li><a href="{{ url('/') }}#faq">FAQ</a></li>
                     </ul>
-                </div>
+                </div> --}}
 
                 <!-- Contact -->
                 <div class="footer-column">
@@ -330,7 +330,10 @@
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
                         </svg>
-                        <p>Jl. Sunset Road No. 89, Kuta, Badung, Bali 80361</p>
+                        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer"
+                            style="text-decoration: none">
+                            <p>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali 80361</p>
+                        </a>
                     </div>
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24">
@@ -352,10 +355,10 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2024 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
                 <div class="footer-brand">
-                    <span class="footer-brand-logo">MBG</span>
-                    <span class="footer-brand-text">Premium Shopping Experience</span>
+                    <span class="footer-brand-logo">Mal Bali Galeria</span>
+                    <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
                 </div>
             </div>
         </div>

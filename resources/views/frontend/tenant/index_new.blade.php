@@ -19,15 +19,17 @@
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             max-width: 100vw;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             color: #2c3e50;
         }
 
         /* Enhanced smooth transitions */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -37,6 +39,7 @@
                 opacity: 0;
                 transform: translateY(30px) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -44,21 +47,45 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px) rotate(0.5deg); }
-            50% { transform: translateY(-20px) rotate(-0.5deg); }
-            100% { transform: translateY(0px) rotate(0.5deg); }
+            0% {
+                transform: translateY(0px) rotate(0.5deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(-0.5deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(0.5deg);
+            }
         }
 
         @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(95, 207, 218, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(95, 207, 218, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(95, 207, 218, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(95, 207, 218, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(95, 207, 218, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(95, 207, 218, 0);
+            }
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* Staggered animations */
@@ -66,14 +93,37 @@
             animation-fill-mode: both;
         }
 
-        .animate-stagger:nth-child(1) { animation-delay: 0.1s; }
-        .animate-stagger:nth-child(2) { animation-delay: 0.2s; }
-        .animate-stagger:nth-child(3) { animation-delay: 0.3s; }
-        .animate-stagger:nth-child(4) { animation-delay: 0.4s; }
-        .animate-stagger:nth-child(5) { animation-delay: 0.5s; }
-        .animate-stagger:nth-child(6) { animation-delay: 0.6s; }
-        .animate-stagger:nth-child(7) { animation-delay: 0.7s; }
-        .animate-stagger:nth-child(8) { animation-delay: 0.8s; }
+        .animate-stagger:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .animate-stagger:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .animate-stagger:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .animate-stagger:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .animate-stagger:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .animate-stagger:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .animate-stagger:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .animate-stagger:nth-child(8) {
+            animation-delay: 0.8s;
+        }
 
         body.dark-mode {
             background: linear-gradient(135deg, #0a0a15 0%, #1a1a2a 100%);
@@ -81,7 +131,12 @@
         }
 
         /* Enhanced typography with better hierarchy */
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: 'Playfair Display', serif;
             line-height: 1.2;
         }
@@ -999,6 +1054,7 @@
                 transform: scale(0, 0);
                 opacity: 0.5;
             }
+
             100% {
                 transform: scale(50, 50);
                 opacity: 0;
@@ -1008,7 +1064,7 @@
         /* Enhanced hover effects */
         .hover-lift {
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        box-shadow 0.4s ease;
+                box-shadow 0.4s ease;
         }
 
         .hover-lift:hover {
@@ -1668,7 +1724,7 @@
         }
 
         .footer-brand-logo {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             font-size: 20px;
             font-weight: 500;
             color: white;
@@ -1902,7 +1958,7 @@
         </div>
 
         <div class="logo">
-            <h1>mal bali galeria<span>SHOPPING CENTER</span></h1>
+            <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -1914,7 +1970,7 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
+            <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
         <button class="sidebar-close" id="sidebarClose">
@@ -2134,8 +2190,7 @@
             <div class="footer-content">
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
-                    <p>Your premier shopping destination in Bali, offering luxury brands, dining, and entertainment
-                        experiences in a modern and comfortable environment.</p>
+                    <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
                     <div class="footer-social">
                         <a href="#" class="footer-social-link" aria-label="Instagram">
                             <svg viewBox="0 0 24 24">
@@ -2217,10 +2272,10 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2024 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
                 <div class="footer-brand">
-                    <span class="footer-brand-logo">MBG</span>
-                    <span class="footer-brand-text">Premium Shopping Experience</span>
+                    <span class="footer-brand-logo">Mal Bali Galeria</span>
+                    <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
                 </div>
             </div>
         </div>

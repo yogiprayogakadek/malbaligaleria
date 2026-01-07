@@ -10,8 +10,8 @@
                 <div class="footer-social">
                     <a href="#" class="footer-social-link" aria-label="Instagram">
                         <svg viewBox="0 0 24 24">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
-                                fill="none" stroke="white" stroke-width="2" />
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none"
+                                stroke="white" stroke-width="2" />
                             <circle cx="12" cy="12" r="4" fill="none" stroke="white"
                                 stroke-width="2" />
                             <circle cx="18" cy="6" r="1" fill="white" />
@@ -41,16 +41,17 @@
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
-                    <li><a href="{{ url('/') }}#about">About Us</a></li>
-                    <li><a href="{{ route('frontend.directory.index') }}">Store Directory</a></li>
-                    <li><a href="{{ url('/') }}#experience">Experiences</a></li>
-                    <li><a href="{{ url('/') }}#events">Events</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    {{-- <li><a href="#tenants">Store Directory</a></li> --}}
+                    {{-- <li><a href="#experience">Experiences</a></li> --}}
+                    <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                    <li><a href="#events">Events</a></li>
                     <li><a href="#career">Careers</a></li>
                 </ul>
             </div>
 
             {{-- Services --}}
-            <div class="footer-column">
+            {{-- <div class="footer-column">
                 <h3>Services</h3>
                 <ul class="footer-links">
                     <li><a href="#valet">Valet Parking</a></li>
@@ -59,7 +60,7 @@
                     <li><a href="#member">Membership</a></li>
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
-            </div>
+            </div> --}}
 
             {{-- Contact --}}
             <div class="footer-column">
@@ -69,7 +70,10 @@
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                         <circle cx="12" cy="10" r="3" />
                     </svg>
-                    <p>Jl. Sunset Road No. 89, Kuta, Badung, Bali 80361</p>
+                    <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer"
+                        style="text-decoration: none">
+                        <p>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali 80361</p>
+                    </a>
                 </div>
                 <div class="footer-contact-item">
                     <svg viewBox="0 0 24 24">
@@ -91,10 +95,10 @@
         <div class="footer-divider"></div>
 
         <div class="footer-bottom">
-            <p class="footer-copyright">© 2024 Mal Bali Galeria. All Rights Reserved.</p>
+            <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
             <div class="footer-brand">
-                <span class="footer-brand-logo">MBG</span>
-                <span class="footer-brand-text">Premium Shopping Experience</span>
+                <span class="footer-brand-logo">Mal Bali Galeria</span>
+                <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
             </div>
         </div>
     </div>

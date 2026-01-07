@@ -1,7 +1,7 @@
 {{-- Sidebar Menu Component --}}
 <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
+        <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
     </div>
 
     <button class="sidebar-close" id="sidebarClose">

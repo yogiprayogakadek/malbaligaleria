@@ -143,8 +143,8 @@
             font-size: 32px;
             font-weight: 300;
             letter-spacing: 3px;
-            text-transform: lowercase;
-            font-family: 'Playfair Display', serif;
+            /* text-transform: lowercase; */
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         }
 
         body.dark-mode .logo h1 {
@@ -256,8 +256,8 @@
             font-size: 28px;
             font-weight: 300;
             letter-spacing: 2px;
-            text-transform: lowercase;
-            font-family: 'Playfair Display', serif;
+            /* text-transform: lowercase; */
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         }
 
         body.dark-mode .sidebar-logo h2 {
@@ -1470,7 +1470,7 @@
         }
 
         .footer-brand-logo {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             font-size: 20px;
             font-weight: 500;
             color: white;
@@ -1553,7 +1553,7 @@
         </div>
 
         <div class="logo">
-            <h1>mal bali galeria<span>SHOPPING CENTER</span></h1>
+            <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -1565,7 +1565,7 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
+            <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
         <button class="sidebar-close" id="sidebarClose">
@@ -1576,11 +1576,13 @@
 
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#tenants">Tenants</a></li>
-                <li><a href="#experience">Experience</a></li>
+                {{-- <li><a href="#tenants">Tenants</a></li> --}}
+                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                {{-- <li><a href="#experience">Experience</a></li> --}}
                 <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -1785,8 +1787,7 @@
             <div class="footer-content">
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
-                    <p>Your premier shopping destination in Bali, offering luxury brands, dining, and entertainment
-                        experiences in a modern and comfortable environment.</p>
+                    <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
                     <div class="footer-social">
                         <a href="#" class="footer-social-link" aria-label="Instagram">
                             <svg viewBox="0 0 24 24">
@@ -1868,10 +1869,10 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2024 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
                 <div class="footer-brand">
-                    <span class="footer-brand-logo">MBG</span>
-                    <span class="footer-brand-text">Premium Shopping Experience</span>
+                    <span class="footer-brand-logo">Mal Bali Galeria</span>
+                    <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
                 </div>
             </div>
         </div>

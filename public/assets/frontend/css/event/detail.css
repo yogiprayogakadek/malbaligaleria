@@ -7,14 +7,14 @@
     --primary-gradient: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
     --secondary-gradient: linear-gradient(135deg, #7d9d9c 0%, #5a7c7a 100%);
     --accent-gradient: linear-gradient(135deg, #a8c5c3 0%, #8ba9a7 100%);
-    
+
     --primary-color: #2c5f5d;
     --secondary-color: #5a7c7a;
     --accent-color: #8ba9a7;
-    
+
     --text-dark: #2c3e50;
     --text-light: #e8ebe9;
-    
+
     --bg-light: #fafaf8;  /* Matched from promotion.css */
     --bg-dark: #1a1f1e;
 }
@@ -140,7 +140,7 @@ body.dark-mode .page-loader {
     font-size: 42px;
     font-weight: 400;
     letter-spacing: 3px;
-    text-transform: lowercase;
+    /* text-transform: lowercase; */
     color: var(--primary-color);
     margin-bottom: 5px;
 }
@@ -219,8 +219,8 @@ body.dark-mode .loader-logo h1 {
 @keyframes textFadeIn { to { opacity: 1; } }
 
 /* ===== HEADER & MENU (MATCHED with Landing/Promotion) ===== */
-/* Note: We rely on landing.css for the main header styles if linked. 
-   But to be safe/standalone, we should include the header styles here 
+/* Note: We rely on landing.css for the main header styles if linked.
+   But to be safe/standalone, we should include the header styles here
    or ensure they are not conflicting. */
 
 /* Event specific main offset */
@@ -757,27 +757,27 @@ body.dark-mode .similar-header h3 { color: var(--text-light); }
         grid-template-columns: 1fr;
         gap: 60px;
     }
-    
+
     .detail-left {
         grid-template-columns: 1fr;
     }
-    
+
     .tenant-logo-wrapper {
         position: static;
         flex-direction: row;
         align-items: flex-start;
         display: grid;
-        grid-template-columns: 180px 1fr; 
+        grid-template-columns: 180px 1fr;
         gap: 25px;
     }
-    
+
     .similar-section {
         padding-top: 0;
         margin-top: 40px;
         width: 100%;
         min-width: 0;
     }
-    
+
     .similar-tenants {
         flex-direction: row;
         overflow-x: auto;
@@ -789,7 +789,7 @@ body.dark-mode .similar-header h3 { color: var(--text-light); }
     .similar-tenants::-webkit-scrollbar {
         display: none;
     }
-    
+
     .similar-tenant-card {
         flex: 0 0 280px;
         scroll-snap-align: start;
@@ -801,11 +801,11 @@ body.dark-mode .similar-header h3 { color: var(--text-light); }
     .carousel-section {
         height: 50vh;
     }
-    
+
     .detail-section {
         padding: 40px 20px;
     }
-    
+
     .detail-container {
         gap: 40px;
     }
@@ -814,26 +814,26 @@ body.dark-mode .similar-header h3 { color: var(--text-light); }
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .tenant-logo {
         max-width: 100%;
         width: 200px;
         margin: 0 auto;
     }
-    
+
     .tenant-info h1 {
         font-size: 32px;
         text-align: center;
     }
-    
+
     .tenant-category {
         margin: 0 auto 20px;
     }
-    
+
     .tenant-details-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .tenant-actions {
         flex-direction: column;
     }

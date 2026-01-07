@@ -21,8 +21,8 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                <h1>mal bali galeria</h1>
-                <span>SHOPPING CENTER</span>
+                <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span>
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -63,7 +63,7 @@
         </div>
 
         <div class="logo">
-            <h1>mal bali galeria<span>SHOPPING CENTER</span></h1>
+            <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -76,7 +76,7 @@
     <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
+            <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
         <button class="sidebar-close" id="sidebarClose">
@@ -126,6 +126,9 @@
     <!-- About Section -->
     <section class="about-section reveal" id="about">
         <div class="about-container">
+            <div class="about-logo">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo">
+            </div>
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
                 <p>Mal Bali Galeria Shopping Center offers an exclusive shopping experience with modern architectural
@@ -490,8 +493,7 @@
                 <!-- About Column -->
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
-                    <p>Your premier shopping destination in Bali, offering luxury brands, dining, and entertainment
-                        experiences in a modern and comfortable environment.</p>
+                    <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
                     <div class="footer-social">
                         <a href="#" class="footer-social-link" aria-label="Instagram">
                             <svg viewBox="0 0 24 24">
@@ -576,10 +578,10 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2024 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
                 <div class="footer-brand">
-                    <span class="footer-brand-logo">MBG</span>
-                    <span class="footer-brand-text">Premium Shopping Experience</span>
+                    <span class="footer-brand-logo">Mal Bali Galeria</span>
+                    <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
                 </div>
             </div>
         </div>

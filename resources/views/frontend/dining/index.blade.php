@@ -166,8 +166,7 @@
                 <!-- About Column -->
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
-                    <p>Your premier shopping destination in Bali, offering luxury brands, dining, and entertainment
-                        experiences in a modern and comfortable environment.</p>
+                    <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
                     <div class="footer-social">
                         <a href="#" class="footer-social-link" aria-label="Instagram">
                             <svg viewBox="0 0 24 24">
@@ -252,10 +251,10 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2024 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
                 <div class="footer-brand">
-                    <span class="footer-brand-logo">MBG</span>
-                    <span class="footer-brand-text">Premium Shopping Experience</span>
+                    <span class="footer-brand-logo">Mal Bali Galeria</span>
+                    <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
                 </div>
             </div>
         </div>

@@ -37,7 +37,7 @@ class LandingPageController extends Controller
             ]
         );
 
-        return view('landing', compact('tenants', 'events'));
+        return view('landing_v2', compact('tenants', 'events'));
     }
 
     public function tenantData($cat = "new store", $isNew)
