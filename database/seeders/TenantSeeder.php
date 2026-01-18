@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Tenant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,76 +15,185 @@ class TenantSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = \Faker\Factory::create();
-        
-        // Get valid categories
-        $categoryIds = \App\Models\Category::pluck('id')->toArray();
-        if (empty($categoryIds)) {
-            $this->command->info('No categories found. Skipping TenantSeeder.');
-            return;
-        }
+        $tenants = [
+            "adidas",
+            "advance",
+            "aldo",
+            "amaris",
+            "american tourister",
+            "aora jewellry",
+            "arena",
+            "asics",
+            "azko",
+            "bag's city",
+            "bali ice skating",
+            "bamboo blonde",
+            "baso afung",
+            "bata",
+            "bath & body works",
+            "batik keris",
+            "bellagio",
+            "birkenstock",
+            "bose",
+            "by aura",
+            "c & f perfumery",
+            "calvin klein",
+            "camel active",
+            "celcius",
+            "charles & keith",
+            "chatime",
+            "chikuro",
+            "christopher salon",
+            "cimb niaga",
+            "color box",
+            "cotton on",
+            "crocs",
+            "digimap",
+            "digiplus",
+            "donini",
+            "doran gadget",
+            "dr. specs",
+            "erafone",
+            "es teller 77",
+            "everbest",
+            "excelso",
+            "expert",
+            "fit flop",
+            "flying tiger",
+            "foot locker",
+            "fossil",
+            "frank & co",
+            "funni fun",
+            "giordano",
+            "gosh",
+            "gramedia",
+            "gs shop",
+            "jbl store",
+            "hair creator",
+            "guardian pharmacy",
+            "h&m",
+            "hyang togol",
+            "hypermart",
+            "gong cha",
+            "guess",
+            "hush puppies",
+            "huawei",
+            "j.co",
+            "johnny andrean",
+            "javabica",
+            "hoka",
+            "josh coffee",
+            "hoops",
+            "ic centre bali",
+            "ichiban sushi",
+            "intimo",
+            "havaianas",
+            "kidz station",
+            "miniso",
+            "king koil",
+            "l'occitane",
+            "koi the",
+            "keds",
+            "king rabbit",
+            "levi's",
+            "kipling",
+            "lady americana",
+            "lacoste",
+            "loly poly"
+        ];
 
-        // Try to get a real logo/photo to reuse
-        $existingTenant = Tenant::whereNotNull('logo')->first();
-        $sampleLogo = $existingTenant ? $existingTenant->logo : 'tenants/default_logo.png';
-        
-        $existingPhoto = \App\Models\TenantPhoto::first();
-        $samplePhotoPath = $existingPhoto ? $existingPhoto->path : 'tenants/default_photo.jpg';
+        $islands = [
+            "balinata",
+            "bananas",
+            "beard papa's",
+            "captain burger",
+            "charlie's",
+            "churros",
+            "clean and care",
+            "crusita",
+            "dear butter",
+            "dedari kuliner",
+            "drink me",
+            "dum dum",
+            "full hardy",
+            "gacha corner",
+            "gino mariani",
+            "gita gemilang",
+            "gnc",
+            "hello the healthy brew",
+            "herborist",
+            "homcha",
+            "iqos",
+            "kanini",
+            "kcmtku",
+            "london bus",
+            "london taxi bike",
+            "lucky cheese",
+            "marquisa",
+            "moncherie",
+            "montato",
+            "motor train",
+            "nespresso",
+            "oni ola",
+            "orlenalycious",
+            "panlandwoo",
+            "perfect health",
+            "perfect relax",
+            "phoooto.id",
+            "photoinc",
+            "playworks",
+            "puyo",
+            "relx",
+            "roti boy",
+            "roti o",
+            "secret garden",
+            "shake shake",
+            "shihlin",
+            "smolton",
+            "somay little menteng",
+            "sour sally",
+            "thai inc",
+            "tomomi",
+            "wangsa gelato",
+            "watch studio",
+            "zuma"
+        ];
 
-        $this->command->info('Seeding 100 Tenants...');
+        $data = [];
+        $categoriesId = Category::pluck('id')->toArray();
 
-        for ($i = 0; $i < 100; $i++) {
-            $floor = rand(1, 2);
-            $isFloor1 = $floor === 1;
-            
-            // Set dimensions based on verified floor map sizes
-            $mapWidth = $isFloor1 ? 1216 : 1024;
-            $mapHeight = $isFloor1 ? 880 : 1024;
-
-            $tenant = Tenant::create([
+        foreach ($tenants as $key => $value) {
+            $data[] = [
                 'uuid' => (string) Str::uuid(),
-                'category_id' => $faker->randomElement($categoryIds),
-                'name' => $faker->company,
-                'phone' => $faker->phoneNumber,
-                'email' => $faker->companyEmail,
-                'website' => $faker->url,
-                'description' => $faker->paragraph,
-                'logo' => $sampleLogo,
-                'is_active' => true,
-                'launched_at' => $faker->dateTimeBetween('-1 year', '+1 month'),
-                'isNew' => $faker->boolean(20), // 20% chance of being new
-                'map_original_size' => [
-                    'width' => $mapWidth,
-                    'height' => $mapHeight,
-                ],
-                'map_coords' => [
-                    'floor' => $floor,
-                    'unit' => $faker->bothify('Unit-##'),
-                    'x' => $faker->numberBetween(50, $mapWidth - 50),
-                    'y' => $faker->numberBetween(50, $mapHeight - 50),
-                ],
-            ]);
-
-            // Create Primary Photo
-            \App\Models\TenantPhoto::create([
-                'tenant_id' => $tenant->id,
-                'path' => $samplePhotoPath,
-                'caption' => 'Primary Photo',
-                'is_primary' => true,
-            ]);
-
-            // Create 1-2 Album Photos
-            $numPhotos = rand(1, 2);
-            for ($j = 0; $j < $numPhotos; $j++) {
-                \App\Models\TenantPhoto::create([
-                    'tenant_id' => $tenant->id,
-                    'path' => $samplePhotoPath,
-                    'caption' => 'Album Photo ' . ($j + 1),
-                    'is_primary' => false,
-                ]);
-            }
+                'name' => mb_convert_case($value, MB_CASE_TITLE, 'UTF-8'),
+                'category_id' => $categoriesId[array_rand($categoriesId)],
+                'type' => 'tenant',
+                'isNew' => rand(0, 1),
+                'map_coords' => json_encode([
+                    'floor' => rand(1, 2),
+                ]),
+                'logo' => 'assets/images/tenant_logo/' . $value . '.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
-        
-        $this->command->info('Tenant seeding completed.');
+
+        foreach ($islands as $key => $value) {
+            $data[] = [
+                'uuid' => (string) Str::uuid(),
+                'name' => mb_convert_case($value, MB_CASE_TITLE, 'UTF-8'),
+                'category_id' => $categoriesId[array_rand($categoriesId)],
+                'type' => 'island',
+                'isNew' => rand(0, 1),
+                'map_coords' => json_encode([
+                    'floor' => rand(1, 2),
+                ]),
+                'logo' => 'assets/images/tenant_logo/' . $value . '.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        Tenant::insert($data);
     }
 }

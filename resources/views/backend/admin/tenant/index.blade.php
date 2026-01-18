@@ -30,6 +30,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Category</th>
+                                    <th>Type</th>
                                     <th>Name</th>
                                     <th>Phone</th>
                                     <th>Map Coord</th>
@@ -63,11 +64,18 @@
                     },
                     {
                         data: 'category',
-                        name: 'category'
+                        name: 'category',
+                        defaultContent: '-'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type',
+                        defaultContent: '-'
                     },
                     {
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
+                        defaultContent: '-'
                     },
                     {
                         data: 'phone',
@@ -76,11 +84,13 @@
                     },
                     {
                         data: 'map_coords',
-                        name: 'map_coords'
+                        name: 'map_coords',
+                        defaultContent: '-'
                     },
                     {
                         data: 'is_active',
-                        name: 'is_active'
+                        name: 'is_active',
+                        defaultContent: '-'
                     },
                     {
                         data: 'action',

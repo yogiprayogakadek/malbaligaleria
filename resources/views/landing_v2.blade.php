@@ -18,11 +18,11 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                <h1>Mal Bali Galeria</h1>
-                <span>Enjoy, Play, Eat, Shop</span>
+                {{-- <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span> --}}
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -58,7 +58,8 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
+                <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" id="headerLogo"
+                    style="height: 30px; width: auto;">
             </a>
         </div>
 
@@ -116,10 +117,12 @@
         <div class="hero-content">
             <h2>The FIRST Premium Shopping Mall & Life Style Destination in Bali</h2>
             <p>The Best Way to Predict The Future is to Create It and That Future is here...</p>
-            <button class="explore-btn">
-                <span class="arrow">→</span>
-                <span class="text">Explore malbaligaleria</span>
-            </button>
+            <a href="{{ route('frontend.directory.index') }}" style="text-decoration: none;">
+                <button class="explore-btn">
+                    <span class="arrow">→</span>
+                    <span class="text">Explore malbaligaleria</span>
+                </button>
+            </a>
         </div>
     </section>
 
@@ -169,13 +172,21 @@
                             <a href="javascript:void(0);" class="featured-tenant-trigger"
                                 data-id="{{ $tenant->id }}" style="text-decoration: none;">
                                 <div class="tenant-card-image"
-                                    style="background-image: url({{ asset('storage/' . $tenant->primaryPhoto->path) }});">
+                                    style="background-image: url({{ $tenant->primaryPhoto && $tenant->primaryPhoto->path
+                                        ? asset('storage/' . $tenant->primaryPhoto->path)
+                                        : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="tenant-card-content">
                                     <h3>{{ $tenant->name }}</h3>
                                     <p>{{ $tenant->category->name }}</p>
-                                    <span
-                                        class="tenant-card-tag">{{ $tenant->map_coords['floor'] == 1 ? $tenant->map_coords['floor'] . 'st Floor' : $tenant->map_coords['floor'] . 'nd Floor' }}</span>
+                                    <span class="tenant-card-tag">
+                                        @php
+                                            $floor = data_get($tenant->map_coords, 'floor');
+                                        @endphp
+
+                                        {{ $floor ? ($floor === 1 ? "{$floor}st Floor" : "{$floor}nd Floor") : '-' }}
+                                    </span>
+
                                 </div>
                             </a>
                         </div>
@@ -435,9 +446,9 @@
 
                 <div class="modal-details">
                     <div class="modal-header">
-                        <div class="modal-logo" id="modalLogo">
+                        {{-- <div class="modal-logo" id="modalLogo">
                             <!-- Logo will be inserted here -->
-                        </div>
+                        </div> --}}
                         <div class="modal-title">
                             <span class="modal-floor-badge" id="modalFloorBadge"></span>
                             <h2 id="modalTenantName"></h2>

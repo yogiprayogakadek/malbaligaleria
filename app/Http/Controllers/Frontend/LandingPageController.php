@@ -57,31 +57,72 @@ class LandingPageController extends Controller
 
     public function findTenantById($tenant_id)
     {
+        // $tenant = $this->tenantService->getTenantsWithRelationshipAndCondition(
+        //     ['id', 'name', 'map_coords', 'category_id', 'logo', 'description'],
+        //     [
+        //         'category:id,name',
+        //         'primaryPhoto:id,path,caption,tenant_id',
+        //         'albumPhoto:id,tenant_id,path,caption'
+        //     ],
+        //     'id',
+        //     $tenant_id
+        // )->map(function ($t) {
+        //     return [
+        //         'name' => $t['name'],
+        //         'floor' => $t['map_coords']['floor'] == 1 ? $t['map_coords']['floor'] . 'st Floor' : $t['map_coords']['floor'] . 'nd Floor',
+        //         'category' => $t['category']['name'],
+        //         'unit' => $t['map_coords']['unit'] ?? '-',
+        //         'hours' => "10:00 AM - 10:00 PM",
+        //         'logo' => !empty($t['logo'])
+        //             ? (str_starts_with($t['logo'], 'assets')
+        //                 ? asset($t['logo'])
+        //                 : asset('storage/' . $t['logo'])
+        //             )
+        //             : asset('assets/images/no_image.jpg'),
+        //         'description' => $t['description'],
+        //         'album' => collect()
+        //             ->when($t->primaryPhoto, function ($c) use ($t) {
+        //                 $c->push(asset('storage/' . $t->primaryPhoto->path));
+        //             })
+        //             ->concat(
+        //                 $t->albumPhoto->map(fn($photo) => asset('storage/' . $photo->path))
+        //             )
+        //             ->unique()
+        //             ->values()
+        //             ->all(),
+        //     ];
+        // });
+
         $tenant = $this->tenantService->getTenantsWithRelationshipAndCondition(
             ['id', 'name', 'map_coords', 'category_id', 'logo', 'description'],
             [
                 'category:id,name',
-                'primaryPhoto:id,path,caption,tenant_id',
-                'albumPhoto:id,tenant_id,path,caption'
             ],
             'id',
             $tenant_id
         )->map(function ($t) {
+
+            $logoUrl = !empty($t['logo'])
+                ? (str_starts_with($t['logo'], 'assets')
+                    ? asset($t['logo'])
+                    : asset('storage/' . $t['logo'])
+                )
+                : asset('assets/images/no_image.jpg');
+
             return [
                 'name' => $t['name'],
-                'floor' => $t['map_coords']['floor'] == 1 ? $t['map_coords']['floor'] . 'st Floor' : $t['map_coords']['floor'] . 'nd Floor',
+                'floor' => $t['map_coords']['floor'] == 1
+                    ? $t['map_coords']['floor'] . 'st Floor'
+                    : $t['map_coords']['floor'] . 'nd Floor',
                 'category' => $t['category']['name'],
-                'unit' => $t['map_coords']['unit'],
+                'unit' => $t['map_coords']['unit'] ?? '-',
                 'hours' => "10:00 AM - 10:00 PM",
-                'logo' => asset('storage/' . $t['logo']),
+                'logo' => $logoUrl,
                 'description' => $t['description'],
-                'album' => collect([asset('storage/' . $t->primaryPhoto->path)])->concat(
-                    $t->albumPhoto->map(function ($photo) {
-                        return asset('storage/' . $photo->path);
-                    })
-                )->all(),
+                'album' => [$logoUrl],
             ];
         });
+
 
         return response()->json($tenant[0]);
     }

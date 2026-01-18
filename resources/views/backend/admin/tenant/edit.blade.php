@@ -36,6 +36,25 @@
                             </div>
                         </div>
 
+                        {{-- Tenant Type --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="type" class="form-label col-sm-3 col-form-label">Type</label>
+                            <div class="col-sm-12">
+                                <select name="type" id="type"
+                                    class="form-control @error('type') is-invalid @enderror">
+                                    <option value="tenant" {{ $tenant->type == 'tenant' ? 'selected' : '' }}>
+                                        Tenant
+                                    </option>
+                                    <option value="island" {{ $tenant->type == 'island' ? 'selected' : '' }}>
+                                        Island
+                                    </option>
+                                </select>
+                                @error('type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         {{-- Tenant Name --}}
                         <div class="mb-4 row align-items-center">
                             <label for="name" class="form-label col-sm-3 col-form-label">Name</label>
@@ -123,7 +142,7 @@
                                 <div class="col-sm-3">
                                     <label for="floor" class="form-label col-sm-3 col-form-label">Floor</label>
                                     <input type="number" class="form-control @error('floor') is-invalid @enderror"
-                                        name="floor" id="floor" value="{{ $tenant->map_coords['floor'] }}"
+                                        name="floor" id="floor" value="{{ $tenant->map_coords['floor'] ?? '' }}"
                                         placeholder="Between 1 & 2">
                                     @error('floor')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -132,7 +151,7 @@
                                 <div class="col-sm-3">
                                     <label for="unit" class="form-label col-sm-3 col-form-label">Unit</label>
                                     <input type="text" class="form-control @error('unit') is-invalid @enderror"
-                                        name="unit" id="unit" value="{{ $tenant->map_coords['unit'] }}"
+                                        name="unit" id="unit" value="{{ $tenant->map_coords['unit'] ?? '' }}"
                                         placeholder="Enter unit tenant location">
                                     @error('unit')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -141,7 +160,7 @@
                                 <div class="col-sm-3">
                                     <label for="positionX" class="form-label col-sm-3 col-form-label">Pos. X</label>
                                     <input type="number" class="form-control @error('position_x') is-invalid @enderror"
-                                        name="position_x" id="positionX" value="{{ $tenant->map_coords['x'] }}"
+                                        name="position_x" id="positionX" value="{{ $tenant->map_coords['x'] ?? '' }}"
                                         placeholder="The field will be automatically filled (in)">
                                     @error('position_x')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -150,13 +169,15 @@
                                 <div class="col-sm-3">
                                     <label for="positionY" class="form-label col-sm-3 col-form-label">Pos. Y</label>
                                     <input type="number" class="form-control @error('position_y') is-invalid @enderror"
-                                        name="position_y" id="positionY" value="{{ $tenant->map_coords['y'] }}"
+                                        name="position_y" id="positionY" value="{{ $tenant->map_coords['y'] ?? '' }}"
                                         placeholder="The field will be automatically filled (in)">
                                     @error('position_y')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <input type="hidden" name="map_original_width" id="map_original_width" value="{{ $tenant->map_original_size['width'] ?? '' }}">
-                                    <input type="hidden" name="map_original_height" id="map_original_height" value="{{ $tenant->map_original_size['height'] ?? '' }}">
+                                    <input type="hidden" name="map_original_width" id="map_original_width"
+                                        value="{{ $tenant->map_original_size['width'] ?? '' }}">
+                                    <input type="hidden" name="map_original_height" id="map_original_height"
+                                        value="{{ $tenant->map_original_size['height'] ?? '' }}">
                                 </div>
                             </div>
                         </div>
@@ -285,7 +306,7 @@
             // Update Input Fields
             $('#positionX').val(originalX);
             $('#positionY').val(originalY);
-            
+
             // Update Original Size Fields
             $('#map_original_width').val(this.naturalWidth);
             $('#map_original_height').val(this.naturalHeight);

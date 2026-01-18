@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\TenantRepository;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class TenantService
@@ -95,29 +96,90 @@ class TenantService
     // Custom
     public function getDataByFloor(array $fields, array $relationship, string $cat, bool $isNew)
     {
-        $tenants = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew)->map(function ($tenant) {
-            $data = [
-                'id' => $tenant['id'],
-                'name' => $tenant['name'],
-                'category' => $tenant['category']['name'],
-                'floor' => $tenant['isNew']
-                    ? 'New Store'
-                    : ($tenant['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor'),
-                'unit' => $tenant['map_coords']['unit'],
-                'logo' => asset('storage/' . $tenant['logo']),
-                'hours' => "10:00 AM - 10:00 PM",
-                'album' => $tenant->albumPhoto->map(function ($photo) {
-                    return [
-                        'id' => $photo->id,
-                        'path' => $photo->path,
-                        'caption' => $photo->caption
+        $cacheKey = "tenant_floor_{$cat}_{$isNew}";
+
+        return Cache::remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($fields, $relationship, $cat, $isNew) {
+                $tenants = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew)->map(function ($tenant) {
+                    $data = [
+                        'id' => $tenant['id'],
+                        'name' => $tenant['name'],
+                        'category' => $tenant['category']['name'],
+                        'floor' => $tenant['isNew']
+                            ? 'New Store'
+                            : (
+                                ($floor = data_get($tenant, 'map_coords.floor'))
+                                ? ($floor === 1 ? '1st Floor' : '2nd Floor')
+                                : '-'
+                            ),
+                        'unit' => $tenant['map_coords']['unit'] ?? '-',
+                        'logo' => !empty($tenant['logo'])
+                            ? (str_starts_with($tenant['logo'], 'assets')
+                                ? asset($tenant['logo'])
+                                : asset('storage/' . $tenant['logo'])
+                            )
+                            : asset('assets/images/no_image.jpg'),
+                        // 'logo' => !empty($tenant['logo'])
+                        //     ? asset('storage/' . $tenant['logo'])
+                        //     : asset('assets/images/no_image.jpg'),
+                        'hours' => "10:00 AM - 10:00 PM",
+                        'album' => optional($tenant->albumPhoto)->map(function ($photo) {
+                            return [
+                                'id' => $photo->id,
+                                'path' => $photo->path,
+                                'caption' => $photo->caption,
+                            ];
+                        }) ?? [],
                     ];
-                })
-            ];
 
-            return $data;
-        });
+                    return $data;
+                });
 
-        return $tenants;
+                return $tenants;
+            }
+        );
     }
+
+
+    // public function getDataByFloor(array $fields, array $relationship, string $cat, bool $isNew)
+    // {
+    //     $tenants = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew)->map(function ($tenant) {
+    //         $data = [
+    //             'id' => $tenant['id'],
+    //             'name' => $tenant['name'],
+    //             'category' => $tenant['category']['name'],
+    //             'floor' => $tenant['isNew']
+    //                 ? 'New Store'
+    //                 : (
+    //                     ($floor = data_get($tenant, 'map_coords.floor'))
+    //                     ? ($floor === 1 ? '1st Floor' : '2nd Floor')
+    //                     : '-'
+    //                 ),
+    //             'unit' => $tenant['map_coords']['unit'] ?? '-',
+    //             'logo' => !empty($tenant['logo'])
+    //                 ? (str_starts_with($tenant['logo'], 'assets')
+    //                     ? asset($tenant['logo'])
+    //                     : asset('storage/' . $tenant['logo'])
+    //                 )
+    //                 : asset('assets/images/no_image.jpg'),
+    //             // 'logo' => !empty($tenant['logo'])
+    //             //     ? asset('storage/' . $tenant['logo'])
+    //             //     : asset('assets/images/no_image.jpg'),
+    //             'hours' => "10:00 AM - 10:00 PM",
+    //             'album' => optional($tenant->albumPhoto)->map(function ($photo) {
+    //                 return [
+    //                     'id' => $photo->id,
+    //                     'path' => $photo->path,
+    //                     'caption' => $photo->caption,
+    //                 ];
+    //             }) ?? [],
+    //         ];
+
+    //         return $data;
+    //     });
+
+    //     return $tenants;
+    // }
 }

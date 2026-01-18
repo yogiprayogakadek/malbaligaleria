@@ -67,12 +67,19 @@ let lastScroll = 0;
 
 window.addEventListener("scroll", () => {
     const currentScroll = window.pageYOffset;
+    const headerLogo = document.getElementById("headerLogo");
 
     // Add scrolled class for background
     if (currentScroll > 100) {
         header.classList.add("scrolled");
+        if (headerLogo) {
+             headerLogo.src = headerLogo.src.replace("logo_bw.png", "logo.png");
+        }
     } else {
         header.classList.remove("scrolled");
+        if (headerLogo) {
+             headerLogo.src = headerLogo.src.replace("logo.png", "logo_bw.png");
+        }
     }
 
     lastScroll = currentScroll;
@@ -713,7 +720,7 @@ async function renderLandingTenants(floor, isNew = false) {
 
         card.innerHTML = `
                     <div class="tenant-logo">
-                        <img src="${tenant.logo}" alt="${tenant.name}">
+                        <img src="${tenant.logo}" alt="${tenant.name}" loading="lazy">
                     </div>
                     <div class="tenant-info">
                         <span class="floor-badge">${tenant.floor}</span>
@@ -953,9 +960,9 @@ async function openTenantModal(tenant_id) {
     document.getElementById("modalFloor").textContent = tenantData.floor;
 
     // Set logo
-    document.getElementById(
-        "modalLogo"
-    ).innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+    // document.getElementById(
+    //     "modalLogo"
+    // ).innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
 
     // Set description (if available)
     const description =

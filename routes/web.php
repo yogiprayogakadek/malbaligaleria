@@ -40,7 +40,7 @@ Route::controller(\App\Http\Controllers\Backend\NotificationController::class)
     });
 
 Route::get('/maintenance', function () {
-    return view('maintenance');
+    return view('maintenance.index');
 });
 
 // FRONTEND
@@ -264,4 +264,8 @@ Route::get('/test-email', function () {
 
 Route::get('quote', function () {
     return view('backend.admin.quotation');
+});
+
+Route::get('quote-v2', function () {
+    return view('quotation_v2');
 });

@@ -18,11 +18,11 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                <h1>Mal Bali Galeria</h1>
-                <span>Enjoy, Play, Eat, Shop</span>
+                {{-- <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span> --}}
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -87,14 +87,14 @@
 
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="{{ route('frontend.landing') }}">Home</a></li>
+                <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
                 {{-- <li><a href="#tenants">Tenants</a></li> --}}
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 {{-- <li><a href="#experience">Experience</a></li> --}}
-                <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
             </ul>
         </nav>
     </div>

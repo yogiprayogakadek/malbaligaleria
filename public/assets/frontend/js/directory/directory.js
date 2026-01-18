@@ -248,7 +248,7 @@ function validateFavorites() {
     if (favorites.length === 0) return;
 
     // Filter out favorites that don't exist in the current tenants list
-    const validFavorites = favorites.filter(favUnit => 
+    const validFavorites = favorites.filter(favUnit =>
         tenants.some(t => t.unit === favUnit)
     );
 
@@ -739,14 +739,20 @@ function filterTenants() {
     const currentCount = parseInt(tenantCountElement.textContent) || 0;
     animateCounter(tenantCountElement, currentCount, filtered.length, 800);
 
-    if (filtered.length > 0) {
-        showToast(
-            `Found ${filtered.length} store${filtered.length > 1 ? "s" : ""}`,
-            "success",
-            2000
-        );
-    } else {
-        showToast("No stores found matching your criteria", "info", 2000);
+    // Debounce toast notification to avoid spamming while typing
+    if (window.searchToastTimer) {
+        clearTimeout(window.searchToastTimer);
+        window.searchToastTimer = null;
+    }
+
+    // Only show toast if NO results found and user stops typing for 1 second
+    if (combinedSearch && combinedSearch.length > 0) {
+        window.searchToastTimer = setTimeout(() => {
+            if (filtered.length === 0) {
+                showToast("No stores found matching your criteria", "info", 2000);
+            }
+            window.searchToastTimer = null;
+        }, 1000);
     }
 
     renderTenants(filtered);
@@ -996,15 +1002,7 @@ function updateMapView() {
         800
     );
 
-    if (currentFloorTenants.length > 0) {
-        showToast(
-            `${currentFloorTenants.length} store${
-                currentFloorTenants.length > 1 ? "s" : ""
-            } on this floor`,
-            "success",
-            2000
-        );
-    }
+    // Toast notification removed as per user request
 
     // Update tenant list in sidebar
     updateTenantList(currentFloorTenants);
@@ -1098,17 +1096,41 @@ function updateMapView() {
                 // Create single marker
                 const tenant = group[0].tenant;
                 pin = document.createElement("div");
-                pin.className = "map-pin";
-                pin.style.position = "absolute";
-                pin.style.left = groupX + "px";
-                pin.style.top = groupY + "px";
-                pin.style.background = getCategoryColor(tenant.category);
-                pin.dataset.tenant = JSON.stringify(tenant);
 
-                const label = document.createElement("div");
-                label.className = "map-pin-label";
-                label.textContent = tenant.name;
-                pin.appendChild(label);
+                // Check if searching (active search term)
+                if (searchTerm && searchTerm.trim() !== '') {
+                    pin.className = "map-pin-logo";
+                    let offset = 25; // Default for 50px
+
+                    // If multiple tenants found, use smaller logo
+                    if (currentFloorTenants.length > 1) {
+                        pin.classList.add("small");
+                        offset = 17.5; // Half of 35px
+                    }
+
+                    // Center the pin
+                    pin.style.left = (groupX - offset) + "px";
+                    pin.style.top = (groupY - offset) + "px";
+
+                    const img = document.createElement("img");
+                    img.src = tenant.logo;
+                    img.alt = tenant.name;
+                    img.onerror = function() { this.style.display = 'none'; }; // Fallback
+                    pin.appendChild(img);
+                } else {
+                    pin.className = "map-pin";
+                    pin.style.left = groupX + "px";
+                    pin.style.top = groupY + "px";
+                    pin.style.background = getCategoryColor(tenant.category);
+
+                    const label = document.createElement("div");
+                    label.className = "map-pin-label";
+                    label.textContent = tenant.name;
+                    pin.appendChild(label);
+                }
+
+                pin.style.position = "absolute";
+                pin.dataset.tenant = JSON.stringify(tenant);
 
                 pin.addEventListener("mouseenter", function () {
                     const tenantData = JSON.parse(this.dataset.tenant);
@@ -1409,8 +1431,8 @@ function showTenantModal(tenant) {
     document.getElementById("modalUnit").textContent = tenantData.unit;
 
     // Set logo
-    const modalLogo = document.getElementById("modalLogo");
-    modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+    // const modalLogo = document.getElementById("modalLogo");
+    // modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
 
     // Set up carousel images
     modalCarouselImages = tenantData.images;
@@ -2050,7 +2072,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     showLoading(); // Show loading overlay initially
     showShimmerCards(); // Show shimmer cards first
-    
+
     // Fetch Data
     tenants = await getTenantsData();
     validateFavorites(); // Clean up invalid/old favorites

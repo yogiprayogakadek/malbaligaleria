@@ -14,7 +14,7 @@
 
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/new-store.css') }}?v={{ time() }}">
 </head>
 
@@ -24,11 +24,11 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
                         style="display: block;">
                 </div>
-                <h1>mal bali galeria</h1>
-                <span>SHOPPING CENTER</span>
+                <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span>
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -59,7 +59,7 @@
             </a>
         </div>
         <div class="logo">
-            <h1>mal bali galeria<span>SHOPPING CENTER</span></h1>
+            <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
         <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
     </header>
@@ -67,18 +67,19 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <h2>mal bali galeria<span>SHOPPING CENTER</span></h2>
+            <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
         <button class="sidebar-close" id="sidebarClose"><span></span><span></span><span></span></button>
         <nav>
             <ul>
-                <li><a href="{{ url('/') }}#home">Home</a></li>
-                <li><a href="{{ url('/') }}#about">About</a></li>
-                <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
-                <li><a href="{{ url('/') }}#experience">Experience</a></li>
-                <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
-                <li><a href="{{ url('/') }}#contact">Contact</a></li>
+                <li><a href="{{ route('frontend.landing') }}">Home</a></li>
+                <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
+                {{-- <li><a href="#tenants">Tenants</a></li> --}}
+                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                {{-- <li><a href="#experience">Experience</a></li> --}}
+                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
             </ul>
         </nav>
 
@@ -171,16 +172,17 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
-                        <li><a href="{{ url('/') }}#about">About Us</a></li>
-                        <li><a href="{{ route('frontend.directory.index') }}">Store Directory</a></li>
-                        <li><a href="{{ url('/') }}#experience">Experiences</a></li>
-                        <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
-                        <li><a href="{{ url('/') }}#career">Careers</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
+                        {{-- <li><a href="#experience">Experiences</a></li> --}}
+                        <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#career">Careers</a></li>
                     </ul>
                 </div>
 
                 <!-- Services -->
-                <div class="footer-column">
+                {{-- <div class="footer-column">
                     <h3>Services</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#valet">Valet Parking</a></li>
@@ -189,7 +191,7 @@
                         <li><a href="{{ url('/') }}#member">Membership</a></li>
                         <li><a href="{{ url('/') }}#faq">FAQ</a></li>
                     </ul>
-                </div>
+                </div> --}}
 
                 <!-- Contact -->
                 <div class="footer-column">

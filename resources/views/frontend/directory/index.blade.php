@@ -18,11 +18,11 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                <h1>Mal Bali Galeria</h1>
-                <span>Enjoy, Play, Eat, Shop</span>
+                {{-- <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span> --}}
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -97,14 +97,14 @@
 
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="{{ route('frontend.landing') }}">Home</a></li>
+                <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
                 {{-- <li><a href="#tenants">Tenants</a></li> --}}
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 {{-- <li><a href="#experience">Experience</a></li> --}}
-                <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
                 @role('admin')
                     <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get
                             Coordinates</a></li>
@@ -212,7 +212,10 @@
                             <div class="filter-input styled-select">
                                 <select id="categoryFilter">
                                     <option value="">All Categories</option>
-                                    <option value="Fashion & Apparel">Fashion & Apparel</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                    @endforeach
+                                    {{-- <option value="Fashion & Apparel">Fashion & Apparel</option>
                                     <option value="Fashion & Accessories">Fashion & Accessories</option>
                                     <option value="Beauty & Health">Beauty & Health</option>
                                     <option value="Jewelry & Watches">Jewelry & Watches</option>
@@ -220,7 +223,7 @@
                                     <option value="Home & Lifestyle">Home & Lifestyle</option>
                                     <option value="Department Store">Department Store</option>
                                     <option value="Supermarket">Supermarket</option>
-                                    <option value="Books & Stationery">Books & Stationery</option>
+                                    <option value="Books & Stationery">Books & Stationery</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -389,9 +392,9 @@
                 <!-- Modal Details -->
                 <div class="modal-details">
                     <div class="modal-header">
-                        <div class="modal-logo" id="modalLogo">
+                        {{-- <div class="modal-logo" id="modalLogo">
                             <!-- Logo will be inserted here -->
-                        </div>
+                        </div> --}}
                         <div class="modal-title">
                             <span class="modal-floor-badge" id="modalFloorBadge"></span>
                             <h2 id="modalTenantName"></h2>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->enum('type', ['tenant', 'island'])->default('tenant');
             $table->string('name', 100);
             $table->string('phone', 20)->nullable();
             $table->string('email')->nullable();

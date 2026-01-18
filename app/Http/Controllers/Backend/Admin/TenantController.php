@@ -24,7 +24,7 @@ class TenantController extends Controller
     {
         if ($request->ajax()) {
             $tenants = $this->tenantService->getAll(
-                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id'],
+                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type'],
             );
 
             return DataTables::of($tenants)
@@ -38,13 +38,20 @@ class TenantController extends Controller
                     }
                     return $row->category->name;
                 })
+                ->addColumn('type', function ($row) {
+                    return ucfirst($row->type);
+                })
                 ->editColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
                         : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->addColumn('map_coords', function ($row) {
-                    return $row->map_coords['floor'] == 1 ? $row->map_coords['floor'] . 'st Floor' : $row->map_coords['floor'] . 'nd Floor';
+                    $floor = $row->map_coords?->floor ?? null;
+
+                    return $floor
+                        ? ($floor === 1 ? "{$floor}st Floor" : "{$floor}nd Floor")
+                        : '-';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.tenant.edit', $row->uuid) . '">
@@ -72,6 +79,7 @@ class TenantController extends Controller
         // dd($request->all());
         $data = [
             'category_id' => $request->category_id,
+            'type' => $request->type,
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
@@ -108,6 +116,7 @@ class TenantController extends Controller
     {
         $data = [
             'category_id' => $request->category_id,
+            'type' => $request->type,
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
