@@ -118,7 +118,7 @@ class TenantSeeder extends Seeder
             "full hardy",
             "gacha corner",
             "gino mariani",
-            "gita gemilang",
+            "gita gemilang", // belum
             "gnc",
             "hello the healthy brew",
             "herborist",
@@ -126,13 +126,13 @@ class TenantSeeder extends Seeder
             "iqos",
             "kanini",
             "kcmtku",
-            "london bus",
-            "london taxi bike",
+            "london bus", //belum
+            "london taxi bike", //belum
             "lucky cheese",
             "marquisa",
-            "moncherie",
+            "moncherie", //belum
             "montato",
-            "motor train",
+            "motor train", //belum
             "nespresso",
             "oni ola",
             "orlenalycious",

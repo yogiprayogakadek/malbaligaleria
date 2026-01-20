@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid()->unique()->index();
             $table->string('name', 100);
+            $table->string('color_zone', 50);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

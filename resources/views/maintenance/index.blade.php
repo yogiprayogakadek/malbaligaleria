@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Under Maintenance - Mal Bali Galeria</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
@@ -62,8 +65,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .logo {
@@ -72,9 +82,17 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .logo img {
@@ -131,9 +149,17 @@
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(44, 95, 93, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(44, 95, 93, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(44, 95, 93, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(44, 95, 93, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(44, 95, 93, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(44, 95, 93, 0);
+            }
         }
 
         .contact-info {
@@ -180,18 +206,21 @@
             h1 {
                 font-size: 28px;
             }
+
             .container {
                 padding: 30px 20px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-pattern"></div>
-    
+
     <div class="container">
         <div class="logo">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="Mal Bali Galeria" onerror="this.src='{{ asset('assets/images/logo_bw.png') }}'">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="Mal Bali Galeria"
+                onerror="this.src='{{ asset('assets/images/logo.png') }}'">
         </div>
 
         <div class="status-badge">
@@ -201,12 +230,12 @@
 
         <h1>Under Maintenance</h1>
         <div class="divider"></div>
-        
+
         <p>
             We are currently working on making our website better for you.<br>
             Please check back soon for an enhanced experience.
         </p>
-        
+
         <p>
             In the meantime, you can visit us directly at<br>
             <strong>Mal Bali Galeria</strong>
@@ -217,4 +246,5 @@
         </div>
     </div>
 </body>
+
 </html>

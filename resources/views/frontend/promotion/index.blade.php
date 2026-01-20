@@ -18,7 +18,7 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
                 {{-- <h1>Mal Bali Galeria</h1>

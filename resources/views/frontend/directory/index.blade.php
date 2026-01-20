@@ -18,7 +18,7 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
                 {{-- <h1>Mal Bali Galeria</h1>
@@ -283,28 +283,15 @@
                             </div>
 
                             <div class="map-legend">
-                                <h4>Map Legend</h4>
+                                <h4>Color Zone</h4>
                                 <div class="legend-grid">
-                                    <div class="legend-item">
-                                        <div class="legend-color" style="background: #ff6b9d;"></div>
-                                        <span class="legend-text">Fashion & Apparel</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <div class="legend-color" style="background: #c8a2c8;"></div>
-                                        <span class="legend-text">Fashion & Accessories</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <div class="legend-color" style="background: #4a90e2;"></div>
-                                        <span class="legend-text">Department Store</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <div class="legend-color" style="background: #f4d03f;"></div>
-                                        <span class="legend-text">Supermarket</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <div class="legend-color" style="background: #7cb342;"></div>
-                                        <span class="legend-text">Food & Beverage</span>
-                                    </div>
+                                    @foreach ($categories as $cat)
+                                        <div class="legend-item">
+                                            <div class="legend-color" style="background: {{ $cat->color_zone }};">
+                                            </div>
+                                            <span class="legend-text">{{ $cat->name }}</span>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

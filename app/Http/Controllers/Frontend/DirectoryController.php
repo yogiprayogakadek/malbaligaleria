@@ -20,7 +20,8 @@ class DirectoryController extends Controller
 
     public function index()
     {
-        $categories = $this->categoryService->getAll(['id', 'name']);
+        $categories = $this->categoryService->getAll(['id', 'name', 'color_zone']);
+
         return view('frontend.directory.index', compact('categories'));
     }
 

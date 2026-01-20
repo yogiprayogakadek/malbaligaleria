@@ -17,6 +17,7 @@ class Category extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'color_zone',
         'is_active'
     ];
 

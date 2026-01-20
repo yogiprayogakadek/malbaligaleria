@@ -262,10 +262,10 @@ Route::get('/test-email', function () {
 });
 
 
-Route::get('quote', function () {
-    return view('backend.admin.quotation');
+Route::get('/mod', function () {
+    return view('subdomain.mod.index');
 });
 
-Route::get('quote-v2', function () {
-    return view('quotation_v2');
-});
+
+// Use Route
+require __DIR__ . '/custom/mod.php';

@@ -18,7 +18,7 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" class="loader-logo-image"
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
                 {{-- <h1>Mal Bali Galeria</h1>
@@ -58,7 +58,7 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo" id="headerLogo"
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" id="headerLogo"
                     style="height: 30px; width: auto;">
             </a>
         </div>
@@ -130,7 +130,7 @@
     <section class="about-section reveal" id="about">
         <div class="about-container">
             <div class="about-logo">
-                <img src="{{ asset('assets/images/logo_bw.png') }}" alt="MBG Logo">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo">
             </div>
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">

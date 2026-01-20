@@ -15,16 +15,27 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Book',
-            'Food',
-            'Travel',
-            'Uniform'
+            'IT, Games & Gadgets',
+            'Anchor Tenant',
+            'Fashion, Beauty & Accessories',
+            'Food & Beverages',
+            'Island Counter',
+            'Household Goods & Furniture',
+            'Bookstore',
+            'Sport & Swim Apparel',
+            'Kids & Play Zone',
+            'Salon, Office & Services',
+            'Convetion Hall / Museum',
+            'Drugs & Pharmacy'
         ];
 
         foreach ($categories as $category) {
+            $randomNumber = mt_rand(0, 0xFFFFFF);
+            $hexColor = '#' . sprintf('%06x', $randomNumber);
             $model = Category::firstOrNew([
                 'uuid' => (string) Str::uuid(),
-                'name' => $category
+                'name' => $category,
+                'color_zone' => $hexColor
             ]);
 
             $model->save();

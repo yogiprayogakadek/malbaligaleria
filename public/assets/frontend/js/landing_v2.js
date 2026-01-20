@@ -73,12 +73,12 @@ window.addEventListener("scroll", () => {
     if (currentScroll > 100) {
         header.classList.add("scrolled");
         if (headerLogo) {
-             headerLogo.src = headerLogo.src.replace("logo_bw.png", "logo.png");
+             headerLogo.src = headerLogo.src.replace("logo.png", "logo.png");
         }
     } else {
         header.classList.remove("scrolled");
         if (headerLogo) {
-             headerLogo.src = headerLogo.src.replace("logo.png", "logo_bw.png");
+             headerLogo.src = headerLogo.src.replace("logo.png", "logo.png");
         }
     }
 
