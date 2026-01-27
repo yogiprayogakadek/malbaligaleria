@@ -35,6 +35,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Page</th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Payload</th>
@@ -66,6 +67,10 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'pages',
+                        name: 'pages'
                     },
                     {
                         data: 'name',

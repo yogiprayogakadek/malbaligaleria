@@ -5,23 +5,26 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Services\CategoryService;
 use App\Services\PromoService;
+use App\Services\SettingService;
 use Illuminate\Http\Request;
 
 class PromotionPageController extends Controller
 {
-    protected $categoryService, $promoService;
+    protected $categoryService, $promoService, $settingService;
 
-    public function __construct(CategoryService $categoryService, PromoService $promoService)
+    public function __construct(CategoryService $categoryService, PromoService $promoService, SettingService $settingService)
     {
         $this->categoryService = $categoryService;
         $this->promoService = $promoService;
+        $this->settingService = $settingService;
     }
 
     public function index()
     {
+        $setting = $this->settingService->getByPage('promo', ['payload']);
         $categories = $this->categoryService->getAll(['id', 'name']);
 
-        return view('frontend.promotion.index', compact('categories'));
+        return view('frontend.promotion.index', compact('categories', 'setting'));
     }
 
     public function loadPromotion()

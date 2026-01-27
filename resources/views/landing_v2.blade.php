@@ -371,19 +371,19 @@
                     <div class="floor-list-wrapper" id="floorListWrapper">
                         <div class="floor-item active">
                             <h4>Level 1</h4>
-                            <p>Electronics, Books, Sports</p>
+                            <p>IT, Games & Gadgets, Fashiion, Food, Island, and etc</p>
                         </div>
                         <div class="floor-item">
                             <h4>Level 2</h4>
-                            <p>Restaurants, Cafés, Food Court</p>
+                            <p>Fashion, Kids & Play Zone, Salon, Drugs & Pharmacy, and etc</p>
                         </div>
                         <div class="floor-item">
                             <h4>New Store</h4>
-                            <p>Fashion, Accessories, Cosmetics</p>
+                            <p>Fashion, Food & Beverage, Island, and etc </p>
                         </div>
                         <div class="floor-item">
                             <h4>All Floor</h4>
-                            <p>Entertainment, Cinema, Kids Zone</p>
+                            <p>All tenants</p>
                         </div>
                     </div>
 

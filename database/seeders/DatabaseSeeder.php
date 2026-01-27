@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             CategorySeeder::class,
             TenantSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

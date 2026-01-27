@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
+            $table->string('pages', 100);
+            $table->string('name', 100);
             $table->json('payload');
             $table->string('description')->nullable();
+            $table->enum('type', ['default', 'custom'])->default('custom');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

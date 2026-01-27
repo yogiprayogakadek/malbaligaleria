@@ -10,7 +10,9 @@ class Setting extends Model
         'name',
         'payload',
         'description',
-        'is_active'
+        'is_active',
+        'type',
+        'pages'
     ];
 
     protected $casts = [

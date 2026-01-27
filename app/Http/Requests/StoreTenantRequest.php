@@ -23,11 +23,11 @@ class StoreTenantRequest extends FormRequest
     {
         return [
             'name'              => 'required|string|max:255|unique:tenants,name',
-            'phone'             => 'required|string|max:20',
-            'email'             => 'required|email|max:255',
-            'website'           => 'required|url|max:255',
+            'phone'             => 'nullable|string|max:20',
+            'email'             => 'nullable|email|max:255',
+            'website'           => 'nullable|url|max:255',
             'logo'              => 'required|image|mimes:png,jpg,jpeg,jfif|max:2048',
-            'description'       => 'required|string',
+            'description'       => 'nullable|string',
             'position_x'        => 'required|numeric',
             'position_y'        => 'required|numeric',
             'floor'             => 'required|numeric|between:1,2',

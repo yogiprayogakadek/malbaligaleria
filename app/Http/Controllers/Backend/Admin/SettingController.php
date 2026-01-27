@@ -4,15 +4,23 @@ namespace App\Http\Controllers\Backend\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Services\SettingService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class SettingController extends Controller
 {
+    protected $settingService;
+
+    public function __construct(SettingService $settingService)
+    {
+        $this->settingService = $settingService;
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $settings = Setting::latest();
+            $settings = $this->settingService->getAll(['id', 'name', 'pages', 'description', 'payload', 'is_active']);
 
             return DataTables::of($settings)
                 ->addIndexColumn()
@@ -38,27 +46,75 @@ class SettingController extends Controller
         return view('backend.admin.setting.index');
     }
 
-    private function getAvailableKeys()
-    {
-        return [
-            'site_title',
-            'site_description',
-            'company_address',
-            'contact_email',
-            'contact_phone',
-            'social_facebook',
-            'social_instagram',
-            'maintenance_mode'
-        ];
-    }
-
     public function create()
     {
-        $availableKeys = $this->getAvailableKeys();
-        return view('backend.admin.setting.create', compact('availableKeys'));
+        $availablePages = $this->settingService->availablePages();
+        return view('backend.admin.setting.create', compact('availablePages'));
     }
 
     public function store(Request $request)
+    {
+        $validate = [
+            'name' => 'required|string|unique:settings,name',
+            'description' => 'required|string',
+        ];
+
+        if ($request->pages == "home") {
+            $validate = array_merge($validate, [
+                'site_title' => 'nullable|string',
+                'hero_background' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048',
+                'hero_title' => 'nullable|string',
+                'hero_subtitle' => 'nullable|string',
+            ]);
+        } elseif ($request->pages == 'others') {
+            $validate = array_merge($validate, [
+                'company_address' => 'nullable|string',
+                'contact_email' => 'nullable|string|email',
+                'contact_phone' => 'nullable|numeric',
+                'social_facebook' => 'nullable|url',
+                'social_instagram' => 'nullable|url',
+                'logo' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048',
+            ]);
+        } elseif (in_array($request->pages, ['mal directory', 'event', 'promo'])) {
+            $validate = array_merge($validate, [
+                'site_title' => 'nullable|string',
+                'page_title' => 'nullable|string',
+                'page_subtitle' => 'nullable|string',
+            ]);
+        }
+
+        $request->validate($validate);
+
+        $isActive = $request->has('is_active');
+        if ($isActive) {
+            Setting::where('pages', $request->pages)->where('is_active', true)->update(['is_active' => false]);
+        } else {
+            if (Setting::count() === 0) {
+                $isActive = true;
+            }
+        }
+
+        $data = [
+            'pages' => $request->pages,
+            'name' => $request->name,
+            'description' => $request->description,
+            'type' => 'custom',
+            'is_active' => $isActive
+        ];
+
+        $data['payload'] = collect($this->settingService->availablePages()[$request->pages])->keys()->mapWithKeys(fn($key) => [
+            $key => $request[$key] ?? null
+        ])->filter(fn($value) => !is_null($value))
+            ->toArray();
+
+        // dd($data);
+
+        $this->settingService->create($data);
+
+        return redirect()->route('admin.setting.index')->with('success', 'Setting created successfully.');
+    }
+
+    public function store2(Request $request)
     {
         $request->validate([
             'name' => 'required|string|unique:settings,name',
@@ -81,7 +137,7 @@ class SettingController extends Controller
             Setting::where('is_active', true)->update(['is_active' => false]);
         } else {
             if (Setting::count() === 0) {
-                 $isActive = true;
+                $isActive = true;
             }
         }
 
@@ -98,8 +154,7 @@ class SettingController extends Controller
     public function edit($id)
     {
         $setting = Setting::findOrFail($id);
-        $availableKeys = $this->getAvailableKeys();
-        
+
         // Prepare payload for display (as string for textarea)
         $payloadVal = $setting->payload;
         if (is_array($payloadVal) || is_object($payloadVal)) {
@@ -130,13 +185,13 @@ class SettingController extends Controller
         } else {
             // Setting this to inactive
             if ($setting->is_active) {
-                // Check if any other is active? The requirement is "Only 1 setting active". 
+                // Check if any other is active? The requirement is "Only 1 setting active".
                 // So if this IS the active one, and we turn it off, then 0 will be active.
                 // Requirement: "ketika hanya ada 1 setting yang aktif yang user ingin menonaktifkan semuanya maka tampilkan notifikasi tidak bisa"
                 // So if this is the ONLY active one, we prevent it.
                 $otherActiveCount = Setting::where('is_active', true)->where('id', '!=', $id)->count();
                 if ($otherActiveCount === 0) {
-                     return back()->with('error', 'Cannot deactivate the only active setting (Cannot disable all settings). One must be active.');
+                    return back()->with('error', 'Cannot deactivate the only active setting (Cannot disable all settings). One must be active.');
                 }
             }
         }

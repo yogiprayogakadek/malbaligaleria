@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promotions | Mal Bali Galeria</title>
+    <title>{{ $setting->payload['site_title'] ?? 'Promotions' }} | Mal Bali Galeria</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -104,8 +104,8 @@
         <div class="promotion-container">
             <!-- Page Header -->
             <div class="promotion-header">
-                <h1>Current Promotions</h1>
-                <p>Discover amazing deals and offers from our tenants</p>
+                <h1>{{ $setting->payload['page_title'] ?? 'Current Promotions' }}</h1>
+                <p>{{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}</p>
             </div>
 
             <!-- Content Layout -->
