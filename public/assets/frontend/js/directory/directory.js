@@ -102,14 +102,7 @@ async function loadTesting()
 }
 
 // ===== CATEGORY COLOR MAPPING =====
-async function getCategoryColor(category) {
-    const dataCategory = (await loadCategories()).map(item => {
-        const randomColor = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-        return {
-            [item.name]: randomColor
-        };
-    });
-
+function getCategoryColor(category) {
     const colorMap = {
         "Fashion & Apparel": "#ff6b9d",
         "Fashion & Accessories": "#c8a2c8",
@@ -1025,7 +1018,13 @@ function updateMapView() {
         // Process tenants for potential clustering
         const allPositions = currentFloorTenants
             .map((tenant) => {
-                if (tenant.mapCoords && tenant.mapOriginalSize) {
+                // Check if tenant has valid coordinates (not '-' or null/undefined)
+                if (tenant.mapCoords && 
+                    tenant.mapOriginalSize && 
+                    typeof tenant.mapCoords.x === 'number' && 
+                    typeof tenant.mapCoords.y === 'number' &&
+                    tenant.mapCoords.x !== '-' &&
+                    tenant.mapCoords.y !== '-') {
                     const position = calculateResponsivePosition(
                         tenant.mapCoords,
                         tenant.mapOriginalSize,
@@ -1132,10 +1131,14 @@ function updateMapView() {
                 pin.style.position = "absolute";
                 pin.dataset.tenant = JSON.stringify(tenant);
 
-                pin.addEventListener("mouseenter", function () {
-                    const tenantData = JSON.parse(this.dataset.tenant);
-                    showSimpleTooltip(tenantData.name, this);
-                });
+                // Note: Regular pins use CSS .map-pin-label for tooltip
+                // Only logo pins (when searching) don't have label, so they might need tooltip
+                if (searchTerm && searchTerm.trim() !== '') {
+                    pin.addEventListener("mouseenter", function () {
+                        const tenantData = JSON.parse(this.dataset.tenant);
+                        showSimpleTooltip(tenantData.name, this);
+                    });
+                }
             }
 
             pin.addEventListener("mouseleave", hideMapTooltip);

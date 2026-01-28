@@ -96,7 +96,8 @@ class DirectoryController extends Controller
                 )
                 : asset('assets/images/no_image.jpg');
 
-            return [
+            // Prepare base tenant data
+            $tenantData = [
                 'name' => $data['name'],
                 'category' => $data['category']['name'],
                 'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
@@ -104,23 +105,32 @@ class DirectoryController extends Controller
                 'logo' => $logoUrl,
                 'hours' => "10:00 AM - 10:00 PM",
                 'description' => $data['description'],
-
-                'mapCoords' => [
-                    'x' => $data['map_coords']['x'] ?? '-',
-                    'y' => $data['map_coords']['y'] ?? '-',
-                ],
-
-                'mapOriginalSize' => [
-                    'width' => $data['map_original_size']['width']
-                        ?? ($data['map_coords']['floor'] == 1 ? 1216 : 1024),
-                    'height' => $data['map_original_size']['height']
-                        ?? ($data['map_coords']['floor'] == 1 ? 880 : 1024),
-                ],
-
                 'images' => [$logoUrl],
             ];
-        });
 
+            // Only add mapCoords if x and y are valid numbers
+            $hasValidCoords = isset($data['map_coords']['x']) && 
+                            isset($data['map_coords']['y']) &&
+                            is_numeric($data['map_coords']['x']) && 
+                            is_numeric($data['map_coords']['y']);
+
+            if ($hasValidCoords) {
+                $tenantData['mapCoords'] = [
+                    'x' => (float) $data['map_coords']['x'],
+                    'y' => (float) $data['map_coords']['y'],
+                ];
+
+                $tenantData['mapOriginalSize'] = [
+                    'width' => $data['map_original_size']['width']
+                        ?? ($data['map_coords']['floor'] == 1 ? 2084 : 2130),
+                    'height' => $data['map_original_size']['height']
+                        ?? ($data['map_coords']['floor'] == 1 ? 4788 : 4728),
+                ];
+            }
+
+            return $tenantData;
+        });
+        // dd($tenants);
 
         return response()->json($tenants);
     }

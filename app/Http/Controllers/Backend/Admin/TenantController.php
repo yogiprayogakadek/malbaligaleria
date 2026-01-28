@@ -22,6 +22,9 @@ class TenantController extends Controller
 
     public function index(Request $request)
     {
+        $tenants = $this->tenantService->getAll(
+            ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type'],
+        );
         if ($request->ajax()) {
             $tenants = $this->tenantService->getAll(
                 ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type'],
@@ -47,7 +50,7 @@ class TenantController extends Controller
                         : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->addColumn('map_coords', function ($row) {
-                    $floor = $row->map_coords?->floor ?? null;
+                    $floor = $row->map_coords['floor'] ?? null;
 
                     return $floor
                         ? ($floor === 1 ? "{$floor}st Floor" : "{$floor}nd Floor")
