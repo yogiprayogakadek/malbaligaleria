@@ -193,38 +193,33 @@
 
                         <div class="filter-divider"></div>
 
-                        <!-- Floor Filter -->
-                        <div class="filter-group">
-                            <label>Floor Level</label>
-                            <div class="filter-input styled-select">
-                                <select id="floorFilter">
-                                    <option value="1st Floor">1st Floor</option>
-                                    <option value="2nd Floor">2nd Floor</option>
-                                </select>
+                        <!-- Mobile Filter Row Container -->
+                        <div class="filter-row-mobile">
+                            <!-- Floor Filter -->
+                            <div class="filter-group">
+                                <label>Floor Level</label>
+                                <div class="filter-input styled-select">
+                                    <select id="floorFilter">
+                                        <option value="">Floor</option>
+                                        <option value="1st Floor">1st Floor</option>
+                                        <option value="2nd Floor">2nd Floor</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="filter-divider"></div>
+                            <div class="filter-divider mobile-hidden"></div>
 
-                        <!-- Category Filter -->
-                        <div class="filter-group">
-                            <label>Categories</label>
-                            <div class="filter-input styled-select">
-                                <select id="categoryFilter">
-                                    <option value="">All Categories</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->name }}">{{ $category->name }}</option>
-                                    @endforeach
-                                    {{-- <option value="Fashion & Apparel">Fashion & Apparel</option>
-                                    <option value="Fashion & Accessories">Fashion & Accessories</option>
-                                    <option value="Beauty & Health">Beauty & Health</option>
-                                    <option value="Jewelry & Watches">Jewelry & Watches</option>
-                                    <option value="Food & Beverage">Food & Beverage</option>
-                                    <option value="Home & Lifestyle">Home & Lifestyle</option>
-                                    <option value="Department Store">Department Store</option>
-                                    <option value="Supermarket">Supermarket</option>
-                                    <option value="Books & Stationery">Books & Stationery</option> --}}
-                                </select>
+                            <!-- Category Filter -->
+                            <div class="filter-group">
+                                <label>Categories</label>
+                                <div class="filter-input styled-select">
+                                    <select id="categoryFilter">
+                                        <option value="">Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 

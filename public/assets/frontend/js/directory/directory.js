@@ -973,9 +973,31 @@ function updateMapView() {
     const total2ndFloor = floorCounts["2nd Floor"] || 0;
 
     mapContainer.innerHTML = `
-                <div class="map-wrapper" id="mapWrapper" style="position: relative;">
+                <div class="map-wrapper" id="mapWrapper" style="position: relative; width: 100%;">
                     <img src="${floorMaps[floorKey]}" alt="Mall Floor Plan" id="floorMapImage" style="width: 100%; height: auto; display: block;">
                 </div>
+                
+                <!-- Zoom Controls -->
+                <div class="map-zoom-controls">
+                    <button class="zoom-btn" id="zoomInBtn" title="Zoom In">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <button class="zoom-btn" id="zoomOutBtn" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <button class="zoom-btn" id="resetZoomBtn" title="Reset View">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                            <path d="M3 3v5h5"></path>
+                        </svg>
+                    </button>
+                </div>
+
                 <div class="map-stats">
                     <div class="map-stats-number" id="mapStatsNumber">${currentFloorTenants.length}</div>
                     <div class="map-stats-label">Stores on this floor</div>
@@ -999,6 +1021,16 @@ function updateMapView() {
 
     // Update tenant list in sidebar
     updateTenantList(currentFloorTenants);
+
+    // Trigger mobile layout adjustment after new elements are added
+    if (typeof adjustMobileLayout === 'function') {
+        adjustMobileLayout();
+    } else {
+        // Fallback or wait for function definition (it hangs off window/scope if defined later, but here it's inside same scope)
+        // Since function is defined at bottom of scope, we need to hoist or call it after definition.
+        // JS functions declarations are hoisted.
+        setTimeout(adjustMobileLayout, 0); 
+    }
 
     const mapImage = document.getElementById("floorMapImage");
     const mapWrapper = document.getElementById("mapWrapper");
@@ -1044,7 +1076,7 @@ function updateMapView() {
 
         // Group by position for clustering (markers that are close together)
         const positionGroups = {};
-        const clusteringDistance = 20; // pixels threshold for clustering
+        const clusteringDistance = 0; // Disabled clustering as per request
 
         allPositions.forEach((pos) => {
             let foundGroup = false;
@@ -1097,19 +1129,18 @@ function updateMapView() {
                 pin = document.createElement("div");
 
                 // Check if searching (active search term)
+                // Check if searching (active search term)
                 if (searchTerm && searchTerm.trim() !== '') {
                     pin.className = "map-pin-logo";
-                    let offset = 25; // Default for 50px
 
                     // If multiple tenants found, use smaller logo
                     if (currentFloorTenants.length > 1) {
                         pin.classList.add("small");
-                        offset = 17.5; // Half of 35px
                     }
 
                     // Center the pin
-                    pin.style.left = (groupX - offset) + "px";
-                    pin.style.top = (groupY - offset) + "px";
+                    pin.style.left = groupX + "px";
+                    pin.style.top = groupY + "px";
 
                     const img = document.createElement("img");
                     img.src = tenant.logo;
@@ -1178,9 +1209,176 @@ function updateMapView() {
         resizeTimeout = setTimeout(addPins, 150);
     };
 
-    window.removeEventListener("resize", window._mapResizeHandler);
-    window._mapResizeHandler = resizeHandler;
     window.addEventListener("resize", resizeHandler);
+
+    // ===== PAN & ZOOM IMPLEMENTATION (BUTTONS ONLY + DRAG PAN) =====
+    let state = {
+        panning: false,
+        scale: 1,
+        pointX: 0,
+        pointY: 0,
+        startX: 0,
+        startY: 0
+    };
+    
+    // Transform settings
+    const minScale = 1;
+    const maxScale = 4;
+    const zoomStep = 0.5;
+    
+    function setTransform() {
+        mapWrapper.style.transform = `translate(${state.pointX}px, ${state.pointY}px) scale(${state.scale})`;
+    }
+
+    // Initialize position
+    function resetMap() {
+        state = { panning: false, scale: 1, pointX: 0, pointY: 0, startX: 0, startY: 0 };
+        setTransform();
+    }
+
+    // Button Listeners
+    document.getElementById('zoomInBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.scale < maxScale) {
+            state.scale = Math.min(state.scale + zoomStep, maxScale);
+            setTransform();
+        }
+    });
+
+    document.getElementById('zoomOutBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.scale > minScale) {
+            state.scale = Math.max(state.scale - zoomStep, minScale);
+            // Center map if zoomed out fully
+            if (state.scale === 1) {
+                state.pointX = 0;
+                state.pointY = 0;
+            }
+            setTransform();
+        }
+    });
+
+    document.getElementById('resetZoomBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        resetMap();
+    });
+
+    // Cleanup existing listeners
+    const cleanupDrag = () => {
+        mapContainer.onmousedown = null;
+        mapContainer.onmouseleave = null;
+        mapContainer.onmouseup = null;
+        mapContainer.onmousemove = null;
+        mapContainer.ontouchstart = null;
+        mapContainer.ontouchend = null;
+        mapContainer.ontouchmove = null;
+        mapContainer.onwheel = null;
+    };
+    cleanupDrag();
+
+    // Mouse Events (Pan)
+    mapContainer.addEventListener('mousedown', (e) => {
+        // e.preventDefault();
+        state.panning = true;
+        state.startX = e.clientX - state.pointX;
+        state.startY = e.clientY - state.pointY;
+        mapContainer.style.cursor = 'grabbing';
+    });
+
+    mapContainer.addEventListener('mousemove', (e) => {
+        if (!state.panning) return;
+        e.preventDefault();
+        state.pointX = (e.clientX - state.startX);
+        state.pointY = (e.clientY - state.startY);
+        setTransform();
+    });
+
+    mapContainer.addEventListener('mouseup', () => {
+        state.panning = false;
+        mapContainer.style.cursor = 'grab';
+    });
+
+    mapContainer.addEventListener('mouseleave', () => {
+        state.panning = false;
+        mapContainer.style.cursor = 'grab';
+    });
+
+    // Touch Events (Pan Only)
+    mapContainer.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            state.panning = true;
+            state.startX = e.touches[0].clientX - state.pointX;
+            state.startY = e.touches[0].clientY - state.pointY;
+        }
+    });
+
+    mapContainer.addEventListener('touchmove', (e) => {
+        if (!state.panning || e.touches.length !== 1) return;
+        e.preventDefault(); // Prevent page scroll while panning
+        state.pointX = (e.touches[0].clientX - state.startX);
+        state.pointY = (e.touches[0].clientY - state.startY);
+        setTransform();
+    });
+
+    mapContainer.addEventListener('touchend', () => {
+        state.panning = false;
+    });
+    // ===== MOBILE LAYOUT ADJUSTMENTS =====
+    function adjustMobileLayout() {
+        const isMobile = window.innerWidth <= 768;
+        const mapLegend = document.querySelector('.map-legend');
+        const mapStats = document.querySelector('.map-stats');
+        const mapTenantList = document.getElementById('mapTenantList');
+        const mapBody = document.querySelector('.map-body'); // Container for legend
+
+        if (isMobile) {
+            // Move Stats to Legend (if exists and not already there)
+            if (mapLegend && mapStats && !mapLegend.contains(mapStats)) {
+                mapLegend.appendChild(mapStats);
+            }
+            
+            // Move Tenant List Below Legend (if exists and not already there)
+            if (mapTenantList && mapLegend) {
+                // Insert after mapLegend
+                mapLegend.parentNode.insertBefore(mapTenantList, mapLegend.nextSibling);
+                mapTenantList.style.display = 'block'; // Ensure it's visible
+            }
+        } else {
+            // Restore for Desktop
+            // Move Stats back to mapContainer (after zoom controls)
+            const mapZoomControls = document.querySelector('.map-zoom-controls');
+            if (mapStats && mapZoomControls && mapZoomControls.nextSibling !== mapStats) {
+                mapZoomControls.parentNode.insertBefore(mapStats, mapZoomControls.nextSibling);
+            }
+
+            // Move Tenant List back to original place (sidebar)
+            // Note: Original place is inside filter-body, after filter-stats
+            const filterStats = document.querySelector('.filter-stats');
+            if (mapTenantList && filterStats) {
+                filterStats.parentNode.insertBefore(mapTenantList, filterStats.nextSibling);
+            }
+        }
+    }
+
+    // Call on load and resize
+    window.addEventListener('load', adjustMobileLayout);
+    window.addEventListener('resize', () => {
+        adjustMobileLayout();
+        // Existing resize handler
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(addPins, 150);
+    });
+
+    // Also call after map update
+    const originalAddPins = addPins;
+    // We can't easily hook into addPins causing rewrite, so we ensure 
+    // we run layout check after DOM updates if needed.
+    // However, mapStats is recreated in innerHTML, so we must re-run adjustMobileLayout
+    // whenever mapContainer.innerHTML is updated.
+    
+    // Let's modify the mapContainer update logic to preserve stats element or move it immediately
+    // For now, simply calling adjustMobileLayout() at the end of the main injection block (around line 1030) is best.
+
 }
 
 // ===== UPDATE TENANT LIST IN SIDEBAR =====
