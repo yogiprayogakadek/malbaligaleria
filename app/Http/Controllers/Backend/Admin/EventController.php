@@ -21,7 +21,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'is_active']);
+            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active']);
 
             return DataTables::of($events)
                 ->addIndexColumn()
@@ -60,7 +60,12 @@ class EventController extends Controller
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'description' => $request->description,
-            // 'is_active' => $request->is_active
+            'location' => $request->location,
+            'organizer' => $request->organizer,
+            'is_paid' => $request->is_paid,
+            'price' => $request->price,
+            'target_audience' => $request->target_audience,
+            'highlights' => $request->highlights,
         ];
 
         $this->eventService->create($data);
@@ -70,7 +75,7 @@ class EventController extends Controller
 
     public function edit($uuid)
     {
-        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'is_active']);
+        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active']);
 
         return view('backend.admin.event.edit', compact('event'));
     }
@@ -84,6 +89,12 @@ class EventController extends Controller
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'description' => $request->description,
+            'location' => $request->location,
+            'organizer' => $request->organizer,
+            'is_paid' => $request->is_paid,
+            'price' => $request->price,
+            'target_audience' => $request->target_audience,
+            'highlights' => $request->highlights,
             'is_active' => $request->is_active
         ];
 

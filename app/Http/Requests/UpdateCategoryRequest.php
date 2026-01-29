@@ -29,6 +29,10 @@ class UpdateCategoryRequest extends FormRequest
                 'max:100',
                 Rule::unique('categories', 'name')->ignore($this->uuid, 'uuid')
             ],
+            'color_zone' => [
+                'required',
+                'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+            ],
             'is_active' => 'required|numeric|between:0,1'
         ];
     }

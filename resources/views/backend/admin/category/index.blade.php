@@ -30,6 +30,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Name</th>
+                                    <th>Color Zone</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -62,6 +63,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'color_zone',
+                        name: 'color_zone'
                     },
                     {
                         data: 'is_active',

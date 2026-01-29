@@ -87,6 +87,100 @@
                             </div>
                         </div>
 
+                        {{-- Location --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="location" class="form-label col-sm-3 col-form-label">Location</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control @error('location') is-invalid @enderror"
+                                    id="location" name="location" placeholder="Enter event location (e.g. Main Atrium)"
+                                    value="{{ old('location') }}">
+                                @error('location')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Entrance Fee & Price --}}
+                        <div class="mb-4 row align-items-center">
+                            <div class="row">
+                                {{-- Entrance Fee --}}
+                                <div class="col-sm-12" id="entrance_fee_col">
+                                    <label for="is_paid">Entrance Fee</label>
+                                    <select class="form-select @error('is_paid') is-invalid @enderror" id="is_paid"
+                                        name="is_paid">
+                                        <option value="0" {{ old('is_paid') == '0' ? 'selected' : '' }}>Free</option>
+                                        <option value="1" {{ old('is_paid') == '1' ? 'selected' : '' }}>Paid</option>
+                                    </select>
+                                    @error('is_paid')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Price (Conditional) --}}
+                                <div class="col-sm-6" id="price_col" style="display: none;">
+                                    <label for="price">Price</label>
+                                    <input type="text" class="form-control @error('price') is-invalid @enderror"
+                                        id="price" name="price" placeholder="Enter price amount"
+                                        value="{{ old('price') }}">
+                                    @error('price')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Organizer --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="organizer" class="form-label col-sm-3 col-form-label">Organizer</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control @error('organizer') is-invalid @enderror"
+                                    id="organizer" name="organizer" placeholder="Enter organizer name"
+                                    value="{{ old('organizer') }}">
+                                @error('organizer')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Target Audience --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="target_audience" class="form-label col-sm-3 col-form-label">Target
+                                Audience</label>
+                            <div class="col-sm-12">
+                                <select class="form-select @error('target_audience') is-invalid @enderror"
+                                    id="target_audience" name="target_audience">
+                                    <option value="">Select Target Audience</option>
+                                    <option value="General" {{ old('target_audience') == 'General' ? 'selected' : '' }}>
+                                        General</option>
+                                    <option value="Family" {{ old('target_audience') == 'Family' ? 'selected' : '' }}>
+                                        Family</option>
+                                    <option value="Kids" {{ old('target_audience') == 'Kids' ? 'selected' : '' }}>Kids
+                                    </option>
+                                    <option value="Adults" {{ old('target_audience') == 'Adults' ? 'selected' : '' }}>
+                                        Adults</option>
+                                    <option value="Teenagers"
+                                        {{ old('target_audience') == 'Teenagers' ? 'selected' : '' }}>Teenagers</option>
+                                </select>
+                                @error('target_audience')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Highlights --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="highlights" class="form-label col-sm-3 col-form-label">Highlights</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control @error('highlights') is-invalid @enderror"
+                                    id="highlights" name="highlights"
+                                    placeholder="Enter highlights (e.g. Live Music & Sale)"
+                                    value="{{ old('highlights') }}">
+                                @error('highlights')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         {{-- Submit --}}
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary hstack gap-6 float-end">
@@ -117,6 +211,21 @@
                 altInput: true,
                 altFormat: "h:i K"
             });
+
+            // Handle Entrance Fee Change
+            $('#is_paid').change(function() {
+                if ($(this).val() == '1') {
+                    $('#entrance_fee_col').removeClass('col-sm-12').addClass('col-sm-6');
+                    $('#price_col').show();
+                } else {
+                    $('#entrance_fee_col').removeClass('col-sm-6').addClass('col-sm-12');
+                    $('#price_col').hide();
+                    $('#price').val('');
+                }
+            });
+
+            // Trigger on load
+            $('#is_paid').trigger('change');
         });
     </script>
 @endpush

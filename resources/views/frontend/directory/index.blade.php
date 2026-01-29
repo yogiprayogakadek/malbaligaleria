@@ -242,8 +242,67 @@
 
                 <!-- Tenant Content -->
                 <div class="tenant-content">
+                    <!-- Skeleton Loading for Tenant Grid -->
+                    <div class="tenant-grid skeleton-container" id="skeletonGrid">
+                        <!-- Repeat 6 skeleton cards -->
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-content">
+                                <div class="skeleton skeleton-card-badge"></div>
+                                <div class="skeleton skeleton-card-title"></div>
+                                <div class="skeleton skeleton-card-category"></div>
+                                <div class="skeleton skeleton-card-floor"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-content">
+                                <div class="skeleton skeleton-card-badge"></div>
+                                <div class="skeleton skeleton-card-title"></div>
+                                <div class="skeleton skeleton-card-category"></div>
+                                <div class="skeleton skeleton-card-floor"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-content">
+                                <div class="skeleton skeleton-card-badge"></div>
+                                <div class="skeleton skeleton-card-title"></div>
+                                <div class="skeleton skeleton-card-category"></div>
+                                <div class="skeleton skeleton-card-floor"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-content">
+                                <div class="skeleton skeleton-card-badge"></div>
+                                <div class="skeleton skeleton-card-title"></div>
+                                <div class="skeleton skeleton-card-category"></div>
+                                <div class="skeleton skeleton-card-floor"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-content">
+                                <div class="skeleton skeleton-card-badge"></div>
+                                <div class="skeleton skeleton-card-title"></div>
+                                <div class="skeleton skeleton-card-category"></div>
+                                <div class="skeleton skeleton-card-floor"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-card">
+                            <div class="skeleton-card-image"></div>
+                            <div class="skeleton-card-content">
+                                <div class="skeleton skeleton-card-badge"></div>
+                                <div class="skeleton skeleton-card-title"></div>
+                                <div class="skeleton skeleton-card-category"></div>
+                                <div class="skeleton skeleton-card-floor"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Tenant Grid -->
-                    <div class="tenant-grid" id="tenantGrid">
+                    <div class="tenant-grid" id="tenantGrid" style="display: none;">
                         <!-- Tenants will be dynamically inserted here -->
                     </div>
 

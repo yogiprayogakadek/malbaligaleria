@@ -43,7 +43,7 @@ class PromotionPageController extends Controller
                 'tenantLogo' => asset('storage/' . $data->tenant->logo),
                 'category' => $data->tenant->category->name,
                 'floor' => $data->tenant['map_coords']['floor'] == 1 ? $data->tenant['map_coords']['floor'] . 'st Floor' : $data->tenant['map_coords']['floor'] . 'nd Floor',
-                'unit' => $data->tenant->map_coords['unit'],
+                'unit' => $data->tenant->map_coords['unit'] ?? '-',
                 'validFrom' => $data->start_date,
                 'validUntil' => $data->end_date,
                 'createdAt' => $data->created_at,

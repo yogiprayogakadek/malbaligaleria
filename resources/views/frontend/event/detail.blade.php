@@ -12,8 +12,8 @@
         rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
-    <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/detail.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() + 50 }}">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/detail.css') }}?v={{ time() + 50 }}">
 </head>
 
 <body>
@@ -23,10 +23,10 @@
             <div class="loader-logo">
                 <div class="loader-logo-circle">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
-                        style="display: block;">
+                        onerror="this.style.display='none'">
                 </div>
-                <h1>mal bali galeria</h1>
-                <span>SHOPPING CENTER</span>
+                {{-- <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span> --}}
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="logo">
-            <h1>Mal Bali Galeria<span>EVENT DETAILS</span></h1>
+            <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -123,7 +123,7 @@
                         <div class="carousel-image" style="background-image: url({{ $photo }});"></div>
                     @endforeach
                 @else
-                    <div class="carousel-image" style="background-image: url({{ $event['primaryPhoto'] }});"></div>
+                    <div class="carousel-image" style="background-image: url({{ $event['primaryPhoto'] ?: asset('assets/images/no_image.jpg') }});"></div>
                 @endif
             </div>
 
@@ -147,7 +147,7 @@
                     <div class="tenant-logo-wrapper">
                         <!-- Square Event Poster/Thumbnail -->
                         <div class="tenant-logo">
-                            <img src="{{ $event['primaryPhoto'] }}" alt="Event Thumbnail">
+                            <img src="{{ $event['primaryPhoto'] ?: asset('assets/images/no_image.jpg') }}" alt="Event Thumbnail">
                         </div>
 
                         <div class="tenant-location">
@@ -177,7 +177,7 @@
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                     <circle cx="12" cy="10" r="3" />
                                 </svg>
-                                <span>Main Atrium, Ground Floor</span>
+                                <span>{{ $event['location'] ?? 'Information Desk' }}</span>
                             </div>
                         </div>
                     </div>
@@ -195,24 +195,29 @@
                         <div class="tenant-details-grid">
                             <div class="detail-item">
                                 <label>Entrance Fee</label>
-                                <p>Free Admission</p>
+                                <p>{{ $event['is_paid'] ? 'Rp ' . number_format($event['price'], 0, ',', '.') : 'Free Admission' }}</p>
                             </div>
                             <div class="detail-item">
                                 <label>Organizer</label>
-                                <p>Mal Bali Galeria</p>
+                                <p>{{ $event['organizer'] ?? 'Mal Bali Galeria' }}</p>
                             </div>
                             <div class="detail-item">
                                 <label>Target Audience</label>
-                                <p>Family & General</p>
+                                <p>{{ $event['target_audience'] ?? 'General' }}</p>
                             </div>
                             <div class="detail-item">
                                 <label>Highlights</label>
-                                <p>Live Music & Midnight Sale</p>
+                                <p>{{ $event['highlights'] ?? 'Special Event' }}</p>
                             </div>
                         </div>
 
                         <div class="tenant-actions">
-                            <a href="#" class="action-btn primary">
+                            <a href="#" class="action-btn primary" id="addToCalendarBtn"
+                                data-event-name="{{ $event['name'] }}"
+                                data-event-description="{{ strip_tags($event['description']) }}"
+                                data-event-location="{{ $event['location'] ?? 'Mal Bali Galeria' }}"
+                                data-event-start="{{ $event['start_date'] }} {{ $event['start_time'] }}"
+                                data-event-end="{{ $event['end_date'] }} {{ $event['end_time'] }}">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"></circle>
@@ -220,7 +225,9 @@
                                 </svg>
                                 Add to Calendar
                             </a>
-                            <a href="#" class="action-btn secondary">
+                            <a href="#" class="action-btn secondary" id="shareEventBtn"
+                                data-event-name="{{ $event['name'] }}"
+                                data-event-url="{{ url()->current() }}">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
                                     <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
@@ -235,24 +242,33 @@
 
                 <div class="similar-section">
                     <div class="similar-header">
-                        <h3>Upcoming Events</h3>
+                        <h3>Upcoming Events <span class="event-count">({{ count($upcomingEvents) }})</span></h3>
                     </div>
-                    <div class="similar-tenants">
-                        @forelse ($upcomingEvents as $upcoming)
-                            <div class="similar-tenant-card"
-                                style="background-image: url({{ asset('storage/' . $upcoming->primaryPhoto->path) }});">
-                                <div class="similar-tenant-content">
-                                    <span
-                                        class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
-                                    <h4>{{ $upcoming->name }}</h4>
-                                    <!-- Using # for now as we might be on the same route structure or need named route -->
-                                    <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
-                                        class="similar-tenant-link">View Details<span>→</span></a>
+                    <div class="similar-carousel-wrapper">
+                        <button class="similar-arrow similar-prev" id="similarPrev">‹</button>
+                        <div class="similar-tenants" id="similarTenants">
+                            @forelse ($upcomingEvents as $upcoming)
+                                <div class="similar-tenant-card"
+                                    style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                    <div class="similar-tenant-content">
+                                        <span
+                                            class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
+                                        <h4>{{ $upcoming->name }}</h4>
+                                        <!-- Using # for now as we might be on the same route structure or need named route -->
+                                        <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
+                                            class="similar-tenant-link">View Details<span>→</span></a>
+                                    </div>
                                 </div>
-                            </div>
-                        @empty
-                            <p>No upcoming events available.</p>
-                        @endforelse
+                            @empty
+                                <p class="no-events-message">No upcoming events available.</p>
+                            @endforelse
+                        </div>
+                        <button class="similar-arrow similar-next" id="similarNext">›</button>
+                        
+                        {{-- Scroll Indicators --}}
+                        @if (count($upcomingEvents) > 2)
+                            <div class="carousel-scroll-indicators" id="scrollIndicators"></div>
+                        @endif
                     </div>
                 </div>
             </div>

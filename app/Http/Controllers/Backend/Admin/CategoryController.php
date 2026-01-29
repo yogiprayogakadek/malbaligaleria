@@ -21,10 +21,19 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $categories = $this->categoryService->getAll(['uuid', 'name', 'is_active'], true);
+            $categories = $this->categoryService->getAll(['uuid', 'name', 'color_zone', 'is_active'], true);
 
             return DataTables::of($categories)
                 ->addIndexColumn()
+                ->editColumn('color_zone', function ($row) {
+                    if ($row->color_zone) {
+                        return '<div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 30px; height: 30px; background-color: ' . $row->color_zone . '; border: 2px solid #ddd; border-radius: 6px;"></div>
+                            <span style="font-family: monospace; font-weight: 600;">' . strtoupper($row->color_zone) . '</span>
+                        </div>';
+                    }
+                    return '<span class="text-muted">-</span>';
+                })
                 ->editColumn('is_active', function ($row) {
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
@@ -39,7 +48,7 @@ class CategoryController extends Controller
                         </button>
                     </a>';
                 })
-                ->rawColumns(['action', 'is_active'])
+                ->rawColumns(['action', 'is_active', 'color_zone'])
                 ->make(true);
         }
         return view('backend.admin.category.index');
@@ -54,6 +63,7 @@ class CategoryController extends Controller
     {
         $data = [
             'name' => $request->name,
+            'color_zone' => $request->color_zone,
         ];
 
         $this->categoryService->create($data);
@@ -63,7 +73,7 @@ class CategoryController extends Controller
 
     public function edit($uuid)
     {
-        $category = $this->categoryService->findByUuid($uuid, ['name', 'uuid', 'is_active']);
+        $category = $this->categoryService->findByUuid($uuid, ['name', 'color_zone', 'uuid', 'is_active']);
         return view('backend.admin.category.edit', compact('category'));
     }
 
@@ -71,6 +81,7 @@ class CategoryController extends Controller
     {
         $data = [
             'name' => $request->name,
+            'color_zone' => $request->color_zone,
             'is_active' => $request->is_active
         ];
 
@@ -78,6 +89,4 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.category.index')->with('success', 'Category updated successfully');
     }
-
-    // public
 }

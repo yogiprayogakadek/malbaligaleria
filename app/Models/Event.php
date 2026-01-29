@@ -20,6 +20,12 @@ class Event extends Model
         'start_time',
         'end_time',
         'description',
+        'location',
+        'organizer',
+        'is_paid',
+        'price',
+        'target_audience',
+        'highlights',
         'is_active'
     ];
 

@@ -297,7 +297,7 @@
                     @forelse ($events as $event)
                         <div class="event-card">
                             <div class="event-card-bg"
-                                style="background-image: url({{ asset('storage/' . $event->primaryPhoto->path) }});">
+                                style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
                                 <span

@@ -45,6 +45,12 @@ class UpdateEventRequest extends FormRequest
             'start_time'    => 'required',
             'end_time'  => 'required',
             'description'   => 'required|string',
+            'location' => 'required|string|max:255',
+            'organizer' => 'nullable|string|max:255',
+            'is_paid' => 'required|numeric|between:0,1',
+            'price' => 'nullable|numeric|min:0|required_if:is_paid,1',
+            'target_audience' => 'nullable|string|max:255',
+            'highlights' => 'nullable|string|max:255',
             'is_active' => 'required|numeric|between:0,1'
         ];
     }
