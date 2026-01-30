@@ -29,13 +29,29 @@ class CategorySeeder extends Seeder
             'Drugs & Pharmacy'
         ];
 
-        foreach ($categories as $category) {
-            $randomNumber = mt_rand(0, 0xFFFFFF);
-            $hexColor = '#' . sprintf('%06x', $randomNumber);
+        $colorZone = [
+            '#FFF000',
+            '#0273B6',
+            '#B04B87',
+            '#5BA997',
+            '#009B4C',
+            '#B9CCBC',
+            '#FBD7A3',
+            '#A79CCB',
+            '#925D23',
+            '#F4B3B3',
+            '#EEEEEF',
+            '#DAB96B'
+
+        ];
+
+        foreach ($categories as $key => $category) {
+            // $randomNumber = mt_rand(0, 0xFFFFFF);
+            // $hexColor = '#' . sprintf('%06x', $randomNumber);
             $model = Category::firstOrNew([
                 'uuid' => (string) Str::uuid(),
                 'name' => $category,
-                'color_zone' => $hexColor
+                'color_zone' => $colorZone[$key]
             ]);
 
             $model->save();
