@@ -1985,7 +1985,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#tenants">Tenants</a></li>
                 <li><a href="#experience">Experience</a></li>
-                <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -2227,11 +2227,11 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
-                        <li><a href="#about">About Us</a></li>
+                        <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
                         <li><a href="#tenants">Store Directory</a></li>
                         <li><a href="#experience">Experiences</a></li>
-                        <li><a href="#events">Events</a></li>
-                        <li><a href="#career">Careers</a></li>
+                        <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
+                        {{-- <li><a href="#career">Careers</a></li> --}}
                     </ul>
                 </div>
 

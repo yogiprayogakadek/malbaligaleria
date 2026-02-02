@@ -93,7 +93,7 @@
                 {{-- <li><a href="#tenants">Tenants</a></li> --}}
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 {{-- <li><a href="#experience">Experience</a></li> --}}
-                <li><a href="#events">Events</a></li>
+                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -554,7 +554,7 @@
                         {{-- <li><a href="#experience">Experiences</a></li> --}}
                         <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="#events">Events</a></li>
-                        <li><a href="#career">Careers</a></li>
+                        {{-- {{-- <li><a href="#career">Careers</a></li> --}} --}}
                     </ul>
                 </div>
 
