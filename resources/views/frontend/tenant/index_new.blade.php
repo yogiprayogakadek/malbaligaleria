@@ -2192,7 +2192,8 @@
                     <h3>Mal Bali Galeria</h3>
                     <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
                     <div class="footer-social">
-                        <a href="#" class="footer-social-link" aria-label="Instagram">
+                        <a href="https://www.instagram.com/malbaligaleria/" class="footer-social-link"
+                            aria-label="Instagram">
                             <svg viewBox="0 0 24 24">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
                                     fill="none" stroke="white" stroke-width="2" />
@@ -2201,18 +2202,20 @@
                                 <circle cx="18" cy="6" r="1" fill="white" />
                             </svg>
                         </a>
-                        <a href="#" class="footer-social-link" aria-label="Facebook">
+                        <a href="https://www.facebook.com/p/Mal-Bali-Galeria-100063642820316/?locale=id_ID"
+                            class="footer-social-link" aria-label="Facebook">
                             <svg viewBox="0 0 24 24">
                                 <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
                             </svg>
                         </a>
-                        <a href="#" class="footer-social-link" aria-label="Twitter">
+                        <a href="https://x.com/infombg" class="footer-social-link" aria-label="Twitter">
                             <svg viewBox="0 0 24 24">
                                 <path
                                     d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
                             </svg>
                         </a>
-                        <a href="#" class="footer-social-link" aria-label="TikTok">
+                        <a href="https://www.tiktok.com/@malbaligaleria" class="footer-social-link"
+                            aria-label="TikTok">
                             <svg viewBox="0 0 24 24">
                                 <path
                                     d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
@@ -2257,7 +2260,7 @@
                             <path
                                 d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <a href="tel:+6236112345678">+62 361 1234 5678</a>
+                        <a href="tel:+62361755277">(0361) 755277</a>
                     </div>
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24">

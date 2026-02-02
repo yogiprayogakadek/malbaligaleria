@@ -1288,78 +1288,11 @@ function updateMapView() {
         mapContainer.ontouchstart = null;
         mapContainer.ontouchend = null;
     // Touch Handling for Map Panning/Zooming
-    mapContainer.addEventListener('touchstart', (e) => {
-        // Stop propagation to prevent global pull-to-refresh
-        e.stopPropagation();
-        
-        if (e.touches.length === 2) {
-            e.preventDefault();
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            state.lastDist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-            
-            // Calculate center for zoom origin
-            const rect = mapContainer.getBoundingClientRect();
-            const centerX = ((touch1.clientX + touch2.clientX) / 2) - rect.left;
-            const centerY = ((touch1.clientY + touch2.clientY) / 2) - rect.top;
-            
-            // Adjust to map coordinates
-             // (Simple center for now, can be improved)
-        } else if (e.touches.length === 1) {
-            // Pan start
-            state.isDragging = true;
-            state.startX = e.touches[0].clientX - state.translateX;
-            state.startY = e.touches[0].clientY - state.translateY;
-            mapContainer.style.cursor = 'grabbing';
-        }
-    }, { passive: false });
-
-    mapContainer.addEventListener('touchmove', (e) => {
-        e.stopPropagation(); // Stop pulling down refresh
-
-        if (e.touches.length === 2) {
-            e.preventDefault();
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-
-            if (state.lastDist) {
-                const delta = dist - state.lastDist;
-                const newScale = Math.min(Math.max(state.scale + (delta * 0.005), minScale), maxScale);
-                
-                if (newScale !== state.scale) {
-                    state.scale = newScale;
-                    updateZoom();
-                }
-            }
-            state.lastDist = dist;
-        } else if (e.touches.length === 1 && state.isDragging) {
-             // Let user scroll naturally if zoomed out, BUT here we want Custom Pan if Zoomed In?
-             // Actually user said "map cannot be scrolled".
-             // If scale > 1, we want Panning.
-             // If scale == 1, we want native page value.
-             
-             if (state.scale > 1) {
-                 e.preventDefault(); // Prevent page scroll
-                 const x = e.touches[0].clientX - state.startX;
-                 const y = e.touches[0].clientY - state.startY;
-                 
-                 state.translateX = x;
-                 state.translateY = y;
-                 updateZoom();
-             }
-        }
-    }, { passive: false });
-
-    mapContainer.addEventListener('touchend', (e) => {
-        if (e.touches.length < 2) {
-            state.lastDist = 0;
-        }
-        if (e.touches.length === 0) {
-            state.isDragging = false;
-            mapContainer.style.cursor = 'default';
-        }
-    });
+    // Touch Handling for Map Panning/Zooming - REMOVED to allow native scroll
+    // Native scroll works better with overflow: auto on mobile
+    mapContainer.ontouchstart = null;
+    mapContainer.ontouchend = null;
+    mapContainer.ontouchmove = null;
         mapContainer.onwheel = null; 
     };
     cleanupDrag();

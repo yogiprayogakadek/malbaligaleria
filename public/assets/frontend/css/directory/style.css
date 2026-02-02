@@ -2197,53 +2197,48 @@ body.dark-mode .floor-btn {
 
 .map-container {
     position: relative;
-    background: #f8f9fa;
-    border-radius: 16px;
-    overflow: hidden; /* Hide scrollbars for transform-based panning */
-    height: 85vh; /* Fixed height for viewport */
-    display: block; /* Change from flex to block for scaling */
+/* Map Container - Consolidated */
+.map-container {
+    position: relative;
     width: 100%;
-    cursor: grab; /* Cursor indicates draggable */
+    height: 600px;
+    max-height: 85vh; /* Responsive height */
+    background: #e8ebe9;
+    border-radius: 20px;
+    overflow: auto !important; /* Enable scrollbars */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+    display: block;
+    cursor: default;
+    touch-action: pan-x pan-y !important; /* Allow native scroll */
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
+    border: 2px solid #e0e0e0;
     user-select: none;
-    touch-action: none; /* Prevent default touch actions like native scrolling */
 }
 
 body.dark-mode .map-container {
     background: #1a1a1a;
+    border-color: #333;
 }
 
 .map-wrapper {
     position: relative !important;
     width: 100%;
     display: block;
-    transform-origin: 0 0; /* Zoom from top-left for easier math */
-    will-change: transform;
-    transition: transform 0.1s ease-out; /* Smooth interactions */
+    transform-origin: 0 0;
+    will-change: width, height;
+    transition: width 0.3s ease-out; /* Smooth zoom */
 }
 
 .map-container img {
-    width: 100%; /* Scale width to container */
-    height: auto; /* Allow height to grow */
+    width: 100%;
+    height: auto;
     display: block;
     position: relative;
     max-width: none;
 }
 
 /* Map Pin Styles - UPDATED FOR BETTER VISIBILITY */
-.map-container {
-    position: relative;
-    width: 100%;
-    height: 600px;
-    background: #e8ebe9;
-    border-radius: 20px;
-    overflow: auto; /* Enable scrollbars */
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
-    display: flex; /* Center initial content if needed, but for scroll zoom block is better */
-    display: block;
-    cursor: default; /* Remove hand cursor */
-    scrollbar-width: auto !important; /* Force show scrollbar for Firefox */
-    -ms-overflow-style: auto !important; /* Force show scrollbar for IE/Edge */
-}
 
 /* Custom Scrollbar for Map */
 .map-container::-webkit-scrollbar {
