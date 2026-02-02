@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <!-- Page Loader -->
+
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
             <div class="loader-logo">
@@ -21,8 +21,7 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                {{-- <h1>Mal Bali Galeria</h1>
-                <span>Enjoy, Play, Eat, Shop</span> --}}
+
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -36,7 +35,7 @@
         </div>
     </div>
 
-    <!-- Dark Mode Toggle -->
+
     <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
         <svg class="moon-icon" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -54,7 +53,7 @@
         </svg>
     </button>
 
-    <!-- Header -->
+
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
@@ -73,7 +72,7 @@
         </button>
     </header>
 
-    <!-- Sidebar Menu -->
+
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
@@ -89,9 +88,9 @@
             <ul>
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
-                {{-- <li><a href="#tenants">Tenants</a></li> --}}
+
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
-                {{-- <li><a href="#experience">Experience</a></li> --}}
+
                 <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
@@ -99,18 +98,18 @@
         </nav>
     </div>
 
-    <!-- Main Content -->
+
     <main class="promotion-main">
         <div class="promotion-container">
-            <!-- Page Header -->
+
             <div class="promotion-header">
                 <h1>{{ $setting->payload['page_title'] ?? 'Current Promotions' }}</h1>
                 <p>{{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}</p>
             </div>
 
-            <!-- Content Layout -->
+
             <div class="promotion-layout">
-                <!-- Tenant Filter Sidebar -->
+
                 <aside class="tenant-filter-sidebar">
                     <div class="filter-header">
                         <button class="mobile-filter-close-btn" id="mobileFilterCloseBtn" aria-label="Close Filter">
@@ -129,7 +128,7 @@
                         <p>Select a tenant to view their promotions</p>
                     </div>
                     <div class="filter-body">
-                        <!-- Category Filter -->
+
                         <div class="category-filter-section">
                             <h4 class="filter-section-title">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -138,11 +137,11 @@
                                 Categories
                             </h4>
                             <div class="category-filter-chips" id="categoryFilterChips">
-                                <!-- Category chips will be populated by JavaScript -->
+
                             </div>
                         </div>
 
-                        <!-- Favorites Filter -->
+
                         <div class="tenant-filter-item" data-filter-type="favorites" id="favoritesFilter">
                             <div class="tenant-filter-icon"
                                 style="background: linear-gradient(135deg, #2c5f5d 0%, #F5F5DC 100%);">
@@ -159,7 +158,7 @@
 
                         <div class="filter-divider"></div>
 
-                        <!-- Tenant Search -->
+
                         <div class="tenant-search-container">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="11" cy="11" r="8" />
@@ -182,17 +181,17 @@
                         </div>
                         <div class="filter-divider"></div>
                         <div id="tenantFilterList">
-                            <!-- Tenant list will be populated by JavaScript -->
+
                         </div>
                     </div>
                 </aside>
 
-                <!-- Mobile Filter Overlay -->
+
                 <div class="mobile-filter-overlay" id="mobileFilterOverlay"></div>
 
-                <!-- Promotion Grid -->
+
                 <div class="promotion-content">
-                    <!-- Toolbar: Sort & View Toggle -->
+
                     <div class="promotion-toolbar">
                         <div class="toolbar-left">
                             <button class="mobile-filter-toggle" id="mobileFilterToggle">
@@ -246,10 +245,10 @@
                     </div>
 
                     <div class="promotion-grid" id="promotionGrid">
-                        <!-- Promotion cards will be populated by JavaScript -->
+
                     </div>
 
-                    <!-- Empty State -->
+
                     <div class="empty-state" id="emptyState" style="display: none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10" />
@@ -263,7 +262,7 @@
                         </button>
                     </div>
 
-                    <!-- Load More Button -->
+
                     <div class="load-more-container" id="loadMoreContainer" style="display: none;">
                         <button class="load-more-btn" id="loadMoreBtn">
                             <span>Load More Promotions</span>
@@ -277,7 +276,7 @@
         </div>
     </main>
 
-    <!-- Promotion Detail Modal -->
+
     <div class="tenant-modal" id="promotionModal">
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="modal-container">
@@ -290,7 +289,7 @@
             <div class="modal-content">
                 <div class="modal-carousel">
                     <div class="carousel-images" id="modalCarouselImages">
-                        <!-- Images will be inserted here dynamically -->
+
                     </div>
                     <button class="carousel-nav prev" id="modalCarouselPrev">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -312,14 +311,14 @@
                         </svg>
                     </div>
                     <div class="carousel-indicators" id="modalCarouselIndicators">
-                        <!-- Indicators will be inserted here dynamically -->
+
                     </div>
                 </div>
 
                 <div class="modal-details">
                     <div class="modal-header">
                         <div class="modal-logo" id="modalLogo">
-                            <!-- Logo will be inserted here -->
+
                         </div>
                         <div class="modal-title">
                             <span class="modal-promo-badge" id="modalPromoBadge">PROMOTION</span>
@@ -354,18 +353,18 @@
                     </div>
 
                     <div class="modal-description" id="modalDescription">
-                        <!-- Description will be inserted here -->
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+
     <footer id="contact">
         <div class="footer-container">
             <div class="footer-content">
-                <!-- About Column -->
+
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
                     <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
@@ -402,32 +401,23 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
+
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
-                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
-                        {{-- <li><a href="#experience">Experiences</a></li> --}}
+
+
                         <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
-                        {{-- <li><a href="#career">Careers</a></li> --}}
+
                     </ul>
                 </div>
 
-                <!-- Services -->
-                {{-- <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="#valet">Valet Parking</a></li>
-                        <li><a href="#concierge">Concierge</a></li>
-                        <li><a href="#gift">Gift Cards</a></li>
-                        <li><a href="#member">Membership</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                    </ul>
-                </div> --}}
 
-                <!-- Contact -->
+
+
+
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
@@ -460,7 +450,7 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
                 <div class="footer-brand">
                     <span class="footer-brand-logo">Mal Bali Galeria</span>
                     <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
@@ -469,7 +459,7 @@
         </div>
     </footer>
 
-    <!-- Scroll to Top Button -->
+
     <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 19V5M5 12l7-7 7 7" />

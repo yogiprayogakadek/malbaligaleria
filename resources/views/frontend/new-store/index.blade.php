@@ -226,7 +226,7 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
                 <div class="footer-brand">
                     <span class="footer-brand-logo">Mal Bali Galeria</span>
                     <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>

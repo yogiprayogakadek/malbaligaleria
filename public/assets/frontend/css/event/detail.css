@@ -246,10 +246,109 @@ body.dark-mode .loader-logo h1 {
     }
 }
 
-/* ===== HEADER & MENU (MATCHED with Landing/Promotion) ===== */
-/* Note: We rely on landing.css for the main header styles if linked.
-   But to be safe/standalone, we should include the header styles here
-   or ensure they are not conflicting. */
+/* Header - Matched from Directory View */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    z-index: 1200;
+    background: rgba(250, 250, 248, 0.98);
+    box-shadow: 0 4px 20px rgba(44, 95, 93, 0.08);
+    backdrop-filter: blur(30px);
+}
+
+body.dark-mode header {
+    background: rgba(26, 31, 30, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Header Logo Circle */
+.header-logo-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(44, 95, 93, 0.2);
+    transition: all 0.3s ease;
+}
+
+.header-logo-circle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(44, 95, 93, 0.3);
+}
+
+/* Logo Text */
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.logo h1 {
+    color: #2c3e50;
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+    margin: 0;
+}
+
+body.dark-mode .logo h1 {
+    color: #e0e0e0;
+}
+
+.logo span {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 5px;
+    margin-top: -5px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Menu Button */
+.menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1210;
+}
+
+.menu-btn span {
+    display: block;
+    width: 30px;
+    height: 2px;
+    background: #2c3e50;
+    margin: 6px 0;
+    transition: 0.3s;
+}
+
+body.dark-mode .menu-btn span {
+    background: #e0e0e0;
+}
+
+.menu-btn.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-6px, 6px);
+}
+
+.menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-btn.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -5px);
+}
 
 /* Event specific main offset */
 main {

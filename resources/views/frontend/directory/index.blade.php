@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <!-- Page Loader -->
+
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
             <div class="loader-logo">
@@ -21,8 +21,7 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                {{-- <h1>Mal Bali Galeria</h1>
-                <span>Enjoy, Play, Eat, Shop</span> --}}
+
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -36,7 +35,7 @@
         </div>
     </div>
 
-    <!-- Dark Mode Toggle -->
+
     <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
         <svg class="moon-icon" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -54,7 +53,7 @@
         </svg>
     </button>
 
-    <!-- Header -->
+
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
@@ -73,7 +72,7 @@
         </button>
     </header>
 
-    <!-- Toastr Notification -->
+
     <div class="toastr" id="toastr">
         <div class="toastr-icon">✓</div>
         <div class="toastr-content">
@@ -83,7 +82,7 @@
         <button class="toastr-close" id="toastrClose">×</button>
     </div>
 
-    <!-- Sidebar Menu -->
+
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
@@ -99,9 +98,9 @@
             <ul>
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
-                {{-- <li><a href="#tenants">Tenants</a></li> --}}
+
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
-                {{-- <li><a href="#experience">Experience</a></li> --}}
+
                 <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
@@ -112,7 +111,7 @@
             </ul>
         </nav>
 
-        <!-- Search in Sidebar for Mobile -->
+
         <div class="sidebar-search">
             <div class="search-bar" style="position: relative;">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -125,18 +124,18 @@
         </div>
     </div>
 
-    <!-- Main Content -->
+
     <main class="main-content">
         <div class="container">
-            <!-- Page Header -->
+
             <div class="page-header">
                 <h1>Tenant Directory</h1>
                 <p>Discover our collection of premium brands and stores</p>
             </div>
 
-            <!-- Content Layout -->
+
             <div class="content-layout">
-                <!-- Filter Sidebar -->
+
                 <aside class="filter-sidebar">
                     <div class="filter-header">
                         <h3>
@@ -157,7 +156,7 @@
                     </div>
 
                     <div class="filter-body">
-                        <!-- View Toggle -->
+
                         <div class="view-toggle">
                             <button class="view-btn" id="mapViewBtn">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
@@ -178,7 +177,7 @@
 
                         <div class="filter-divider"></div>
 
-                        <!-- Search Filter -->
+
                         <div class="filter-group">
                             <label>Search Tenant</label>
                             <div class="filter-input" style="position: relative;">
@@ -193,7 +192,7 @@
 
                         <div class="filter-divider"></div>
 
-                        <!-- Mobile Filter Row Container -->
+
                         <div class="filter-row-mobile">
                             <!-- Floor Filter -->
                             <div class="filter-group">
@@ -223,13 +222,13 @@
                             </div>
                         </div>
 
-                        <!-- Stats -->
+
                         <div class="filter-stats">
                             <div class="filter-stats-number" id="tenantCount">17</div>
                             <div class="filter-stats-label">Tenants Found</div>
                         </div>
 
-                        <!-- Tenant List in Map View -->
+
                         <div id="mapTenantList" style="display: none; margin-top: 25px;">
                             <div class="filter-divider"></div>
                             <label
@@ -240,7 +239,7 @@
                     </div>
                 </aside>
 
-                <!-- Tenant Content -->
+
                 <div class="tenant-content">
                     <!-- Skeleton Loading for Tenant Grid -->
                     <div class="tenant-grid skeleton-container" id="skeletonGrid">
@@ -301,12 +300,12 @@
                         </div>
                     </div>
 
-                    <!-- Tenant Grid -->
+
                     <div class="tenant-grid" id="tenantGrid" style="display: none;">
                         <!-- Tenants will be dynamically inserted here -->
                     </div>
 
-                    <!-- Map View -->
+
                     <div id="mapView">
                         <div class="map-header">
                             <h3>
@@ -351,7 +350,7 @@
                         </div>
                     </div>
 
-                    <!-- Empty State -->
+
                     <div class="empty-state" id="emptyState">
                         <svg viewBox="0 0 24 24">
                             <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor"
@@ -365,11 +364,11 @@
         </div>
     </main>
 
-    <!-- Tenant Details Modal -->
+
     <div class="tenant-modal" id="tenantModal">
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="modal-container">
-            <!-- Close Button -->
+
             <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -377,7 +376,7 @@
                 </svg>
             </button>
 
-            <!-- Favorite Button in Modal -->
+
             <button class="favorite-btn" id="modalFavoriteBtn" data-unit="">
                 <svg viewBox="0 0 24 24">
                     <path
@@ -385,7 +384,7 @@
                 </svg>
             </button>
 
-            <!-- Share Button in Modal -->
+
             <button class="share-btn" id="modalShareBtn" title="Share Store">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="18" cy="5" r="3" />
@@ -397,9 +396,9 @@
             </button>
 
             <div class="modal-content">
-                <!-- Modal Carousel -->
+
                 <div class="modal-carousel">
-                    <!-- Swipe Hint -->
+
                     <div class="carousel-swipe-hint" id="carouselSwipeHint">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 18l-6-6 6-6" />
@@ -411,7 +410,7 @@
                     </div>
 
                     <div class="carousel-images" id="modalCarouselImages">
-                        <!-- Images will be inserted here dynamically -->
+
                     </div>
 
                     <button class="carousel-nav prev" id="modalCarouselPrev">
@@ -426,16 +425,14 @@
                     </button>
 
                     <div class="carousel-indicators" id="modalCarouselIndicators">
-                        <!-- Indicators will be inserted here dynamically -->
+
                     </div>
                 </div>
 
-                <!-- Modal Details -->
+
                 <div class="modal-details">
                     <div class="modal-header">
-                        {{-- <div class="modal-logo" id="modalLogo">
-                            <!-- Logo will be inserted here -->
-                        </div> --}}
+
                         <div class="modal-title">
                             <span class="modal-floor-badge" id="modalFloorBadge"></span>
                             <h2 id="modalTenantName"></h2>
@@ -492,10 +489,10 @@
         </div>
     </div>
 
-    <!-- Toast Notification Container -->
+
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- Keyboard Shortcuts Help Modal -->
+
     <div class="shortcuts-modal" id="shortcutsModal">
         <div class="shortcuts-overlay" onclick="document.getElementById('shortcutsModal').classList.remove('active')">
         </div>
@@ -530,7 +527,7 @@
         </div>
     </div>
 
-    <!-- Favorites Filter Button (will be added to sidebar dynamically) -->
+
     <template id="favoritesButtonTemplate">
         <button class="favorites-filter-btn" id="favoritesFilterBtn" title="Show Favorites">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -541,7 +538,7 @@
         </button>
     </template>
 
-    <!-- Keyboard Shortcuts Hint Button (Desktop Only) -->
+
     <button class="shortcuts-hint-btn" id="shortcutsHintBtn" title="Keyboard Shortcuts (Press ?)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -550,7 +547,7 @@
         <span>?</span>
     </button>
 
-    <!-- Recent Searches Dropdown -->
+
     <div class="recent-searches-dropdown" id="recentSearchesDropdown">
         <div class="recent-searches-header">
             <span>Recent Searches</span>
@@ -561,11 +558,11 @@
             </button>
         </div>
         <div class="recent-searches-list" id="recentSearchesList">
-            <!-- Recent searches will be inserted here -->
+
         </div>
     </div>
 
-    <!-- Share Menu (will be added to modal dynamically) -->
+
     <div class="share-menu" id="shareMenu">
         <div class="share-menu-overlay" onclick="document.getElementById('shareMenu').classList.remove('active')">
         </div>
@@ -608,11 +605,11 @@
         </div>
     </div>
 
-    <!-- Footer -->
+
     <footer>
         <div class="footer-container">
             <div class="footer-content">
-                <!-- About Column -->
+
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
                     <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
@@ -649,32 +646,22 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
+
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
-                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
-                        {{-- <li><a href="#experience">Experiences</a></li> --}}
+
                         <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
-                        {{-- <li><a href="#career">Careers</a></li> --}}
+
                     </ul>
                 </div>
 
-                <!-- Services -->
-                {{-- <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="#valet">Valet Parking</a></li>
-                        <li><a href="#concierge">Concierge</a></li>
-                        <li><a href="#gift">Gift Cards</a></li>
-                        <li><a href="#member">Membership</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                    </ul>
-                </div> --}}
 
-                <!-- Contact -->
+
+
+
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
@@ -707,7 +694,7 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
                 <div class="footer-brand">
                     <span class="footer-brand-logo">Mal Bali Galeria</span>
                     <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>

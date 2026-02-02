@@ -6,16 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events | Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-    <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Argesta+Display&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
     <style>
-        /* Internal CSS for Event Listing Specifics to avoid creating a new file for now */
         .page-header {
             padding-top: 150px;
             padding-bottom: 50px;
@@ -77,14 +74,12 @@
 
             .event-card {
                 min-width: 0;
-                /* Reset flex min-width override if present */
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Page Loader -->
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
             <div class="loader-logo">
@@ -107,7 +102,6 @@
         </div>
     </div>
 
-    <!-- Dark Mode Toggle -->
     <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
         <svg class="moon-icon" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -125,7 +119,6 @@
         </svg>
     </button>
 
-    <!-- Header -->
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
@@ -144,7 +137,6 @@
         </button>
     </header>
 
-    <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
@@ -160,9 +152,7 @@
             <ul>
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
-                {{-- <li><a href="#tenants">Tenants</a></li> --}}
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
-                {{-- <li><a href="#experience">Experience</a></li> --}}
                 <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
@@ -170,7 +160,6 @@
         </nav>
     </div>
 
-    <!-- Main Content -->
     <main>
         <section class="page-header">
             <h1>Upcoming Events</h1>
@@ -202,11 +191,9 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="reveal" id="contact">
         <div class="footer-container">
             <div class="footer-content">
-                <!-- About Column -->
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
                     <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
@@ -243,32 +230,15 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
-                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
-                        {{-- <li><a href="#experience">Experiences</a></li> --}}
                         <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
-                        {{-- <li><a href="#career">Careers</a></li> --}}
                     </ul>
                 </div>
 
-                <!-- Services -->
-                {{-- <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="{{ url('/') }}#valet">Valet Parking</a></li>
-                        <li><a href="{{ url('/') }}#concierge">Concierge</a></li>
-                        <li><a href="{{ url('/') }}#gift">Gift Cards</a></li>
-                        <li><a href="{{ url('/') }}#member">Membership</a></li>
-                        <li><a href="{{ url('/') }}#faq">FAQ</a></li>
-                    </ul>
-                </div> --}}
-
-                <!-- Contact -->
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
@@ -301,7 +271,7 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
                 <div class="footer-brand">
                     <span class="footer-brand-logo">Mal Bali Galeria</span>
                     <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
@@ -310,7 +280,6 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
 </body>

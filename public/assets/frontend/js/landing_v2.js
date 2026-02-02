@@ -1,27 +1,27 @@
-// Page Loader
+
 const pageLoader = document.getElementById("pageLoader");
 
-// Ensure loader shows first
-let minLoadTime = 3500; // Minimum 3.5 seconds
+
+let minLoadTime = 3500;
 let loadStartTime = Date.now();
 
 window.addEventListener("load", () => {
     let loadTime = Date.now() - loadStartTime;
     let remainingTime = Math.max(0, minLoadTime - loadTime);
 
-    // Hide loader after ensuring minimum display time
+
     setTimeout(() => {
         pageLoader.classList.add("hidden");
         document.body.classList.add("loaded");
 
-        // Remove from DOM after transition
+
         setTimeout(() => {
             pageLoader.style.display = "none";
         }, 500);
     }, remainingTime);
 });
 
-// Fallback: if load event doesn't fire within 5 seconds, hide loader anyway
+
 setTimeout(() => {
     if (!document.body.classList.contains("loaded")) {
         pageLoader.classList.add("hidden");
@@ -32,7 +32,7 @@ setTimeout(() => {
     }
 }, 5000);
 
-// Menu toggle
+
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const sidebarClose = document.getElementById("sidebarClose");
@@ -41,18 +41,18 @@ const header = document.querySelector("header");
 menuBtn.addEventListener("click", () => {
     menuBtn.classList.toggle("active");
     sidebar.classList.toggle("active");
-    // Toggle body scroll
+
     document.body.classList.toggle("menu-open");
 });
 
-// Close sidebar with close button
+
 sidebarClose.addEventListener("click", () => {
     menuBtn.classList.remove("active");
     sidebar.classList.remove("active");
     document.body.classList.remove("menu-open");
 });
 
-// Close sidebar when clicking on a link
+
 const sidebarLinks = sidebar.querySelectorAll("a");
 sidebarLinks.forEach((link) => {
     link.addEventListener("click", () => {
@@ -62,14 +62,14 @@ sidebarLinks.forEach((link) => {
     });
 });
 
-// Sticky Header - Always visible
+
 let lastScroll = 0;
 
 window.addEventListener("scroll", () => {
     const currentScroll = window.pageYOffset;
     const headerLogo = document.getElementById("headerLogo");
 
-    // Add scrolled class for background
+
     if (currentScroll > 100) {
         header.classList.add("scrolled");
         if (headerLogo) {
@@ -85,10 +85,10 @@ window.addEventListener("scroll", () => {
     lastScroll = currentScroll;
 });
 
-// Dark Mode Toggle
+
 const darkModeToggle = document.getElementById("darkModeToggle");
 
-// Check for saved dark mode preference
+
 if (localStorage.getItem("darkMode") === "enabled") {
     document.body.classList.add("dark-mode");
 }
@@ -99,7 +99,7 @@ darkModeToggle.addEventListener("click", function (e) {
 
     document.body.classList.toggle("dark-mode");
 
-    // Save preference
+
     if (document.body.classList.contains("dark-mode")) {
         localStorage.setItem("darkMode", "enabled");
     } else {
@@ -107,7 +107,7 @@ darkModeToggle.addEventListener("click", function (e) {
     }
 });
 
-// Enhanced Parallax Effect for Hero Section
+
 const hero = document.querySelector(".hero");
 const heroBg = document.querySelector(".hero-bg");
 
@@ -115,13 +115,13 @@ window.addEventListener("scroll", () => {
     const scrolled = window.pageYOffset;
 
     if (hero && heroBg && scrolled < hero.offsetHeight) {
-        // Parallax untuk background - bergerak lebih lambat
+
         const parallaxSpeed = 0.5;
         heroBg.style.transform = `translateY(${
             scrolled * parallaxSpeed
         }px) scale(1.1)`;
 
-        // Fade out hero content saat scroll
+
         const heroContent = document.querySelector(".hero-content");
         const opacity = 1 - scrolled / (hero.offsetHeight * 0.7);
         const translateY = scrolled * 0.3;
@@ -131,7 +131,7 @@ window.addEventListener("scroll", () => {
             heroContent.style.transform = `translateY(${translateY}px)`;
         }
 
-        // Zoom in effect pada background
+
         const scale = 1.1 + scrolled * 0.0001;
         heroBg.style.transform = `translateY(${
             scrolled * parallaxSpeed
@@ -139,7 +139,7 @@ window.addEventListener("scroll", () => {
     }
 });
 
-// Reveal on Scroll Animation
+
 const revealElements = document.querySelectorAll(".reveal");
 
 const revealOnScroll = () => {
@@ -156,21 +156,20 @@ const revealOnScroll = () => {
 };
 
 window.addEventListener("scroll", revealOnScroll);
-revealOnScroll(); // Initial check
+revealOnScroll();
 
-// Tenant Carousel
-// Tenant Carousel - Infinite Loop
+
 const carouselContainer = document.getElementById("carouselContainer");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
-// Strategy: Try scoped first, fallback to global if empty (to match previous behavior)
+
 let cards = [];
 if (carouselContainer) {
     cards = carouselContainer.querySelectorAll(".tenant-card");
 }
 
-// Fallback to global if scoped is empty (restore previous functionality)
+
 if (cards.length === 0) {
     cards = document.querySelectorAll(".tenant-card");
 }
@@ -181,12 +180,11 @@ let currentIndex = 0;
 let cardsPerView = 4;
 let isTransitioning = false;
 
-// Clone first 4 cards for infinite loop
-// Ensure container exists before appending
+
 if (originalCardsCount > 0 && carouselContainer) {
     const clonesNeeded = 4;
     for (let i = 0; i < clonesNeeded; i++) {
-        // Use modulus to handle case where originalCardsCount < 4
+
         const cardToClone = cards[i % originalCardsCount];
         if (cardToClone) {
             const clone = cardToClone.cloneNode(true);
@@ -195,8 +193,7 @@ if (originalCardsCount > 0 && carouselContainer) {
         }
     }
 
-    // Re-query cards after appending clones
-    // We must maintain the same selector strategy
+
     if (
         carouselContainer.querySelectorAll(".tenant-card").length >
         originalCardsCount
@@ -207,7 +204,7 @@ if (originalCardsCount > 0 && carouselContainer) {
     }
 }
 
-// Update cards per view based on screen size
+
 const updateCardsPerView = () => {
     if (window.innerWidth <= 480) {
         cardsPerView = 1;
@@ -218,9 +215,9 @@ const updateCardsPerView = () => {
     } else {
         cardsPerView = 4;
     }
-    updateCarousel(true); // Instant update on resize
+updateCarousel(true);
 
-    // Restart autoplay logic
+
     if (typeof startAutoplay === "function") startAutoplay();
 };
 
@@ -228,7 +225,7 @@ const updateCarousel = (instant = false) => {
     if (cards.length === 0) return;
 
     const cardWidth = cards[0].offsetWidth;
-    const gap = 30; // Match CSS gap
+    const gap = 30;
     const offset = -(currentIndex * (cardWidth + gap));
 
     if (instant) {
@@ -249,12 +246,12 @@ const updateCarousel = (instant = false) => {
     }
 };
 
-// Handle Infinite Loop Reset
+
 carouselContainer.addEventListener("transitionend", () => {
-    // If we've scrolled past the original set
+
     if (currentIndex >= originalCardsCount) {
         currentIndex = currentIndex % originalCardsCount;
-        updateCarousel(true); // Snap back instantly
+        updateCarousel(true);
     }
     isTransitioning = false;
 });
@@ -265,12 +262,11 @@ prevBtn.addEventListener("click", () => {
         currentIndex--;
         updateCarousel();
     } else {
-        // Loop back to end (optional complexity, for now just stop at 0 or wrap)
-        // Simple wrapping for Prev button to match infinite feel
+
+
         currentIndex = originalCardsCount - 1;
-        updateCarousel(true); // Jump to end of real items
-        // Then slide to adjustment? No, to emulate infinite scroll left needs prepend clones
-        // For now, simple Prev behavior stops at 0 is acceptable or wrap to end value
+        updateCarousel(true);
+
     }
 });
 
@@ -282,23 +278,23 @@ nextBtn.addEventListener("click", () => {
     }
 });
 
-// Auto-play carousel
+
 let autoplayInterval;
 
 const startAutoplay = () => {
     if (autoplayInterval) clearInterval(autoplayInterval);
 
-    // Only autoplay if we have enough content (Infinite loop always active if content exists)
+
     if (originalCardsCount > 0) {
         autoplayInterval = setInterval(() => {
             currentIndex++;
             updateCarousel();
-            // Reset logic is handled by transitionend
-        }, 4000); // Slightly faster for infinite feel
+
+        }, 4000);
     }
 };
 
-// Pause on hover
+
 if (carouselContainer) {
     carouselContainer.addEventListener("mouseenter", () => {
         if (autoplayInterval) clearInterval(autoplayInterval);
@@ -309,18 +305,18 @@ if (carouselContainer) {
     });
 }
 
-// Start initially
+
 startAutoplay();
 
-// Update on window resize
+
 window.addEventListener("resize", () => {
     updateCardsPerView();
 });
 
-// Initial setup
+
 updateCardsPerView();
 
-// Event Slider
+
 const eventGrid = document.getElementById("eventGrid");
 const eventPrevBtn = document.getElementById("eventPrevBtn");
 const eventNextBtn = document.getElementById("eventNextBtn");
@@ -330,7 +326,7 @@ const eventCards = document.querySelectorAll(".event-card");
 let eventCurrentIndex = 0;
 let eventCardsPerView = 2;
 
-// Update cards per view based on screen size
+
 const updateEventCardsPerView = () => {
     if (window.innerWidth <= 768) {
         eventCardsPerView = 1;
@@ -349,7 +345,7 @@ const updateEventSlider = () => {
     const offset = -(eventCurrentIndex * (cardWidth + gap));
     eventGrid.style.transform = `translateX(${offset}px)`;
 
-    // Update button states
+
     if (eventPrevBtn && eventNextBtn) {
         eventPrevBtn.disabled = eventCurrentIndex === 0;
         eventNextBtn.disabled =
@@ -360,9 +356,7 @@ const updateEventSlider = () => {
 const updateEventControlsVisibility = () => {
     if (!eventControls) return;
 
-    // Hide controls if:
-    // - Desktop (2 cards per view) and 2 or fewer events
-    // - Mobile (1 card per view) and 1 or fewer events
+
     const shouldHideControls = eventCards.length <= eventCardsPerView;
 
     if (shouldHideControls) {
@@ -387,7 +381,7 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
         }
     });
 
-    // Auto-play event slider
+
     let eventAutoplayInterval = setInterval(() => {
         if (eventCards.length > eventCardsPerView) {
             if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
@@ -399,7 +393,7 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
         }
     }, 6000);
 
-    // Pause autoplay on hover
+
     eventGrid.addEventListener("mouseenter", () => {
         clearInterval(eventAutoplayInterval);
     });
@@ -417,16 +411,16 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
         }, 6000);
     });
 
-    // Update on window resize
+
     window.addEventListener("resize", () => {
         updateEventCardsPerView();
     });
 
-    // Initial setup
+
     updateEventCardsPerView();
 }
 
-// Smooth scroll for anchor links
+
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
         e.preventDefault();
@@ -443,66 +437,18 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     });
 });
 
-// Experience cards - DISABLED to prevent blinking
-/*
-                const experienceCardsContainer = document.querySelector('.experience-cards');
-                const experienceCards = document.querySelectorAll('.experience-card');
-                let lastHoveredCard = document.querySelector('.experience-card.promotion');
-                let isHovering = false;
-
-                experienceCards.forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        card.style.boxShadow = '0 0 40px rgba(95, 207, 218, 0.4)';
-                        lastHoveredCard = card;
-                        isHovering = true;
-                    });
-
-                    card.addEventListener('mouseleave', () => {
-                        card.style.boxShadow = 'none';
-                        isHovering = false;
-                    });
-                });
 
 
-                if (experienceCardsContainer) {
-                    experienceCardsContainer.addEventListener('mouseleave', () => {
-                        experienceCards.forEach(card => {
-                            card.classList.remove('promotion', 'expanded');
-                        });
-                        if (lastHoveredCard) {
-                            lastHoveredCard.classList.add('expanded');
-                        }
-                    });
-                }
-                */
 
-// Disabled scroll event to prevent blinking
-// The CSS hover states are sufficient for the experience cards behavior
-/*
-                let scrollTimeout;
-                let lastExpandedCard = null;
-                window.addEventListener('scroll', () => {
-                    if (!isHovering && lastHoveredCard && experienceCardsContainer) {
-                        clearTimeout(scrollTimeout);
-                        scrollTimeout = setTimeout(() => {
-                            if (lastExpandedCard !== lastHoveredCard) {
-                                experienceCards.forEach(card => {
-                                    card.classList.remove('promotion', 'expanded');
-                                });
-                                lastHoveredCard.classList.add('expanded');
-                                lastExpandedCard = lastHoveredCard;
-                            }
-                        }, 500);
-                    }
-                });
-                */
 
-// Mall Directory Scroll Indicator
+
+
+
 const mapFloors = document.getElementById("mapFloors");
 const scrollIndicator = document.getElementById("scrollIndicator");
 
 if (mapFloors && scrollIndicator) {
-    // Check if scrollable
+
     const checkScrollable = () => {
         const isScrollable = mapFloors.scrollHeight > mapFloors.clientHeight;
         if (!isScrollable) {
@@ -510,7 +456,7 @@ if (mapFloors && scrollIndicator) {
         }
     };
 
-    // Hide indicator when scrolled to bottom
+
     mapFloors.addEventListener("scroll", () => {
         const isAtBottom =
             mapFloors.scrollHeight - mapFloors.scrollTop <=
@@ -525,7 +471,7 @@ if (mapFloors && scrollIndicator) {
     checkScrollable();
 }
 
-// Add intersection observer for more advanced animations
+
 const observerOptions = {
     threshold: 0.2,
     rootMargin: "0px 0px -100px 0px",
@@ -543,13 +489,13 @@ revealElements.forEach((element) => {
     observer.observe(element);
 });
 
-// Add stagger animation to tenant cards
+
 const tenantCards = document.querySelectorAll(".tenant-card");
 tenantCards.forEach((card, index) => {
     card.style.animationDelay = `${index * 0.1}s`;
 });
 
-// Enhance button interactions with ripple effect
+
 const buttons = document.querySelectorAll(
     "button:not(#darkModeToggle), .explore-btn, .all-experience-btn"
 );
@@ -573,7 +519,7 @@ buttons.forEach((button) => {
                     animation: ripple 0.6s ease-out;
                 `;
 
-        // Check if button already has position relative
+
         const currentPosition = window.getComputedStyle(this).position;
         if (currentPosition === "static") {
             this.style.position = "relative";
@@ -585,7 +531,7 @@ buttons.forEach((button) => {
     });
 });
 
-// Add ripple animation
+
 const style = document.createElement("style");
 style.textContent = `
             @keyframes ripple {
@@ -601,7 +547,7 @@ style.textContent = `
         `;
 document.head.appendChild(style);
 
-// Lazy loading for images
+
 const imageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -618,7 +564,7 @@ document.querySelectorAll("[data-src]").forEach((img) => {
     imageObserver.observe(img);
 });
 
-// Add fade-in animation for footer elements
+
 const footerElements = document.querySelectorAll(
     "footer .footer-links a, footer .footer-social-link"
 );
@@ -650,7 +596,7 @@ if (footer) {
     footerObserver.observe(footer);
 }
 
-// Performance optimization: Debounce scroll events
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -663,23 +609,22 @@ function debounce(func, wait) {
     };
 }
 
-// Apply debounce to scroll-heavy functions
+
 const debouncedReveal = debounce(revealOnScroll, 50);
 window.removeEventListener("scroll", revealOnScroll);
 window.addEventListener("scroll", debouncedReveal);
 
-// Add loading state
+
 window.addEventListener("load", () => {
     document.body.classList.add("loaded");
 
-    // Trigger initial animations
     setTimeout(() => {
         revealOnScroll();
     }, 100);
 });
 
-// MALL DIRECTORY TENANT
-// Load data from database
+
+
 
 async function loadTenantsOnDatabase(floor, isNew = false) {
     try {
@@ -699,9 +644,9 @@ async function renderLandingTenants(floor, isNew = false) {
 
     grid.innerHTML = "";
 
-    // Normalize floor comparison
+
     let searchFloor = floor;
-    // if (floor === "1st Floor") searchFloor = "1st Floor"; // Map Ground to 1st if needed
+
 
     const filtered = tenantData.filter(
         (t) => t.floor === searchFloor || t.floor === floor
@@ -761,16 +706,16 @@ async function renderLandingTenants(floor, isNew = false) {
     });
 }
 
-// Initialize Landing Directory
+
 document.addEventListener("DOMContentLoaded", () => {
     renderLandingTenants("1st Floor");
 
     const floorItems = document.querySelectorAll(".map-floors .floor-item");
     floorItems.forEach((item) => {
-        // Initial check for active
+
         if (item.classList.contains("active")) {
             const floor = item.querySelector("h4").textContent;
-            // Or simplify if data-floor missing
+
             if (floor.includes("1st")) renderLandingTenants("1st Floor");
             else if (floor.includes("2nd")) renderLandingTenants("2nd Floor");
             else if (floor.includes("New Store")) renderLandingTenants("2nd Floor");
@@ -779,16 +724,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         item.addEventListener("click", function () {
-            // Remove active class
+
             floorItems.forEach((i) => i.classList.remove("active"));
-            // Add active class
+
             this.classList.add("active");
 
             const floorText = this.querySelector("h4").textContent;
             let targetFloor = "1st Floor";
             let isNew = false;
 
-            // Simple Mapping for now based on Text if data-floor not set
+
             if (floorText.includes("1st") || floorText.includes("Level 1")) {
                 targetFloor = "1st Floor";
             } else if (floorText.includes("2nd") || floorText.includes("Level 2")) {
@@ -856,19 +801,18 @@ if (tenantGrid) {
     });
 }
 
-// Tenant Grid Navigation Buttons
+
 const tenantNavPrev = document.getElementById("tenantNavPrev");
 const tenantNavNext = document.getElementById("tenantNavNext");
 const tenantGridForNav = document.getElementById("landingTenantGrid");
 
 if (tenantNavPrev && tenantNavNext && tenantGridForNav) {
-    // Scroll amount (one card width + gap)
     const getScrollAmount = () => {
         const card = tenantGridForNav.querySelector(".tenant-card");
         if (card) {
-            return card.offsetWidth + 24; // card width + gap (1.5rem = 24px)
+            return card.offsetWidth + 24;
         }
-        return 400; // fallback
+        return 400;
     };
 
     tenantNavPrev.addEventListener("click", () => {
@@ -888,7 +832,7 @@ if (tenantNavPrev && tenantNavNext && tenantGridForNav) {
     });
 }
 
-// Floor List Vertical Scroll Indicators
+
 const floorWrapper = document.querySelector(".floor-list-wrapper");
 const floorScrollUp = document.getElementById("floorScrollUp");
 const floorScrollDown = document.getElementById("floorScrollDown");
@@ -900,14 +844,14 @@ if (floorWrapper && floorScrollUp && floorScrollDown) {
         const clientHeight = floorWrapper.clientHeight;
         const isScrollable = scrollHeight > clientHeight;
 
-        // Toggle Up Indicator
+
         if (scrollTop > 10 && isScrollable) {
             floorScrollUp.classList.remove("hidden");
         } else {
             floorScrollUp.classList.add("hidden");
         }
 
-        // Toggle Down Indicator
+
         if (scrollTop + clientHeight < scrollHeight - 10 && isScrollable) {
             floorScrollDown.classList.remove("hidden");
         } else {
@@ -917,14 +861,14 @@ if (floorWrapper && floorScrollUp && floorScrollDown) {
 
     floorWrapper.addEventListener("scroll", updateFloorIndicators);
 
-    // Initial Check
+
     setTimeout(updateFloorIndicators, 500);
 
-    // Resize Check
+
     window.addEventListener("resize", updateFloorIndicators);
 }
 
-// Tenant Details Modal
+
 const tenantModal = document.getElementById("tenantModal");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalClose = document.getElementById("modalClose");
@@ -947,10 +891,10 @@ async function getDataByTenantId(tenant_id) {
     }
 }
 
-// Open modal function
+
 async function openTenantModal(tenant_id) {
     tenantData = await getDataByTenantId(tenant_id);
-    // Populate modal with tenant data
+
     document.getElementById("modalTenantName").textContent = tenantData.name;
     document.getElementById("modalFloorBadge").textContent = tenantData.floor;
     document.getElementById("modalCategory").textContent = tenantData.category;
@@ -960,11 +904,9 @@ async function openTenantModal(tenant_id) {
     document.getElementById("modalFloor").textContent = tenantData.floor;
 
     // Set logo
-    // document.getElementById(
-    //     "modalLogo"
-    // ).innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
 
-    // Set description (if available)
+
+
     const description =
         tenantData.description ||
         "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
@@ -972,20 +914,18 @@ async function openTenantModal(tenant_id) {
         "modalDescription"
     ).innerHTML = `<p>${description}</p>`;
 
-    // Setup carousel images
-    // For now, we'll use the logo as the main image and create placeholder images
-    // In production, you should have actual tenant photos from the database
+
     modalImages = tenantData.album
-        // tenantData.primaryPhoto,
+
 
     currentModalImageIndex = 0;
     renderModalCarousel();
 
-    // Show modal with animation
+
     document.body.style.overflow = "hidden";
     tenantModal.classList.add("active");
 
-    // Show swipe hint and auto-hide after 3 seconds
+
     const swipeHint = document.getElementById("carouselSwipeHint");
     if (swipeHint) {
         swipeHint.classList.remove("hidden");
@@ -995,12 +935,12 @@ async function openTenantModal(tenant_id) {
     }
 }
 
-// Close modal function
+
 function closeTenantModal() {
     tenantModal.classList.remove("active");
     document.body.style.overflow = "";
 
-    // Reset after animation
+
     setTimeout(() => {
         currentModalImageIndex = 0;
         modalImages = [];
@@ -1008,9 +948,9 @@ function closeTenantModal() {
     }, 400);
 }
 
-// Render carousel
+
 function renderModalCarousel() {
-    // Render images
+
     modalCarouselImages.innerHTML = modalImages
         .map(
             (img, index) => `
@@ -1023,7 +963,7 @@ function renderModalCarousel() {
         )
         .join("");
 
-    // Render indicators
+
     modalCarouselIndicators.innerHTML = modalImages
         .map(
             (_, index) => `
@@ -1034,10 +974,10 @@ function renderModalCarousel() {
         )
         .join("");
 
-    // Update carousel position
+
     updateModalCarousel();
 
-    // Add click events to indicators
+
     document.querySelectorAll(".carousel-indicator").forEach((indicator) => {
         indicator.addEventListener("click", () => {
             currentModalImageIndex = parseInt(indicator.dataset.index);
@@ -1085,19 +1025,17 @@ let touchStartY = 0;
 let touchEndY = 0;
 
 function handleSwipeGesture() {
-    const swipeThreshold = 50; // minimum distance for swipe
+    const swipeThreshold = 50;
     const horizontalSwipe = Math.abs(touchEndX - touchStartX);
     const verticalSwipe = Math.abs(touchEndY - touchStartY);
 
-    // Only process if horizontal swipe is greater than vertical (to avoid conflict with scroll)
+
     if (horizontalSwipe > verticalSwipe && horizontalSwipe > swipeThreshold) {
         if (touchEndX < touchStartX) {
-            // Swipe left - next image
             currentModalImageIndex =
                 (currentModalImageIndex + 1) % modalImages.length;
             updateModalCarousel();
         } else if (touchEndX > touchStartX) {
-            // Swipe right - previous image
             currentModalImageIndex =
                 (currentModalImageIndex - 1 + modalImages.length) %
                 modalImages.length;
@@ -1107,7 +1045,7 @@ function handleSwipeGesture() {
 }
 
 if (modalCarouselImages) {
-    // Touch events for mobile
+
     modalCarouselImages.addEventListener(
         "touchstart",
         (e) => {
@@ -1127,7 +1065,7 @@ if (modalCarouselImages) {
         { passive: true }
     );
 
-    // Mouse events for desktop (drag to swipe)
+
     let isDragging = false;
 
     modalCarouselImages.addEventListener("mousedown", (e) => {
@@ -1158,11 +1096,11 @@ if (modalCarouselImages) {
         }
     });
 
-    // Set initial cursor
+
     modalCarouselImages.style.cursor = "grab";
 }
 
-// Close modal events
+
 if (modalClose) {
     modalClose.addEventListener("click", closeTenantModal);
 }
@@ -1171,14 +1109,14 @@ if (modalOverlay) {
     modalOverlay.addEventListener("click", closeTenantModal);
 }
 
-// Close on ESC key
+
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && tenantModal.classList.contains("active")) {
         closeTenantModal();
     }
 });
 
-// Attach click event to dynamically created see-details buttons
+
 document.addEventListener("click", (e) => {
     if (
         e.target.classList.contains("see-details-btn") ||

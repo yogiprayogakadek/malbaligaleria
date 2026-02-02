@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $event['name'] }} - Event Details | Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-    <!-- Fonts -->
+
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- CSS -->
+
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() + 50 }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/detail.css') }}?v={{ time() + 50 }}">
 </head>
 
 <body>
-    <!-- Page Loader -->
+
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
             <div class="loader-logo">
@@ -25,8 +25,7 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-                {{-- <h1>Mal Bali Galeria</h1>
-                <span>Enjoy, Play, Eat, Shop</span> --}}
+
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -40,7 +39,7 @@
         </div>
     </div>
 
-    <!-- Dark Mode Toggle -->
+
     <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
         <svg class="moon-icon" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -58,7 +57,7 @@
         </svg>
     </button>
 
-    <!-- Header -->
+
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
@@ -77,7 +76,7 @@
         </button>
     </header>
 
-    <!-- Sidebar Menu -->
+
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
@@ -93,16 +92,16 @@
             <ul>
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
-                {{-- <li><a href="#tenants">Tenants</a></li> --}}
+
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
-                {{-- <li><a href="#experience">Experience</a></li> --}}
+
                 <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
             </ul>
         </nav>
 
-        <!-- Search in Sidebar for Mobile -->
+
         <div class="sidebar-search">
             <div class="search-bar">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -115,7 +114,7 @@
     </div>
 
     <main>
-        <!-- Hero Carousel -->
+
         <section class="carousel-section">
             <div class="carousel-images" id="carouselImages">
                 @if (isset($event['photos']) && count($event['photos']) > 0)
@@ -142,12 +141,12 @@
             @endif
         </section>
 
-        <!-- Details -->
+
         <section class="detail-section">
             <div class="detail-container">
                 <div class="detail-left">
                     <div class="tenant-logo-wrapper">
-                        <!-- Square Event Poster/Thumbnail -->
+
                         <div class="tenant-logo">
                             <img src="{{ $event['primaryPhoto'] ?: asset('assets/images/no_image.jpg') }}"
                                 alt="Event Thumbnail">
@@ -257,7 +256,7 @@
                                         <span
                                             class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
                                         <h4>{{ $upcoming->name }}</h4>
-                                        <!-- Using # for now as we might be on the same route structure or need named route -->
+
                                         <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
                                             class="similar-tenant-link">View Details<span>→</span></a>
                                     </div>
@@ -268,7 +267,7 @@
                         </div>
                         <button class="similar-arrow similar-next" id="similarNext">›</button>
 
-                        {{-- Scroll Indicators --}}
+
                         @if (count($upcomingEvents) > 2)
                             <div class="carousel-scroll-indicators" id="scrollIndicators"></div>
                         @endif
@@ -278,11 +277,11 @@
         </section>
     </main>
 
-    <!-- Footer -->
+
     <footer class="reveal" id="contact">
         <div class="footer-container">
             <div class="footer-content">
-                <!-- About Column -->
+
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
                     <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali</p>
@@ -319,32 +318,22 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
+
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
-                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
-                        {{-- <li><a href="#experience">Experiences</a></li> --}}
+
+
                         <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
-                        {{-- <li><a href="#career">Careers</a></li> --}}
+
                     </ul>
                 </div>
 
-                {{-- <!-- Services -->
-                <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="{{ url('/') }}#valet">Valet Parking</a></li>
-                        <li><a href="{{ url('/') }}#concierge">Concierge</a></li>
-                        <li><a href="{{ url('/') }}#gift">Gift Cards</a></li>
-                        <li><a href="{{ url('/') }}#member">Membership</a></li>
-                        <li><a href="{{ url('/') }}#faq">FAQ</a></li>
-                    </ul>
-                </div> --}}
 
-                <!-- Contact -->
+
+
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
@@ -377,7 +366,7 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
                 <div class="footer-brand">
                     <span class="footer-brand-logo">Mal Bali Galeria</span>
                     <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
@@ -386,9 +375,9 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <!-- Use separate event logic -->
+
     <script src="{{ asset('assets/frontend/js/event/detail.js') }}"></script>
 </body>
 
