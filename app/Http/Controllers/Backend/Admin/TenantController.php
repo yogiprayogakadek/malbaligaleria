@@ -9,6 +9,7 @@ use App\Services\CategoryService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class TenantController extends Controller
 {
@@ -55,7 +56,10 @@ class TenantController extends Controller
                 })
                 ->addColumn('logo', function ($row) {
                     $logo = $row->logo;
-                    return file_exists(public_path($logo)) ? 'logo' : 'kosong';
+                    // return file_exists(public_path($logo)) ? 'logo' : 'kosong';
+                    // $logo = 'assets/img/logo.png';
+
+                    return (file_exists(public_path($logo)) || Storage::disk('public')->exists($logo)) ? 'logo' : 'kosong';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.tenant.edit', $row->uuid) . '">
@@ -143,6 +147,7 @@ class TenantController extends Controller
         if ($request->logo != '') {
             $data['logo'] = $request->logo;
         }
+        // dd($data);
 
         $this->tenantService->update($data, $uuid);
 

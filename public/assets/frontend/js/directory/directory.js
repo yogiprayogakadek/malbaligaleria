@@ -1107,12 +1107,18 @@ function updateMapView() {
                 // Create cluster marker
                 pin = document.createElement("div");
                 pin.className = "map-pin cluster";
-                pin.style.position = "absolute";
-                pin.style.left = groupX + "px";
-                pin.style.top = groupY + "px";
+                
+                // Use percentage for responsive positioning
+                // Use the first tenant in group for position reference
+                const firstTenant = group[0].tenant;
+                const leftPercent = (firstTenant.mapCoords.x / firstTenant.mapOriginalSize.width) * 100;
+                const topPercent = (firstTenant.mapCoords.y / firstTenant.mapOriginalSize.height) * 100;
+                
+                pin.style.left = leftPercent + "%";
+                pin.style.top = topPercent + "%";
                 pin.textContent = group.length;
-                pin.style.background =
-                    "linear-gradient(135deg, #5fcfda, #4db8c3)";
+                pin.style.position = "absolute";
+                pin.style.background = "linear-gradient(135deg, #5fcfda, #4db8c3)";
 
                 // Store all tenants in this cluster
                 pin.dataset.tenants = JSON.stringify(
@@ -1127,8 +1133,12 @@ function updateMapView() {
                 // Create single marker
                 const tenant = group[0].tenant;
                 pin = document.createElement("div");
+                
+                // Calculate percentage position
+                // Note: We use original coordinates relative to original size for accuracy
+                const leftPercent = (tenant.mapCoords.x / tenant.mapOriginalSize.width) * 100;
+                const topPercent = (tenant.mapCoords.y / tenant.mapOriginalSize.height) * 100;
 
-                // Check if searching (active search term)
                 // Check if searching (active search term)
                 if (searchTerm && searchTerm.trim() !== '') {
                     pin.className = "map-pin-logo";
@@ -1138,10 +1148,6 @@ function updateMapView() {
                         pin.classList.add("small");
                     }
 
-                    // Center the pin
-                    pin.style.left = groupX + "px";
-                    pin.style.top = groupY + "px";
-
                     const img = document.createElement("img");
                     img.src = tenant.logo;
                     img.alt = tenant.name;
@@ -1149,8 +1155,10 @@ function updateMapView() {
                     pin.appendChild(img);
                 } else {
                     pin.className = "map-pin";
-                    pin.style.left = groupX + "px";
-                    pin.style.top = groupY + "px";
+                    // Check for Island category
+                    if (tenant.category && tenant.category.toLowerCase().includes('island')) {
+                        pin.classList.add('small-pin');
+                    }
                     pin.style.background = getCategoryColor(tenant.category);
 
                     const label = document.createElement("div");
@@ -1160,10 +1168,11 @@ function updateMapView() {
                 }
 
                 pin.style.position = "absolute";
+                pin.style.left = leftPercent + "%";
+                pin.style.top = topPercent + "%";
                 pin.dataset.tenant = JSON.stringify(tenant);
 
-                // Note: Regular pins use CSS .map-pin-label for tooltip
-                // Only logo pins (when searching) don't have label, so they might need tooltip
+                // Add tooltips
                 if (searchTerm && searchTerm.trim() !== '') {
                     pin.addEventListener("mouseenter", function () {
                         const tenantData = JSON.parse(this.dataset.tenant);
@@ -1211,29 +1220,36 @@ function updateMapView() {
 
     window.addEventListener("resize", resizeHandler);
 
-    // ===== PAN & ZOOM IMPLEMENTATION (BUTTONS ONLY + DRAG PAN) =====
+    // ===== ZOOM IMPLEMENTATION (WIDTH BASED FOR SCROLLBARS) =====
+    // Note: We use width percentage to allow the browser's native scrollbars to work on the container
     let state = {
-        panning: false,
-        scale: 1,
-        pointX: 0,
-        pointY: 0,
-        startX: 0,
-        startY: 0
+        scale: 1
     };
     
-    // Transform settings
+    // Zoom settings
     const minScale = 1;
     const maxScale = 4;
     const zoomStep = 0.5;
     
-    function setTransform() {
-        mapWrapper.style.transform = `translate(${state.pointX}px, ${state.pointY}px) scale(${state.scale})`;
+    function updateZoom() {
+        // Set width percentage based on scale (1 = 100%, 4 = 400%)
+        mapWrapper.style.width = `${state.scale * 100}%`;
+        
+        // Disable scrollbars when fully zoomed out to prevent slight scroll issues
+        // if (state.scale === 1) {
+        //     mapContainer.style.overflow = 'hidden';
+        // } else {
+        //     mapContainer.style.overflow = 'auto';
+        // }
     }
 
     // Initialize position
     function resetMap() {
-        state = { panning: false, scale: 1, pointX: 0, pointY: 0, startX: 0, startY: 0 };
-        setTransform();
+        state = { scale: 1 };
+        updateZoom();
+        // Reset scroll position
+        mapContainer.scrollLeft = 0;
+        mapContainer.scrollTop = 0;
     }
 
     // Button Listeners
@@ -1241,7 +1257,7 @@ function updateMapView() {
         e.stopPropagation();
         if (state.scale < maxScale) {
             state.scale = Math.min(state.scale + zoomStep, maxScale);
-            setTransform();
+            updateZoom();
         }
     });
 
@@ -1249,12 +1265,12 @@ function updateMapView() {
         e.stopPropagation();
         if (state.scale > minScale) {
             state.scale = Math.max(state.scale - zoomStep, minScale);
-            // Center map if zoomed out fully
+            // If fully zoomed out, reset scroll
             if (state.scale === 1) {
-                state.pointX = 0;
-                state.pointY = 0;
+                mapContainer.scrollLeft = 0;
+                mapContainer.scrollTop = 0;
             }
-            setTransform();
+            updateZoom();
         }
     });
 
@@ -1272,57 +1288,27 @@ function updateMapView() {
         mapContainer.ontouchstart = null;
         mapContainer.ontouchend = null;
         mapContainer.ontouchmove = null;
-        mapContainer.onwheel = null;
+        mapContainer.onwheel = null; 
     };
     cleanupDrag();
-
-    // Mouse Events (Pan)
-    mapContainer.addEventListener('mousedown', (e) => {
-        // e.preventDefault();
-        state.panning = true;
-        state.startX = e.clientX - state.pointX;
-        state.startY = e.clientY - state.pointY;
-        mapContainer.style.cursor = 'grabbing';
-    });
-
-    mapContainer.addEventListener('mousemove', (e) => {
-        if (!state.panning) return;
-        e.preventDefault();
-        state.pointX = (e.clientX - state.startX);
-        state.pointY = (e.clientY - state.startY);
-        setTransform();
-    });
-
-    mapContainer.addEventListener('mouseup', () => {
-        state.panning = false;
-        mapContainer.style.cursor = 'grab';
-    });
-
-    mapContainer.addEventListener('mouseleave', () => {
-        state.panning = false;
-        mapContainer.style.cursor = 'grab';
-    });
-
-    // Touch Events (Pan Only)
-    mapContainer.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-            state.panning = true;
-            state.startX = e.touches[0].clientX - state.pointX;
-            state.startY = e.touches[0].clientY - state.pointY;
+    
+    // Wheel Zoom
+    mapContainer.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            
+            const delta = -Math.sign(e.deltaY) * zoomStep;
+            const newScale = Math.min(Math.max(state.scale + delta, minScale), maxScale);
+            
+            if (newScale !== state.scale) {
+                state.scale = newScale;
+                updateZoom();
+            }
         }
-    });
+        // If no modifier key, do NOTHING (allow native scroll)
+    }, { passive: false });
 
-    mapContainer.addEventListener('touchmove', (e) => {
-        if (!state.panning || e.touches.length !== 1) return;
-        e.preventDefault(); // Prevent page scroll while panning
-        state.pointX = (e.touches[0].clientX - state.startX);
-        state.pointY = (e.touches[0].clientY - state.startY);
-        setTransform();
-    });
-
-    mapContainer.addEventListener('touchend', () => {
-        state.panning = false;
-    });
+    // Remove drag handlers (don't add them back)
     // ===== MOBILE LAYOUT ADJUSTMENTS =====
     function adjustMobileLayout() {
         const isMobile = window.innerWidth <= 768;

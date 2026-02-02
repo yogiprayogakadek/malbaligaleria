@@ -134,17 +134,24 @@
             </div>
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
-                <p>Mal Bali Galeria Shopping Center offers an exclusive shopping experience with modern architectural
-                    design and comprehensive facilities. Located in the strategic area of Denpasar, we provide a
-                    comfortable and luxurious shopping environment for all your needs.</p>
+                <p>Mal Bali Galeria is a large shopping complex conveniently located at the Simpang Dewa Ruci landmark
+                    and roundabout in Kuta.</p>
 
-                <p>As a premier retail destination in Bali, Mal Bali Galeria hosts a diverse collection of local and
-                    international brands, from fashion, beauty, dining, to lifestyle & entertainment. We are committed
-                    to providing the best shopping experience with various facilities and services for the whole family.
+                <p>The expansive shopping and entertainment precinct boasts a ‘Family Mall’ concept, carrying a slogan
+                    of ‘enjoy, play, eat, shop, learn’.
                 </p>
 
-                <p>With our strategic location and complete amenities, Mal Bali Galeria is the perfect destination for
-                    shopping, dining, and spending quality time with your loved ones in Denpasar.</p>
+                <p>Various tenants, outlets and event highlights make it a favourite destination among local and foreign
+                    visitors.</p>
+
+                <p>Besides shopping and dining, Mal Bali Galeria is also a popular leisure venue where different
+                    ‘happenings’ regularly occur on its calendar of events.</p>
+
+                <p>These mostly take place in its large and lux atrium referred to as the ‘dome’ and 'galeria food
+                    terrace'.</p>
+
+                <p>Adding to the convenience factor is a three-storey car park, as well as a dedicated parking space for
+                    motorcycles in its eastern ground level.</p>
             </div>
 
             <div class="info-grid">
