@@ -1237,6 +1237,8 @@ function updateMapView() {
         
         // Set width percentage based on scale (1 = 100%, 4 = 400%)
         mapWrapper.style.width = `${state.scale * 100}%`;
+        mapWrapper.style.height = 'auto'; 
+        mapWrapper.style.minWidth = `${state.scale * 100}%`; // Force min-width to ensure scrollbars trigger
         
         // Disable scrollbars when fully zoomed out to prevent slight scroll issues
         // if (state.scale === 1) {
