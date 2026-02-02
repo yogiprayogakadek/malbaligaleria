@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Logo</th>
                                     <th>Category</th>
                                     <th>Type</th>
                                     <th>Name</th>
@@ -61,6 +62,10 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'logo',
+                        name: 'logo',
                     },
                     {
                         data: 'category',

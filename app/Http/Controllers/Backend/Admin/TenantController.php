@@ -22,12 +22,9 @@ class TenantController extends Controller
 
     public function index(Request $request)
     {
-        $tenants = $this->tenantService->getAll(
-            ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type'],
-        );
         if ($request->ajax()) {
             $tenants = $this->tenantService->getAll(
-                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type'],
+                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type', 'logo'],
             );
 
             return DataTables::of($tenants)
@@ -53,8 +50,12 @@ class TenantController extends Controller
                     $floor = $row->map_coords['floor'] ?? null;
 
                     return $floor
-                        ? ($floor === 1 ? "{$floor}st Floor" : "{$floor}nd Floor")
+                        ? ($floor == 1 ? "{$floor}st Floor" : "{$floor}nd Floor")
                         : '-';
+                })
+                ->addColumn('logo', function ($row) {
+                    $logo = $row->logo;
+                    return file_exists(public_path($logo)) ? 'logo' : 'kosong';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.tenant.edit', $row->uuid) . '">

@@ -27,7 +27,7 @@ class UpdateTenantRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('tenants', 'name')->ignore($this->uuid, 'uuid')
+                // Rule::unique('tenants', 'name')->ignore($this->uuid, 'uuid')
             ],
             'phone'             => 'nullable|string|max:20',
             'email'             => 'nullable|email|max:255',
