@@ -44,7 +44,7 @@
         <div class="auth-forms">
             <div class="auth-tabs">
                 <div class="auth-tab active" onclick="showForm('login')">Tenant Login</div>
-                <div class="auth-tab" onclick="showForm('register')">Tenant Register</div>
+                {{-- <div class="auth-tab" onclick="showForm('register')">Tenant Register</div> --}}
             </div>
 
             <!-- Login Form -->
@@ -120,14 +120,14 @@
                     </button>
                 </form>
 
-                <div class="auth-toggle">
+                {{-- <div class="auth-toggle">
                     Don't have an account? <a href="#"
                         onclick="event.preventDefault(); showForm('register')">Register Store</a>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Register Form -->
-            <div id="register-form" class="form-container">
+            {{-- <div id="register-form" class="form-container">
                 <div class="auth-header">
                     <h2>Tenant Registration</h2>
                     <p>Register your store to join our mall community</p>
@@ -246,7 +246,7 @@
                     Already have an account? <a href="#"
                         onclick="event.preventDefault(); showForm('login')">Access Dashboard</a>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
