@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             AdminSeeder::class,
             CategorySeeder::class,
-            TenantSeeder1stFloor::class,
+            TenantSeederV3::class,
             SettingSeeder::class,
         ]);
     }
