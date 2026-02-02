@@ -46,7 +46,7 @@
                         <!-- ------------------------------- -->
                         <!-- start message Dropdown -->
                         <!-- ------------------------------- -->
-                        <li class="nav-item nav-icon-hover dropdown">
+                        {{-- <li class="nav-item nav-icon-hover dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
                                 aria-expanded="false">
                                 <iconify-icon icon="solar:inbox-line-line-duotone" class="fs-6"></iconify-icon>
@@ -164,7 +164,7 @@
                                         Messages</button>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         <!-- ------------------------------- -->
                         <!-- end message Dropdown -->
                         <!-- ------------------------------- -->
@@ -355,8 +355,7 @@
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                                         <img src="{{ Auth::user()->avatar ?? 'https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg' }}"
-                                            class="rounded-circle" width="80" height="80"
-                                            alt="MaterialM-img" />
+                                            class="rounded-circle" width="80" height="80" alt="MaterialM-img" />
                                         <div class="ms-3">
                                             <h5 class="mb-0 fs-4">{{ Auth::user()->name }}</h5>
                                             <span
@@ -367,7 +366,7 @@
                                         </div>
                                     </div>
                                     <div class="message-body">
-                                        <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-user-profile.html"
+                                        {{-- <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-user-profile.html"
                                             class="py-8 px-7 mt-8 d-flex align-items-center">
                                             <span
                                                 class="d-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded round">
@@ -405,7 +404,7 @@
                                                 <span class="fs-2 d-block text-body-secondary">To-do and
                                                     Daily Tasks</span>
                                             </div>
-                                        </a>
+                                        </a> --}}
                                     </div>
                                     <div class="d-grid py-4 px-7 pt-8">
                                         <a href="{{ route('logout') }}"
@@ -715,7 +714,7 @@
                         <!-- ------------------------------- -->
                         <!-- start message Dropdown -->
                         <!-- ------------------------------- -->
-                        <li class="nav-item nav-icon-hover dropdown">
+                        {{-- <li class="nav-item nav-icon-hover dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <iconify-icon icon="solar:inbox-line-line-duotone" class="fs-6"></iconify-icon>
@@ -836,7 +835,7 @@
                                         Messages</button>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         <!-- ------------------------------- -->
                         <!-- end message Dropdown -->
                         <!-- ------------------------------- -->
