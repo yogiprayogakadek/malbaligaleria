@@ -26,9 +26,9 @@ class StoreEventPhotoRequest extends FormRequest
             'path'              => 'required|image|mimes:png,jpg,jpeg|max:2048',
             'caption'           => 'required|string',
 
-            'album' => 'required|array|min:1|max:5',
+            'album' => 'nullable|array|min:1|max:5',
             'album.*' => [
-                'required',
+                'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:2048',
@@ -42,7 +42,7 @@ class StoreEventPhotoRequest extends FormRequest
             'event_id.required' => 'The tenant field is required.',
             'path.required'      => 'The primary image display field is required.',
 
-            'album.required' => 'Please upload at least one photo.',
+            // 'album.required' => 'Please upload at least one photo.',
             'album.array' => 'Invalid file format submitted.',
             'album.min' => 'You must upload at least :min photo.',
             'album.max' => 'You cannot upload more than :max photos.',
