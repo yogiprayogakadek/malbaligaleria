@@ -1232,6 +1232,9 @@ function updateMapView() {
     const zoomStep = 0.5;
     
     function updateZoom() {
+        const mapWrapper = document.getElementById("mapWrapper");
+        if (!mapWrapper) return;
+        
         // Set width percentage based on scale (1 = 100%, 4 = 400%)
         mapWrapper.style.width = `${state.scale * 100}%`;
         
