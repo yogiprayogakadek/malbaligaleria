@@ -141,7 +141,8 @@ class TenantController extends Controller
             'map_original_size' => [
                 'width' => $request->map_original_width,
                 'height' => $request->map_original_height,
-            ]
+            ],
+            'is_active' => $request->is_active,
         ];
 
         if ($request->logo != '') {

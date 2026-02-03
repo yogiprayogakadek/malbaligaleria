@@ -46,7 +46,7 @@
                                 <select name="is_active" id="is_active"
                                     class="form-control @error('is_active') is-invalid @enderror">
                                     <option value="1" {{ $category->is_active == 1 ? 'selected' : '' }}>Active</option>
-                                    <option value="0" {{ $category->is_active == 0 ? 'selected' : '' }}>Not Active
+                                    <option value="0" {{ $category->is_active == 0 ? 'selected' : '' }}>Inactive
                                     </option>
                                 </select>
                                 @error('is_active')
