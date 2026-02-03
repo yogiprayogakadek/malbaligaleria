@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Mal Bali Galeria | Login</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
 
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/auth.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -44,7 +45,7 @@
         <div class="auth-forms">
             <div class="auth-tabs">
                 <div class="auth-tab active" onclick="showForm('login')">Tenant Login</div>
-                <div class="auth-tab" onclick="showForm('register')">Tenant Register</div>
+                {{-- <div class="auth-tab" onclick="showForm('register')">Tenant Register</div> --}}
             </div>
 
             <!-- Login Form -->
@@ -120,10 +121,10 @@
                     </button>
                 </form>
 
-                <div class="auth-toggle">
+                {{-- <div class="auth-toggle">
                     Don't have an account? <a href="#"
                         onclick="event.preventDefault(); showForm('register')">Register Store</a>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Register Form -->
@@ -159,7 +160,7 @@
                     Or register with email
                 </div> --}}
 
-                <form method="POST" action="{{ route('register') }}">
+                {{-- <form method="POST" action="{{ route('register') }}">
                     @csrf
 
                     <div class="form-group">
@@ -240,12 +241,12 @@
                     <button type="submit" class="auth-button">
                         Register Store
                     </button>
-                </form>
+                </form> --}}
 
-                <div class="auth-toggle">
+                {{-- <div class="auth-toggle">
                     Already have an account? <a href="#"
                         onclick="event.preventDefault(); showForm('login')">Access Dashboard</a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
