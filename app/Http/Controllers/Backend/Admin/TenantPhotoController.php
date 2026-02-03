@@ -78,7 +78,8 @@ class TenantPhotoController extends Controller
 
         $this->tenantPhotoService->create($data);
 
-        return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo saved successfully');
+        return redirect()->back()->with('success', 'Photo saved successfully');
+        // return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo saved successfully');
     }
 
     public function edit($id)

@@ -8,9 +8,22 @@
 
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/backend/css/sweetalert2.min.css') }}">
 @endpush
 
 @section('content')
+    @if (session('success'))
+        <script>
+            toastr.success(
+                "{{ session('success') }}",
+                "Success", {
+                    showMethod: "slideDown",
+                    hideMethod: "slideUp",
+                    timeOut: 2000
+                }
+            );
+        </script>
+    @endif
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -109,6 +122,7 @@
 
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="{{ asset('assets/backend/js/sweetalert2.min.js') }}"></script>
     <script>
         $("#tenantId").select2({
             placeholder: "Select a tenant",
