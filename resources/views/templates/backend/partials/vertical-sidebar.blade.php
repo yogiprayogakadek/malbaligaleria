@@ -113,7 +113,8 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <a class="sidebar-link has-arrow {{ request()->routeIs('admin.tenant.photo*') ? 'active' : '' }}"
+                                        href="javascript:void(0)" aria-expanded="false">
                                         <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
                                         <span class="hide-menu">Photo</span>
                                     </a>
@@ -129,6 +130,12 @@
                                             <a class="sidebar-link" href="{{ route('admin.tenant.photo.create') }}">
                                                 <span class="icon-small"></span>
                                                 <span class="hide-menu">Create</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('admin.tenant.photo.bulk.create') }}">
+                                                <span class="icon-small"></span>
+                                                <span class="hide-menu">Bulk Insert</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -162,7 +169,8 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <a class="sidebar-link has-arrow {{ request()->routeIs('admin.event.photo*') ? 'active' : '' }}"
+                                        href="javascript:void(0)" aria-expanded="false">
                                         <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
                                         <span class="hide-menu">Photo</span>
                                     </a>
