@@ -16,6 +16,7 @@ class TenantPhotoRepository
     public function findById(int $id, array $fields)
     {
         return $this->model::select($fields)->where('id', $id)->firstOrFail();
+        // return $this->model::find($id);
     }
 
     public function findByTenantId(int $tenant_id, bool $is_primary, array $fields)
@@ -45,9 +46,8 @@ class TenantPhotoRepository
         return $tenant->update($data);
     }
 
-    public function delete(int $id)
+    public function delete(int $tenantId)
     {
-        $tenant = $this->model::find($id);
-        $tenant->delete();
+        $this->model::where('tenant_id', $tenantId)->delete();
     }
 }

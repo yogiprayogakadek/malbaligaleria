@@ -432,7 +432,9 @@
 
                 <div class="modal-details">
                     <div class="modal-header">
+                        <div class="modal-logo" id="modalLogo">
 
+                        </div>
                         <div class="modal-title">
                             <span class="modal-floor-badge" id="modalFloorBadge"></span>
                             <h2 id="modalTenantName"></h2>

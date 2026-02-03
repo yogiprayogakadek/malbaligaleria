@@ -11,17 +11,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Function to show/hide loading overlay
 function showLoading() {
-    const overlay = document.querySelector(".loading-overlay");
-    if (overlay) {
-        overlay.classList.add("show");
+    const pageLoader = document.getElementById("pageLoader");
+    const skeletonGrid = document.getElementById("skeletonGrid");
+    if (pageLoader) {
+        pageLoader.classList.remove("hidden");
+    }
+    if (skeletonGrid) {
+        skeletonGrid.style.display = "grid";
     }
 }
 
 function hideLoading() {
-    const overlay = document.querySelector(".loading-overlay");
-    if (overlay) {
-        overlay.classList.remove("show");
+    const pageLoader = document.getElementById("pageLoader");
+    const skeletonGrid = document.getElementById("skeletonGrid");
+    if (pageLoader) {
+        pageLoader.classList.add("hidden");
     }
+    if (skeletonGrid) {
+        skeletonGrid.style.display = "none";
+        skeletonGrid.classList.add("loaded");
+    }
+    document.body.classList.add("loaded");
 }
 
 // ===== TOAST NOTIFICATION SYSTEM =====
@@ -125,6 +135,7 @@ function animateCounter(element, start, end, duration = 1000) {
     const difference = end - start;
 
     function updateCounter(currentTime) {
+        if (!element) return; // Defensive check
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easeOut = 1 - Math.pow(1 - progress, 3);
@@ -711,8 +722,11 @@ function filterTenants() {
     const sidebarSearchTerm = sidebarSearch
         ? sidebarSearch.value.toLowerCase()
         : "";
-    const selectedFloor = document.getElementById("floorFilter").value;
-    const selectedCategory = document.getElementById("categoryFilter").value;
+    const floorFilter = document.getElementById("floorFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    const selectedFloor = floorFilter ? floorFilter.value : "";
+    const selectedCategory = categoryFilter ? categoryFilter.value : "";
 
     const combinedSearch = searchTerm || headerSearchTerm || sidebarSearchTerm;
 
@@ -729,8 +743,10 @@ function filterTenants() {
     });
 
     const tenantCountElement = document.getElementById("tenantCount");
-    const currentCount = parseInt(tenantCountElement.textContent) || 0;
-    animateCounter(tenantCountElement, currentCount, filtered.length, 800);
+    if (tenantCountElement) {
+        const currentCount = parseInt(tenantCountElement.textContent) || 0;
+        animateCounter(tenantCountElement, currentCount, filtered.length, 800);
+    }
 
     // Debounce toast notification to avoid spamming while typing
     if (window.searchToastTimer) {
@@ -926,12 +942,13 @@ document.getElementById("categoryFilter").addEventListener("change", () => {
 
 // ===== MAP VIEW =====
 function updateMapView() {
-    const mapContainer = document.getElementById("mapContainer");
-    const selectedFloor = document.getElementById("floorFilter").value;
-    const searchTerm = document
-        .getElementById("searchInput")
-        .value.toLowerCase();
-    const selectedCategory = document.getElementById("categoryFilter").value;
+    const floorFilter = document.getElementById("floorFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const searchInput = document.getElementById("searchInput");
+
+    const selectedFloor = floorFilter ? floorFilter.value : "";
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
+    const selectedCategory = categoryFilter ? categoryFilter.value : "";
 
     // Calculate tenant counts per floor
     const floorCounts = {};
@@ -972,6 +989,9 @@ function updateMapView() {
     const total1stFloor = floorCounts["1st Floor"] || 0;
     const total2ndFloor = floorCounts["2nd Floor"] || 0;
 
+    const mapContainer = document.getElementById("mapContainer");
+    if (!mapContainer) return;
+
     mapContainer.innerHTML = `
                 <div class="map-wrapper" id="mapWrapper" style="position: relative; width: 100%;">
                     <img src="${floorMaps[floorKey]}" alt="Mall Floor Plan" id="floorMapImage" style="width: 100%; height: auto; display: block;">
@@ -1009,13 +1029,15 @@ function updateMapView() {
             `;
 
     const mapStatsNumberElement = document.getElementById("mapStatsNumber");
-    const currentMapCount = parseInt(mapStatsNumberElement.textContent) || 0;
-    animateCounter(
-        mapStatsNumberElement,
-        currentMapCount,
-        currentFloorTenants.length,
-        800
-    );
+    if (mapStatsNumberElement) {
+        const currentMapCount = parseInt(mapStatsNumberElement.textContent) || 0;
+        animateCounter(
+            mapStatsNumberElement,
+            currentMapCount,
+            currentFloorTenants.length,
+            800
+        );
+    }
 
     // Toast notification removed as per user request
 
@@ -1606,33 +1628,41 @@ function showTenantModal(tenant) {
         logo:
             tenant.logo ||
             "https://via.placeholder.com/150x100?text=Store+Logo",
-        images: tenant.images || [
-            "https://via.placeholder.com/800x600?text=Store+Image+1",
-            "https://via.placeholder.com/800x600?text=Store+Image+2",
-            "https://via.placeholder.com/800x600?text=Store+Image+3",
-        ],
+        images: tenant.images || [],
         description:
             tenant.description ||
             "Welcome to our store! We offer a wide selection of premium products and exceptional customer service. Visit us today to discover our latest collections and exclusive offers.",
     };
 
     // Populate modal data
-    document.getElementById("modalTenantName").textContent = tenantData.name;
-    document.getElementById("modalFloorBadge").textContent = tenantData.floor;
-    document.getElementById("modalCategoryText").textContent =
-        tenantData.category;
-    document.getElementById("modalHours").textContent = tenantData.hours;
-    document.getElementById(
-        "modalLocation"
-    ).textContent = `${tenantData.floor}, Unit ${tenantData.unit}`;
-    document.getElementById("modalUnit").textContent = tenantData.unit;
+    const nameEl = document.getElementById("modalTenantName");
+    const floorBadgeEl = document.getElementById("modalFloorBadge");
+    const categoryTextEl = document.getElementById("modalCategoryText");
+    const hoursEl = document.getElementById("modalHours");
+    const locationEl = document.getElementById("modalLocation");
+    const unitEl = document.getElementById("modalUnit");
 
-    // Set logo
-    // const modalLogo = document.getElementById("modalLogo");
-    // modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+    if (nameEl) nameEl.textContent = tenantData.name;
+    if (floorBadgeEl) floorBadgeEl.textContent = tenantData.floor;
+    if (categoryTextEl) categoryTextEl.textContent = tenantData.category;
+    if (hoursEl) hoursEl.textContent = tenantData.hours;
+    if (locationEl) locationEl.textContent = `${tenantData.floor}, Unit ${tenantData.unit}`;
+    if (unitEl) unitEl.textContent = tenantData.unit;
+
+    // Set logo in modal header ONLY if tenant has album photos
+    const modalLogo = document.getElementById("modalLogo");
+    if (modalLogo) {
+        if (tenant.has_album) {
+            modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+            modalLogo.style.display = 'flex';
+        } else {
+            modalLogo.innerHTML = '';
+            modalLogo.style.display = 'none';
+        }
+    }
 
     // Set up carousel images
-    modalCarouselImages = tenantData.images;
+    modalCarouselImages = tenantData.images || [tenantData.logo];
     currentModalCarouselIndex = 0;
     updateModalCarousel();
 
@@ -2005,13 +2035,15 @@ const listViewBtn = document.getElementById("listViewBtn");
 
 function switchToMapView() {
     currentView = "map";
-    mapViewBtn.classList.add("active");
-    listViewBtn.classList.remove("active");
-    tenantGrid.style.display = "none";
-    emptyState.style.display = "none";
-    mapView.style.display = "block";
+    if (mapViewBtn) mapViewBtn.classList.add("active");
+    if (listViewBtn) listViewBtn.classList.remove("active");
+    if (tenantGrid) tenantGrid.style.display = "none";
+    if (emptyState) emptyState.style.display = "none";
+    if (mapView) mapView.style.display = "block";
 
-    document.getElementById("mapTenantList").style.display = "block";
+    const mapTenantList = document.getElementById("mapTenantList");
+    if (mapTenantList) mapTenantList.style.display = "block";
+    
     showToast("Switched to Map View", "info", 2000);
 
     updateMapView();
@@ -2019,12 +2051,14 @@ function switchToMapView() {
 
 function switchToListView() {
     currentView = "list";
-    listViewBtn.classList.add("active");
-    mapViewBtn.classList.remove("active");
-    mapView.style.display = "none";
-    tenantGrid.style.display = "grid";
+    if (listViewBtn) listViewBtn.classList.add("active");
+    if (mapViewBtn) mapViewBtn.classList.remove("active");
+    if (mapView) mapView.style.display = "none";
+    if (tenantGrid) tenantGrid.style.display = "grid";
 
-    document.getElementById("mapTenantList").style.display = "none";
+    const mapTenantList = document.getElementById("mapTenantList");
+    if (mapTenantList) mapTenantList.style.display = "none";
+    
     showToast("Switched to List View", "info", 2000);
 
     filterTenants();
@@ -2268,7 +2302,10 @@ function initSwipeGestures() {
 // ===== INITIAL RENDER =====
 document.addEventListener("DOMContentLoaded", async () => {
     // Set default floor to 1st Floor
-    document.getElementById("floorFilter").value = "1st Floor";
+    const floorFilter = document.getElementById("floorFilter");
+    if (floorFilter) {
+        floorFilter.value = "1st Floor";
+    }
 
     showLoading(); // Show loading overlay initially
     showShimmerCards(); // Show shimmer cards first
@@ -2301,12 +2338,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             // Add event listeners for filters
-            document
-                .getElementById("floorFilter")
-                .addEventListener("change", filterTenants);
-            document
-                .getElementById("categoryFilter")
-                .addEventListener("change", filterTenants);
+            const floorFilterEl = document.getElementById("floorFilter");
+            const categoryFilterEl = document.getElementById("categoryFilter");
+
+            if (floorFilterEl) {
+                floorFilterEl.addEventListener("change", filterTenants);
+            }
+            if (categoryFilterEl) {
+                categoryFilterEl.addEventListener("change", filterTenants);
+            }
 
             // Add modal close event listeners
             const modalCloseBtn = document.getElementById("modalCloseBtn");

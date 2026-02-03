@@ -227,11 +227,11 @@
 
                 <div class="experience-card events">
                     <div class="experience-card-title-vertical">
-                        <h4>D&E Events</h4>
+                        <h4>Events</h4>
                     </div>
                     <div class="experience-card-content">
                         <div class="experience-card-title">
-                            <h4>D&E Events</h4>
+                            <h4>Events</h4>
                         </div>
                         <div class="experience-card-button-wrapper">
                             <a href="{{ route('frontend.event.index') }}" class="experience-card-button"
@@ -379,16 +379,52 @@
     <div class="tenant-modal" id="tenantModal">
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="modal-container">
-            <button class="modal-close" id="modalClose">
+
+            <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12" />
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
             </button>
 
+
+            <button class="favorite-btn" id="modalFavoriteBtn" data-unit="">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+            </button>
+
+
+            <button class="share-btn" id="modalShareBtn" title="Share Store">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+            </button>
+
+
             <div class="modal-content">
+
                 <div class="modal-carousel">
-                    <div class="carousel-images" id="modalCarouselImages">
+
+                    <div class="carousel-swipe-hint" id="carouselSwipeHint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                        Swipe to browse
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
                     </div>
+
+                    <div class="carousel-images" id="modalCarouselImages">
+
+                    </div>
+
                     <button class="carousel-nav prev" id="modalCarouselPrev">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 18l-6-6 6-6" />
@@ -399,27 +435,31 @@
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
-                    <div class="carousel-swipe-hint" id="carouselSwipeHint">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 18l-6-6 6-6" />
-                        </svg>
-                        <span>Swipe or use navigation buttons</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18l6-6-6-6" />
-                        </svg>
-                    </div>
+
                     <div class="carousel-indicators" id="modalCarouselIndicators">
+
                     </div>
                 </div>
 
+
                 <div class="modal-details">
                     <div class="modal-header">
+                        <div class="modal-logo" id="modalLogo">
+
+                        </div>
                         <div class="modal-title">
                             <span class="modal-floor-badge" id="modalFloorBadge"></span>
                             <h2 id="modalTenantName"></h2>
-                            <p class="modal-category" id="modalCategory"></p>
+                            <div class="modal-category" id="modalCategory">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+                                </svg>
+                                <span id="modalCategoryText"></span>
+                            </div>
                         </div>
                     </div>
+
 
                     <div class="modal-info">
                         <div class="modal-info-item">
@@ -429,7 +469,7 @@
                             </svg>
                             <div>
                                 <span class="info-label">Location</span>
-                                <span class="info-value" id="modalUnit"></span>
+                                <span class="info-value" id="modalLocation"></span>
                             </div>
                         </div>
                         <div class="modal-info-item">
@@ -440,16 +480,6 @@
                             <div>
                                 <span class="info-label">Operating Hours</span>
                                 <span class="info-value" id="modalHours"></span>
-                            </div>
-                        </div>
-                        <div class="modal-info-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                <polyline points="9 22 9 12 15 12 15 22" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Floor</span>
-                                <span class="info-value" id="modalFloor"></span>
                             </div>
                         </div>
                     </div>

@@ -881,6 +881,7 @@ const modalCarouselIndicators = document.getElementById(
 
 let currentModalImageIndex = 0;
 let modalImages = [];
+let tenantData = null;
 
 
 async function getDataByTenantId(tenant_id) {
@@ -894,38 +895,81 @@ async function getDataByTenantId(tenant_id) {
 
 async function openTenantModal(tenant_id) {
     tenantData = await getDataByTenantId(tenant_id);
+    if (!tenantData) return;
 
-    document.getElementById("modalTenantName").textContent = tenantData.name;
-    document.getElementById("modalFloorBadge").textContent = tenantData.floor;
-    document.getElementById("modalCategory").textContent = tenantData.category;
-    document.getElementById("modalUnit").textContent =
-        "Unit " + tenantData.unit;
-    document.getElementById("modalHours").textContent = tenantData.hours;
-    document.getElementById("modalFloor").textContent = tenantData.floor;
+    // Basic data
+    const nameEl = document.getElementById("modalTenantName");
+    if (nameEl) nameEl.textContent = tenantData.name;
 
-    // Set logo
+    const floorBadge = document.getElementById("modalFloorBadge");
+    if (floorBadge) floorBadge.textContent = tenantData.floor;
 
+    const categoryText = document.getElementById("modalCategoryText");
+    if (categoryText) categoryText.textContent = tenantData.category;
 
+    const locationEl = document.getElementById("modalLocation");
+    if (locationEl) locationEl.textContent = "Unit " + tenantData.unit;
 
-    const description =
-        tenantData.description ||
-        "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
-    document.getElementById(
-        "modalDescription"
-    ).innerHTML = `<p>${description}</p>`;
+    const hoursEl = document.getElementById("modalHours");
+    if (hoursEl) hoursEl.textContent = tenantData.hours;
 
+    // Set logo in modal header ONLY if tenant has album photos
+    const modalLogo = document.getElementById("modalLogo");
+    if (modalLogo) {
+        if (tenantData.has_album) {
+            modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+            modalLogo.style.display = 'flex';
+        } else {
+            modalLogo.innerHTML = '';
+            modalLogo.style.display = 'none';
+        }
+    }
 
-    modalImages = tenantData.album
+    // Modal Description
+    const descEl = document.getElementById("modalDescription");
+    if (descEl) {
+        const description = tenantData.description || "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
+        descEl.innerHTML = `<p>${description}</p>`;
+    }
 
-
+    // Carousel setup
+    modalImages = tenantData.images || [tenantData.logo];
     currentModalImageIndex = 0;
     renderModalCarousel();
 
-
+    // Show modal
     document.body.style.overflow = "hidden";
     tenantModal.classList.add("active");
 
+    // Action button listeners
+    const modalFavBtn = document.getElementById("modalFavoriteBtn");
+    if (modalFavBtn) {
+        modalFavBtn.classList.remove("active");
+        const newFavBtn = modalFavBtn.cloneNode(true);
+        modalFavBtn.parentNode.replaceChild(newFavBtn, modalFavBtn);
+        newFavBtn.addEventListener("click", () => {
+            newFavBtn.classList.toggle("active");
+        });
+    }
 
+    const modalShareBtn = document.getElementById("modalShareBtn");
+    if (modalShareBtn) {
+        const newShareBtn = modalShareBtn.cloneNode(true);
+        modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
+        newShareBtn.addEventListener("click", () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: tenantData.name,
+                    text: `Check out ${tenantData.name} at Mal Bali Galeria!`,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert(`Sharing ${tenantData.name}`);
+            }
+        });
+    }
+
+    // Swipe hint
     const swipeHint = document.getElementById("carouselSwipeHint");
     if (swipeHint) {
         swipeHint.classList.remove("hidden");
@@ -988,18 +1032,17 @@ function renderModalCarousel() {
 
 
 function updateModalCarousel() {
+    if (!modalCarouselImages) return;
     const offset = -currentModalImageIndex * 100;
     modalCarouselImages.style.transform = `translateX(${offset}%)`;
 
-    document
-        .querySelectorAll(".carousel-indicator")
-        .forEach((indicator, index) => {
-            if (index === currentModalImageIndex) {
-                indicator.classList.add("active");
-            } else {
-                indicator.classList.remove("active");
-            }
-        });
+    document.querySelectorAll(".carousel-indicator").forEach((indicator, index) => {
+        if (index === currentModalImageIndex) {
+            indicator.classList.add("active");
+        } else {
+            indicator.classList.remove("active");
+        }
+    });
 }
 
 
@@ -1101,8 +1144,9 @@ if (modalCarouselImages) {
 }
 
 
-if (modalClose) {
-    modalClose.addEventListener("click", closeTenantModal);
+const modalCloseBtn = document.getElementById("modalCloseBtn");
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener("click", closeTenantModal);
 }
 
 if (modalOverlay) {

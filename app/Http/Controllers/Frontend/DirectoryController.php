@@ -84,6 +84,8 @@ class DirectoryController extends Controller
             ['id', 'name', 'category_id', 'map_coords', 'logo', 'description'],
             [
                 'category:id,name',
+                'albumPhoto:id,tenant_id,path',
+                'primaryPhoto:id,tenant_id,path',
             ],
             'is_active',
             true
@@ -96,7 +98,21 @@ class DirectoryController extends Controller
                 )
                 : asset('assets/images/no_image.jpg');
 
-            // Prepare base tenant data
+            $photos = collect()
+                ->when(
+                    filled($data->primaryPhoto?->path),
+                    fn($c) => $c->push(Storage::url($data->primaryPhoto->path))
+                )
+                ->concat(
+                    collect($data->albumPhoto ?? [])
+                        ->filter(fn($photo) => filled($photo->path))
+                        ->map(fn($photo) => Storage::url($photo->path))
+                )
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
+
             $tenantData = [
                 'name' => $data['name'],
                 'category' => $data['category']['name'],
@@ -105,10 +121,10 @@ class DirectoryController extends Controller
                 'logo' => $logoUrl,
                 'hours' => "10:00 AM - 10:00 PM",
                 'description' => $data['description'],
-                'images' => [$logoUrl],
+                'images' => !empty($photos) ? $photos : [$logoUrl],
+                'has_album' => !empty($photos),
             ];
 
-            // Only add mapCoords if x and y are valid numbers
             $hasValidCoords = isset($data['map_coords']['x']) && 
                             isset($data['map_coords']['y']) &&
                             is_numeric($data['map_coords']['x']) && 

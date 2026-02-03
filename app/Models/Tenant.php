@@ -29,6 +29,7 @@ class Tenant extends Model
     protected $casts = [
         'map_coords' => 'array',
         'map_original_size' => 'array',
+        'launched_at' => 'datetime',
     ];
 
     protected static function boot()

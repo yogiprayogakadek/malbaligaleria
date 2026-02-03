@@ -22,7 +22,7 @@ class UpdateTenantPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'path'              => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'path'              => 'nullable|image|mimes:png,jpg,jpeg,webp,jfif,heic|max:2048',
             'caption'           => 'required|string',
 
             'album' => 'required|array|min:1|max:5',
@@ -44,7 +44,7 @@ class UpdateTenantPhotoRequest extends FormRequest
             'album.max' => 'You cannot upload more than :max photos.',
 
             'album.*.image' => 'The file must be an image.',
-            'album.*.mimes' => 'Only JPG, JPEG, PNG, and WEBP formats are allowed.',
+            'album.*.mimes' => 'Only JPG, JPEG, PNG, JFIF, HEIC, and WEBP formats are allowed.',
             'album.*.max' => 'Each image must not exceed 2MB in size.',
         ];
     }

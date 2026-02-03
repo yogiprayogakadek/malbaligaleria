@@ -112,14 +112,15 @@ class TenantPhotoService
         return $results;
     }
 
-    public function delete(int $id)
+    public function delete(int $tenantId)
     {
-        $tenantPhoto = $this->findById($id);
-        if (!empty($tenantPhoto->path)) {
-            $this->deleteImage($tenantPhoto);
+        $tenantPhoto = $this->tenantPhotoRepository->getByTenantId($tenantId, ['path', 'tenant_id', 'id']);
+        foreach ($tenantPhoto as $t) {
+            if (!empty($t->path)) {
+                $this->deleteImage($t->path);
+            }
+            return $this->tenantPhotoRepository->delete($tenantId);
         }
-
-        return $this->tenantPhotoRepository->delete($id);
     }
 
     public function uploadImage(UploadedFile $file)

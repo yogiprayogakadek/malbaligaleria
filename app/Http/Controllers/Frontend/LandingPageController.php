@@ -46,7 +46,8 @@ class LandingPageController extends Controller
             ['id', 'name', 'map_coords', 'category_id', 'logo', 'isNew'],
             [
                 'category:id,name',
-                'albumPhoto:id,path,caption,tenant_id'
+                'albumPhoto:id,path,caption,tenant_id',
+                'primaryPhoto:id,path,caption,tenant_id'
             ],
             $cat,
             filter_var($isNew, FILTER_VALIDATE_BOOLEAN)
@@ -57,72 +58,50 @@ class LandingPageController extends Controller
 
     public function findTenantById($tenant_id)
     {
-        // $tenant = $this->tenantService->getTenantsWithRelationshipAndCondition(
-        //     ['id', 'name', 'map_coords', 'category_id', 'logo', 'description'],
-        //     [
-        //         'category:id,name',
-        //         'primaryPhoto:id,path,caption,tenant_id',
-        //         'albumPhoto:id,tenant_id,path,caption'
-        //     ],
-        //     'id',
-        //     $tenant_id
-        // )->map(function ($t) {
-        //     return [
-        //         'name' => $t['name'],
-        //         'floor' => $t['map_coords']['floor'] == 1 ? $t['map_coords']['floor'] . 'st Floor' : $t['map_coords']['floor'] . 'nd Floor',
-        //         'category' => $t['category']['name'],
-        //         'unit' => $t['map_coords']['unit'] ?? '-',
-        //         'hours' => "10:00 AM - 10:00 PM",
-        //         'logo' => !empty($t['logo'])
-        //             ? (str_starts_with($t['logo'], 'assets')
-        //                 ? asset($t['logo'])
-        //                 : asset('storage/' . $t['logo'])
-        //             )
-        //             : asset('assets/images/no_image.jpg'),
-        //         'description' => $t['description'],
-        //         'album' => collect()
-        //             ->when($t->primaryPhoto, function ($c) use ($t) {
-        //                 $c->push(asset('storage/' . $t->primaryPhoto->path));
-        //             })
-        //             ->concat(
-        //                 $t->albumPhoto->map(fn($photo) => asset('storage/' . $photo->path))
-        //             )
-        //             ->unique()
-        //             ->values()
-        //             ->all(),
-        //     ];
-        // });
-
         $tenant = $this->tenantService->getTenantsWithRelationshipAndCondition(
             ['id', 'name', 'map_coords', 'category_id', 'logo', 'description'],
             [
                 'category:id,name',
+                'albumPhoto:id,tenant_id,path',
+                'primaryPhoto:id,tenant_id,path',
             ],
             'id',
             $tenant_id
-        )->map(function ($t) {
-
-            $logoUrl = !empty($t['logo'])
-                ? (str_starts_with($t['logo'], 'assets')
-                    ? asset($t['logo'])
-                    : asset('storage/' . $t['logo'])
+        )->map(function ($data) {
+            $logoUrl = !empty($data['logo'])
+                ? (str_starts_with($data['logo'], 'assets')
+                    ? asset($data['logo'])
+                    : asset('storage/' . $data['logo'])
                 )
                 : asset('assets/images/no_image.jpg');
 
+            $photos = collect()
+                ->when(
+                    filled($data->primaryPhoto?->path),
+                    fn($c) => $c->push(\Illuminate\Support\Facades\Storage::url($data->primaryPhoto->path))
+                )
+                ->concat(
+                    collect($data->albumPhoto ?? [])
+                        ->filter(fn($photo) => filled($photo->path))
+                        ->map(fn($photo) => \Illuminate\Support\Facades\Storage::url($photo->path))
+                )
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
+
             return [
-                'name' => $t['name'],
-                'floor' => $t['map_coords']['floor'] == 1
-                    ? $t['map_coords']['floor'] . 'st Floor'
-                    : $t['map_coords']['floor'] . 'nd Floor',
-                'category' => $t['category']['name'],
-                'unit' => $t['map_coords']['unit'] ?? '-',
-                'hours' => "10:00 AM - 10:00 PM",
+                'name' => $data['name'],
+                'category' => $data['category']['name'],
+                'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
+                'unit' => $data['map_coords']['unit'] ?? '-',
                 'logo' => $logoUrl,
-                'description' => $t['description'],
-                'album' => [$logoUrl],
+                'hours' => "10:00 AM - 10:00 PM",
+                'description' => $data['description'],
+                'images' => !empty($photos) ? $photos : [$logoUrl],
+                'has_album' => !empty($photos),
             ];
         });
-
 
         return response()->json($tenant[0]);
     }

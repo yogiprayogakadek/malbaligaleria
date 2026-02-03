@@ -1,3 +1,32 @@
+/* Force Directory-like Header for New Store Page */
+.new-store-page header {
+    background: rgba(250, 250, 248, 0.98) !important;
+    box-shadow: 0 4px 20px rgba(44, 95, 93, 0.08) !important;
+    backdrop-filter: blur(30px) !important;
+    padding: 15px 40px !important;
+}
+
+.new-store-page body.dark-mode header {
+    background: rgba(26, 31, 30, 0.98) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.new-store-page header .logo h1 {
+    color: #2c3e50 !important;
+}
+
+.new-store-page body.dark-mode header .logo h1 {
+    color: #e0e0e0 !important;
+}
+
+.new-store-page header .menu-btn span {
+    background: #2c3e50 !important;
+}
+
+.new-store-page body.dark-mode header .menu-btn span {
+    background: #e0e0e0 !important;
+}
+
 :root {
     --text-dark: #111;
 }

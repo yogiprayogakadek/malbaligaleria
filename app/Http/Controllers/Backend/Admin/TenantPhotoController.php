@@ -81,10 +81,11 @@ class TenantPhotoController extends Controller
         return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo saved successfully');
     }
 
-    public function edit($tenant_id)
+    public function edit($id)
     {
-        $tenantPhoto = $this->tenantPhotoService->findByTenantId($tenant_id, true);
-        $album = $this->tenantPhotoService->getPhotoIsPrimary($tenant_id, false)->map(function ($photo) {
+        // $tenantPhoto = $this->tenantPhotoService->findByTenantId($tenant_id, true);
+        $tenantPhoto = $this->tenantPhotoService->findById($id);
+        $album = $this->tenantPhotoService->getPhotoIsPrimary($tenantPhoto->tenant_id, false)->map(function ($photo) {
             return [
                 'path' => asset('storage/' . $photo->path),
                 'id' => $photo->id
@@ -110,9 +111,9 @@ class TenantPhotoController extends Controller
         return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo updated successfully');
     }
 
-    public function delete($id)
+    public function delete($tenant_id)
     {
-        $this->tenantPhotoService->delete($id);
+        $this->tenantPhotoService->delete($tenant_id);
 
         // return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo deleted successfully');
     }

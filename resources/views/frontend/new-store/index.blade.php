@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/new-store.css') }}?v={{ time() }}">
 </head>
 
-<body>
+<body class="new-store-page">
     <!-- Page Loader -->
     <div class="page-loader" id="pageLoader">
         <div class="loader-content">
@@ -52,7 +52,7 @@
         </svg>
     </button>
 
-    <header>
+    <header class="scrolled">
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
@@ -104,9 +104,9 @@
         <section class="new-store-grid">
             @forelse($tenants as $tenant)
                 @php
-                    $isNew = $tenant->created_at->diffInDays(now()) < 30;
-                    $badgeText = $isNew ? 'Just Opened' : 'New Concept';
-                    $badgeClass = $isNew ? 'store-badge' : 'store-badge coming-soon'; // Example logic reuse
+                    $isJustOpened = $tenant->launched_at && $tenant->launched_at->diffInDays(now()) < 3;
+                    $badgeText = $isJustOpened ? 'Just Opened' : 'New Store';
+                    $badgeClass = 'store-badge';
                 @endphp
                 <a href="#" class="store-card">
                     <div class="store-image-wrapper">

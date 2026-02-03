@@ -10,11 +10,14 @@ class NewStoreController extends Controller
 {
     public function index()
     {
-        // Fetch latest active tenants
+        // Fetch tenants that are marked as new, have a launched_at date,
+        // and launched within the last 7 days.
         $tenants = Tenant::where('is_active', true)
+            ->where('isNew', true)
+            ->whereNotNull('launched_at')
+            ->where('launched_at', '>=', now()->subDays(7))
             ->with(['category', 'primaryPhoto'])
-            ->orderBy('created_at', 'desc')
-            ->take(12) // Limit to latest 12
+            ->orderBy('launched_at', 'desc')
             ->get();
 
         return view('frontend.new-store.index', compact('tenants'));

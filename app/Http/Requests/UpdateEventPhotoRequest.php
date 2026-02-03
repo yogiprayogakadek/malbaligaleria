@@ -22,7 +22,7 @@ class UpdateEventPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'path'              => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'path'              => 'nullable|image|mimes:png,jpg,jpeg,webp,jfif,heic',
             'caption'           => 'required|string',
 
             'album' => 'required|array|min:1|max:5',
@@ -44,7 +44,7 @@ class UpdateEventPhotoRequest extends FormRequest
             'album.max' => 'You cannot upload more than :max photos.',
 
             'album.*.image' => 'The file must be an image.',
-            'album.*.mimes' => 'Only JPG, JPEG, PNG, and WEBP formats are allowed.',
+            'album.*.mimes' => 'Only JPG, JPEG, PNG, JFIF, HEIC, and WEBP formats are allowed.',
             'album.*.max' => 'Each image must not exceed 2MB in size.',
         ];
     }
