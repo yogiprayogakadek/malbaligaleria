@@ -24,7 +24,8 @@ class StoreTenantPhotoRequest extends FormRequest
         return [
             'tenant_id'         => 'required|numeric|exists:tenants,id',
             'path'              => 'required|image|mimes:png,jpg,jpeg,webp,jfif,heic|max:2048',
-            'caption'           => 'required|string',
+            'caption'           => 'nullable|string',
+            // 'caption'           => 'required|string',
 
             'album' => 'nullable|array|min:1|max:5',
             'album.*' => [

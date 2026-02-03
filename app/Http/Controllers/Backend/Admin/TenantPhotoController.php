@@ -70,7 +70,7 @@ class TenantPhotoController extends Controller
     {
         $data = [
             'tenant_id' => $request->tenant_id,
-            'caption'   => $request->caption,
+            'caption'   => $request->caption ?? 'Soft Front',
             'is_primary'    => true,
             'path'      => $request->path,
             'album'     => $request->file('album')
