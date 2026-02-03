@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTenantPhotoRequest;
 use App\Http\Requests\UpdateTenantPhotoRequest;
+use App\Http\Requests\BulkStoreTenantPhotoRequest;
 use App\Services\TenantPhotoService;
 use App\Services\TenantService;
 use Illuminate\Http\Request;
@@ -66,6 +67,13 @@ class TenantPhotoController extends Controller
         return view('backend.admin.tenant-photo.create', compact('tenants'));
     }
 
+    public function bulkCreate()
+    {
+        $tenants = $this->tenantService->findEmptyPhotoTenants(['id', 'uuid', 'name']);
+
+        return view('backend.admin.tenant-photo.bulk-create', compact('tenants'));
+    }
+
     public function store(StoreTenantPhotoRequest $request)
     {
         $data = [
@@ -80,6 +88,26 @@ class TenantPhotoController extends Controller
 
         return redirect()->back()->with('success', 'Photo saved successfully');
         // return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo saved successfully');
+    }
+
+    public function bulkStore(BulkStoreTenantPhotoRequest $request)
+    {
+        $tenantIds = $request->id;
+        $paths = $request->file('path');
+        $captions = $request->caption;
+
+        foreach ($tenantIds as $index => $tenantId) {
+            $data = [
+                'tenant_id' => $tenantId,
+                'caption'   => $captions[$index] ?? 'Soft Front',
+                'is_primary' => true,
+                'path'      => $paths[$index],
+            ];
+
+            $this->tenantPhotoService->create($data);
+        }
+
+        return redirect()->route('admin.tenant.photo.index')->with('success', 'Bulk photos saved successfully');
     }
 
     public function edit($id)
