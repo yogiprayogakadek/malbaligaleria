@@ -28,7 +28,7 @@ class LandingPageController extends Controller
                 'category:id,name',
                 'primaryPhoto:id,path,caption,tenant_id,is_primary'
             ]
-        );
+        )->sortBy('name');
 
         $events = $this->eventService->getEventsWithRelationship(
             ['id', 'uuid', 'name', 'start_date', 'description'],
@@ -46,14 +46,13 @@ class LandingPageController extends Controller
             ['id', 'name', 'map_coords', 'category_id', 'logo', 'isNew'],
             [
                 'category:id,name',
-                'albumPhoto:id,path,caption,tenant_id',
                 'primaryPhoto:id,path,caption,tenant_id'
             ],
             $cat,
             filter_var($isNew, FILTER_VALIDATE_BOOLEAN)
         );
 
-        return response()->json($tenants);
+        return response()->json($tenants->sortBy('name')->values());
     }
 
     public function findTenantById($tenant_id)

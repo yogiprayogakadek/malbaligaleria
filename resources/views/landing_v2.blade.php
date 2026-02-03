@@ -421,6 +421,13 @@
                         </svg>
                     </div>
 
+                    <div class="carousel-loading" id="modalCarouselLoading">
+                        <div class="loading-status">
+                            <div class="loading-spinner"></div>
+                            <span>Memuat Album...</span>
+                        </div>
+                    </div>
+
                     <div class="carousel-images" id="modalCarouselImages">
 
                     </div>

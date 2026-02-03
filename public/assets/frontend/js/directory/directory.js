@@ -1610,29 +1610,71 @@ let currentModalCarouselIndex = 0;
 let modalCarouselImages = [];
 let modalSwipeStartX = 0;
 let modalSwipeEndX = 0;
+const tenantCache = {}; // Client-side cache for full tenant data
 
-function showTenantModal(tenant) {
+async function getDataByTenantId(tenant_id) {
+    try {
+        return await $.get("/find/tenants/" + tenant_id);
+    } catch (error) {
+        console.log("Failed to load data", error);
+    }
+}
+
+async function showTenantModal(tenant) {
     const modal = document.getElementById("tenantModal");
     if (!modal) return;
 
     // Hide any open tooltips
     hideMapTooltip();
 
-    // Use dummy data if tenant data is incomplete
-    const tenantData = {
-        name: tenant.name || "Sample Store",
-        floor: tenant.floor || "1st Floor",
-        category: tenant.category || "Fashion & Apparel",
-        hours: tenant.hours || "10:00 AM - 10:00 PM",
-        unit: tenant.unit || "A-101",
-        logo:
-            tenant.logo ||
-            "https://via.placeholder.com/150x100?text=Store+Logo",
-        images: tenant.images || [],
-        description:
-            tenant.description ||
-            "Welcome to our store! We offer a wide selection of premium products and exceptional customer service. Visit us today to discover our latest collections and exclusive offers.",
-    };
+    const tenantId = tenant.id;
+    let fullData = tenantCache[tenantId];
+
+    if (fullData) {
+        updateModalContent(fullData);
+    } else {
+        // Show modal immediately with fallback data (from the current tenant object)
+        const fallbackData = {
+            name: tenant.name || "Sample Store",
+            floor: tenant.floor || "1st Floor",
+            category: tenant.category || "Fashion & Apparel",
+            hours: tenant.hours || "10:00 AM - 10:00 PM",
+            unit: tenant.unit || "-",
+            logo: tenant.logo || "/assets/images/no_image.jpg",
+            images: [tenant.logo || "/assets/images/no_image.jpg"],
+            description: "Memuat informasi tenant...",
+            has_album: false
+        };
+        updateModalContent(fallbackData);
+
+        // Show loading indicator
+        const loadingIndicator = document.getElementById("modalCarouselLoading");
+        if (loadingIndicator) loadingIndicator.classList.add("active");
+
+        // Fetch full data
+        fullData = await getDataByTenantId(tenantId);
+        if (fullData) {
+            tenantCache[tenantId] = fullData;
+            updateModalContent(fullData);
+        }
+
+        if (loadingIndicator) loadingIndicator.classList.remove("active");
+    }
+
+    // Show modal and prevent body scroll
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+
+    // Hide swipe hint after 3 seconds
+    setTimeout(() => {
+        const hint = document.getElementById("carouselSwipeHint");
+        if (hint) hint.classList.add("hidden");
+    }, 3000);
+}
+
+function updateModalContent(data) {
+    const modal = document.getElementById("tenantModal");
+    if (!modal) return;
 
     // Populate modal data
     const nameEl = document.getElementById("modalTenantName");
@@ -1641,19 +1683,23 @@ function showTenantModal(tenant) {
     const hoursEl = document.getElementById("modalHours");
     const locationEl = document.getElementById("modalLocation");
     const unitEl = document.getElementById("modalUnit");
+    const descText = document.getElementById("modalDescription");
+    const descContainer = document.getElementById("modalDescriptionContainer");
 
-    if (nameEl) nameEl.textContent = tenantData.name;
-    if (floorBadgeEl) floorBadgeEl.textContent = tenantData.floor;
-    if (categoryTextEl) categoryTextEl.textContent = tenantData.category;
-    if (hoursEl) hoursEl.textContent = tenantData.hours;
-    if (locationEl) locationEl.textContent = `${tenantData.floor}, Unit ${tenantData.unit}`;
-    if (unitEl) unitEl.textContent = tenantData.unit;
+    if (nameEl) nameEl.textContent = data.name;
+    if (floorBadgeEl) floorBadgeEl.textContent = data.floor;
+    if (categoryTextEl) categoryTextEl.textContent = data.category;
+    if (hoursEl) hoursEl.textContent = data.hours;
+    if (locationEl) locationEl.textContent = `${data.floor}, Unit ${data.unit}`;
+    if (unitEl) unitEl.textContent = data.unit;
+    if (descText) descText.textContent = data.description || "Discover amazing products and services at this store.";
+    if (descContainer) descContainer.style.display = "block";
 
     // Set logo in modal header ONLY if tenant has album photos
     const modalLogo = document.getElementById("modalLogo");
     if (modalLogo) {
-        if (tenant.has_album) {
-            modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+        if (data.has_album) {
+            modalLogo.innerHTML = `<img src="${data.logo}" alt="${data.name}">`;
             modalLogo.style.display = 'flex';
         } else {
             modalLogo.innerHTML = '';
@@ -1662,25 +1708,15 @@ function showTenantModal(tenant) {
     }
 
     // Set up carousel images
-    modalCarouselImages = tenantData.images || [tenantData.logo];
+    modalCarouselImages = data.images || [data.logo];
     currentModalCarouselIndex = 0;
-    updateModalCarousel();
-
-    // Show description
-    const descContainer = document.getElementById("modalDescriptionContainer");
-    const descText = document.getElementById("modalDescription");
-    descText.textContent = tenantData.description;
-    descContainer.style.display = "block";
-
-    // Show modal
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
+    updateModalCarousel(data.name);
 
     // Set favorite button
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
     if (modalFavBtn) {
-        modalFavBtn.dataset.unit = tenantData.unit;
-        if (isFavorite(tenantData.unit)) {
+        modalFavBtn.dataset.unit = data.unit;
+        if (isFavorite(data.unit)) {
             modalFavBtn.classList.add("active");
         } else {
             modalFavBtn.classList.remove("active");
@@ -1692,8 +1728,8 @@ function showTenantModal(tenant) {
 
         // Add new listener
         newBtn.addEventListener("click", () => {
-            toggleFavorite(tenantData.unit);
-            if (isFavorite(tenantData.unit)) {
+            toggleFavorite(data.unit);
+            if (isFavorite(data.unit)) {
                 newBtn.classList.add("active");
             } else {
                 newBtn.classList.remove("active");
@@ -1708,29 +1744,19 @@ function showTenantModal(tenant) {
         modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
 
         newShareBtn.addEventListener("click", () => {
-            openShareMenu(tenantData);
+            openShareMenu(data);
         });
     }
 
     // Add status badge to hours
     const hoursElement = document.getElementById("modalHours");
-    if (hoursElement && tenantData.hours) {
+    if (hoursElement && data.hours) {
         // Remove existing badge if any
         const existingBadge = hoursElement.querySelector(".store-status-badge");
         if (existingBadge) existingBadge.remove();
 
-        addStatusBadge(hoursElement, tenantData.hours);
+        addStatusBadge(hoursElement, data.hours);
     }
-
-    // Show modal and prevent body scroll
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
-
-    // Hide swipe hint after 3 seconds
-    setTimeout(() => {
-        const hint = document.getElementById("carouselSwipeHint");
-        if (hint) hint.classList.add("hidden");
-    }, 3000);
 }
 
 function closeTenantModal() {
@@ -1745,7 +1771,7 @@ function closeTenantModal() {
     if (hint) hint.classList.remove("hidden");
 }
 
-function updateModalCarousel() {
+function updateModalCarousel(tenantName) {
     const carouselContainer = document.getElementById("modalCarouselImages");
     const indicatorsContainer = document.getElementById(
         "modalCarouselIndicators"
@@ -1754,9 +1780,9 @@ function updateModalCarousel() {
     // Update images
     carouselContainer.innerHTML = modalCarouselImages
         .map(
-            (img) => `
+            (img, index) => `
                 <div class="carousel-image">
-                    <img src="${img}" alt="Tenant Image">
+                    <img src="${img}" alt="${tenantName || 'Tenant'} - Image ${index + 1}">
                 </div>
             `
         )

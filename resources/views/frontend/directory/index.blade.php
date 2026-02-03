@@ -398,6 +398,13 @@
             <div class="modal-content">
 
                 <div class="modal-carousel">
+                    <!-- Carousel Loading Indicator -->
+                    <div class="carousel-loading" id="modalCarouselLoading">
+                        <div class="loading-status">
+                            <div class="loading-spinner"></div>
+                            <span>Memuat Album...</span>
+                        </div>
+                    </div>
 
                     <div class="carousel-swipe-hint" id="carouselSwipeHint">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

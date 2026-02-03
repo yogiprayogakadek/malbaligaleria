@@ -714,7 +714,8 @@ document.addEventListener("DOMContentLoaded", () => {
     floorItems.forEach((item) => {
 
         if (item.classList.contains("active")) {
-            const floor = item.querySelector("h4").textContent;
+            const h4 = item.querySelector("h4");
+            const floor = h4 ? h4.textContent : "";
 
             if (floor.includes("1st")) renderLandingTenants("1st Floor");
             else if (floor.includes("2nd")) renderLandingTenants("2nd Floor");
@@ -729,7 +730,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             this.classList.add("active");
 
-            const floorText = this.querySelector("h4").textContent;
+            const h4 = this.querySelector("h4");
+            const floorText = h4 ? h4.textContent : "";
             let targetFloor = "1st Floor";
             let isNew = false;
 
@@ -882,6 +884,7 @@ const modalCarouselIndicators = document.getElementById(
 let currentModalImageIndex = 0;
 let modalImages = [];
 let tenantData = null;
+const tenantCache = {}; // Client-side cache for tenant data
 
 
 async function getDataByTenantId(tenant_id) {
@@ -894,30 +897,73 @@ async function getDataByTenantId(tenant_id) {
 
 
 async function openTenantModal(tenant_id) {
-    tenantData = await getDataByTenantId(tenant_id);
-    if (!tenantData) return;
+    // Check cache first
+    let cachedData = tenantCache[tenant_id];
+
+    if (cachedData) {
+        tenantData = cachedData;
+        updateModalContent(tenantData);
+    } else {
+        // Fallback to logo from grid if available
+        const gridCard = document.querySelector(`.see-details-btn[data-id="${tenant_id}"]`)?.closest('.tenant-card');
+        const gridLogo = gridCard?.querySelector('.tenant-logo img')?.src;
+
+        if (gridLogo) {
+            // Show modal immediately with fallback data
+            const fallbackData = {
+                name: gridCard.querySelector('h3')?.textContent || "Loading...",
+                logo: gridLogo,
+                floor: gridCard.querySelector('.floor-badge')?.textContent || "-",
+                category: gridCard.querySelector('.tenant-category')?.textContent?.trim() || "-",
+                unit: gridCard.querySelector('.meta-item:first-child span')?.textContent?.replace('Unit ', '') || "-",
+                hours: "10:00 AM - 10:00 PM",
+                description: "Memuat informasi tenant...",
+                images: [gridLogo],
+                has_album: false
+            };
+            updateModalContent(fallbackData);
+        }
+
+        // Show loading indicator
+        const loadingIndicator = document.getElementById("modalCarouselLoading");
+        if (loadingIndicator) loadingIndicator.classList.add("active");
+
+        // Fetch full data
+        tenantData = await getDataByTenantId(tenant_id);
+        if (tenantData) {
+            tenantCache[tenant_id] = tenantData;
+            updateModalContent(tenantData);
+        }
+
+        if (loadingIndicator) loadingIndicator.classList.remove("active");
+    }
+}
+
+// Global helper to update modal content safely
+function updateModalContent(data) {
+    if (!data) return;
 
     // Basic data
     const nameEl = document.getElementById("modalTenantName");
-    if (nameEl) nameEl.textContent = tenantData.name;
+    if (nameEl) nameEl.textContent = data.name;
 
     const floorBadge = document.getElementById("modalFloorBadge");
-    if (floorBadge) floorBadge.textContent = tenantData.floor;
+    if (floorBadge) floorBadge.textContent = data.floor;
 
     const categoryText = document.getElementById("modalCategoryText");
-    if (categoryText) categoryText.textContent = tenantData.category;
+    if (categoryText) categoryText.textContent = data.category;
 
     const locationEl = document.getElementById("modalLocation");
-    if (locationEl) locationEl.textContent = "Unit " + tenantData.unit;
+    if (locationEl) locationEl.textContent = "Unit " + data.unit;
 
     const hoursEl = document.getElementById("modalHours");
-    if (hoursEl) hoursEl.textContent = tenantData.hours;
+    if (hoursEl) hoursEl.textContent = data.hours;
 
     // Set logo in modal header ONLY if tenant has album photos
     const modalLogo = document.getElementById("modalLogo");
     if (modalLogo) {
-        if (tenantData.has_album) {
-            modalLogo.innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+        if (data.has_album) {
+            modalLogo.innerHTML = `<img src="${data.logo}" alt="${data.name}">`;
             modalLogo.style.display = 'flex';
         } else {
             modalLogo.innerHTML = '';
@@ -928,14 +974,14 @@ async function openTenantModal(tenant_id) {
     // Modal Description
     const descEl = document.getElementById("modalDescription");
     if (descEl) {
-        const description = tenantData.description || "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
+        const description = data.description || "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
         descEl.innerHTML = `<p>${description}</p>`;
     }
 
     // Carousel setup
-    modalImages = tenantData.images || [tenantData.logo];
+    modalImages = data.images || [data.logo];
     currentModalImageIndex = 0;
-    renderModalCarousel();
+    renderModalCarousel(data.name);
 
     // Show modal
     document.body.style.overflow = "hidden";
@@ -959,12 +1005,12 @@ async function openTenantModal(tenant_id) {
         newShareBtn.addEventListener("click", () => {
             if (navigator.share) {
                 navigator.share({
-                    title: tenantData.name,
-                    text: `Check out ${tenantData.name} at Mal Bali Galeria!`,
+                    title: data.name,
+                    text: `Check out ${data.name} at Mal Bali Galeria!`,
                     url: window.location.href
                 }).catch(console.error);
             } else {
-                alert(`Sharing ${tenantData.name}`);
+                alert(`Sharing ${data.name}`);
             }
         });
     }
@@ -981,7 +1027,7 @@ async function openTenantModal(tenant_id) {
 
 
 function closeTenantModal() {
-    tenantModal.classList.remove("active");
+    if (tenantModal) tenantModal.classList.remove("active");
     document.body.style.overflow = "";
 
 
@@ -993,13 +1039,13 @@ function closeTenantModal() {
 }
 
 
-function renderModalCarousel() {
+function renderModalCarousel(tenantName) {
 
     modalCarouselImages.innerHTML = modalImages
         .map(
             (img, index) => `
                 <div class="carousel-image">
-                    <img src="${img}" alt="${tenantData.name} - Image ${
+                    <img src="${img}" alt="${tenantName || 'Tenant'} - Image ${
                 index + 1
             }">
                 </div>

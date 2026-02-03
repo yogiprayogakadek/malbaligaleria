@@ -930,6 +930,8 @@ const modalCarouselIndicators = document.getElementById(
 
 let currentModalImageIndex = 0;
 let modalImages = [];
+let tenantData = null;
+const tenantCache = {}; // Client-side cache for tenant data
 
 
 async function getDataByTenantId(tenant_id) {
@@ -942,43 +944,54 @@ async function getDataByTenantId(tenant_id) {
 
 // Open modal function
 async function openTenantModal(tenant_id) {
-    tenantData = await getDataByTenantId(tenant_id);
-    // Populate modal with tenant data
-    document.getElementById("modalTenantName").textContent = tenantData.name;
-    document.getElementById("modalFloorBadge").textContent = tenantData.floor;
-    document.getElementById("modalCategory").textContent = tenantData.category;
-    document.getElementById("modalUnit").textContent =
-        "Unit " + tenantData.unit;
-    document.getElementById("modalHours").textContent = tenantData.hours;
-    document.getElementById("modalFloor").textContent = tenantData.floor;
+    // Check cache first
+    let cachedData = tenantCache[tenant_id];
 
-    // Set logo
-    document.getElementById(
-        "modalLogo"
-    ).innerHTML = `<img src="${tenantData.logo}" alt="${tenantData.name}">`;
+    if (cachedData) {
+        tenantData = cachedData;
+        updateModalContent(tenantData);
+    } else {
+        // Fallback to logo from grid if available
+        const gridCard = document.querySelector(`.see-details-btn[data-id="${tenant_id}"]`)?.closest('.tenant-card');
+        const gridLogo = gridCard?.querySelector('.tenant-logo img')?.src;
 
-    // Set description (if available)
-    const description =
-        tenantData.description ||
-        "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
-    document.getElementById(
-        "modalDescription"
-    ).innerHTML = `<p>${description}</p>`;
+        if (gridLogo) {
+            // Show modal immediately with fallback data
+            const fallbackData = {
+                name: gridCard.querySelector('h3')?.textContent || "Loading...",
+                logo: gridLogo,
+                floor: gridCard.querySelector('.floor-badge')?.textContent || "-",
+                category: gridCard.querySelector('.tenant-category')?.textContent?.trim() || "-",
+                unit: gridCard.querySelector('.meta-item:first-child span')?.textContent?.replace('Unit ', '') || "-",
+                hours: "10:00 AM - 10:00 PM",
+                description: "Memuat informasi tenant...",
+                images: [gridLogo],
+                has_album: false
+            };
+            updateModalContent(fallbackData);
+        }
 
-    // Setup carousel images
-    // For now, we'll use the logo as the main image and create placeholder images
-    // In production, you should have actual tenant photos from the database
-    modalImages = tenantData.album
-        // tenantData.primaryPhoto,
+        // Show loading indicator
+        const loadingIndicator = document.getElementById("modalCarouselLoading");
+        if (loadingIndicator) loadingIndicator.classList.add("active");
 
-    currentModalImageIndex = 0;
-    renderModalCarousel();
+        // Fetch full data
+        tenantData = await getDataByTenantId(tenant_id);
+        if (tenantData) {
+            tenantCache[tenant_id] = tenantData;
+            updateModalContent(tenantData);
+        }
 
-    // Show modal with animation
-    document.body.style.overflow = "hidden";
-    tenantModal.classList.add("active");
+        if (loadingIndicator) loadingIndicator.classList.remove("active");
+    }
 
-    // Show swipe hint and auto-hide after 3 seconds
+    // Show modal
+    if (tenantModal) {
+        document.body.style.overflow = "hidden";
+        tenantModal.classList.add("active");
+    }
+
+    // Swipe hint
     const swipeHint = document.getElementById("carouselSwipeHint");
     if (swipeHint) {
         swipeHint.classList.remove("hidden");
@@ -988,9 +1001,82 @@ async function openTenantModal(tenant_id) {
     }
 }
 
+// Global helper to update modal content safely
+function updateModalContent(data) {
+    if (!data) return;
+
+    // Basic data
+    const nameEl = document.getElementById("modalTenantName");
+    if (nameEl) nameEl.textContent = data.name;
+
+    const floorBadge = document.getElementById("modalFloorBadge");
+    if (floorBadge) floorBadge.textContent = data.floor;
+
+    const categoryText = document.getElementById("modalCategoryText");
+    if (categoryText) categoryText.textContent = data.category;
+
+    const locationEl = document.getElementById("modalLocation");
+    if (locationEl) locationEl.textContent = "Unit " + data.unit;
+
+    const hoursEl = document.getElementById("modalHours");
+    if (hoursEl) hoursEl.textContent = data.hours;
+
+    // Set logo in modal header ONLY if tenant has album photos
+    const modalLogo = document.getElementById("modalLogo");
+    if (modalLogo) {
+        if (data.has_album) {
+            modalLogo.innerHTML = `<img src="${data.logo}" alt="${data.name}">`;
+            modalLogo.style.display = 'flex';
+        } else {
+            modalLogo.innerHTML = '';
+            modalLogo.style.display = 'none';
+        }
+    }
+
+    // Modal Description
+    const descEl = document.getElementById("modalDescription");
+    if (descEl) {
+        const description = data.description || "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
+        descEl.innerHTML = `<p>${description}</p>`;
+    }
+
+    // Carousel setup
+    modalImages = data.images || [data.logo];
+    currentModalImageIndex = 0;
+    renderModalCarousel(data.name);
+
+    // Action button listeners
+    const modalFavBtn = document.getElementById("modalFavoriteBtn");
+    if (modalFavBtn) {
+        modalFavBtn.classList.remove("active");
+        const newFavBtn = modalFavBtn.cloneNode(true);
+        modalFavBtn.parentNode.replaceChild(newFavBtn, modalFavBtn);
+        newFavBtn.addEventListener("click", () => {
+            newFavBtn.classList.toggle("active");
+        });
+    }
+
+    const modalShareBtn = document.getElementById("modalShareBtn");
+    if (modalShareBtn) {
+        const newShareBtn = modalShareBtn.cloneNode(true);
+        modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
+        newShareBtn.addEventListener("click", () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: data.name,
+                    text: `Check out ${data.name} at Mal Bali Galeria!`,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert(`Sharing ${data.name}`);
+            }
+        });
+    }
+}
+
 // Close modal function
 function closeTenantModal() {
-    tenantModal.classList.remove("active");
+    if (tenantModal) tenantModal.classList.remove("active");
     document.body.style.overflow = "";
 
     // Reset after animation
@@ -1002,13 +1088,14 @@ function closeTenantModal() {
 }
 
 // Render carousel
-function renderModalCarousel() {
-    // Render images
+function renderModalCarousel(tenantName) {
+    if (!modalCarouselImages) return;
+
     modalCarouselImages.innerHTML = modalImages
         .map(
             (img, index) => `
                 <div class="carousel-image">
-                    <img src="${img}" alt="${tenantData.name} - Image ${
+                    <img src="${img}" alt="${tenantName || 'Tenant'} - Image ${
                 index + 1
             }">
                 </div>
@@ -1016,7 +1103,7 @@ function renderModalCarousel() {
         )
         .join("");
 
-    // Render indicators
+
     modalCarouselIndicators.innerHTML = modalImages
         .map(
             (_, index) => `
@@ -1027,10 +1114,10 @@ function renderModalCarousel() {
         )
         .join("");
 
-    // Update carousel position
+
     updateModalCarousel();
 
-    // Add click events to indicators
+
     document.querySelectorAll(".carousel-indicator").forEach((indicator) => {
         indicator.addEventListener("click", () => {
             currentModalImageIndex = parseInt(indicator.dataset.index);

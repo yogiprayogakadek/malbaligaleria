@@ -114,6 +114,7 @@ class DirectoryController extends Controller
                 ->all();
 
             $tenantData = [
+                'id' => $data['id'],
                 'name' => $data['name'],
                 'category' => $data['category']['name'],
                 'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
@@ -148,6 +149,6 @@ class DirectoryController extends Controller
         });
         // dd($tenants);
 
-        return response()->json($tenants);
+        return response()->json($tenants->sortBy('name')->values());
     }
 }
