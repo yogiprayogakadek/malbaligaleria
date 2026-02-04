@@ -640,6 +640,17 @@ function showPromotionModal(promo) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
+    // Reset and show scroll hint
+    const scrollHint = modal.querySelector('.modal-scroll-hint');
+    if (scrollHint) {
+        scrollHint.classList.remove('hidden');
+        // Clear any existing timeout if necessary (though simple modal usually doesn't need it)
+        setTimeout(() => {
+            scrollHint.classList.add('hidden');
+        }, 3000); // 3 seconds
+    }
+
+    // Hide carousel swipe hint after 3 seconds
     setTimeout(() => {
         const hint = document.getElementById('carouselSwipeHint');
         if (hint) hint.classList.add('hidden');
@@ -653,6 +664,7 @@ function closePromotionModal() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
 
+    // Reset swipe hint for next time
     const hint = document.getElementById('carouselSwipeHint');
     if (hint) hint.classList.remove('hidden');
 }
