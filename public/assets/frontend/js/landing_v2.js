@@ -1282,6 +1282,50 @@ document.addEventListener("DOMContentLoaded", () => {
     if (tenantId) {
         setTimeout(() => {
             openTenantModal(tenantId);
-        }, 1000); // Give some time for initial load
+        }, 1000);
+    }
+});
+
+// Instagram Load More Logic
+document.addEventListener("DOMContentLoaded", () => {
+    const loadMoreBtn = document.getElementById("loadMoreIg");
+    let currentVisible = 6;
+
+    if (loadMoreBtn) {
+        const allItems = document.querySelectorAll(".instagram-item");
+        
+        loadMoreBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            
+            // Detect current column count (row size)
+            const grid = document.querySelector(".instagram-grid");
+            const columns = window.getComputedStyle(grid).getPropertyValue("grid-template-columns").split(" ").length;
+            const increment = columns;
+
+            const hiddenItems = document.querySelectorAll(".instagram-item.ig-hidden");
+            
+            if (hiddenItems.length > 0) {
+                const itemsToReveal = Array.from(hiddenItems).slice(0, increment);
+                
+                itemsToReveal.forEach((item, index) => {
+                    item.style.display = 'block';
+                    item.style.opacity = '0';
+                    item.classList.remove("ig-hidden");
+                    
+                    setTimeout(() => {
+                        item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                        item.style.opacity = '1';
+                    }, index * 100);
+                });
+
+                currentVisible += itemsToReveal.length;
+
+                if (currentVisible >= allItems.length) {
+                    loadMoreBtn.style.display = "none";
+                }
+            } else {
+                loadMoreBtn.style.display = "none";
+            }
+        });
     }
 });
