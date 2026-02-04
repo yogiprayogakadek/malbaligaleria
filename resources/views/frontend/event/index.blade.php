@@ -13,67 +13,245 @@
 
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing.css') }}?v={{ time() }}">
     <style>
+        :root {
+            --event-card-bg: #ffffff;
+            --event-grid-gap: 40px;
+            --category-color: #6a7a78;
+            --title-color: #1a1a1a;
+            --text-muted: #888888;
+        }
+
         .page-header {
-            padding-top: 150px;
-            padding-bottom: 50px;
+            padding-top: 180px;
+            padding-bottom: 80px;
             text-align: center;
-            background: var(--bg-light);
+            background: #ffffff;
+            position: relative;
         }
 
         body.dark-mode .page-header {
-            background: var(--bg-dark);
+            background: #121212;
         }
 
         .page-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .page-header .display-title {
             font-family: "Playfair Display", serif;
             font-size: 48px;
             font-weight: 500;
             color: var(--text-dark);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             letter-spacing: 1px;
         }
 
-        body.dark-mode .page-header h1 {
+        body.dark-mode .page-header .display-title {
             color: var(--text-light);
         }
 
         .page-header p {
-            color: #666;
+            color: #888;
             font-size: 16px;
             letter-spacing: 0.5px;
-        }
-
-        body.dark-mode .page-header p {
-            color: #aaa;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .events-grid-section {
-            padding: 0 40px 100px;
-            max-width: 1400px;
+            padding: 0 60px 120px;
+            max-width: 1600px;
             margin: 0 auto;
+            background: #ffffff;
+        }
+
+        body.dark-mode .events-grid-section {
+            background: #121212;
         }
 
         .events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--event-grid-gap);
         }
 
-        @media (max-width: 768px) {
-            .page-header {
-                padding-top: 120px;
-            }
+        .event-card-v2 {
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+        }
 
-            .page-header h1 {
-                font-size: 36px;
-            }
+        .event-img-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            margin-bottom: 25px;
+            background: #f0f0f0;
+        }
 
+        body.dark-mode .event-img-wrapper {
+            background: #1a1a1a;
+        }
+
+        .event-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .event-card-v2:hover .event-img-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .event-category-tag {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--category-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        body.dark-mode .event-category-tag {
+            color: #aaa;
+        }
+
+        .event-title-v2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--title-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        body.dark-mode .event-title-v2 {
+            color: #ffffff;
+        }
+
+        .event-date-v2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .see-details-link {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+
+        body.dark-mode .see-details-link {
+            color: #4a8a87;
+        }
+
+        .see-details-link svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .event-card-v2:hover .see-details-link {
+            gap: 15px;
+            color: var(--highlight-color);
+        }
+
+        .event-card-v2:hover .see-details-link svg {
+            transform: translateX(5px);
+        }
+
+        .event-card-v2.event-hidden {
+            display: none;
+        }
+
+        .load-more-container {
+            text-align: center;
+            margin-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        .btn-load-more {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-color);
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            padding: 15px 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .btn-load-more {
+            color: #4a8a87;
+            border-color: #4a8a87;
+        }
+
+        .btn-load-more:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        body.dark-mode .btn-load-more:hover {
+            background: #4a8a87;
+            color: #121212;
+        }
+
+        @media (max-width: 1200px) {
+            .events-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .events-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .events-grid-section {
+                padding: 0 30px 80px;
+            }
+        }
+
+        @media (max-width: 576px) {
             .events-grid {
                 grid-template-columns: 1fr;
             }
-
-            .event-card {
-                min-width: 0;
+            .page-header .display-title {
+                font-size: 32px;
             }
         }
     </style>
@@ -162,25 +340,31 @@
 
     <main>
         <section class="page-header">
-            <h1>Upcoming Events</h1>
-            <p>Discover the latest happenings at Mal Bali Galeria</p>
+            <h1>What's Happening</h1>
+            <h2 class="display-title">Upcoming Events</h2>
+            <p>Experience extraordinary moments at Bali's favorite lifestyle destination. From musical performances to seasonal festivals.</p>
         </section>
 
         <section class="events-grid-section">
-            <div class="events-grid">
-                @forelse ($events as $event)
-                    <div class="event-card">
-                        <div class="event-card-bg"
-                            style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+            <div class="events-grid" id="eventsGrid">
+                @forelse ($events as $index => $event)
+                    <a href="{{ route('frontend.event.detail', $event->uuid) }}" 
+                       class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }}">
+                        <div class="event-img-wrapper">
+                            <img src="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}" alt="{{ $event->name }}">
                         </div>
-                        <div class="event-card-content">
-                            <span
-                                class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
-                            <h3>{{ $event->name }}</h3>
-                            <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
-                                More →</a>
+                        <div class="event-card-info">
+                            <span class="event-category-tag">MALL EVENT</span>
+                            <h3 class="event-title-v2">{{ $event->name }}</h3>
+                            <span class="event-date-v2">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                            <div class="see-details-link">
+                                SEE DETAILS
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 @empty
                     <div class="no-events" style="grid-column: 1 / -1; text-align: center; padding: 50px;">
                         <h3>No upcoming events at the moment.</h3>
@@ -188,6 +372,12 @@
                     </div>
                 @endforelse
             </div>
+
+            @if(count($events) > 8)
+                <div class="load-more-container">
+                    <button id="loadMoreBtn" class="btn-load-more">Load More Events</button>
+                </div>
+            @endif
         </section>
     </main>
 
@@ -282,6 +472,21 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loadMoreBtn').on('click', function() {
+                const hiddenEvents = $('.event-card-v2.event-hidden');
+                
+                // Show the next 8 events
+                hiddenEvents.slice(0, 8).removeClass('event-hidden').hide().fadeIn(600);
+                
+                // If no more hidden events, hide the button
+                if ($('.event-card-v2.event-hidden').length === 0) {
+                    $('.load-more-container').fadeOut();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
