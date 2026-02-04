@@ -74,6 +74,13 @@
                                 <i class="ti ti-list-numbers fs-4 me-1"></i> Generate
                             </button>
                         </div>
+                        <div class="col-md-4 text-end">
+                            <div class="alert alert-light-info d-inline-block py-2 px-3 mb-0 border">
+                                <i class="ti ti-chart-pie fs-5 me-1"></i>
+                                Total Size: <span id="totalUploadSize" class="fw-bold">0 KB</span>
+                                <span class="text-muted ms-1">(Max Server: ~{{ ini_get('post_max_size') }})</span>
+                            </div>
+                        </div>
                     </div>
 
                     <form action="{{ route('admin.tenant.photo.bulk.store') }}" method="POST" enctype="multipart/form-data"
@@ -126,6 +133,7 @@
             <td>
                 <input type="file" name="path[]" class="form-control tenant-photo-input" accept="image/*">
                 <div class="invalid-feedback">Harap pilih foto untuk tenant ini.</div>
+                <small class="text-muted file-size-info" style="display: none;"></small>
             </td>
             <td>
                 <input type="text" name="caption[]" class="form-control" placeholder="Optional caption">
@@ -265,11 +273,6 @@
                 addRow();
             });
 
-            $(document).on('click', '.btn-remove-row', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers();
-                syncTenants();
-            });
 
             $('#btnGenerate').trigger('click');
 
@@ -380,11 +383,53 @@
                 });
             }
 
+            function updateTotalSize() {
+                let totalBytes = 0;
+                $('input[name="path[]"]').each(function() {
+                    const files = $(this)[0].files;
+                    if (files && files.length > 0) {
+                        totalBytes += files[0].size;
+                        
+                        // Update individual row size if needed (optional)
+                        const sizeText = formatBytes(files[0].size);
+                        $(this).siblings('.file-size-info').text(`Size: ${sizeText}`).show();
+                    } else {
+                        $(this).siblings('.file-size-info').hide();
+                    }
+                });
+
+                $('#totalUploadSize').text(formatBytes(totalBytes));
+                
+                // Visual warning if total is getting large (example 50MB)
+                if (totalBytes > 50 * 1024 * 1024) {
+                    $('#totalUploadSize').removeClass('text-dark').addClass('text-danger');
+                } else {
+                    $('#totalUploadSize').removeClass('text-danger').addClass('text-dark');
+                }
+            }
+
+            function formatBytes(bytes, decimals = 2) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            }
+
             $(document).on('change', 'input[name="path[]"]', function() {
                 if ($(this).val()) {
                     $(this).removeClass('is-invalid');
                     $(this).siblings('.invalid-feedback').hide();
                 }
+                updateTotalSize();
+            });
+
+            $(document).on('click', '.btn-remove-row', function() {
+                $(this).closest('tr').remove();
+                updateRowNumbers();
+                syncTenants();
+                updateTotalSize();
             });
         });
     </script>
