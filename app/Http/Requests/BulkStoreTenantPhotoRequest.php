@@ -17,7 +17,7 @@ class BulkStoreTenantPhotoRequest extends FormRequest
             'id' => 'required|array|min:1',
             'id.*' => 'required|numeric|distinct|exists:tenants,id',
             'path' => 'required|array|min:1',
-            'path.*' => 'required|image|mimes:png,jpg,jpeg,webp,jfif,heic|max:2048',
+            'path.*' => 'required|image|mimes:png,jpg,jpeg,webp,jfif,heic|max:3072',
             'caption' => 'nullable|array',
             'caption.*' => 'nullable|string',
         ];

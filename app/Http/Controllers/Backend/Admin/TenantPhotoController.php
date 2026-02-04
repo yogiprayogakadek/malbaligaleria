@@ -111,11 +111,11 @@ class TenantPhotoController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Bulk photos saved successfully',
-                'redirect' => route('admin.tenant.photo.index')
+                'redirect' => route('admin.tenant.photo.bulk.create')
             ]);
         }
 
-        return redirect()->route('admin.tenant.photo.index')->with('success', 'Bulk photos saved successfully');
+        return redirect()->route('admin.tenant.photo.bulk.create')->with('success', 'Bulk photos saved successfully');
     }
 
     public function edit($id)
