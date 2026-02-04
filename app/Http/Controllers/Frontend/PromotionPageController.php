@@ -7,6 +7,7 @@ use App\Services\CategoryService;
 use App\Services\PromoService;
 use App\Services\SettingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PromotionPageController extends Controller
 {
@@ -40,7 +41,7 @@ class PromotionPageController extends Controller
                 'id' => $data->id,
                 'title' => $data->name,
                 'tenant' => $data->tenant->name,
-                'tenantLogo' => asset('storage/' . $data->tenant->logo),
+                'tenantLogo' => (Storage::disk('public')->exists($data->tenant->logo)) ? asset('storage/' . $data->tenant->logo) : asset($data->tenant->logo),
                 'category' => $data->tenant->category->name,
                 'floor' => $data->tenant['map_coords']['floor'] == 1 ? $data->tenant['map_coords']['floor'] . 'st Floor' : $data->tenant['map_coords']['floor'] . 'nd Floor',
                 'unit' => $data->tenant->map_coords['unit'] ?? '-',
