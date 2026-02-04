@@ -25,9 +25,9 @@ class UpdateTenantPhotoRequest extends FormRequest
             'path'              => 'nullable|image|mimes:png,jpg,jpeg,webp,jfif,heic|max:2048',
             'caption'           => 'required|string',
 
-            'album' => 'required|array|min:1|max:5',
+            'album' => 'nullable|array|min:1|max:5',
             'album.*' => [
-                'required',
+                'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:2048',
@@ -38,7 +38,7 @@ class UpdateTenantPhotoRequest extends FormRequest
     public function messages()
     {
         return [
-            'album.required' => 'Please upload at least one photo.',
+            // 'album.required' => 'Please upload at least one photo.',
             'album.array' => 'Invalid file format submitted.',
             'album.min' => 'You must upload at least :min photo.',
             'album.max' => 'You cannot upload more than :max photos.',
