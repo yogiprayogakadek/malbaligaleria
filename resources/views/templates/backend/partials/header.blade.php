@@ -12,7 +12,9 @@
             </ul>
 
             <div class="d-block d-lg-none">
-                <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
+                <span class="fw-bold fs-5 text-dark"
+                    style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal
+                    Bali Galeria</span>
             </div>
             <a class="navbar-toggler p-0 border-0 nav-icon-hover" href="javascript:void(0)" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -24,14 +26,6 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="d-flex align-items-center justify-content-between">
                     <ul class="navbar-nav flex-row mx-auto ms-lg-auto align-items-center justify-content-center">
-                        <li class="nav-item nav-icon-hover dropdown">
-                            <a href="javascript:void(0)"
-                                class="nav-link d-flex d-lg-none align-items-center justify-content-center"
-                                type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar"
-                                aria-controls="offcanvasWithBothOptions">
-                                <iconify-icon icon="solar:sort-line-duotone" class="fs-7"></iconify-icon>
-                            </a>
-                        </li>
                         <li class="nav-item nav-icon-hover">
                             <a class="nav-link moon dark-layout" href="javascript:void(0)">
                                 <iconify-icon icon="solar:moon-line-duotone" class="moon fs-6"></iconify-icon>
@@ -40,131 +34,6 @@
                                 <iconify-icon icon="solar:sun-2-line-duotone" class="sun fs-6"></iconify-icon>
                             </a>
                         </li>
-                        <!-- ------------------------------- -->
-                        <!-- start message Dropdown -->
-                        <!-- ------------------------------- -->
-                        {{-- <li class="nav-item nav-icon-hover dropdown">
-                            <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
-                                aria-expanded="false">
-                                <iconify-icon icon="solar:inbox-line-line-duotone" class="fs-6"></iconify-icon>
-                                <span class="badge text-bg-primary fs-1 notification">3</span>
-                            </a>
-                            <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
-                                aria-labelledby="drop2">
-                                <div class="d-flex align-items-center justify-content-between py-3 px-7">
-                                    <h5 class="mb-0 fs-5 fw-semibold">Inbox</h5>
-                                    <span class="badge text-bg-warning rounded-4 px-3 py-1 lh-sm">3
-                                        new</span>
-                                </div>
-                                <div class="message-body" data-simplebar>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-6.jpg"
-                                                alt="user" class="rounded-circle" width="45" height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-danger border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Michell Flintoff</h6>
-                                                <span class="fs-2 d-block">just now</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">You: Yesterdy was
-                                                great...</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-2.jpg"
-                                                alt="user" class="rounded-circle" width="45" height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-primary border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Bianca Anderson</h6>
-                                                <span class="fs-2 d-block">5 mins ago</span>
-                                            </div>
-
-                                            <span class="d-block w-100 text-truncate">Nice looking dress
-                                                you...</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-3.jpg"
-                                                alt="user" class="rounded-circle" width="45" height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-success border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Andrew Johnson</h6>
-                                                <span class="fs-2 d-block">10 mins ago</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">Sent a photo</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-4.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-warning border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Marry Strokes</h6>
-                                                <span class="fs-2 d-block">days ago</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">
-                                                If I don’t like something, I’ll stay away from it.
-                                            </span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-5.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-success border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Josh Anderson</h6>
-                                                <span class="fs-2 d-block">year ago</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">$230 deducted from
-                                                account</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="py-6 px-7 mb-1">
-                                    <button class="btn btn-outline-primary w-100">See All
-                                        Messages</button>
-                                </div>
-                            </div>
-                        </li> --}}
-                        <!-- ------------------------------- -->
-                        <!-- end message Dropdown -->
-                        <!-- ------------------------------- -->
 
                         <!-- ------------------------------- -->
                         <!-- start notification Dropdown -->
@@ -426,235 +295,6 @@
         <!-- ---------------------------------- -->
         <!-- End Vertical Layout Header -->
         <!-- ---------------------------------- -->
-
-        <!-- ------------------------------- -->
-        <!-- apps Dropdown in Small screen -->
-        <!-- ------------------------------- -->
-        <!--  Mobilenavbar -->
-        <div class="offcanvas offcanvas-start pt-0" data-bs-scroll="true" tabindex="-1" id="mobilenavbar"
-            aria-labelledby="offcanvasWithBothOptionsLabel">
-            <nav class="sidebar-nav scroll-sidebar">
-                <div class="offcanvas-header justify-content-between">
-                    <a href="{{ url('/') }}" class="text-nowrap logo-img">
-                         <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
-                    </a>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body pt-0 h-n80" data-simplebar="" data-simplebar>
-                    <ul id="sidebarnav">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow ms-0" href="javascript:void(0)" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:slider-vertical-line-duotone"
-                                        class="fs-7"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">Apps</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level my-3">
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-chat.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-chat.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Chat Application</h6>
-                                            <span class="fs-3 d-block text-muted">New messages
-                                                arrived</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-invoice.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-invoice.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Invoice App</h6>
-                                            <span class="fs-3 d-block text-muted">Get latest
-                                                invoice</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-contact2.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-mobile.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Contact Application</h6>
-                                            <span class="fs-3 d-block text-muted">2 Unsaved
-                                                Contacts</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-email.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-message-box.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Email App</h6>
-                                            <span class="fs-3 d-block text-muted">Get new emails</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-user-profile.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-cart.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">User Profile</h6>
-                                            <span class="fs-3 d-block text-muted">learn more
-                                                information</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-calendar.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-date.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Calendar App</h6>
-                                            <span class="fs-3 d-block text-muted">Get dates</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-contact.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-lifebuoy.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Contact List Table</h6>
-                                            <span class="fs-3 d-block text-muted">Add new contact</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item py-2">
-                                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-notes.html"
-                                        class="d-flex align-items-center">
-                                        <div
-                                            class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-application.svg"
-                                                alt="malbaligaleria" class="img-fluid" width="24"
-                                                height="24" />
-                                        </div>
-                                        <div class="d-inline-block">
-                                            <h6 class="mb-0 bg-hover-primary">Notes Application</h6>
-                                            <span class="fs-3 d-block text-muted">To-do and Daily
-                                                tasks</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <ul class="px-8 mt-7 mb-4">
-                                    <li class="sidebar-item mb-3">
-                                        <h5 class="fs-5 fw-semibold">Quick Links</h5>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-pricing.html">Pricing
-                                            Page</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/authentication-login.html">Authentication
-                                            Design</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/authentication-register.html">Register
-                                            Now</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/authentication-error.html">404
-                                            Error
-                                            Page</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-notes.html">Notes
-                                            App</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-user-profile.html">User
-                                            Application</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <a class="fw-semibold bg-hover-primary"
-                                            href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-account-settings.html">Account
-                                            Settings</a>
-                                    </li>
-                                </ul>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link ms-0"
-                                href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-chat.html"
-                                aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:chat-unread-outline" class="fs-7"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">Chat</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link ms-0"
-                                href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-calendar.html"
-                                aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:calendar-minimalistic-outline"
-                                        class="fs-7"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">Calendar</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link ms-0"
-                                href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-email.html"
-                                aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:inbox-unread-outline" class="fs-7"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">Email</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
     </div>
     <div class="app-header with-horizontal">
         <nav class="navbar navbar-expand-xl container-fluid p-0">
@@ -666,14 +306,18 @@
                 </li>
                 <li class="nav-item d-none d-xl-block">
                     <a href="{{ url('/') }}" class="text-nowrap nav-link">
-                        <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
+                        <span class="fw-bold fs-5 text-dark"
+                            style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal
+                            Bali Galeria</span>
                     </a>
                 </li>
 
             </ul>
             <div class="d-block d-xl-none">
                 <a href="{{ url('/') }}" class="text-nowrap nav-link">
-                    <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
+                    <span class="fw-bold fs-5 text-dark"
+                        style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal
+                        Bali Galeria</span>
                 </a>
             </div>
             <a class="navbar-toggler nav-icon-hover p-0 border-0" href="javascript:void(0)" data-bs-toggle="collapse"
@@ -686,14 +330,6 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="d-flex align-items-center justify-content-between px-0 px-xl-8">
                     <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-                        <li class="nav-item dropdown">
-                            <a href="javascript:void(0)"
-                                class="nav-link d-flex d-lg-none align-items-center justify-content-center"
-                                type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar"
-                                aria-controls="offcanvasWithBothOptions">
-                                <iconify-icon icon="solar:sort-line-duotone" class="fs-7"></iconify-icon>
-                            </a>
-                        </li>
                         <li class="nav-item nav-icon-hover">
                             <a class="nav-link moon dark-layout" href="javascript:void(0)">
                                 <iconify-icon icon="solar:moon-line-duotone" class="moon fs-6"></iconify-icon>
@@ -702,135 +338,6 @@
                                 <iconify-icon icon="solar:sun-2-line-duotone" class="sun fs-6"></iconify-icon>
                             </a>
                         </li>
-                        <!-- ------------------------------- -->
-                        <!-- start message Dropdown -->
-                        <!-- ------------------------------- -->
-                        {{-- <li class="nav-item nav-icon-hover dropdown">
-                            <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <iconify-icon icon="solar:inbox-line-line-duotone" class="fs-6"></iconify-icon>
-                                <span class="badge text-bg-primary fs-1 notification">3</span>
-                            </a>
-                            <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
-                                aria-labelledby="drop2">
-                                <div class="d-flex align-items-center justify-content-between py-3 px-7">
-                                    <h5 class="mb-0 fs-5 fw-semibold">Inbox</h5>
-                                    <span class="badge text-bg-warning rounded-4 px-3 py-1 lh-sm">3
-                                        new</span>
-                                </div>
-                                <div class="message-body" data-simplebar>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-6.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-danger border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Michell Flintoff</h6>
-                                                <span class="fs-2 d-block">just now</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">You: Yesterdy was
-                                                great...</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-2.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-primary border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Bianca Anderson</h6>
-                                                <span class="fs-2 d-block">5 mins ago</span>
-                                            </div>
-
-                                            <span class="d-block w-100 text-truncate">Nice looking dress
-                                                you...</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-3.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-success border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Andrew Johnson</h6>
-                                                <span class="fs-2 d-block">10 mins ago</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">Sent a photo</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-4.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-warning border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Marry Strokes</h6>
-                                                <span class="fs-2 d-block">days ago</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">
-                                                If I don’t like something, I’ll stay away from it.
-                                            </span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)"
-                                        class="py-6 px-7 d-flex align-items-center dropdown-item">
-                                        <span class="me-3 position-relative">
-                                            <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-5.jpg"
-                                                alt="user" class="rounded-circle" width="45"
-                                                height="45" />
-                                            <span
-                                                class="position-absolute top-25 start-75 translate-middle-x p-1 bg-success border border-light rounded-circle">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-                                        </span>
-                                        <div class="w-75 v-middle">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h6 class="mb-1">Josh Anderson</h6>
-                                                <span class="fs-2 d-block">year ago</span>
-                                            </div>
-                                            <span class="d-block w-100 text-truncate">$230 deducted from
-                                                account</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="py-6 px-7 mb-1">
-                                    <button class="btn btn-outline-primary w-100">See All
-                                        Messages</button>
-                                </div>
-                            </div>
-                        </li> --}}
-                        <!-- ------------------------------- -->
-                        <!-- end message Dropdown -->
-                        <!-- ------------------------------- -->
-
                         <!-- ------------------------------- -->
                         <!-- start notification Dropdown -->
                         <!-- ------------------------------- -->

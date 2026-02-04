@@ -9,9 +9,9 @@
                 <a href="{{ url('/') }}" class="text-nowrap logo-img">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" style="height: 40px; width: auto;" />
                     <span class="hide-menu ms-2 fw-bold text-dark fs-5"
-                        style="font-family: 'Plus Jakarta Sans', sans-serif;">Mal Bali Galeria</span>
+                        style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
                 </a>
-                <div class="close-btn d-block d-xl-none sidebartoggler cursor-pointer" id="sidebarCollapse">
+                <div class="d-block d-xl-none sidebartoggler cursor-pointer" style="margin-right: -10px;">
                     <i class="ti ti-x fs-8"></i>
                 </div>
             </div>
