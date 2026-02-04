@@ -1181,6 +1181,30 @@ body.dark-mode .no-events-message {
 }
 
 @media (max-width: 768px) {
+    header {
+        padding: 15px 20px;
+    }
+
+    .header-left {
+        display: none;
+    }
+
+    .logo {
+        position: static;
+        transform: none;
+        text-align: left;
+        flex: 1;
+    }
+
+    .logo h1 {
+        font-size: 24px;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 80px 30px 120px;
+    }
+
     .carousel-section {
         height: 50vh;
     }

@@ -30,7 +30,7 @@ class BulkStoreTenantPhotoRequest extends FormRequest
             'id.*.exists' => 'The selected tenant is invalid.',
             'path.*.required' => 'The image is required for each row.',
             'path.*.image' => 'The file must be an image.',
-            'path.*.max' => 'Each image must not exceed 2MB.',
+            'path.*.max' => 'Each image must not exceed 3MB.',
         ];
     }
 }

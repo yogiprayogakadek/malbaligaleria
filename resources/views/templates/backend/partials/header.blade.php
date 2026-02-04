@@ -13,9 +13,9 @@
 
             <div class="d-block d-lg-none">
                 <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                    class="dark-logo" width="180" alt="MaterialM-img" />
+                    class="dark-logo" width="180" alt="malbaligaleria" />
                 <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/light-logo.svg"
-                    class="light-logo" width="180" alt="MaterialM-img" />
+                    class="light-logo" width="180" alt="malbaligaleria" />
             </div>
             <a class="navbar-toggler p-0 border-0 nav-icon-hover" href="javascript:void(0)" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -344,7 +344,7 @@
                             <a class="nav-link" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center gap-2 lh-base">
                                     <img src="{{ Auth::user()->avatar ?? 'https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg' }}"
-                                        class="rounded-circle" width="35" height="35" alt="MaterialM-img" />
+                                        class="rounded-circle" width="35" height="35" alt="malbaligaleria" />
                                 </div>
                             </a>
                             <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
@@ -355,7 +355,7 @@
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                                         <img src="{{ Auth::user()->avatar ?? 'https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg' }}"
-                                            class="rounded-circle" width="80" height="80" alt="MaterialM-img" />
+                                            class="rounded-circle" width="80" height="80" alt="malbaligaleria" />
                                         <div class="ms-3">
                                             <h5 class="mb-0 fs-4">{{ Auth::user()->name }}</h5>
                                             <span
@@ -463,7 +463,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-chat.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -479,7 +479,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-invoice.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -495,7 +495,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-mobile.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -511,7 +511,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-message-box.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -526,7 +526,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-cart.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -542,7 +542,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-date.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -557,7 +557,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-lifebuoy.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -572,7 +572,7 @@
                                         <div
                                             class="text-bg-light rounded-circle round-40 me-3 p-6 d-flex align-items-center justify-content-center">
                                             <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/svgs/icon-dd-application.svg"
-                                                alt="MaterialM-img" class="img-fluid" width="24"
+                                                alt="malbaligaleria" class="img-fluid" width="24"
                                                 height="24" />
                                         </div>
                                         <div class="d-inline-block">
@@ -672,9 +672,9 @@
                 <li class="nav-item d-none d-xl-block">
                     <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/" class="text-nowrap nav-link">
                         <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                            class="dark-logo" width="180" alt="MaterialM-img" />
+                            class="dark-logo" width="180" alt="malbaligaleria" />
                         <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/light-logo.svg"
-                            class="light-logo" width="180" alt="MaterialM-img" />
+                            class="light-logo" width="180" alt="malbaligaleria" />
                     </a>
                 </li>
 
@@ -682,7 +682,7 @@
             <div class="d-block d-xl-none">
                 <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/" class="text-nowrap nav-link">
                     <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                        width="180" alt="MaterialM-img" />
+                        width="180" alt="malbaligaleria" />
                 </a>
             </div>
             <a class="navbar-toggler nav-icon-hover p-0 border-0" href="javascript:void(0)" data-bs-toggle="collapse"
@@ -966,7 +966,7 @@
                                 aria-expanded="false">
                                 <div class="d-flex align-items-center gap-2 lh-base">
                                     <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg"
-                                        class="rounded-circle" width="35" height="35" alt="MaterialM-img" />
+                                        class="rounded-circle" width="35" height="35" alt="malbaligaleria" />
                                 </div>
                             </a>
                             <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
@@ -978,7 +978,7 @@
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                                         <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/profile/user-1.jpg"
                                             class="rounded-circle" width="80" height="80"
-                                            alt="MaterialM-img" />
+                                            alt="malbaligaleria" />
                                         <div class="ms-3">
                                             <h5 class="mb-0 fs-4">Jonathan Deo</h5>
                                             <span class="mb-1 d-block">Admin</span>
