@@ -107,6 +107,14 @@ class TenantPhotoController extends Controller
             $this->tenantPhotoService->create($data);
         }
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Bulk photos saved successfully',
+                'redirect' => route('admin.tenant.photo.index')
+            ]);
+        }
+
         return redirect()->route('admin.tenant.photo.index')->with('success', 'Bulk photos saved successfully');
     }
 

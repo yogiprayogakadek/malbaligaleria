@@ -25,6 +25,20 @@
         .tenant-select.is-invalid ~ .select2-container .select2-selection {
             border-color: #fa896b !important;
         }
+
+        .rotate {
+            animation: rotation 1s infinite linear;
+        }
+
+        @keyframes rotation {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 @endpush
 
@@ -52,8 +66,8 @@
                         <div class="col-md-4">
                             <label class="form-label">Initial Row Count</label>
                             <input type="number" id="initialCount" class="form-control" value="5" min="1"
-                                max="{{ count($tenants) }}">
-                            <small class="text-muted">Max: {{ count($tenants) }} tenants available</small>
+                                max="10">
+                            <small class="text-muted">Max: 10 tenants per upload session</small>
                         </div>
                         <div class="col-md-2">
                             <button type="button" id="btnGenerate" class="btn btn-info w-100">
@@ -134,7 +148,7 @@
         $(document).ready(function() {
             const $tableBody = $('#bulkTableBody');
             const $rowTemplate = $('#rowTemplate').html();
-            const maxTenants = parseInt($('#initialCount').attr('max'));
+            const maxTenants = 10;
 
             function updateRowNumbers() {
                 $tableBody.find('.row-number').each(function(index) {
@@ -286,8 +300,85 @@
                 if (!isValid) {
                     e.preventDefault();
                     Swal.fire('Validasi Gagal', 'Beberapa field wajib belum diisi dengan benar.', 'error');
+                } else {
+                    e.preventDefault();
+                    uploadWithProgress();
                 }
             });
+
+            function uploadWithProgress() {
+                const formData = new FormData($('#bulkForm')[0]);
+                const $submitBtn = $('#bulkForm button[type="submit"]');
+
+                $submitBtn.prop('disabled', true).html('<i class="ti ti-loader-2 rotate fs-4 me-1"></i> Uploading...');
+
+                Swal.fire({
+                    title: 'Memproses Unggahan...',
+                    html: `
+                        <div class="progress mb-3" style="height: 25px;">
+                            <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <p id="uploadStatusText" class="text-muted mb-0">Menyiapkan data...</p>
+                    `,
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        $.ajax({
+                            url: $('#bulkForm').attr('action'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            xhr: function() {
+                                const xhr = new window.XMLHttpRequest();
+                                xhr.upload.addEventListener("progress", function(evt) {
+                                    if (evt.lengthComputable) {
+                                        const percentComplete = Math.round((evt.loaded / evt.total) * 100);
+                                        $('#uploadProgressBar').css('width', percentComplete + '%').attr('aria-valuenow', percentComplete).text(percentComplete + '%');
+                                        
+                                        if (percentComplete < 100) {
+                                            $('#uploadStatusText').text('Mengunggah file (' + percentComplete + '%)');
+                                        } else {
+                                            $('#uploadStatusText').text('Menyimpan data di server...');
+                                        }
+                                    }
+                                }, false);
+                                return xhr;
+                            },
+                            success: function(response) {
+                                Swal.close();
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: response.message,
+                                        icon: 'success',
+                                        confirmButtonText: 'Lanjutkan'
+                                    }).then(() => {
+                                        window.location.href = response.redirect;
+                                    });
+                                } else {
+                                    $submitBtn.prop('disabled', false).html('<i class="ti ti-send fs-4 me-1"></i> Submit All Photos');
+                                    Swal.fire('Error', response.message || 'Terjadi kesalahan saat menyimpan data.', 'error');
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.close();
+                                $submitBtn.prop('disabled', false).html('<i class="ti ti-send fs-4 me-1"></i> Submit All Photos');
+                                
+                                let errorMsg = 'Gagal mengunggah foto.';
+                                if (xhr.status === 413) {
+                                    errorMsg = 'Ukuran file terlalu besar untuk server Anda.';
+                                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                    errorMsg = xhr.responseJSON.message;
+                                }
+                                
+                                Swal.fire('Gagal!', errorMsg, 'error');
+                            }
+                        });
+                    }
+                });
+            }
 
             $(document).on('change', 'input[name="path[]"]', function() {
                 if ($(this).val()) {
