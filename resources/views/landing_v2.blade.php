@@ -123,7 +123,7 @@
             </div>
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
-                <p>Mal Bali Galeria is a large shopping complex conveniently located at the Simpang Dewa Ruci landmark
+                {{-- <p>Mal Bali Galeria is a large shopping complex conveniently located at the Simpang Dewa Ruci landmark
                     and roundabout in Kuta.</p>
 
                 <p>The expansive shopping and entertainment precinct boasts a ‘Family Mall’ concept, carrying a slogan
@@ -140,7 +140,13 @@
                     terrace'.</p>
 
                 <p>Adding to the convenience factor is a three-storey car park, as well as a dedicated parking space for
-                    motorcycles in its eastern ground level.</p>
+                    motorcycles in its eastern ground level.</p> --}}
+                <p>An iconic lifestyle destination in the heart of Kuta, set at the prestigious Simpang Dewa Ruci. As
+                    Bali’s first mall to introduce premium retail concepts that continue to thrive, Mal Bali Galeria
+                    blends refined shopping and curated dining with a vibrant calendar of unique, high-energy
+                    events—delivering a sophisticated Family Mall experience where excitement, culture, and elegance
+                    come together.
+                    Enjoy. Play. Eat. Shop.</p>
             </div>
 
             <div class="info-grid">
@@ -198,68 +204,36 @@
     </section>
 
     <section class="experience-section reveal" id="experience">
-        <div class="experience-wrapper">
-            <div class="experience-left">
-                <button class="all-experience-btn">
-                    <span class="arrow">→</span>
-                    <span class="text">All Experience</span>
-                </button>
+        <div class="experience-container">
+            <div class="experience-header">
+                <h2>COMMERCIALS - SHOPPING MALL</h2>
+                <div class="header-divider"></div>
             </div>
 
             <div class="experience-cards">
-                <div class="experience-card promotion">
-                    <div class="experience-card-title-vertical">
-                        <h4>Promotion</h4>
-                    </div>
+                <a href="{{ route('frontend.promotion.index') }}" class="experience-card promotion">
                     <div class="experience-card-content">
                         <div class="experience-card-title">
                             <h4>Promotion</h4>
                         </div>
-                        <div class="experience-card-button-wrapper">
-                            <a href="{{ route('frontend.promotion.index') }}" class="experience-card-button"
-                                style="text-decoration: none;">
-                                <span class="text">See More</span>
-                                <span class="arrow">→</span>
-                            </a>
-                        </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="experience-card events">
-                    <div class="experience-card-title-vertical">
-                        <h4>Events</h4>
-                    </div>
+                <a href="{{ route('frontend.event.index') }}" class="experience-card events">
                     <div class="experience-card-content">
                         <div class="experience-card-title">
                             <h4>Events</h4>
                         </div>
-                        <div class="experience-card-button-wrapper">
-                            <a href="{{ route('frontend.event.index') }}" class="experience-card-button"
-                                style="text-decoration: none;">
-                                <span class="text">See More</span>
-                                <span class="arrow">→</span>
-                            </a>
-                        </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="experience-card new-store">
-                    <div class="experience-card-title-vertical">
-                        <h4>New Store</h4>
-                    </div>
+                <a href="{{ url('/new-store') }}" class="experience-card new-store">
                     <div class="experience-card-content">
                         <div class="experience-card-title">
                             <h4>New Store</h4>
                         </div>
-                        <div class="experience-card-button-wrapper">
-                            <a href="{{ url('/new-store') }}" class="experience-card-button"
-                                style="text-decoration: none;">
-                                <span class="text">See More</span>
-                                <span class="arrow">→</span>
-                            </a>
-                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
