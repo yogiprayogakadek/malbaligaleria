@@ -23,8 +23,10 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'name'  => 'required|string|unique:events,name',
-            'start_date'    => 'required|date|after_or_equal:today',
-            'end_date'  => 'required|date|after_or_equal:today|after_or_equal:start_date',
+            'start_date'    => 'required|date',
+            'end_date'  => 'required|date|after_or_equal:start_date',
+            // 'start_date'    => 'required|date|after_or_equal:today',
+            // 'end_date'  => 'required|date|after_or_equal:today|after_or_equal:start_date',
             'start_time'    => 'required',
             'end_time'  => 'required',
             'description'   => 'required|string',

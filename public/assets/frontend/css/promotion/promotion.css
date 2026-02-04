@@ -1809,7 +1809,8 @@ body.dark-mode .empty-state p {
     max-height: 90vh;
     background: white;
     border-radius: 20px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     transform: scale(0.9);
     transition: transform 0.3s ease;
@@ -1854,8 +1855,8 @@ body.dark-mode .modal-container {
 .modal-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    max-height: 90vh;
-    overflow: hidden;
+    max-height: none;
+    overflow: visible;
 }
 
 .modal-carousel {
@@ -1880,7 +1881,8 @@ body.dark-mode .modal-container {
 .carousel-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 20px;
 }
 
 .carousel-nav {
@@ -2309,7 +2311,7 @@ body.dark-mode footer {
     }
 
     .carousel-image {
-        height: 400px;
+        height: 350px;
     }
 
     .footer-content {
@@ -2362,6 +2364,7 @@ body.dark-mode footer {
 
     .modal-details {
         padding: 30px 20px;
+        overflow-y: visible;
     }
 
     .modal-info {
@@ -2520,5 +2523,50 @@ body.dark-mode .promotion-card.shimmer .promotion-info > * {
     .promotion-content {
         width: 100% !important;
         margin-top: 0 !important;
+    }
+}
+
+/* ===== MODAL SCROLL HINT ===== */
+.modal-scroll-hint {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: rgba(44, 95, 93, 0.9);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: bounceUpDown 2s infinite;
+    pointer-events: none;
+}
+
+@keyframes bounceUpDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@media (min-width: 1025px) {
+    .modal-scroll-hint {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-scroll-hint {
+        bottom: 20px;
+        right: 50%;
+        transform: translateX(50%);
+        width: max-content;
+    }
+    
+    @keyframes bounceUpDown {
+        0%, 100% { transform: translateX(50%) translateY(0); }
+        50% { transform: translateX(50%) translateY(-10px); }
     }
 }

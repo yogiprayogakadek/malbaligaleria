@@ -315,6 +315,13 @@
                     </div>
                 </div>
 
+                <div class="modal-scroll-hint">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                    </svg>
+                    <span>Scroll down for more details</span>
+                </div>
+
                 <div class="modal-details">
                     <div class="modal-header">
                         <div class="modal-logo" id="modalLogo">

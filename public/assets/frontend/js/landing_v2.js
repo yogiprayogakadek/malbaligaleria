@@ -995,6 +995,7 @@ function updateModalContent(data) {
         modalFavBtn.parentNode.replaceChild(newFavBtn, modalFavBtn);
         newFavBtn.addEventListener("click", () => {
             newFavBtn.classList.toggle("active");
+            showToast(newFavBtn.classList.contains("active") ? "Added to favorites" : "Removed from favorites", "success");
         });
     }
 
@@ -1003,14 +1004,19 @@ function updateModalContent(data) {
         const newShareBtn = modalShareBtn.cloneNode(true);
         modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
         newShareBtn.addEventListener("click", () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${data.id || data.unit}`;
+            
             if (navigator.share) {
                 navigator.share({
                     title: data.name,
                     text: `Check out ${data.name} at Mal Bali Galeria!`,
-                    url: window.location.href
-                }).catch(console.error);
+                    url: shareUrl
+                }).catch(err => {
+                    console.log("Share failed, falling back to clipboard", err);
+                    copyToClipboard(shareUrl);
+                });
             } else {
-                alert(`Sharing ${data.name}`);
+                copyToClipboard(shareUrl);
             }
         });
     }
@@ -1225,5 +1231,57 @@ document.addEventListener("click", (e) => {
         if (tenantId) {
             openTenantModal(tenantId);
         }
+    }
+});
+
+// Helper for clipboard
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast("Link copied to clipboard!", "success");
+        });
+    } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showToast("Link copied to clipboard!", "success");
+    }
+}
+
+// Toast notification system
+function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `toast-notification ${type}`;
+    
+    let icon = "";
+    if (type === "success") {
+        icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+    } else {
+        icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+    }
+
+    toast.innerHTML = `${icon}<span>${message}</span>`;
+    document.body.appendChild(toast);
+    
+    toast.offsetHeight; // force reflow
+    toast.classList.add("active");
+
+    setTimeout(() => {
+        toast.classList.remove("active");
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Check for deep-link parameter on load
+document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tenantId = urlParams.get("id") || urlParams.get("store");
+    if (tenantId) {
+        setTimeout(() => {
+            openTenantModal(tenantId);
+        }, 1000); // Give some time for initial load
     }
 });
