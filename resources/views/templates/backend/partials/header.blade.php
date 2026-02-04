@@ -12,10 +12,7 @@
             </ul>
 
             <div class="d-block d-lg-none">
-                <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                    class="dark-logo" width="180" alt="malbaligaleria" />
-                <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/light-logo.svg"
-                    class="light-logo" width="180" alt="malbaligaleria" />
+                <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
             </div>
             <a class="navbar-toggler p-0 border-0 nav-icon-hover" href="javascript:void(0)" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -438,10 +435,8 @@
             aria-labelledby="offcanvasWithBothOptionsLabel">
             <nav class="sidebar-nav scroll-sidebar">
                 <div class="offcanvas-header justify-content-between">
-                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/index.html"
-                        class="text-nowrap logo-img">
-                        <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/logo-icon.svg"
-                            alt="Logo" />
+                    <a href="{{ url('/') }}" class="text-nowrap logo-img">
+                         <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
                     </a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
@@ -670,19 +665,15 @@
                     </a>
                 </li>
                 <li class="nav-item d-none d-xl-block">
-                    <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/" class="text-nowrap nav-link">
-                        <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                            class="dark-logo" width="180" alt="malbaligaleria" />
-                        <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/light-logo.svg"
-                            class="light-logo" width="180" alt="malbaligaleria" />
+                    <a href="{{ url('/') }}" class="text-nowrap nav-link">
+                        <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
                     </a>
                 </li>
 
             </ul>
             <div class="d-block d-xl-none">
-                <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/" class="text-nowrap nav-link">
-                    <img src="https://bootstrapdemos.wrappixel.com/materialM/dist/assets/images/logos/dark-logo.svg"
-                        width="180" alt="malbaligaleria" />
+                <a href="{{ url('/') }}" class="text-nowrap nav-link">
+                    <span class="fw-bold fs-5 text-dark" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Mal Bali Galeria</span>
                 </a>
             </div>
             <a class="navbar-toggler nav-icon-hover p-0 border-0" href="javascript:void(0)" data-bs-toggle="collapse"

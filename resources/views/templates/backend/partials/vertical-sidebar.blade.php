@@ -11,6 +11,9 @@
                     <span class="hide-menu ms-2 fw-bold text-dark fs-5"
                         style="font-family: 'Plus Jakarta Sans', sans-serif;">Mal Bali Galeria</span>
                 </a>
+                <div class="close-btn d-block d-xl-none sidebartoggler cursor-pointer" id="sidebarCollapse">
+                    <i class="ti ti-x fs-8"></i>
+                </div>
             </div>
 
             <!-- ---------------------------------- -->
