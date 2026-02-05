@@ -5,6 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenant Directory | Mal Bali Galeria</title>
+    <meta name="description" content="Explore our collection of premium brands and stores at Mal Bali Galeria. Find your favorite shops across all levels.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Tenant Directory | Mal Bali Galeria">
+    <meta property="og:description" content="Explore our collection of premium brands and stores at Mal Bali Galeria.">
+    <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="Tenant Directory | Mal Bali Galeria">
+    <meta property="twitter:description" content="Explore our collection of premium brands and stores at Mal Bali Galeria.">
+    <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
+
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"

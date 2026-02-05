@@ -5,6 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $event['name'] }} - Event Details | Mal Bali Galeria</title>
+    <meta name="description" content="{{ Str::limit(strip_tags($event['description']), 160) }}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $event['name'] }} | Mal Bali Galeria">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($event['description']), 160) }}">
+    <meta property="og:image" content="{{ $event['photo_path'] ? asset('storage/' . $event['photo_path']) : asset('assets/images/logo.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $event['name'] }} | Mal Bali Galeria">
+    <meta property="twitter:description" content="{{ Str::limit(strip_tags($event['description']), 160) }}">
+    <meta property="twitter:image" content="{{ $event['photo_path'] ? asset('storage/' . $event['photo_path']) : asset('assets/images/logo.png') }}">
+
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
 
     <link

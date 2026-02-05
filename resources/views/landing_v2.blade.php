@@ -4,7 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mal Bali Galeria</title>
+    <title>Mal Bali Galeria | Enjoy, Play, Eat, Shop</title>
+    <meta name="description" content="Mal Bali Galeria - The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
+    <meta name="keywords" content="Mal Bali Galeria, Bali Shopping Mall, Kuta Mall, Bali Lifestyle, Bali Shopping Destination">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:title" content="Mal Bali Galeria | Enjoy, Play, Eat, Shop">
+    <meta property="og:description" content="The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
+    <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url('/') }}">
+    <meta property="twitter:title" content="Mal Bali Galeria | Enjoy, Play, Eat, Shop">
+    <meta property="twitter:description" content="The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
+    <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
+
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"

@@ -2249,6 +2249,8 @@ body.dark-mode .floor-btn {
 
 .map-container {
     position: relative;
+}
+
 /* Map Container - Consolidated */
 .map-container {
     position: relative;
@@ -2266,7 +2268,6 @@ body.dark-mode .floor-btn {
     scrollbar-width: thin;
     -ms-overflow-style: auto;
     border: 2px solid #e0e0e0;
-    user-select: none;
 }
 
 body.dark-mode .map-container {
@@ -2501,12 +2502,6 @@ body.dark-mode .map-container {
         width: 24px; /* Smaller logo pin (was 30px) */
         height: 24px;
     }
-
-    .map-pin-logo.small {
-        width: 16px; /* Smaller small logo (was 20px) */
-        height: 16px;
-    }
-}
 
     .map-pin-logo.small {
         width: 16px; /* Smaller small logo (was 20px) */
@@ -4879,6 +4874,10 @@ body.dark-mode footer {
 
     .map-body {
         padding: 20px;
+    }
+
+    .map-container {
+        height: 450px;
     }
 
     .sidebar {

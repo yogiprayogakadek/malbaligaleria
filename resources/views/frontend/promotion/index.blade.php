@@ -5,6 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $setting->payload['site_title'] ?? 'Promotions' }} | Mal Bali Galeria</title>
+    <meta name="description" content="Check out the latest promotions and exclusive deals at Mal Bali Galeria. Your premium shopping experience simplified.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $setting->payload['site_title'] ?? 'Promotions' }} | Mal Bali Galeria">
+    <meta property="og:description" content="Check out the latest promotions and exclusive deals at Mal Bali Galeria.">
+    <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $setting->payload['site_title'] ?? 'Promotions' }} | Mal Bali Galeria">
+    <meta property="twitter:description" content="Check out the latest promotions and exclusive deals at Mal Bali Galeria.">
+    <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
+
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
