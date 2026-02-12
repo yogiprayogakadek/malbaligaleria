@@ -1535,7 +1535,8 @@ function pinpointOnMap(tenant) {
 
     // Set map image
     if (visualMapImage) {
-        visualMapImage.src = `/assets/images/floors/${floorImg}`;
+        const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
+        visualMapImage.src = `${baseUrl}/${floorImg}`;
         
         // Position marker using percentages
         if (mapMarker) {
@@ -1577,14 +1578,15 @@ function renderModalMap(data) {
     const markerLogo = document.getElementById("modalMapMarkerLogo");
     const logoImg = document.getElementById("markerLogoImg");
 
-    // if (!floorMapImg || !markerLogo || !logoImg) return;
+    if (!floorMapImg || !markerLogo || !logoImg) return;
 
     // Check if coordinates exist
     if (data.x && data.y && data.map_original_size) {
         const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
         const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
         
-        floorMapImg.src = `/assets/images/floors/${floorImg}`;
+        const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
+        floorMapImg.src = `${baseUrl}/${floorImg}`;
         
         // Set logo
         logoImg.src = data.logo;

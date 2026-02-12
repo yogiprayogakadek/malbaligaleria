@@ -675,6 +675,9 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        window.FLOOR_MAP_BASE_URL = "{{ asset('assets/images/floors') }}";
+    </script>
     <script src="{{ asset('assets/frontend/js/landing_v2.js') }}"></script>
 
 </body>
