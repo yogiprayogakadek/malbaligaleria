@@ -568,7 +568,10 @@
                                 </svg>
                                 Back to Info
                             </button>
-                            <h4 class="modal-map-title">Store Location</h4>
+                            <h4 class="modal-map-title">
+                                Store Location
+                                <span class="modal-map-floor-badge" id="modalMapFloorBadge"></span>
+                            </h4>
                         </div>
                         <div class="modal-map-wrapper">
                             <img src="" id="modalFloorMap" alt="Floor Map">

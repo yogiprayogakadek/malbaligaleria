@@ -1584,23 +1584,19 @@ function renderModalMap(data) {
     const markerLogo = document.getElementById("modalMapMarkerLogo");
     const logoImg = document.getElementById("markerLogoImg");
 
-    console.log("Elements found:", { 
-        floorMapImg: !!floorMapImg, 
-        markerLogo: !!markerLogo, 
-        logoImg: !!logoImg 
-    });
-
-    if (!floorMapImg) {
-        console.error("modalFloorMap element not found!");
-        return;
-    }
-
     // Check if coordinates exist (map_original_size is optional, we'll use fallback)
     if (data.x && data.y) {
         const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
         const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
+        const floorText = floorId == 2 ? "2nd Floor" : "1st Floor";
         
         console.log("Setting floor map image for floor:", floorId);
+        
+        // Update floor badge
+        const floorBadge = document.getElementById("modalMapFloorBadge");
+        if (floorBadge) {
+            floorBadge.textContent = floorText;
+        }
         
         if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
             floorMapImg.src = window.FLOOR_MAPS[floorId];
