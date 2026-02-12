@@ -1578,26 +1578,43 @@ function pinpointOnMap(tenant) {
  * Renders the map inside the modal for a specific tenant
  */
 function renderModalMap(data) {
+    console.log("renderModalMap called with data:", data);
+    
     const floorMapImg = document.getElementById("modalFloorMap");
     const markerLogo = document.getElementById("modalMapMarkerLogo");
     const logoImg = document.getElementById("markerLogoImg");
 
-    if (!floorMapImg || !markerLogo || !logoImg) return;
+    console.log("Elements found:", { 
+        floorMapImg: !!floorMapImg, 
+        markerLogo: !!markerLogo, 
+        logoImg: !!logoImg 
+    });
+
+    if (!floorMapImg) {
+        console.error("modalFloorMap element not found!");
+        return;
+    }
 
     // Check if coordinates exist
     if (data.x && data.y && data.map_original_size) {
         const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
         const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
         
+        console.log("Setting floor map image for floor:", floorId);
+        
         if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
             floorMapImg.src = window.FLOOR_MAPS[floorId];
+            console.log("Using FLOOR_MAPS URL:", window.FLOOR_MAPS[floorId]);
         } else {
             const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
             floorMapImg.src = `${baseUrl}/${floorImg}`;
+            console.log("Using fallback URL:", `${baseUrl}/${floorImg}`);
         }
         
-        // Set logo
-        logoImg.src = data.logo;
+        // Set logo (only if elements exist)
+        if (logoImg && data.logo) {
+            logoImg.src = data.logo;
+        }
         
         // Calculate percentage positions using the most accurate dimensions available
         // We prefer data.map_original_size if provided by backend, 
@@ -1608,10 +1625,19 @@ function renderModalMap(data) {
         const xPos = (data.x / mapWidth) * 100;
         const yPos = (data.y / mapHeight) * 100;
         
-        markerLogo.style.left = `${xPos}%`;
-        markerLogo.style.top = `${yPos}%`;
-        markerLogo.style.display = "block";
+        if (markerLogo) {
+            markerLogo.style.left = `${xPos}%`;
+            markerLogo.style.top = `${yPos}%`;
+            markerLogo.style.display = "block";
+        }
     } else {
-        markerLogo.style.display = "none";
+        console.warn("Missing coordinates or map_original_size:", {
+            x: data.x,
+            y: data.y,
+            map_original_size: data.map_original_size
+        });
+        if (markerLogo) {
+            markerLogo.style.display = "none";
+        }
     }
 }
