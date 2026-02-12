@@ -1577,7 +1577,7 @@ function renderModalMap(data) {
     const markerLogo = document.getElementById("modalMapMarkerLogo");
     const logoImg = document.getElementById("markerLogoImg");
 
-    if (!floorMapImg || !markerLogo || !logoImg) return;
+    // if (!floorMapImg || !markerLogo || !logoImg) return;
 
     // Check if coordinates exist
     if (data.x && data.y && data.map_original_size) {
