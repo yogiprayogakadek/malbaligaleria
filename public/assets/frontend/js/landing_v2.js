@@ -1595,8 +1595,8 @@ function renderModalMap(data) {
         return;
     }
 
-    // Check if coordinates exist
-    if (data.x && data.y && data.map_original_size) {
+    // Check if coordinates exist (map_original_size is optional, we'll use fallback)
+    if (data.x && data.y) {
         const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
         const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
         
@@ -1616,14 +1616,15 @@ function renderModalMap(data) {
             logoImg.src = data.logo;
         }
         
-        // Calculate percentage positions using the most accurate dimensions available
-        // We prefer data.map_original_size if provided by backend, 
-        // fallback to naturalWidth if the image is already loaded
-        const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
-        const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
+        // Calculate percentage positions
+        // Use map_original_size if available, otherwise use standard dimensions
+        const mapWidth = data.map_original_size?.width || 1400;
+        const mapHeight = data.map_original_size?.height || 1000;
 
         const xPos = (data.x / mapWidth) * 100;
         const yPos = (data.y / mapHeight) * 100;
+        
+        console.log("Marker position:", { xPos, yPos, mapWidth, mapHeight });
         
         if (markerLogo) {
             markerLogo.style.left = `${xPos}%`;
@@ -1631,10 +1632,9 @@ function renderModalMap(data) {
             markerLogo.style.display = "block";
         }
     } else {
-        console.warn("Missing coordinates or map_original_size:", {
+        console.warn("Missing coordinates:", {
             x: data.x,
-            y: data.y,
-            map_original_size: data.map_original_size
+            y: data.y
         });
         if (markerLogo) {
             markerLogo.style.display = "none";
