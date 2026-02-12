@@ -1616,20 +1616,39 @@ function renderModalMap(data) {
             logoImg.src = data.logo;
         }
         
-        // Calculate percentage positions
-        // Use map_original_size if available, otherwise use standard dimensions
-        const mapWidth = data.map_original_size?.width || 1400;
-        const mapHeight = data.map_original_size?.height || 1000;
+        // Function to position marker after image loads
+        const positionMarker = () => {
+            // Calculate percentage positions
+            // Priority: 1) map_original_size from backend, 2) naturalWidth/Height from loaded image, 3) fallback
+            const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
+            const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
 
-        const xPos = (data.x / mapWidth) * 100;
-        const yPos = (data.y / mapHeight) * 100;
-        
-        console.log("Marker position:", { xPos, yPos, mapWidth, mapHeight });
-        
-        if (markerLogo) {
-            markerLogo.style.left = `${xPos}%`;
-            markerLogo.style.top = `${yPos}%`;
-            markerLogo.style.display = "block";
+            const xPos = (data.x / mapWidth) * 100;
+            const yPos = (data.y / mapHeight) * 100;
+            
+            console.log("Marker position:", { 
+                xPos, 
+                yPos, 
+                mapWidth, 
+                mapHeight,
+                naturalWidth: floorMapImg.naturalWidth,
+                naturalHeight: floorMapImg.naturalHeight,
+                hasOriginalSize: !!data.map_original_size
+            });
+            
+            if (markerLogo) {
+                markerLogo.style.left = `${xPos}%`;
+                markerLogo.style.top = `${yPos}%`;
+                markerLogo.style.display = "block";
+            }
+        };
+
+        // If image is already loaded, position immediately
+        if (floorMapImg.complete && floorMapImg.naturalWidth > 0) {
+            positionMarker();
+        } else {
+            // Wait for image to load to get accurate dimensions
+            floorMapImg.onload = positionMarker;
         }
     } else {
         console.warn("Missing coordinates:", {
