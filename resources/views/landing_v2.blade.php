@@ -676,7 +676,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-        window.FLOOR_MAP_BASE_URL = "{{ asset('assets/images/floors') }}";
+        window.FLOOR_MAPS = {
+            1: "{{ asset('assets/images/floors/1st_floor.png') }}",
+            2: "{{ asset('assets/images/floors/2nd_floor.png') }}"
+        };
     </script>
     <script src="{{ asset('assets/frontend/js/landing_v2.js') }}"></script>
 

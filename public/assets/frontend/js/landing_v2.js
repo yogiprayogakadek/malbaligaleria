@@ -1535,8 +1535,12 @@ function pinpointOnMap(tenant) {
 
     // Set map image
     if (visualMapImage) {
-        const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
-        visualMapImage.src = `${baseUrl}/${floorImg}`;
+        if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
+            visualMapImage.src = window.FLOOR_MAPS[floorId];
+        } else {
+            const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
+            visualMapImage.src = `${baseUrl}/${floorImg}`;
+        }
         
         // Position marker using percentages
         if (mapMarker) {
@@ -1585,8 +1589,12 @@ function renderModalMap(data) {
         const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
         const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
         
-        const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
-        floorMapImg.src = `${baseUrl}/${floorImg}`;
+        if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
+            floorMapImg.src = window.FLOOR_MAPS[floorId];
+        } else {
+            const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
+            floorMapImg.src = `${baseUrl}/${floorImg}`;
+        }
         
         // Set logo
         logoImg.src = data.logo;
