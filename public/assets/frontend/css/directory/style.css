@@ -2350,6 +2350,16 @@ body.dark-mode .map-container {
     height: 5px;
 }
 
+@keyframes pin-attention {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(95, 207, 218, 0.7); }
+    50% { transform: translate(-50%, -50%) scale(1.8); box-shadow: 0 0 20px 10px rgba(95, 207, 218, 0); }
+}
+
+.map-pin.pin-highlight, .map-pin-logo.pin-highlight {
+    z-index: 1000 !important;
+    animation: pin-attention 1s ease-in-out infinite !important;
+}
+
 .map-pin.cluster {
     width: 20px;
     height: 20px;
@@ -2700,6 +2710,28 @@ body.dark-mode .tenant-modal .modal-container {
     background: rgba(30, 30, 30, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+}
+
+.modal-info-item.highlight {
+    background: rgba(95, 207, 218, 0.1);
+    border: 1px solid rgba(95, 207, 218, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-info-item.highlight:hover {
+    background: rgba(95, 207, 218, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(95, 207, 218, 0.1);
+}
+
+.modal-info-item.highlight .info-value {
+    color: #2c5f5d;
+    font-weight: 600;
+}
+
+.modal-info-item.highlight svg {
+    color: #5fcfda;
 }
 
 /* Modal Close Button */

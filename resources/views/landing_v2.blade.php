@@ -331,9 +331,31 @@
         <div class="map-container">
             <h2>Tenants Directory</h2>
             <p class="map-subtitle">Navigate through our shopping center with ease</p>
+            <div class="tenant-search-wrapper">
+                <div class="tenant-search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" stroke-linecap="round" />
+                    </svg>
+                    <input type="text" id="tenantSearchInput" placeholder="Search tenants by name or category...">
+                </div>
+            </div>
             <div class="map-wrapper">
                 <div class="map-display">
-                    <div class="tenant-content">
+                    <div class="visual-map-container" id="visualMapContainer" style="display: none;">
+                        <img id="visualMapImage" src="" alt="Mall Map">
+                        <div id="mapMarker" class="map-marker" style="display: none;">
+                            <div class="marker-pin"></div>
+                            <div class="marker-pulse"></div>
+                        </div>
+                        <button class="back-to-grid-btn" id="btnBackToGrid">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            Back to List
+                        </button>
+                    </div>
+                    <div class="tenant-content" id="tenantContentGrid">
                         <div class="tenant-grid-wrapper">
                             <button class="tenant-nav-btn prev" id="tenantNavPrev">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -482,48 +504,81 @@
 
 
                 <div class="modal-details">
-                    <div class="modal-header">
-                        <div class="modal-logo" id="modalLogo">
-
+                    <!-- Detail View (Initially Shown) -->
+                    <div id="modalInfoView">
+                        <div class="modal-header">
+                            <div class="modal-logo" id="modalLogo"></div>
+                            <div class="modal-title">
+                                <span class="modal-floor-badge" id="modalFloorBadge"></span>
+                                <h2 id="modalTenantName"></h2>
+                                <div class="modal-category" id="modalCategory">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+                                    </svg>
+                                    <span id="modalCategoryText"></span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-title">
-                            <span class="modal-floor-badge" id="modalFloorBadge"></span>
-                            <h2 id="modalTenantName"></h2>
-                            <div class="modal-category" id="modalCategory">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path
-                                        d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+
+                        <div class="modal-info">
+                            <div class="modal-info-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
                                 </svg>
-                                <span id="modalCategoryText"></span>
+                                <div>
+                                    <span class="info-label">Operating Hours</span>
+                                    <span class="info-value" id="modalHours"></span>
+                                </div>
+                            </div>
+
+                            <div class="modal-info-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <div>
+                                    <span class="info-label">Location</span>
+                                    <span class="info-value" id="modalLocation"></span>
+                                </div>
+                            </div>
+
+                            <div class="modal-info-item highlight" id="showOnMapBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                                    <line x1="8" y1="2" x2="8" y2="18" />
+                                    <line x1="16" y1="6" x2="16" y2="22" />
+                                </svg>
+                                <div>
+                                    <span class="info-label">Direction</span>
+                                    <span class="info-value">Show on Map</span>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="modal-description" id="modalDescription"></div>
                     </div>
 
-
-                    <div class="modal-info">
-                        <div class="modal-info-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Location</span>
-                                <span class="info-value" id="modalLocation"></span>
+                    <!-- Map View (Shown when clicked) -->
+                    <div id="modalMapView" style="display: none;">
+                        <div class="modal-map-header">
+                            <button class="modal-map-back" id="btnBackToInfo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                                Back to Info
+                            </button>
+                            <h4 class="modal-map-title">Store Location</h4>
+                        </div>
+                        <div class="modal-map-wrapper">
+                            <img src="" id="modalFloorMap" alt="Floor Map">
+                            <div class="map-marker-logo" id="modalMapMarkerLogo">
+                                <div class="logo-pin">
+                                    <img src="" id="markerLogoImg" alt="">
+                                </div>
+                                <div class="marker-pulse"></div>
                             </div>
                         </div>
-                        <div class="modal-info-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Operating Hours</span>
-                                <span class="info-value" id="modalHours"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-description" id="modalDescription">
                     </div>
                 </div>
             </div>

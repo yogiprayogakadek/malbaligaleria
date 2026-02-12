@@ -58,7 +58,7 @@ class LandingPageController extends Controller
     public function findTenantById($tenant_id)
     {
         $tenant = $this->tenantService->getTenantsWithRelationshipAndCondition(
-            ['id', 'name', 'map_coords', 'category_id', 'logo', 'description'],
+            ['id', 'name', 'map_coords', 'map_original_size', 'category_id', 'logo', 'description'],
             [
                 'category:id,name',
                 'albumPhoto:id,tenant_id,path',
@@ -93,7 +93,12 @@ class LandingPageController extends Controller
                 'name' => $data['name'],
                 'category' => $data['category']['name'],
                 'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
+                'floor_id' => $data['map_coords']['floor'],
                 'unit' => $data['map_coords']['unit'] ?? '-',
+                'x' => $data['map_coords']['x'] ?? null,
+                'y' => $data['map_coords']['y'] ?? null,
+                'map_coords' => $data['map_coords'],
+                'map_original_size' => $data['map_original_size'],
                 'logo' => $logoUrl,
                 'hours' => "10:00 AM - 10:00 PM",
                 'description' => $data['description'],

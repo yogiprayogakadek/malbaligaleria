@@ -597,12 +597,38 @@ if (footer) {
 }
 
 
+// Global cache for tenant search (1st and 2nd floor only)
+let allTenantsCache = {
+    "1st Floor": [],
+    "2nd Floor": [],
+    "loaded": false
+};
+
+async function fetchAllTenantsForSearch() {
+    if (allTenantsCache.loaded) return;
+    
+    try {
+        const [floor1, floor2] = await Promise.all([
+            loadTenantsOnDatabase("1st Floor", false),
+            loadTenantsOnDatabase("2nd Floor", false)
+        ]);
+        
+        allTenantsCache["1st Floor"] = floor1 || [];
+        allTenantsCache["2nd Floor"] = floor2 || [];
+        allTenantsCache.loaded = true;
+    } catch (error) {
+        console.error("Failed to fetch all tenants for search", error);
+    }
+}
+
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
+        const context = this;
         const later = () => {
             clearTimeout(timeout);
-            func(...args);
+            func.apply(context, args);
         };
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
@@ -628,29 +654,41 @@ window.addEventListener("load", () => {
 
 async function loadTenantsOnDatabase(floor, isNew = false) {
     try {
-        tenantData = await $.get("/tenants/" + floor + '/' + isNew);
-        return tenantData;
+        const data = await $.get("/tenants/" + floor + '/' + isNew);
+        return data;
     } catch (error) {
         console.error("Failed to load data", error);
+        return [];
     }
 }
 
-async function renderLandingTenants(floor, isNew = false) {
-    const tenantData = await loadTenantsOnDatabase(floor, isNew);
+async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
+    // Try to get from cache first for performance
+    let tenantData = [];
+    if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
+        tenantData = allTenantsCache[floor];
+    } else {
+        tenantData = await loadTenantsOnDatabase(floor, isNew);
+    }
+
     const grid = document.getElementById("landingTenantGrid");
     const emptyState = document.getElementById("landingEmptyState");
-
     if (!grid) return;
 
     grid.innerHTML = "";
 
+    // Data is already filtered by floor from backend/cache
+    let filtered = tenantData;
 
-    let searchFloor = floor;
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(
+            (t) =>
+                (t.name && t.name.toLowerCase().includes(query)) ||
+                (t.category && t.category.toLowerCase().includes(query))
+        );
+    }
 
-
-    const filtered = tenantData.filter(
-        (t) => t.floor === searchFloor || t.floor === floor
-    );
     if (filtered.length === 0) {
         if (emptyState) emptyState.style.display = "block";
         return;
@@ -662,10 +700,11 @@ async function renderLandingTenants(floor, isNew = false) {
         const card = document.createElement("div");
         card.className = "tenant-card stagger-card";
         card.style.animationDelay = `${index * 0.1}s`;
+        card.setAttribute("data-id", tenant.id);
 
         card.innerHTML = `
                     <div class="tenant-logo">
-                        <img src="${tenant.logo}" alt="${tenant.name}" loading="lazy">
+                        <img src="${tenant.logo}" alt="${tenant.name}" loading="lazy" onerror="this.src='/assets/images/no_image.jpg'">
                     </div>
                     <div class="tenant-info">
                         <span class="floor-badge">${tenant.floor}</span>
@@ -701,9 +740,19 @@ async function renderLandingTenants(floor, isNew = false) {
                     </div>
                 `;
 
+        card.addEventListener("click", () => {
+            if (typeof openTenantModal === "function") {
+                openTenantModal(tenant.id);
+            }
+        });
+
         grid.appendChild(card);
         setTimeout(() => card.classList.add("show"), 50);
     });
+
+    if (typeof revealOnScroll === "function") {
+        setTimeout(revealOnScroll, 100);
+    }
 }
 
 
@@ -713,17 +762,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const floorItems = document.querySelectorAll(".map-floors .floor-item");
     floorItems.forEach((item) => {
 
-        if (item.classList.contains("active")) {
-            const h4 = item.querySelector("h4");
-            const floor = h4 ? h4.textContent : "";
-
-            if (floor.includes("1st")) renderLandingTenants("1st Floor");
-            else if (floor.includes("2nd")) renderLandingTenants("2nd Floor");
-            else if (floor.includes("New Store")) renderLandingTenants("2nd Floor");
-            else if (floor.includes("All Floor"))
-                window.location.href = "/directory";
-        }
-
         item.addEventListener("click", function () {
 
             floorItems.forEach((i) => i.classList.remove("active"));
@@ -731,7 +769,7 @@ document.addEventListener("DOMContentLoaded", () => {
             this.classList.add("active");
 
             const h4 = this.querySelector("h4");
-            const floorText = h4 ? h4.textContent : "";
+            const floorText = h4 ? h4.textContent.trim() : "";
             let targetFloor = "1st Floor";
             let isNew = false;
 
@@ -748,8 +786,103 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             renderLandingTenants(targetFloor, isNew);
+
+            // Clear search input when switching floors MANUALLY (not via search logic)
+            if (!this.classList.contains("switching-via-search")) {
+                const searchInput = document.getElementById("tenantSearchInput");
+                if (searchInput) searchInput.value = "";
+            }
         });
     });
+
+    // Initial fetch
+    fetchAllTenantsForSearch();
+
+    const searchInput = document.getElementById("tenantSearchInput");
+    if (searchInput) {
+        searchInput.addEventListener(
+            "input",
+            debounce(async function (e) {
+                const query = e.target.value.toLowerCase();
+                if (!query) {
+                    // If search is cleared, just re-render current floor
+                    const activeItem = document.querySelector(".map-floors .floor-item.active");
+                    if (activeItem) activeItem.click();
+                    return;
+                }
+
+                const activeFloorItem = document.querySelector(".map-floors .floor-item.active");
+                if (!activeFloorItem) return;
+
+                const h4 = activeFloorItem.querySelector("h4");
+                const currentFloorText = h4 ? h4.textContent.trim() : "";
+                
+                // Deterministic floor names for cache
+                let currentFloor = "";
+                if (currentFloorText.includes("1st") || currentFloorText.includes("Level 1")) currentFloor = "1st Floor";
+                else if (currentFloorText.includes("2nd") || currentFloorText.includes("Level 2")) currentFloor = "2nd Floor";
+
+                // Ensure cache is loaded before global search
+                if (!allTenantsCache.loaded) {
+                    await fetchAllTenantsForSearch();
+                }
+
+                // 1. Search in current floor first
+                if (currentFloor && allTenantsCache[currentFloor]) {
+                    const matchesOnCurrent = allTenantsCache[currentFloor].filter(t => 
+                        (t.name && t.name.toLowerCase().includes(query)) || 
+                        (t.category && t.category.toLowerCase().includes(query))
+                    );
+
+                    if (matchesOnCurrent.length > 0) {
+                        renderLandingTenants(currentFloor, false, query);
+                        return;
+                    }
+                }
+
+                // 2. If no matches on current floor, look at the other floor (1st or 2nd only)
+                const otherFloor = currentFloor === "1st Floor" ? "2nd Floor" : "1st Floor";
+                const matchesOnOther = (allTenantsCache[otherFloor] || []).filter(t => 
+                    (t.name && t.name.toLowerCase().includes(query)) || 
+                    (t.category && t.category.toLowerCase().includes(query))
+                );
+
+                if (matchesOnOther.length > 0) {
+                    // Auto-switch floor
+                    const floorItems = document.querySelectorAll(".map-floors .floor-item");
+                    floorItems.forEach(item => {
+                        const text = item.querySelector("h4")?.textContent.trim() || "";
+                        const isTarget = otherFloor === "1st Floor" ? (text.includes("1st") || text.includes("Level 1")) : (text.includes("2nd") || text.includes("Level 2"));
+                        
+                        if (isTarget) {
+                            // Click the item, but we'll manually handle the restoration of search and rendering
+                            item.classList.add("switching-via-search");
+                            item.click();
+                            
+                            // Restore query and filter (the click event usually clears it)
+                            const input = document.getElementById("tenantSearchInput");
+                            if (input) {
+                                input.value = query;
+                                // Small delay to ensure click handler finished
+                                setTimeout(() => {
+                                    renderLandingTenants(otherFloor, false, query);
+                                    item.classList.remove("switching-via-search");
+                                }, 50);
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                // 3. If still no matches (including New Store if it was active), show empty state for current view
+                // Default fallback to current rendering
+                let targetFloor = currentFloor || "1st Floor";
+                let isNew = currentFloorText.includes("New Store");
+                renderLandingTenants(targetFloor, isNew, query);
+
+            }, 400)
+        );
+    }
 });
 
 // Tenant Scroll Indicators
@@ -886,6 +1019,14 @@ let modalImages = [];
 let tenantData = null;
 const tenantCache = {}; // Client-side cache for tenant data
 
+// Visual Map Constants
+const visualMapContainer = document.getElementById("visualMapContainer");
+const visualMapImage = document.getElementById("visualMapImage");
+const mapMarker = document.getElementById("mapMarker");
+const tenantContentGrid = document.getElementById("tenantContentGrid");
+const showOnMapBtn = document.getElementById("showOnMapBtn");
+const btnBackToGrid = document.getElementById("btnBackToGrid");
+
 
 async function getDataByTenantId(tenant_id) {
     try {
@@ -915,7 +1056,7 @@ async function openTenantModal(tenant_id) {
                 logo: gridLogo,
                 floor: gridCard.querySelector('.floor-badge')?.textContent || "-",
                 category: gridCard.querySelector('.tenant-category')?.textContent?.trim() || "-",
-                unit: gridCard.querySelector('.meta-item:first-child span')?.textContent?.replace('Unit ', '') || "-",
+                unit: gridCard.querySelector('.meta-item:first-child span')?.textContent?.replace('Unit ', '') || "",
                 hours: "10:00 AM - 10:00 PM",
                 description: "Memuat informasi tenant...",
                 images: [gridLogo],
@@ -954,7 +1095,7 @@ function updateModalContent(data) {
     if (categoryText) categoryText.textContent = data.category;
 
     const locationEl = document.getElementById("modalLocation");
-    if (locationEl) locationEl.textContent = "Unit " + data.unit;
+    if (locationEl) locationEl.textContent = data.floor;
 
     const hoursEl = document.getElementById("modalHours");
     if (hoursEl) hoursEl.textContent = data.hours;
@@ -982,6 +1123,16 @@ function updateModalContent(data) {
     modalImages = data.images || [data.logo];
     currentModalImageIndex = 0;
     renderModalCarousel(data.name);
+
+    // Map setup
+    // renderModalMap(data); // Don't render map automatically anymore
+    
+    // Ensure we start with Info View
+    const infoView = document.getElementById("modalInfoView");
+    const mapView = document.getElementById("modalMapView");
+    if (infoView) infoView.style.display = "block";
+    if (mapView) mapView.style.display = "none";
+    tenantModal.classList.remove("map-active-mobile");
 
     // Show modal
     document.body.style.overflow = "hidden";
@@ -1329,3 +1480,128 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// --- INTERACTIVE MAP FUNCTIONS ---
+if (showOnMapBtn) {
+    showOnMapBtn.addEventListener("click", () => {
+        if (tenantData) {
+            // Instead of closing modal and scrolling, we swap view inside modal
+            renderModalMap(tenantData);
+            
+            const infoView = document.getElementById("modalInfoView");
+            const mapView = document.getElementById("modalMapView");
+            if (infoView) infoView.style.display = "none";
+            if (mapView) mapView.style.display = "block";
+            tenantModal.classList.add("map-active-mobile");
+            
+            // Logically, we still want to keep the old pinpoint function for outside triggers
+            // pinpointOnMap(tenantData); 
+        }
+    });
+}
+
+const btnBackToInfo = document.getElementById("btnBackToInfo");
+if (btnBackToInfo) {
+    btnBackToInfo.addEventListener("click", () => {
+        const infoView = document.getElementById("modalInfoView");
+        const mapView = document.getElementById("modalMapView");
+        if (infoView) infoView.style.display = "block";
+        if (mapView) mapView.style.display = "none";
+        tenantModal.classList.remove("map-active-mobile");
+    });
+}
+
+if (btnBackToGrid) {
+    btnBackToGrid.addEventListener("click", () => {
+        if (visualMapContainer) visualMapContainer.style.display = "none";
+        if (tenantContentGrid) tenantContentGrid.style.display = "block";
+    });
+}
+
+function pinpointOnMap(tenant) {
+    if (!tenant || !tenant.x || !tenant.y) {
+        console.warn("No coordinates for tenant:", tenant?.name);
+        alert("Lokasi tenant ini belum tersedia di peta.");
+        return;
+    }
+
+    // Determine floor image
+    const floorId = tenant.floor_id || (tenant.map_coords ? tenant.map_coords.floor : null);
+    const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
+
+    // Switch view to map
+    if (tenantContentGrid) tenantContentGrid.style.display = "none";
+    if (visualMapContainer) visualMapContainer.style.display = "block";
+
+    // Set map image
+    if (visualMapImage) {
+        visualMapImage.src = `/assets/images/floors/${floorImg}`;
+        
+        // Position marker using percentages
+        if (mapMarker) {
+            let xPos, yPos;
+            
+            const mapWidth = tenant.map_original_size?.width || visualMapImage.naturalWidth || 1400;
+            const mapHeight = tenant.map_original_size?.height || visualMapImage.naturalHeight || 1000;
+
+            xPos = (tenant.x / mapWidth) * 100;
+            yPos = (tenant.y / mapHeight) * 100;
+            
+            mapMarker.style.left = `${xPos}%`;
+            mapMarker.style.top = `${yPos}%`;
+            mapMarker.style.display = "block";
+        }
+    }
+
+    // Close modal
+    if (typeof closeTenantModal === 'function') {
+        closeTenantModal();
+    } else {
+        const modal = document.getElementById("tenantModal");
+        if (modal) modal.classList.remove("active");
+        document.body.style.overflow = "";
+    }
+
+    // Scroll to section
+    const mapSection = document.getElementById("map-section") || document.querySelector(".map-display");
+    if (mapSection) {
+        mapSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+/**
+ * Renders the map inside the modal for a specific tenant
+ */
+function renderModalMap(data) {
+    const floorMapImg = document.getElementById("modalFloorMap");
+    const markerLogo = document.getElementById("modalMapMarkerLogo");
+    const logoImg = document.getElementById("markerLogoImg");
+
+    if (!floorMapImg || !markerLogo || !logoImg) return;
+
+    // Check if coordinates exist
+    if (data.x && data.y && data.map_original_size) {
+        const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
+        const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
+        
+        floorMapImg.src = `/assets/images/floors/${floorImg}`;
+        
+        // Set logo
+        logoImg.src = data.logo;
+        
+        // Calculate percentage positions using the most accurate dimensions available
+        // We prefer data.map_original_size if provided by backend, 
+        // fallback to naturalWidth if the image is already loaded
+        const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
+        const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
+
+        const xPos = (data.x / mapWidth) * 100;
+        const yPos = (data.y / mapHeight) * 100;
+        
+        markerLogo.style.left = `${xPos}%`;
+        markerLogo.style.top = `${yPos}%`;
+        markerLogo.style.display = "block";
+    } else {
+        markerLogo.style.display = "none";
+    }
+}

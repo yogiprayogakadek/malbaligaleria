@@ -145,7 +145,19 @@ class TenantService
 
     public function getDataByFloor(array $fields, array $relationship, string $cat, bool $isNew)
     {
-        $tenants = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew)->map(function ($tenant) {
+        $query = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew);
+
+        // Filter by floor if not "New Store"
+        if (!$isNew) {
+            $floorNumber = str_contains($cat, '1st') ? '1' : (str_contains($cat, '2nd') ? '2' : null);
+            if ($floorNumber) {
+                $query = $query->filter(function ($tenant) use ($floorNumber) {
+                    return data_get($tenant, 'map_coords.floor') == $floorNumber;
+                });
+            }
+        }
+
+        $tenants = $query->map(function ($tenant) {
             $data = [
                 'id' => $tenant['id'],
                 'name' => $tenant['name'],

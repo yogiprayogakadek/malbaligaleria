@@ -1193,6 +1193,7 @@ function updateMapView() {
                 pin.style.left = leftPercent + "%";
                 pin.style.top = topPercent + "%";
                 pin.dataset.tenant = JSON.stringify(tenant);
+                pin.dataset.tenantUnit = tenant.unit; // Add unit for easy finding
 
                 // Add tooltips
                 if (searchTerm && searchTerm.trim() !== '') {
@@ -1611,6 +1612,7 @@ let modalCarouselImages = [];
 let modalSwipeStartX = 0;
 let modalSwipeEndX = 0;
 const tenantCache = {}; // Client-side cache for full tenant data
+let currentTenantData = null; // Store current tenant in modal
 
 async function getDataByTenantId(tenant_id) {
     try {
@@ -1660,6 +1662,9 @@ async function showTenantModal(tenant) {
 
         if (loadingIndicator) loadingIndicator.classList.remove("active");
     }
+
+    // Set current tenant data for "Show on Map"
+    currentTenantData = tenant;
 
     // Show modal and prevent body scroll
     modal.classList.add("active");
@@ -1748,14 +1753,31 @@ function updateModalContent(data) {
         });
     }
 
-    // Add status badge to hours
-    const hoursElement = document.getElementById("modalHours");
-    if (hoursElement && data.hours) {
-        // Remove existing badge if any
-        const existingBadge = hoursElement.querySelector(".store-status-badge");
-        if (existingBadge) existingBadge.remove();
+    // Set up Show on Map button
+    const showOnMapBtn = document.getElementById("directoryShowOnMapBtn");
+    if (showOnMapBtn) {
+        // Robust check for coordinates (handles different naming conventions)
+        const coords = data.mapCoords || data.map_coords;
+        const xCoord = coords ? (coords.x || coords.map_x) : null;
+        
+        console.log("Show on Map check:", { 
+            tenant: data.name, 
+            hasCoords: !!coords, 
+            x: xCoord 
+        });
 
-        addStatusBadge(hoursElement, data.hours);
+        if (coords && xCoord !== '-' && xCoord !== null && xCoord !== undefined) {
+            showOnMapBtn.style.display = 'flex';
+        } else {
+            showOnMapBtn.style.display = 'none';
+        }
+
+        // Add click listener
+        const newShowBtn = showOnMapBtn.cloneNode(true);
+        showOnMapBtn.parentNode.replaceChild(newShowBtn, showOnMapBtn);
+        newShowBtn.addEventListener("click", () => {
+            locateTenantOnMap(data);
+        });
     }
 }
 
@@ -2541,3 +2563,87 @@ window.addEventListener("load", () => {
         document.body.classList.add("loaded");
     }, remainingTime);
 });
+// ===== LOCATE TENANT ON MAP =====
+function locateTenantOnMap(tenant) {
+    if (!tenant) return;
+
+    // 1. Close modal
+    closeTenantModal();
+
+    // 2. Switch to Map View
+    switchToMapView();
+
+    // 3. Set the correct floor
+    const floorValue = tenant.floor;
+    const floorKey = floorValue === "1st Floor" ? "floor1" : "floor2";
+    
+    let floorChanged = false;
+    if (currentFloorMap !== floorKey) {
+        currentFloorMap = floorKey;
+        floorChanged = true;
+        // Update floor buttons UI
+        document.querySelectorAll(".floor-btn").forEach((btn) => {
+            if (btn.dataset.floor === floorKey) {
+                btn.classList.add("active");
+            } else {
+                btn.classList.remove("active");
+            }
+        });
+        document.getElementById("floorFilter").value = floorValue;
+        updateMapView();
+    }
+
+    // 4. Scroll to Map section (Target container specifically to avoid legend)
+    const mapSection = document.getElementById("mapContainer");
+    if (mapSection) {
+        // Scroll window to bring map into view
+        mapSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 5. Highlight the pin
+    // Increase timeout if floor changed to allow for map rendering and pin placement
+    const highlightDelay = floorChanged ? 1000 : 400;
+
+    setTimeout(() => {
+        const pins = document.querySelectorAll('.map-pin, .map-pin-logo');
+        let targetPin = null;
+
+        pins.forEach(pin => {
+            if (pin.dataset.tenantUnit === tenant.unit) {
+                targetPin = pin;
+            }
+        });
+
+        if (targetPin) {
+            // Trigger tooltip
+            showMapTooltip(tenant, targetPin);
+            
+            // Internal scroll within the map container to center the pin
+            const mapContainer = document.getElementById("mapContainer");
+            if (mapContainer) {
+                const pinRect = targetPin.getBoundingClientRect();
+                const containerRect = mapContainer.getBoundingClientRect();
+                
+                // Calculate position relative to container
+                const scrollLeft = targetPin.offsetLeft - (mapContainer.clientWidth / 2);
+                const scrollTop = targetPin.offsetTop - (mapContainer.clientHeight / 2);
+                
+                mapContainer.scrollTo({
+                    left: scrollLeft,
+                    top: scrollTop,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Add a temporary highlight animation class
+            targetPin.classList.add('pin-highlight');
+            setTimeout(() => targetPin.classList.remove('pin-highlight'), 3000);
+        } else {
+            console.warn("Pin not found for unit:", tenant.unit);
+            if (!floorChanged) {
+                // Try once more if not found (maybe still rendering)
+                setTimeout(() => locateTenantOnMap(tenant), 500);
+            }
+        }
+    }, highlightDelay);
+}
