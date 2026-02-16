@@ -2626,8 +2626,8 @@ function locateTenantOnMap(tenant) {
         });
 
         if (targetPin) {
-            // Trigger tooltip
-            showMapTooltip(tenant, targetPin);
+            // Tooltip removed - user can hover to see details
+            // showMapTooltip(tenant, targetPin); // REMOVED
             
             // Internal scroll within the map container to center the pin
             const mapContainer = document.getElementById("mapContainer");

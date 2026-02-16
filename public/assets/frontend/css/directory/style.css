@@ -2389,8 +2389,8 @@ body.dark-mode .map-container {
 
 .map-pin-logo {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     background: white;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -2406,8 +2406,8 @@ body.dark-mode .map-container {
 }
 
 .map-pin-logo.small {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-width: 1px;
 }
 
@@ -2509,13 +2509,13 @@ body.dark-mode .map-container {
     }
 
     .map-pin-logo {
-        width: 24px; /* Smaller logo pin (was 30px) */
-        height: 24px;
+        width: 18px; /* Smaller logo pin for mobile */
+        height: 18px;
     }
 
     .map-pin-logo.small {
-        width: 16px; /* Smaller small logo (was 20px) */
-        height: 16px;
+        width: 14px; /* Smaller small logo for mobile */
+        height: 14px;
     }
 }
 
