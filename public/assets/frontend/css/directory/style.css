@@ -2404,7 +2404,7 @@ body.dark-mode .map-container {
     width: 24px; /* Desktop size (larger than mobile) */
     height: 24px;
     background: white;
-    border-radius: 50% 50% 50% 0; /* Teardrop shape */
+    border-radius: 50% 50% 50% 0 !important; /* Force Teardrop shape */
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
@@ -2541,6 +2541,7 @@ body.dark-mode .map-container {
     .map-pin-logo {
         width: 14px !important; /* Mobile size requested 14px */
         height: 14px !important;
+        border-radius: 50% 50% 50% 0 !important; /* Force Teardrop shape on mobile */
         border-width: 1.5px !important;
         transform: rotate(-45deg) translate(0, -50%) !important;
         transform-origin: 0% 100% !important;

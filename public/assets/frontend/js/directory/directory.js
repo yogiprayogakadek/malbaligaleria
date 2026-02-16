@@ -1211,8 +1211,18 @@ function updateMapView() {
 
             pin.addEventListener("mouseleave", hideMapTooltip);
 
-            pin.addEventListener("click", function (e) {
+            // Robust handler for both click and touch
+            const handlePinInteraction = function (e) {
+                // Prevent default if it's a touch event to stop double-firing and ghost clicks
+                if (e.type === 'touchend') {
+                    e.preventDefault(); 
+                }
+                
                 e.stopPropagation();
+
+                // Logic to close any open tooltips/popups if necessary
+                hideMapTooltip();
+
                 if (this.classList.contains("cluster")) {
                     const tenantList = JSON.parse(this.dataset.tenants);
                     showClusterModal(tenantList);
@@ -1220,7 +1230,11 @@ function updateMapView() {
                     const tenantData = JSON.parse(this.dataset.tenant);
                     showTenantModal(tenantData);
                 }
-            });
+            };
+
+            // Add listeners for both click and touchend
+            pin.addEventListener("click", handlePinInteraction);
+            pin.addEventListener("touchend", handlePinInteraction);
 
             mapWrapper.appendChild(pin);
         }
