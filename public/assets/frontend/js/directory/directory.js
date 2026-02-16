@@ -988,6 +988,46 @@ function updateMapView() {
     // Format tenant counts per floor for display
     const total1stFloor = floorCounts["1st Floor"] || 0;
     const total2ndFloor = floorCounts["2nd Floor"] || 0;
+    
+    // --- GLOBAL SEARCH AUTO-SWITCH LOGIC ---
+    // If user is searching (searchTerm exists) AND no results on current selected floor/category
+    // BUT there are results globally, switch to that floor automatically.
+    if (searchTerm && currentFloorTenants.length === 0) {
+        // Search globally across all tenants
+        const globalMatches = tenants.filter(t => 
+            t.name.toLowerCase().includes(searchTerm) || 
+            t.category.toLowerCase().includes(searchTerm)
+        );
+        
+        if (globalMatches.length > 0) {
+            // Found matches elsewhere!
+            const targetFloor = globalMatches[0].floor;
+            
+            // Only switch if we are strictly filtering by a floor that has no results
+            // OR if no floor is selected but somehow current view logic needs update
+            if (selectedFloor && selectedFloor !== targetFloor) {
+                // Update the dropdown value
+                if (floorFilter) {
+                    floorFilter.value = targetFloor;
+                    // Trigger change event to re-run this function naturally
+                    const event = new Event('change');
+                    floorFilter.dispatchEvent(event);
+                    return; // Stop execution of this run, let the event listener handle the re-run
+                }
+            } else if (!selectedFloor) {
+                // If "All Floors" or empty floor selected, but we want to focus map on the floor with results
+                // We should probably switch the map view to that floor
+                // Map view logic often depends on selectedFloor or currentFloorMap
+                 if (floorFilter) {
+                    floorFilter.value = targetFloor;
+                    const event = new Event('change');
+                    floorFilter.dispatchEvent(event);
+                    return;
+                }
+            }
+        }
+    }
+    // ---------------------------------------
 
     const mapContainer = document.getElementById("mapContainer");
     if (!mapContainer) return;
