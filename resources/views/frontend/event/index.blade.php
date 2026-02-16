@@ -321,7 +321,10 @@
         </div>
 
         <div class="logo">
-            <h1>Mal Bali Galeria<span>EVENTS</span></h1>
+            <img src="{{ asset('assets/images/default/mbg.png') }}" 
+                 alt="Mal Bali Galeria" 
+                 class="header-main-logo"
+                 style="height: 45px; width: auto; object-fit: contain;">
         </div>
 
         <button class="menu-btn" id="menuBtn">
