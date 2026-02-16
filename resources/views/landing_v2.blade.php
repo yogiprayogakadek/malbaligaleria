@@ -5,21 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mal Bali Galeria | Enjoy, Play, Eat, Shop</title>
-    <meta name="description" content="Mal Bali Galeria - The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
-    <meta name="keywords" content="Mal Bali Galeria, Bali Shopping Mall, Kuta Mall, Bali Lifestyle, Bali Shopping Destination">
-    
+    <meta name="description"
+        content="Mal Bali Galeria - The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
+    <meta name="keywords"
+        content="Mal Bali Galeria, Bali Shopping Mall, Kuta Mall, Bali Lifestyle, Bali Shopping Destination">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:title" content="Mal Bali Galeria | Enjoy, Play, Eat, Shop">
-    <meta property="og:description" content="The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
+    <meta property="og:description"
+        content="The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
     <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url('/') }}">
     <meta property="twitter:title" content="Mal Bali Galeria | Enjoy, Play, Eat, Shop">
-    <meta property="twitter:description" content="The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
+    <meta property="twitter:description"
+        content="The FIRST Premium Shopping Mall & Life Style Destination in Bali. Discover premium brands, dining, and entertainment.">
     <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
@@ -62,8 +66,10 @@
             <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" />
             <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor"
+                stroke-width="2" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor"
+                stroke-width="2" />
         </svg>
     </button>
 
@@ -76,10 +82,8 @@
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}" 
-                 alt="Mal Bali Galeria" 
-                 class="header-main-logo"
-                 style="height: 45px; width: auto; object-fit: contain;">
+            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
+                style="height: 45px; width: auto; object-fit: contain;">
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -125,7 +129,7 @@
     <section class="hero" id="home">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <h2>The FIRST Premium Shopping Mall & Life Style Destination in Bali</h2>
+            <h2>The Pioneer Shopping Center in Bali</h2>
             <p>The Best Way to Predict The Future is to Create It and That Future is here...</p>
             <a href="{{ route('frontend.directory.index') }}" style="text-decoration: none;">
                 <button class="explore-btn">
@@ -353,7 +357,7 @@
                         </div>
                         <button class="back-to-grid-btn" id="btnBackToGrid">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                                <path d="M19 12H5M12 19l-7-7 7-7" />
                             </svg>
                             Back to List
                         </button>
@@ -516,7 +520,8 @@
                                 <h2 id="modalTenantName"></h2>
                                 <div class="modal-category" id="modalCategory">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+                                        <path
+                                            d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
                                     </svg>
                                     <span id="modalCategoryText"></span>
                                 </div>
