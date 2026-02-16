@@ -265,6 +265,8 @@ body.dark-mode .page-loader {
 .page-loader.hidden {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none !important;
+    display: none !important;
 }
 
 .loader-content {
@@ -2323,7 +2325,7 @@ body.dark-mode .map-container {
     border: none !important; /* Force remove border */
     border-radius: 50%;
     cursor: pointer;
-    transform: translate(-50%, -50%);
+    transform: translate(-3px, -3px); /* Exact half of 6px */
     transition: transform 0.2s ease;
     box-shadow: none !important; /* Force remove shadow */
     z-index: 10;
@@ -2389,8 +2391,8 @@ body.dark-mode .map-container {
 
 .map-pin-logo {
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     background: white;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -2399,16 +2401,17 @@ body.dark-mode .map-container {
     justify-content: center;
     overflow: hidden;
     z-index: 15;
-    border: 2px solid #5fcfda;
+    border: 1.5px solid #5fcfda;
     transition: transform 0.3s ease;
-    transform: translate(-50%, -50%);
+    transform: translate(-8px, -8px); /* Exact half of 16px for precise centering */
     /* Removed rotation */
 }
 
 .map-pin-logo.small {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     border-width: 1px;
+    transform: translate(-7px, -7px); /* Exact half of 14px */
 }
 
 .map-pin-logo img {
@@ -2419,12 +2422,12 @@ body.dark-mode .map-container {
 }
 
 .map-pin-logo:hover {
-    transform: translate(-50%, -50%) scale(1.2) !important;
+    transform: translate(-8px, -8px) scale(1.2) !important;
     z-index: 100;
 }
 
 .map-pin:hover {
-    transform: translate(-50%, -50%) scale(1.5);
+    transform: translate(-3px, -3px) scale(1.5); /* 6px / 2 = 3px */
     background: #e8e6ca;
     box-shadow: 0 5px 20px rgba(245, 245, 220, 0.8);
     z-index: 20;
@@ -2509,13 +2512,15 @@ body.dark-mode .map-container {
     }
 
     .map-pin-logo {
-        width: 18px; /* Smaller logo pin for mobile */
-        height: 18px;
+        width: 12px; /* Much smaller for mobile */
+        height: 12px;
+        border-width: 1px;
     }
 
     .map-pin-logo.small {
-        width: 14px; /* Smaller small logo for mobile */
-        height: 14px;
+        width: 10px; /* Even smaller */
+        height: 10px;
+        border-width: 1px;
     }
 }
 
