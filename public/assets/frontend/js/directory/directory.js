@@ -1064,7 +1064,7 @@ function updateMapView() {
 
     const addPins = () => {
         mapContainer
-            .querySelectorAll(".map-pin")
+            .querySelectorAll(".map-pin, .map-pin-logo, .cluster")
             .forEach((pin) => pin.remove());
         if (!mapImage.width || !mapImage.height) {
             setTimeout(addPins, 100);

@@ -2528,30 +2528,30 @@ body.dark-mode .map-container {
     }
 
     .map-pin-logo {
-        width: 8px !important; /* Very small for mobile */
-        height: 8px !important;
+        width: 10px !important; /* Slightly larger as requested (was 8px) */
+        height: 10px !important;
         border-width: 0.5px !important;
-        transform: translate(-4px, -4px) !important; /* Half of 8px */
+        transform: translate(-5px, -5px) !important; /* Half of 10px */
     }
 
     .map-pin-logo.small {
-        width: 6px !important; /* Even smaller */
-        height: 6px !important;
+        width: 8px !important; /* Was 6px */
+        height: 8px !important;
         border-width: 0.5px !important;
-        transform: translate(-3px, -3px) !important; /* Half of 6px */
+        transform: translate(-4px, -4px) !important; /* Half of 8px */
     }
     
     /* Disable ALL hover effects on mobile */
     .map-pin-logo:hover,
     .map-pin-logo:active,
     .map-pin-logo:focus {
-        transform: translate(-4px, -4px) !important; /* No scale on mobile */
+        transform: translate(-5px, -5px) !important; /* No scale on mobile */
     }
     
     .map-pin-logo.small:hover,
     .map-pin-logo.small:active,
     .map-pin-logo.small:focus {
-        transform: translate(-3px, -3px) !important;
+        transform: translate(-4px, -4px) !important;
     }
 }
 
