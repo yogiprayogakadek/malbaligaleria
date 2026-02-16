@@ -263,10 +263,20 @@ body.dark-mode .page-loader {
 }
 
 .page-loader.hidden {
-    opacity: 0;
-    visibility: hidden;
+    opacity: 0 !important;
+    visibility: hidden !important;
     pointer-events: none !important;
     display: none !important;
+    z-index: -9999 !important;
+}
+
+/* Ensure page loader never shows after initial load */
+body.loaded .page-loader {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    display: none !important;
+    z-index: -9999 !important;
 }
 
 .loader-content {
@@ -2421,17 +2431,23 @@ body.dark-mode .map-container {
     padding: 2px;
 }
 
-.map-pin-logo:hover {
-    transform: translate(-8px, -8px) scale(1.2) !important;
-    z-index: 100;
+/* Disable hover on touch devices to prevent position shift */
+@media (hover: hover) and (pointer: fine) {
+    .map-pin-logo:hover {
+        transform: translate(-8px, -8px) scale(1.2) !important;
+        z-index: 100;
+    }
 }
 
-.map-pin:hover {
-    transform: translate(-3px, -3px) scale(1.5); /* 6px / 2 = 3px */
-    background: #e8e6ca;
-    box-shadow: 0 5px 20px rgba(245, 245, 220, 0.8);
-    z-index: 20;
-    animation: none;
+/* Disable hover on touch devices */
+@media (hover: hover) and (pointer: fine) {
+    .map-pin:hover {
+        transform: translate(-3px, -3px) scale(1.5);
+        background: #e8e6ca;
+        box-shadow: 0 5px 20px rgba(245, 245, 220, 0.8);
+        z-index: 20;
+        animation: none;
+    }
 }
 
 /* Map Pin Label - Premium Glassmorphism Design */
@@ -2512,15 +2528,30 @@ body.dark-mode .map-container {
     }
 
     .map-pin-logo {
-        width: 12px; /* Much smaller for mobile */
-        height: 12px;
-        border-width: 1px;
+        width: 8px !important; /* Very small for mobile */
+        height: 8px !important;
+        border-width: 0.5px !important;
+        transform: translate(-4px, -4px) !important; /* Half of 8px */
     }
 
     .map-pin-logo.small {
-        width: 10px; /* Even smaller */
-        height: 10px;
-        border-width: 1px;
+        width: 6px !important; /* Even smaller */
+        height: 6px !important;
+        border-width: 0.5px !important;
+        transform: translate(-3px, -3px) !important; /* Half of 6px */
+    }
+    
+    /* Disable ALL hover effects on mobile */
+    .map-pin-logo:hover,
+    .map-pin-logo:active,
+    .map-pin-logo:focus {
+        transform: translate(-4px, -4px) !important; /* No scale on mobile */
+    }
+    
+    .map-pin-logo.small:hover,
+    .map-pin-logo.small:active,
+    .map-pin-logo.small:focus {
+        transform: translate(-3px, -3px) !important;
     }
 }
 
