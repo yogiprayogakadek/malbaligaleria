@@ -2401,41 +2401,52 @@ body.dark-mode .map-container {
 
 .map-pin-logo {
     position: absolute;
-    width: 16px;
-    height: 16px;
+    width: 24px; /* Desktop size (larger than mobile) */
+    height: 24px;
     background: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border-radius: 50% 50% 50% 0; /* Teardrop shape */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible; /* Allow shadow */
     z-index: 15;
-    border: 1.5px solid #5fcfda;
+    border: 2px solid #f5f5dc; /* Beige border like landing page */
     transition: transform 0.3s ease;
-    transform: translate(-8px, -8px); /* Exact half of 16px for precise centering */
-    /* Removed rotation */
+    transform: rotate(-45deg) translate(0, -50%); /* Point to coordinate */
+    transform-origin: 0% 100%; /* Anchor to bottom-left tip */
+    margin-top: -12px; /* Pull up by half height to center vertically */
+    margin-left: 12px; /* Push right by half width to center horizontally */
 }
 
 .map-pin-logo.small {
-    width: 14px;
-    height: 14px;
-    border-width: 1px;
-    transform: translate(-7px, -7px); /* Exact half of 14px */
+    width: 18px;
+    height: 18px;
+    border-width: 1.5px;
+    margin-top: -9px;
+    margin-left: 9px;
 }
 
 .map-pin-logo img {
-    width: 100%;
-    height: 100%;
+    width: 70%;
+    height: 70%;
     object-fit: contain;
-    padding: 2px;
+    padding: 0;
+    transform: rotate(45deg); /* Counter-rotate image */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -35%;
+    margin-left: -35%;
 }
 
 /* Disable hover on touch devices to prevent position shift */
 @media (hover: hover) and (pointer: fine) {
     .map-pin-logo:hover {
-        transform: translate(-8px, -8px) scale(1.2) !important;
+        transform: rotate(-45deg) translate(0, -50%) scale(1.2) !important;
         z-index: 100;
+        background: #fff;
+        border-color: #2c5f5d; /* Teal border on hover */
     }
 }
 
@@ -2528,30 +2539,36 @@ body.dark-mode .map-container {
     }
 
     .map-pin-logo {
-        width: 10px !important; /* Slightly larger as requested (was 8px) */
-        height: 10px !important;
-        border-width: 0.5px !important;
-        transform: translate(-5px, -5px) !important; /* Half of 10px */
+        width: 14px !important; /* Mobile size requested 14px */
+        height: 14px !important;
+        border-width: 1.5px !important;
+        transform: rotate(-45deg) translate(0, -50%) !important;
+        transform-origin: 0% 100% !important;
+        margin-top: -7px !important;
+        margin-left: 7px !important;
     }
 
     .map-pin-logo.small {
-        width: 8px !important; /* Was 6px */
-        height: 8px !important;
-        border-width: 0.5px !important;
-        transform: translate(-4px, -4px) !important; /* Half of 8px */
+        width: 12px !important;
+        height: 12px !important;
+        border-width: 1px !important;
+        margin-top: -6px !important;
+        margin-left: 6px !important;
     }
     
     /* Disable ALL hover effects on mobile */
     .map-pin-logo:hover,
     .map-pin-logo:active,
     .map-pin-logo:focus {
-        transform: translate(-5px, -5px) !important; /* No scale on mobile */
+        transform: rotate(-45deg) translate(0, -50%) !important; /* No scale on mobile */
+        background: white !important;
+        border-color: #f5f5dc !important;
     }
     
     .map-pin-logo.small:hover,
     .map-pin-logo.small:active,
     .map-pin-logo.small:focus {
-        transform: translate(-4px, -4px) !important;
+        transform: rotate(-45deg) translate(0, -50%) !important;
     }
 }
 
