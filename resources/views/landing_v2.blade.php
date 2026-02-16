@@ -130,7 +130,7 @@
         <div class="hero-bg"></div>
         <div class="hero-content">
             <h2>The Pioneer Shopping Center in Bali</h2>
-            <p>The Best Way to Predict The Future is to Create It and That Future is here...</p>
+            <p>Enjoy the moment. Play without limits. Eat with passion. Shop the best.</p>
             <a href="{{ route('frontend.directory.index') }}" style="text-decoration: none;">
                 <button class="explore-btn">
                     <span class="arrow">→</span>
@@ -147,30 +147,24 @@
             </div>
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
-                {{-- <p>Mal Bali Galeria is a large shopping complex conveniently located at the Simpang Dewa Ruci landmark
-                    and roundabout in Kuta.</p>
-
-                <p>The expansive shopping and entertainment precinct boasts a ‘Family Mall’ concept, carrying a slogan
-                    of ‘enjoy, play, eat, shop, learn’.
-                </p>
-
-                <p>Various tenants, outlets and event highlights make it a favourite destination among local and foreign
-                    visitors.</p>
-
-                <p>Besides shopping and dining, Mal Bali Galeria is also a popular leisure venue where different
-                    ‘happenings’ regularly occur on its calendar of events.</p>
-
-                <p>These mostly take place in its large and lux atrium referred to as the ‘dome’ and 'galeria food
-                    terrace'.</p>
-
-                <p>Adding to the convenience factor is a three-storey car park, as well as a dedicated parking space for
-                    motorcycles in its eastern ground level.</p> --}}
-                <p>An iconic lifestyle destination in the heart of Kuta, set at the prestigious Simpang Dewa Ruci. As
+                {{-- <p>An iconic lifestyle destination in the heart of Kuta, set at the prestigious Simpang Dewa Ruci. As
                     Bali’s first mall to introduce premium retail concepts that continue to thrive, Mal Bali Galeria
                     blends refined shopping and curated dining with a vibrant calendar of unique, high-energy
                     events—delivering a sophisticated Family Mall experience where excitement, culture, and elegance
                     come together.
-                    Enjoy. Play. Eat. Shop.</p>
+                    Enjoy. Play. Eat. Shop.</p> --}}
+
+                <p>
+                    Right in the vibrant heart of Kuta at the iconic Simpang Dewa Ruci, Mal Bali Galeria is where Bali
+                    comes to life. As the island’s pioneer of premium retail concepts, the mall continues to set the
+                    standard for trendsetting brands, exciting experiences, and unforgettable moments.
+                    With its signature motto, Enjoy. Play. Eat. Shop., Mal Bali Galeria is more than a shopping
+                    destination—it’s a lifestyle playground. From fashion-forward retail and curated dining spots to
+                    thrilling, high-energy events that light up the calendar, there’s always something happening.
+                    Designed as a dynamic Family Mall, it’s the place where friends gather, families connect, cultures
+                    meet, and excitement never stops. Every visit brings new discoveries, fresh flavors, and vibrant
+                    experiences—all under one roof.
+                </p>
             </div>
 
             <div class="info-grid">
