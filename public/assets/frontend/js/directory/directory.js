@@ -992,6 +992,11 @@ function updateMapView() {
     const mapContainer = document.getElementById("mapContainer");
     if (!mapContainer) return;
 
+    // Remove any existing map-stats elements to prevent duplicates
+    // This is necessary because adjustMobileLayout() may have moved the old element elsewhere
+    const existingMapStats = document.querySelectorAll('.map-stats');
+    existingMapStats.forEach(stats => stats.remove());
+
     mapContainer.innerHTML = `
                 <div class="map-wrapper" id="mapWrapper" style="position: relative; width: 100%;">
                     <img src="${floorMaps[floorKey]}" alt="Mall Floor Plan" id="floorMapImage" style="width: 100%; height: auto; display: block;">
