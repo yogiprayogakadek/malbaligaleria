@@ -1292,7 +1292,7 @@ body.dark-mode .about-container h2 {
     line-height: 1.8;
     color: #5a5a5a;
     margin-bottom: 30px;
-    text-align: center;
+    text-align: justify;
 }
 
 body.dark-mode .about-content p {
@@ -1673,7 +1673,8 @@ body.dark-mode .header-divider {
     pointer-events: none;
 }
 
-.experience-card:hover .experience-card-content { /* Tip-of-pin anchor point for high accuracy */
+.experience-card:hover .experience-card-content {
+    /* Tip-of-pin anchor point for high accuracy */
     opacity: 1;
     transform: translate(-50%, -100%);
 }
@@ -4144,7 +4145,7 @@ body.dark-mode .instagram-header h2 {
 }
 
 .instagram-header p {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 1rem;
     color: var(--secondary-color);
     letter-spacing: 2px;
@@ -4241,7 +4242,7 @@ body.dark-mode .instagram-header p a {
     color: white;
     text-decoration: none;
     border-radius: 50px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -4427,7 +4428,7 @@ body.dark-mode .visual-map-container {
     background: #ffffff;
     border: 3px solid #f5f5dc;
     border-radius: 50% 50% 50% 0; /* Leaf shape pointing to center */
-    transform: rotate(-45deg); 
+    transform: rotate(-45deg);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -4501,7 +4502,8 @@ body.dark-mode .logo-pin {
 }
 
 /* View Transitions */
-#modalInfoView, #modalMapView {
+#modalInfoView,
+#modalMapView {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -4556,7 +4558,7 @@ body.dark-mode .logo-pin {
         top: 0;
         left: 0;
         right: 0;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -4639,7 +4641,7 @@ body.dark-mode .logo-pin {
         right: 15px;
         background: white;
         color: #2c3e50;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         z-index: 10001;
     }
 
