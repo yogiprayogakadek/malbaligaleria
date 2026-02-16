@@ -1358,8 +1358,11 @@ function updateMapView() {
             
             // Move Tenant List Below Legend (if exists and not already there)
             if (mapTenantList && mapLegend) {
-                // Insert after mapLegend
-                mapLegend.parentNode.insertBefore(mapTenantList, mapLegend.nextSibling);
+                // Check if mapTenantList is already positioned correctly (right after mapLegend)
+                if (mapLegend.nextSibling !== mapTenantList) {
+                    // Insert after mapLegend only if it's not already there
+                    mapLegend.parentNode.insertBefore(mapTenantList, mapLegend.nextSibling);
+                }
                 mapTenantList.style.display = 'block'; // Ensure it's visible
             }
         } else {
@@ -1374,7 +1377,10 @@ function updateMapView() {
             // Note: Original place is inside filter-body, after filter-stats
             const filterStats = document.querySelector('.filter-stats');
             if (mapTenantList && filterStats) {
-                filterStats.parentNode.insertBefore(mapTenantList, filterStats.nextSibling);
+                // Check if mapTenantList is already positioned correctly
+                if (filterStats.nextSibling !== mapTenantList) {
+                    filterStats.parentNode.insertBefore(mapTenantList, filterStats.nextSibling);
+                }
             }
         }
     }
