@@ -2166,6 +2166,21 @@ function switchToMapView() {
     const mapTenantList = document.getElementById("mapTenantList");
     if (mapTenantList) mapTenantList.style.display = "block";
 
+    // Map view: hapus opsi "All Floors" — user harus pilih lantai spesifik
+    const floorFilter = document.getElementById("floorFilter");
+    if (floorFilter) {
+        const allOption = floorFilter.querySelector('option[value=""]');
+        if (allOption) allOption.remove();
+        // Default ke 1st Floor jika belum ada pilihan
+        if (!floorFilter.value) {
+            floorFilter.value = "1st Floor";
+            currentFloorMap = "floor1";
+            document.querySelectorAll(".floor-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.floor === "floor1");
+            });
+        }
+    }
+
     updateMapView();
 }
 
@@ -2178,6 +2193,16 @@ function switchToListView() {
 
     const mapTenantList = document.getElementById("mapTenantList");
     if (mapTenantList) mapTenantList.style.display = "none";
+
+    // List view: kembalikan opsi "All Floors" sebagai pilihan pertama
+    const floorFilter = document.getElementById("floorFilter");
+    if (floorFilter && !floorFilter.querySelector('option[value=""]')) {
+        const allOption = document.createElement("option");
+        allOption.value = "";
+        allOption.textContent = "Floor";
+        floorFilter.insertBefore(allOption, floorFilter.firstChild);
+        floorFilter.value = ""; // reset ke All Floors
+    }
 
     filterTenants();
 }
@@ -2611,7 +2636,15 @@ if (resetFiltersBtn) {
         if (sidebarSearch) sidebarSearch.value = '';
 
         resetFiltersBtn.style.display = 'none';
-        filterTenants();
+
+        // Update sesuai view yang aktif
+        if (currentView === 'map') {
+            updateMapView();   // Refresh map → tampilkan semua pin
+            updateFloorCounts();
+        } else {
+            filterTenants();   // Refresh list view
+        }
+
         showToast('All filters cleared', 'success', 2000);
 
         // Clean URL param if any
