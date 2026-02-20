@@ -2165,8 +2165,6 @@ function switchToMapView() {
 
     const mapTenantList = document.getElementById("mapTenantList");
     if (mapTenantList) mapTenantList.style.display = "block";
-    
-    showToast("Switched to Map View", "info", 2000);
 
     updateMapView();
 }
@@ -2180,8 +2178,6 @@ function switchToListView() {
 
     const mapTenantList = document.getElementById("mapTenantList");
     if (mapTenantList) mapTenantList.style.display = "none";
-    
-    showToast("Switched to List View", "info", 2000);
 
     filterTenants();
 }
@@ -2680,47 +2676,55 @@ window.addEventListener("load", () => {
 function locateTenantOnMap(tenant) {
     if (!tenant) return;
 
-    // 1. Close modal
-    closeTenantModal();
-
-    // 2. Switch to Map View
-    switchToMapView();
-
-    // 3. Set the correct floor
-    const floorValue = tenant.floor;
-    const floorKey = floorValue === "1st Floor" ? "floor1" : "floor2";
-    
-    let floorChanged = false;
-    if (currentFloorMap !== floorKey) {
-        currentFloorMap = floorKey;
-        floorChanged = true;
-        // Update floor buttons UI
-        document.querySelectorAll(".floor-btn").forEach((btn) => {
-            if (btn.dataset.floor === floorKey) {
-                btn.classList.add("active");
-            } else {
-                btn.classList.remove("active");
-            }
-        });
-        document.getElementById("floorFilter").value = floorValue;
-        updateMapView();
+    // 1. Set searchInput ke nama tenant agar pin muncul sebagai logo (searchTerm tidak kosong)
+    const searchInput = document.getElementById('searchInput');
+    const sidebarSearch = document.getElementById('sidebarSearch');
+    if (searchInput) {
+        searchInput.value = tenant.name;
+    }
+    if (sidebarSearch) {
+        sidebarSearch.value = tenant.name;
     }
 
-    // 4. Scroll to Map section (Target container specifically to avoid legend)
+    // 2. Set floor filter ke floor tenant
+    const floorFilter = document.getElementById('floorFilter');
+    if (floorFilter && tenant.floor) {
+        floorFilter.value = tenant.floor;
+    }
+
+    // 3. Update currentFloorMap state
+    const floorKey = tenant.floor === '1st Floor' ? 'floor1' : 'floor2';
+    currentFloorMap = floorKey;
+    document.querySelectorAll('.floor-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.floor === floorKey);
+    });
+
+    // 4. Close modal
+    closeTenantModal();
+
+    // 5. Switch to Map View (tanpa toast)
+    currentView = "map";
+    if (mapViewBtn) mapViewBtn.classList.add("active");
+    if (listViewBtn) listViewBtn.classList.remove("active");
+    if (tenantGrid) tenantGrid.style.display = "none";
+    if (emptyState) emptyState.style.display = "none";
+    if (mapView) mapView.style.display = "block";
+    const mapTenantList = document.getElementById("mapTenantList");
+    if (mapTenantList) mapTenantList.style.display = "block";
+
+    // 6. Update map dengan filter tenant tunggal, sehingga pin tampil sebagai logo
+    updateMapView();
+
+    // 7. Scroll ke map container
     const mapSection = document.getElementById("mapContainer");
     if (mapSection) {
-        // Scroll window to bring map into view
         mapSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // 5. Highlight the pin
-    // Increase timeout if floor changed to allow for map rendering and pin placement
-    const highlightDelay = floorChanged ? 1000 : 400;
-
+    // 8. Highlight pin setelah map selesai render
     setTimeout(() => {
         const pins = document.querySelectorAll('.map-pin, .map-pin-logo');
         let targetPin = null;
-
         pins.forEach(pin => {
             if (pin.dataset.tenantUnit === tenant.unit) {
                 targetPin = pin;
@@ -2728,35 +2732,17 @@ function locateTenantOnMap(tenant) {
         });
 
         if (targetPin) {
-            // Tooltip removed - user can hover to see details
-            // showMapTooltip(tenant, targetPin); // REMOVED
-            
-            // Internal scroll within the map container to center the pin
+            // Scroll map container untuk center-kan pin
             const mapContainer = document.getElementById("mapContainer");
             if (mapContainer) {
-                const pinRect = targetPin.getBoundingClientRect();
-                const containerRect = mapContainer.getBoundingClientRect();
-                
-                // Calculate position relative to container
                 const scrollLeft = targetPin.offsetLeft - (mapContainer.clientWidth / 2);
                 const scrollTop = targetPin.offsetTop - (mapContainer.clientHeight / 2);
-                
-                mapContainer.scrollTo({
-                    left: scrollLeft,
-                    top: scrollTop,
-                    behavior: 'smooth'
-                });
+                mapContainer.scrollTo({ left: scrollLeft, top: scrollTop, behavior: 'smooth' });
             }
-
-            // Add a temporary highlight animation class
+            // Tambah highlight animation
             targetPin.classList.add('pin-highlight');
             setTimeout(() => targetPin.classList.remove('pin-highlight'), 3000);
-        } else {
-            console.warn("Pin not found for unit:", tenant.unit);
-            if (!floorChanged) {
-                // Try once more if not found (maybe still rendering)
-                setTimeout(() => locateTenantOnMap(tenant), 500);
-            }
         }
-    }, highlightDelay);
+    }, 600);
 }
+
