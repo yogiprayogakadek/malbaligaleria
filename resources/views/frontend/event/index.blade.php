@@ -416,11 +416,8 @@
             }
         }, 5000);
 
-        // ===== HEADER SCROLL =====
+        // ===== HEADER SCROLL (minimal - just for future use) =====
         const header = document.getElementById("mainHeader");
-        window.addEventListener("scroll", () => {
-            header.classList.toggle("scrolled", window.pageYOffset > 80);
-        });
 
         // ===== SIDEBAR =====
         const menuBtn = document.getElementById("menuBtn");
