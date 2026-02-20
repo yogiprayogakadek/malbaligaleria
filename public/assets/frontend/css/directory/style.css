@@ -5274,3 +5274,180 @@ body.dark-mode .skeleton-list-item {
 #skeletonGrid.loaded {
     display: none !important;
 }
+
+/* ========================================
+   DIRECTORY HERO BANNER
+   ======================================== */
+.directory-hero-banner {
+    background: var(--primary-gradient);
+    padding: 110px 2.5rem 70px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.directory-hero-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -20%; width: 60%; height: 200%;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.directory-hero-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0; height: 46px;
+    background: var(--bg-light);
+    clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+body.dark-mode .directory-hero-banner::after {
+    background: var(--bg-dark);
+}
+
+.directory-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.directory-hero-eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 14px; border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.directory-hero-title {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; color: white;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px; line-height: 1.15;
+}
+
+.directory-hero-subtitle {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    margin-bottom: 28px; line-height: 1.6;
+}
+
+.directory-hero-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    padding: 9px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px; transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.directory-hero-back:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateX(-4px);
+}
+
+.directory-hero-back svg {
+    width: 16px; height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.directory-hero-back:hover svg {
+    transform: translateX(-3px);
+}
+
+/* Adjust main-content padding so container starts right after hero */
+.main-content .container {
+    padding-top: 20px;
+}
+
+/* ========================================
+   MOBILE STICKY CTA (Directory)
+   ======================================== */
+.dir-mobile-sticky-cta {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(44, 95, 93, 0.12);
+    box-shadow: 0 -4px 20px rgba(44, 95, 93, 0.12);
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+body.dark-mode .dir-mobile-sticky-cta {
+    background: rgba(26, 31, 30, 0.97);
+    border-top: 1px solid rgba(168, 197, 195, 0.15);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.dir-mobile-cta-btn {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; padding: 6px 8px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: all 0.2s ease; border-radius: 8px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.dir-mobile-cta-btn:hover,
+.dir-mobile-cta-btn:active {
+    background: rgba(44, 95, 93, 0.08);
+    color: var(--primary-color);
+}
+
+body.dark-mode .dir-mobile-cta-btn {
+    color: var(--accent-color);
+}
+
+.dir-mobile-cta-btn svg {
+    width: 22px; height: 22px;
+    stroke: var(--primary-color);
+    fill: none;
+    transition: stroke 0.2s ease;
+}
+
+body.dark-mode .dir-mobile-cta-btn svg {
+    stroke: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+    .dir-mobile-sticky-cta {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    footer {
+        padding-bottom: 70px;
+    }
+
+    .dark-mode-toggle {
+        bottom: 85px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .directory-hero-banner {
+        padding: 90px 1.2rem 60px;
+    }
+}
+
