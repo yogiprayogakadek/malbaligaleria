@@ -122,7 +122,8 @@
                         <circle cx="11" cy="11" r="8" stroke-width="2" />
                         <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
                     </svg>
-                    <input type="text" name="search" id="sidebarSearchInput" placeholder="Search tenants..." autocomplete="off">
+                    <input type="text" name="search" id="sidebarSearchInput" placeholder="Search tenants..."
+                        autocomplete="off">
                 </div>
             </form>
         </div>
@@ -130,9 +131,13 @@
 
     <section class="hero" id="home">
         <div class="hero-slider" id="heroSlider">
-            <div class="hero-slide active" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_1.png') }}')"></div>
+            <div class="hero-slide active" style="background-image: url('{{ asset('assets/backgorund.webp') }}')">
+            </div>
+            <div class="hero-slide" style="background-image: url('{{ asset('assets/backgorund.webp') }}')"></div>
+            <div class="hero-slide" style="background-image: url('{{ asset('assets/backgorund.webp') }}')"></div>
+            {{-- <div class="hero-slide active" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_1.png') }}')"></div>
             <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_2.png') }}')"></div>
-            <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_3.png') }}')"></div>
+            <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_3.png') }}')"></div> --}}
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -238,7 +243,8 @@
         <div class="experience-container">
             <div class="experience-header">
                 <h2>What's On at MBG</h2>
-                <p class="experience-subtitle">From exciting promos to brand-new stores — there's always something happening.</p>
+                <p class="experience-subtitle">From exciting promos to brand-new stores — there's always something
+                    happening.</p>
                 <div class="header-divider"></div>
             </div>
 
@@ -322,10 +328,12 @@
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
-                                <span class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <span
+                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p class="event-desc">{{ Str::limit($event->description, 110) }}</p>
-                                <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn More →</a>
+                                <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
+                                    More →</a>
                             </div>
                         </div>
                     @empty
@@ -693,7 +701,8 @@
 
     {{-- #7 Sticky Mobile CTA Bar --}}
     <div class="mobile-sticky-cta" id="mobileStickyBar">
-        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer" class="mobile-cta-btn">
+        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer"
+            class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
@@ -709,7 +718,8 @@
         </a>
         <a href="tel:+62361755277" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
             <span>Hubungi</span>
         </a>
