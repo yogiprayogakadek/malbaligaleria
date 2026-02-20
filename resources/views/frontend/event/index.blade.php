@@ -115,6 +115,23 @@
                 <span class="events-hero-eyebrow">Mal Bali Galeria</span>
                 <h1 class="events-hero-title">What's Happening</h1>
                 <p class="events-hero-subtitle">Experience extraordinary moments at Bali's favorite lifestyle destination. From musical performances to seasonal festivals.</p>
+                {{-- #5: Hero stat --}}
+                <div class="events-hero-stats">
+                    <div class="hero-stat-item">
+                        <span class="hero-stat-number">{{ count($events) }}</span>
+                        <span class="hero-stat-label">Events</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat-item">
+                        <span class="hero-stat-number">{{ $events->where('start_date', '>=', now()->toDateString())->count() }}</span>
+                        <span class="hero-stat-label">Upcoming</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat-item">
+                        <span class="hero-stat-number">{{ $events->where('is_paid', false)->count() }}</span>
+                        <span class="hero-stat-label">Free Entry</span>
+                    </div>
+                </div>
                 <a href="{{ route('frontend.landing') }}" class="events-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -129,21 +146,93 @@
             <div class="events-section-label">
                 <h2>Upcoming Events</h2>
                 <div class="divider"></div>
-                <span class="events-count-badge">{{ count($events) }} Events</span>
+                <span class="events-count-badge" id="eventsShownCount">{{ count($events) }} Events</span>
+            </div>
+
+            {{-- #1 & #8: Filter toolbar + month pills --}}
+            <div class="events-filter-toolbar">
+                <div class="events-filter-left">
+                    {{-- Status filter --}}
+                    <div class="event-status-pills">
+                        <button class="event-status-pill active" data-status="all">All</button>
+                        <button class="event-status-pill" data-status="upcoming">Upcoming</button>
+                        <button class="event-status-pill" data-status="ongoing">Ongoing</button>
+                        <button class="event-status-pill" data-status="ended">Ended</button>
+                    </div>
+                    {{-- Month filter (generated from events data) --}}
+                    <div class="event-month-pills" id="monthPills"></div>
+                </div>
+                <div class="events-filter-right">
+                    {{-- Sort --}}
+                    <select class="events-sort-select" id="eventsSort">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="name_asc">A–Z</option>
+                    </select>
+                </div>
             </div>
 
             <div class="events-grid" id="eventsGrid">
                 @forelse ($events as $index => $event)
                     @php
-                        $day   = date_format(date_create($event->start_date), 'd');
-                        $month = date_format(date_create($event->start_date), 'M');
+                        $day      = date_format(date_create($event->start_date), 'd');
+                        $month    = date_format(date_create($event->start_date), 'M');
+                        $yearMonth = date_format(date_create($event->start_date), 'Y-m');
+                        $monthLabel = date_format(date_create($event->start_date), 'M Y');
                         $fullDate = date_format(date_create($event->start_date), 'd M Y');
-                        $imgUrl = $event->primaryPhoto && $event->primaryPhoto->path
+                        $imgUrl   = $event->primaryPhoto && $event->primaryPhoto->path
                             ? asset('storage/' . $event->primaryPhoto->path)
                             : asset('assets/images/no_image.jpg');
+
+                        // #9: Date range if multi-day
+                        $endDate  = $event->end_date ?? null;
+                        $dateRange = $fullDate;
+                        if ($endDate && $endDate !== $event->start_date) {
+                            $endFmt = date_format(date_create($endDate), 'd M Y');
+                            $dateRange = $fullDate . ' – ' . $endFmt;
+                        }
+
+                        // #3: Event status
+                        $today     = now()->toDateString();
+                        $startStr  = $event->start_date;
+                        $endStr    = $endDate ?? $startStr;
+                        if ($today < $startStr) {
+                            $statusLabel = 'Upcoming';
+                            $statusClass = 'status-upcoming';
+                        } elseif ($today >= $startStr && $today <= $endStr) {
+                            $statusLabel = 'Ongoing';
+                            $statusClass = 'status-ongoing';
+                        } else {
+                            $statusLabel = 'Ended';
+                            $statusClass = 'status-ended';
+                        }
+
+                        // #2 & #11: Dynamic category from event attributes
+                        $isPaid     = $event->is_paid ?? false;
+                        $location   = strtolower($event->location ?? '');
+                        if (!$isPaid) {
+                            $catLabel = 'Free Entry';
+                            $catClass = 'cat-free';
+                        } elseif (str_contains($location, 'atrium') || str_contains($location, 'lobby')) {
+                            $catLabel = 'Atrium Event';
+                            $catClass = 'cat-atrium';
+                        } else {
+                            $catLabel = 'Mall Event';
+                            $catClass = 'cat-mall';
+                        }
+
+                        // #7: WA share URL
+                        $shareUrl  = route('frontend.event.detail', $event->uuid);
+                        $waText    = urlencode('Jangan lewatkan event seru di Mal Bali Galeria: ' . $event->name . ' 📅 ' . $dateRange . ' 👉 ' . $shareUrl);
+                        $waHref    = 'https://wa.me/?text=' . $waText;
                     @endphp
                     <a href="{{ route('frontend.event.detail', $event->uuid) }}"
-                       class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }}">
+                       class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
+                       data-month="{{ $yearMonth }}"
+                       data-month-label="{{ $monthLabel }}"
+                       data-status="{{ strtolower($statusLabel) }}"
+                       data-date="{{ $event->start_date }}"
+                       data-name="{{ $event->name }}">
                         <div class="event-img-wrapper">
                             <img src="{{ $imgUrl }}" alt="{{ $event->name }}" loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
@@ -151,11 +240,38 @@
                                 <span class="day">{{ $day }}</span>
                                 <span class="month">{{ $month }}</span>
                             </div>
+                            {{-- #3: Status badge --}}
+                            <span class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                            {{-- #7: WA Share button --}}
+                            <a href="{{ $waHref }}" target="_blank" rel="noopener noreferrer"
+                               class="event-wa-share"
+                               title="Share via WhatsApp"
+                               onclick="event.stopPropagation(); event.preventDefault(); window.open(this.href, '_blank');">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+                                </svg>
+                            </a>
                         </div>
                         <div class="event-card-info">
-                            <span class="event-category-tag">Mall Event</span>
+                            {{-- #2 & #11: Dynamic category tag --}}
+                            <span class="event-category-tag {{ $catClass }}">{{ $catLabel }}</span>
                             <h3 class="event-title-v2">{{ $event->name }}</h3>
-                            <span class="event-date-v2">{{ $fullDate }}</span>
+                            {{-- #9: Date range --}}
+                            <span class="event-date-v2">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                    <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                {{ $dateRange }}
+                            </span>
+                            @if($event->location)
+                            <span class="event-location-v2">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                {{ $event->location }}
+                            </span>
+                            @endif
                             <div class="see-details-link">
                                 See Details
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -165,9 +281,12 @@
                         </div>
                     </a>
                 @empty
-                    <div class="no-events">
-                        <h3>No upcoming events at the moment.</h3>
-                        <p>Stay tuned for updates!</p>
+                    {{-- #4: Better empty state --}}
+                    <div class="no-events-improved">
+                        <div class="no-events-emoji">🎪</div>
+                        <h3>No Events at the Moment</h3>
+                        <p>Kami sedang mempersiapkan event seru berikutnya. Stay tuned!</p>
+                        <a href="{{ route('frontend.landing') }}" class="no-events-cta">Kembali ke Beranda</a>
                     </div>
                 @endforelse
             </div>
@@ -175,6 +294,7 @@
             @if(count($events) > 8)
                 <div class="load-more-container">
                     <button id="loadMoreBtn" class="btn-load-more">Load More Events</button>
+                    <p class="load-more-hint" id="loadMoreHint"></p>
                 </div>
             @endif
         </div>
@@ -268,9 +388,16 @@
         </a>
     </div>
 
+    {{-- #10: Scroll to top --}}
+    <button class="event-scroll-top" id="scrollToTop" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7" />
+        </svg>
+    </button>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-        // Page Loader
+        // ===== PAGE LOADER =====
         const pageLoader = document.getElementById("pageLoader");
         let loadStartTime = Date.now();
         window.addEventListener("load", () => {
@@ -289,13 +416,13 @@
             }
         }, 5000);
 
-        // Header scroll
+        // ===== HEADER SCROLL =====
         const header = document.getElementById("mainHeader");
         window.addEventListener("scroll", () => {
             header.classList.toggle("scrolled", window.pageYOffset > 80);
         });
 
-        // Sidebar
+        // ===== SIDEBAR =====
         const menuBtn = document.getElementById("menuBtn");
         const sidebar = document.getElementById("sidebar");
         const sidebarClose = document.getElementById("sidebarClose");
@@ -317,7 +444,7 @@
             });
         });
 
-        // Dark mode
+        // ===== DARK MODE =====
         const darkModeToggle = document.getElementById("darkModeToggle");
         if (localStorage.getItem("darkMode") === "enabled") document.body.classList.add("dark-mode");
         darkModeToggle.addEventListener("click", (e) => {
@@ -326,11 +453,117 @@
             localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
         });
 
-        // Load More
+        // ===== #10: SCROLL TO TOP =====
+        const scrollTopBtn = document.getElementById("scrollToTop");
+        window.addEventListener("scroll", () => {
+            scrollTopBtn.classList.toggle("visible", window.pageYOffset > 400);
+        });
+        scrollTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+        // ===== #1 & #8: FILTER / SORT ENGINE =====
+        let activeStatus = 'all';
+        let activeMonth  = 'all';
+        let activeSort   = 'newest';
+
+        // Collect all event cards (including hidden initially)
+        const allCards = [...document.querySelectorAll('.event-card-v2')];
+
+        // Build month pills from unique months in data
+        const monthMap = new Map();
+        allCards.forEach(card => {
+            const m = card.dataset.month;
+            const ml = card.dataset.monthLabel;
+            if (m && !monthMap.has(m)) monthMap.set(m, ml);
+        });
+        const monthPillsEl = document.getElementById('monthPills');
+        if (monthPillsEl && monthMap.size > 1) {
+            monthMap.forEach((label, key) => {
+                const btn = document.createElement('button');
+                btn.className = 'event-month-pill';
+                btn.dataset.month = key;
+                btn.textContent = label;
+                btn.addEventListener('click', () => {
+                    activeMonth = activeMonth === key ? 'all' : key;
+                    document.querySelectorAll('.event-month-pill').forEach(b => b.classList.remove('active'));
+                    if (activeMonth !== 'all') btn.classList.add('active');
+                    applyFilters();
+                });
+                monthPillsEl.appendChild(btn);
+            });
+        }
+
+        // Status pill clicks
+        document.querySelectorAll('.event-status-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                activeStatus = pill.dataset.status;
+                document.querySelectorAll('.event-status-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                applyFilters();
+            });
+        });
+
+        // Sort change
+        const sortSelect = document.getElementById('eventsSort');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', () => {
+                activeSort = sortSelect.value;
+                applyFilters();
+            });
+        }
+
+        function applyFilters() {
+            const grid = document.getElementById('eventsGrid');
+            let visible = allCards.filter(card => {
+                const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
+                const monthMatch  = activeMonth === 'all'  || card.dataset.month  === activeMonth;
+                return statusMatch && monthMatch;
+            });
+
+            // Sort
+            visible.sort((a, b) => {
+                if (activeSort === 'newest')   return b.dataset.date.localeCompare(a.dataset.date);
+                if (activeSort === 'oldest')   return a.dataset.date.localeCompare(b.dataset.date);
+                if (activeSort === 'name_asc') return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+                return 0;
+            });
+
+            // Hide all first
+            allCards.forEach(c => { c.style.display = 'none'; c.classList.remove('event-reveal'); });
+
+            // Show filtered with animation (#6)
+            visible.forEach((card, i) => {
+                card.style.display = '';
+                card.style.animationDelay = (i * 0.06) + 's';
+                card.classList.add('event-reveal');
+            });
+
+            // Update counter
+            const countEl = document.getElementById('eventsShownCount');
+            if (countEl) countEl.textContent = `${visible.length} Event${visible.length !== 1 ? 's' : ''}`;
+
+            // Hide load more when filtering (show all filtered results)
+            const lmContainer = document.querySelector('.load-more-container');
+            if (lmContainer) lmContainer.style.display = (activeStatus === 'all' && activeMonth === 'all') ? '' : 'none';
+        }
+
+        // ===== #6: LOAD MORE with animation =====
         $(document).ready(function() {
             $('#loadMoreBtn').on('click', function() {
-                const hidden = $('.event-card-v2.event-hidden');
-                hidden.slice(0, 8).removeClass('event-hidden').hide().fadeIn(600);
+                const hidden = $('.event-card-v2.event-hidden:not([style*="display: none"])');
+                const toShow = hidden.slice(0, 8);
+                toShow.each(function(i) {
+                    const card = $(this);
+                    setTimeout(() => {
+                        card.removeClass('event-hidden')
+                            .css({ opacity: 0, transform: 'translateY(20px)' })
+                            .animate({ opacity: 1 }, 300);
+                        card[0].style.transform = 'translateY(0)';
+                        card[0].style.transition = 'transform 0.4s ease';
+                    }, i * 80);
+                });
+                const remaining = hidden.length - toShow.length;
+                const hintEl = document.getElementById('loadMoreHint');
+                if (hintEl) hintEl.textContent = remaining > 0 ? `${remaining} events more to load` : '';
                 if ($('.event-card-v2.event-hidden').length === 0) {
                     $('.load-more-container').fadeOut();
                 }
