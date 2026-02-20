@@ -6,20 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $event['name'] }} - Event Details | Mal Bali Galeria</title>
     <meta name="description" content="{{ Str::limit(strip_tags($event['description']), 160) }}">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $event['name'] }} | Mal Bali Galeria">
     <meta property="og:description" content="{{ Str::limit(strip_tags($event['description']), 160) }}">
-    <meta property="og:image" content="{{ $event['photo_path'] ? asset('storage/' . $event['photo_path']) : asset('assets/images/logo.png') }}">
+    <meta property="og:image"
+        content="{{ $event['primaryPhoto'] ? asset('storage/' . $event['primaryPhoto']) : asset('assets/images/logo.png') }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ $event['name'] }} | Mal Bali Galeria">
     <meta property="twitter:description" content="{{ Str::limit(strip_tags($event['description']), 160) }}">
-    <meta property="twitter:image" content="{{ $event['photo_path'] ? asset('storage/' . $event['photo_path']) : asset('assets/images/logo.png') }}">
+    <meta property="twitter:image"
+        content="{{ $event['primaryPhoto'] ? asset('storage/' . $event['primaryPhoto']) : asset('assets/images/logo.png') }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
 
@@ -68,8 +70,10 @@
             <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" />
             <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor"
+                stroke-width="2" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor"
+                stroke-width="2" />
         </svg>
     </button>
 
@@ -82,10 +86,8 @@
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}" 
-                 alt="Mal Bali Galeria" 
-                 class="header-main-logo"
-                 style="height: 45px; width: auto; object-fit: contain;">
+            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
+                style="height: 45px; width: auto; object-fit: contain;">
         </div>
 
         <button class="menu-btn" id="menuBtn">
