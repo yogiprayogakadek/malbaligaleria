@@ -2631,21 +2631,26 @@ if (resetFiltersBtn) {
         const sidebarSearch = document.getElementById('sidebarSearch');
 
         if (searchInput) searchInput.value = '';
-        if (floorFilter) floorFilter.value = '';
-        if (categoryFilter) categoryFilter.value = '';
         if (sidebarSearch) sidebarSearch.value = '';
+        if (categoryFilter) categoryFilter.value = '';
+
+        // Di map view: JANGAN reset floor — pertahankan lantai yang sedang ditampilkan
+        // agar pin tidak tumpang tindih antar lantai
+        if (currentView !== 'map') {
+            if (floorFilter) floorFilter.value = '';
+        }
 
         resetFiltersBtn.style.display = 'none';
 
         // Update sesuai view yang aktif
         if (currentView === 'map') {
-            updateMapView();   // Refresh map → tampilkan semua pin
+            updateMapView();   // Refresh map → tampilkan semua pin lantai aktif
             updateFloorCounts();
         } else {
             filterTenants();   // Refresh list view
         }
 
-        showToast('All filters cleared', 'success', 2000);
+        showToast('Filters cleared', 'success', 2000);
 
         // Clean URL param if any
         if (window.history.replaceState) {
