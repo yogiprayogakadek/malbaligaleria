@@ -17,7 +17,7 @@ class PromoRepository
     {
         return $this->model::select($fields)
             ->with($relationship)
-            ->where('is_active', true)
+            // ->where('is_active', true)
             ->whereDate('end_date', '>=', now()->toDateString())
             ->get();
     }
