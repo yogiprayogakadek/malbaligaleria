@@ -21,6 +21,11 @@ class PromoService
         return $this->promoRepository->getAll($fields);
     }
 
+    public function getAllWithRelationship(array $fields = ['*'], array $relationship)
+    {
+        return $this->promoRepository->getAllWithRelationship($fields, $relationship);
+    }
+
     public function getPromoWithRelationship(array $fields = ['*'], array $relationship)
     {
         return $this->promoRepository->getPromoWithRelationship($fields, $relationship);

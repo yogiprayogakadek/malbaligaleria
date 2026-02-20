@@ -13,12 +13,17 @@ class PromoRepository
         return $this->model::select($fields)->get();
     }
 
+    public function getAllWithRelationship(array $fields, array $relationship)
+    {
+        return $this->model::select($fields)->with($relationship)->get();
+    }
+
     public function getPromoWithRelationship(array $fields, array $relationship)
     {
         return $this->model::select($fields)
             ->with($relationship)
-            // ->where('is_active', true)
-            // ->whereDate('end_date', '>=', now()->toDateString())
+            ->where('is_active', true)
+            ->whereDate('end_date', '>=', now()->toDateString())
             ->get();
     }
 

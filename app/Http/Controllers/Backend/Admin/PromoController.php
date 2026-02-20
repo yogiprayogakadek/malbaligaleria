@@ -25,7 +25,7 @@ class PromoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $promos = $this->promoService->getPromoWithRelationship(['id', 'tenant_id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'is_active'], ['tenant:id,name']);
+            $promos = $this->promoService->getAllWithRelationship(['id', 'tenant_id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'is_active'], ['tenant:id,name']);
 
             return DataTables::of($promos)
                 ->addIndexColumn()
