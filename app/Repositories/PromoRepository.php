@@ -15,7 +15,11 @@ class PromoRepository
 
     public function getPromoWithRelationship(array $fields, array $relationship)
     {
-        return $this->model::select($fields)->with($relationship)->get();
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where('is_active', true)
+            ->whereDate('end_date', '>=', now()->toDateString())
+            ->get();
     }
 
     public function getPromoWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)

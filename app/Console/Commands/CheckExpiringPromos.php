@@ -27,6 +27,13 @@ class CheckExpiringPromos extends Command
     {
         $this->info('Checking for expiring promos...');
 
+        // 0. Deactivate promos that have already passed their end_date
+        $expiredCount = \App\Models\Promo::where('is_active', true)
+            ->whereDate('end_date', '<', now()->toDateString())
+            ->update(['is_active' => false]);
+
+        $this->info("Deactivated {$expiredCount} expired promo(s).");
+
         // 1. Promos expiring in 7 days
         $promos7Days = \App\Models\Promo::whereDate('end_date', now()->addDays(7)->toDateString())
             ->where('is_active', true)
