@@ -97,6 +97,39 @@ function getPromotionBadges(promo) {
     return badges;
 }
 
+// Get days remaining until promo expires
+function getDaysRemaining(validUntil) {
+    const endDate = new Date(validUntil);
+    const now = new Date();
+    const daysDiff = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+    return daysDiff;
+}
+
+// Update promo count in toolbar
+function updatePromoCount(total, showing) {
+    let el = document.getElementById('promoResultCount');
+    if (!el) return;
+    el.textContent = `Showing ${showing} of ${total} promotions`;
+}
+
+// Update active filter pill in toolbar
+function updateActiveFilterPill(tenantName, categoryName) {
+    const pillContainer = document.getElementById('activeFilterPills');
+    if (!pillContainer) return;
+    const pills = [];
+    if (tenantName && tenantName !== 'all') {
+        pills.push(`<span class="active-filter-pill" data-type="tenant">${tenantName} <button class="pill-remove" onclick="renderPromotions('all', currentCategoryFilter)" aria-label="Remove tenant filter">×</button></span>`);
+    }
+    if (categoryName && categoryName !== 'all' && categoryName !== 'favorites') {
+        pills.push(`<span class="active-filter-pill" data-type="category">${categoryName} <button class="pill-remove" onclick="renderPromotions(currentFilter, 'all')" aria-label="Remove category filter">×</button></span>`);
+    }
+    if (categoryName === 'favorites') {
+        pills.push(`<span class="active-filter-pill favorites-pill">❤ My Favorites <button class="pill-remove" onclick="renderPromotions('all', 'all')" aria-label="Remove favorites filter">×</button></span>`);
+    }
+    pillContainer.innerHTML = pills.join('');
+    pillContainer.style.display = pills.length > 0 ? 'flex' : 'none';
+}
+
 // ===== PAGE LOADER =====
 const pageLoader = document.getElementById("pageLoader");
 let minLoadTime = 1500;
@@ -228,6 +261,12 @@ async function populateCategoryFilter() {
         }
     });
 
+    // Fallback jika kategori kosong
+    if (categoryMap.size === 0) {
+        categoryChips.innerHTML = `<p class="filter-empty-hint">No categories available</p>`;
+        return;
+    }
+
     let html = `
         <div class="category-chip active" data-category="all">
             All <span class="category-chip-count">${promoData.length}</span>
@@ -338,6 +377,7 @@ async function renderPromotions(filter = 'all', category = 'all') {
     displayedPromotions = filtered;
 
     updateActiveFilter(filter);
+    updateActiveFilterPill(filter !== 'all' ? filter : null, currentCategoryFilter);
     displayPromotions();
 }
 
@@ -412,10 +452,20 @@ async function displayPromotions() {
             </div>
         ` : '';
 
+        const daysLeft = getDaysRemaining(promo.validUntil);
+        const isUrgent = daysLeft > 0 && daysLeft <= 7;
+        // Countdown bar: width % shows urgency (100% = 7 days, 0% = 0 days)
+        const countdownBarHTML = isUrgent ? `
+            <div class="promo-countdown-bar">
+                <div class="countdown-fill" style="width:${Math.round((daysLeft / 7) * 100)}%"></div>
+                <span class="countdown-text">${daysLeft === 1 ? 'Last day!' : `${daysLeft} days left`}</span>
+            </div>
+        ` : '';
+
         const isFav = isFavorite(promo.id);
 
         return `
-        <div class="promotion-card" data-promo-id="${promo.id}" style="animation-delay: ${index * 0.1}s">
+        <div class="promotion-card ${isUrgent ? 'urgent' : ''}" data-promo-id="${promo.id}" style="animation-delay: ${index * 0.1}s">
             <div class="promotion-image" style="background-image: url('${promo.images[0]}')">
                 ${badgesHTML}
                 <button class="bookmark-btn ${isFav ? 'active' : ''}" data-promo-id="${promo.id}" aria-label="Bookmark">
@@ -434,7 +484,7 @@ async function displayPromotions() {
                 </button>
                 <span class="promotion-badge">PROMO</span>
                 <div class="tenant-logo-badge">
-                    <img src="${promo.tenantLogo}" alt="${promo.tenant}">
+                    <img src="${promo.tenantLogo}" alt="${promo.tenant}" loading="lazy">
                 </div>
             </div>
             <div class="promotion-info">
@@ -454,6 +504,7 @@ async function displayPromotions() {
                     </svg>
                     Valid until ${formatDate(promo.validUntil)}
                 </div>
+                ${countdownBarHTML}
                 <p class="promotion-description">${promo.description}</p>
                 <button class="view-details-btn">
                     View Details
@@ -464,6 +515,9 @@ async function displayPromotions() {
             </div>
         </div>
     `}).join('');
+
+    // Update toolbar promo count
+    updatePromoCount(displayedPromotions.length, visiblePromotions.length);
 
     if (loadMoreContainer) {
         if (visiblePromotions.length < displayedPromotions.length) {
@@ -640,14 +694,20 @@ function showPromotionModal(promo) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    // Reset and show scroll hint
+    // ===== #9 Share WA button in modal =====
+    const modalShareWA = document.getElementById('modalShareWA');
+    if (modalShareWA) {
+        const waText = encodeURIComponent(`Cek promo menarik dari ${promo.tenant} di Mal Bali Galeria: *${promo.title}*\nBerlaku hingga ${formatDate(promo.validUntil)}\n${window.location.origin}${window.location.pathname}?promo=${promo.id}`);
+        modalShareWA.href = `https://wa.me/?text=${waText}`;
+    }
+
+    // Reset and show scroll hint — auto-hide after 2.5s (#8)
     const scrollHint = modal.querySelector('.modal-scroll-hint');
     if (scrollHint) {
         scrollHint.classList.remove('hidden');
-        // Clear any existing timeout if necessary (though simple modal usually doesn't need it)
         setTimeout(() => {
             scrollHint.classList.add('hidden');
-        }, 3000); // 3 seconds
+        }, 2500);
     }
 
     // Hide carousel swipe hint after 3 seconds

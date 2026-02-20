@@ -274,21 +274,26 @@
                         </div>
                     </div>
 
+                    {{-- #3 Promo count + #2 Active Filter Pills row --}}
+                    <div class="toolbar-meta-row">
+                        <span class="promo-result-count" id="promoResultCount">Loading...</span>
+                        <div class="active-filter-pills" id="activeFilterPills" style="display:none;"></div>
+                    </div>
+
                     <div class="promotion-grid" id="promotionGrid">
 
                     </div>
 
 
                     <div class="empty-state" id="emptyState" style="display: none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="12" />
-                            <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
+                        <div class="empty-state-emoji">🛍️</div>
                         <h3>No promotions found</h3>
-                        <p>Check back later for new deals or try changing your filters</p>
+                        <p id="emptyStateMsg">Belum ada promo yang cocok dengan filter kamu. Coba ubah filter atau cek lagi nanti ya!</p>
                         <button class="clear-filters-btn" id="clearFiltersBtn">
-                            Clear Filters
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:6px;">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" />
+                            </svg>
+                            Reset All Filters
                         </button>
                     </div>
 
@@ -388,6 +393,15 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- #9 Share to WhatsApp button --}}
+                    <a href="#" id="modalShareWA" target="_blank" rel="noopener noreferrer" class="modal-wa-share-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+                        </svg>
+                        Share via WhatsApp
+                    </a>
 
                     <div class="modal-description" id="modalDescription">
 
@@ -512,12 +526,11 @@
             </svg>
             <span>Home</span>
         </a>
-        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer" class="mobile-cta-btn">
+        <a href="{{ route('frontend.directory.index') }}" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
+                <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
             </svg>
-            <span>Lokasi</span>
+            <span>Directory</span>
         </a>
         <a href="tel:+62361755277" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

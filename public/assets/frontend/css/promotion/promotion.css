@@ -2792,3 +2792,226 @@ body.dark-mode .mobile-cta-btn svg {
     }
 }
 
+/* ============================================================
+   UI/UX IMPROVEMENTS — All High/Medium/Nice-to-have items
+   ============================================================ */
+
+/* ===== #1: URGENCY PROGRESS BAR on Card ===== */
+.promo-countdown-bar {
+    position: relative;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 20px;
+    height: 6px;
+    margin: 8px 0 12px;
+    overflow: hidden;
+}
+
+.countdown-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #ff6b6b);
+    border-radius: 20px;
+    transition: width 0.6s ease;
+    animation: countdownPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes countdownPulse {
+    from { opacity: 1; }
+    to { opacity: 0.7; }
+}
+
+.countdown-text {
+    position: absolute;
+    top: -18px;
+    right: 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: #e74c3c;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Urgent card — subtle left border glow */
+.promotion-card.urgent {
+    border-left: 3px solid #e74c3c;
+    box-shadow: -3px 0 12px rgba(231, 76, 60, 0.15), 0 4px 20px rgba(0,0,0,0.08);
+}
+
+body.dark-mode .promotion-card.urgent {
+    box-shadow: -3px 0 16px rgba(231, 76, 60, 0.25), 0 4px 24px rgba(0,0,0,0.25);
+}
+
+body.dark-mode .promo-countdown-bar {
+    background: rgba(231, 76, 60, 0.15);
+}
+
+/* ===== #2: ACTIVE FILTER PILLS ===== */
+.toolbar-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 0 6px;
+    min-height: 34px;
+}
+
+.promo-result-count {
+    font-size: 12px;
+    font-weight: 500;
+    color: #7f8c8d;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+body.dark-mode .promo-result-count {
+    color: #95a5a6;
+}
+
+.active-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.active-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 12px;
+    background: rgba(44, 95, 93, 0.1);
+    border: 1px solid rgba(44, 95, 93, 0.25);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-color);
+    animation: pillFadeIn 0.2s ease;
+}
+
+.active-filter-pill.favorites-pill {
+    background: rgba(231, 76, 60, 0.08);
+    border-color: rgba(231, 76, 60, 0.25);
+    color: #e74c3c;
+}
+
+@keyframes pillFadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.pill-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    font-weight: 700;
+}
+
+.pill-remove:hover { opacity: 1; }
+
+body.dark-mode .active-filter-pill {
+    background: rgba(95, 207, 218, 0.1);
+    border-color: rgba(95, 207, 218, 0.2);
+    color: #5fcfda;
+}
+
+/* ===== #4: HERO BANNER — subtle floating particles ===== */
+.promo-hero-banner {
+    position: relative;
+    overflow: hidden;
+}
+
+.promo-hero-banner::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: heroPulse 6s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes heroPulse {
+    from { transform: scale(1) translate(0,0); opacity: 0.4; }
+    to { transform: scale(1.2) translate(-30px, 20px); opacity: 0.08; }
+}
+
+/* ===== #5: EMPTY STATE with emoji ===== */
+.empty-state-emoji {
+    font-size: 52px;
+    margin-bottom: 16px;
+    animation: emojiFloat 3s ease-in-out infinite alternate;
+    display: block;
+}
+
+@keyframes emojiFloat {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+.empty-state .clear-filters-btn {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 16px;
+    padding: 12px 24px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    letter-spacing: 0.5px;
+}
+
+.empty-state .clear-filters-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(44, 95, 93, 0.3);
+}
+
+/* ===== #9: WHATSAPP SHARE BUTTON in Modal ===== */
+.modal-wa-share-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0 16px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: white !important;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.modal-wa-share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.45);
+    opacity: 0.92;
+}
+
+.modal-wa-share-btn svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+/* ===== #10: Category chips empty fallback ===== */
+.filter-empty-hint {
+    font-size: 12px;
+    color: #95a5a6;
+    font-style: italic;
+    padding: 8px 0;
+    text-align: center;
+}
