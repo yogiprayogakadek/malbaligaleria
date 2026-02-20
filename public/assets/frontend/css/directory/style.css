@@ -5275,6 +5275,62 @@ body.dark-mode .skeleton-list-item {
     display: none !important;
 }
 
+/* ===== RESET ALL FILTERS BUTTON ===== */
+.reset-filters-btn {
+    display: none; /* shown via JS when filters are active */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 16px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.07);
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.reset-filters-btn:hover {
+    background: rgba(192, 57, 43, 0.13);
+    border-color: rgba(192, 57, 43, 0.4);
+    transform: translateY(-1px);
+}
+
+body.dark-mode .reset-filters-btn {
+    color: #e57373;
+    background: rgba(229, 115, 115, 0.08);
+    border-color: rgba(229, 115, 115, 0.2);
+}
+
+body.dark-mode .reset-filters-btn:hover {
+    background: rgba(229, 115, 115, 0.15);
+    border-color: rgba(229, 115, 115, 0.4);
+}
+
+.reset-filters-btn svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+}
+
+.reset-filters-btn:hover svg {
+    animation: spinOnce 0.5s ease forwards;
+}
+
+@keyframes spinOnce {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-180deg); }
+}
+
+
 /* ========================================
    DIRECTORY HERO BANNER
    ======================================== */

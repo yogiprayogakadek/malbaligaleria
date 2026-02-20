@@ -655,11 +655,12 @@ function renderTenants(tenantsToRender) {
     tenantsToRender.forEach((tenant, index) => {
         const card = document.createElement("div");
         card.className = "tenant-card stagger-card";
+        card.dataset.unit = tenant.unit;
         card.style.animationDelay = `${index * 0.1}s`;
 
         card.innerHTML = `
                     <div class="tenant-logo">
-                        <img src="${tenant.logo}" alt="${tenant.name}">
+                        <img src="${tenant.logo}" alt="${tenant.name}" loading="lazy">
                     </div>
                     <div class="tenant-info">
                         <span class="floor-badge">${tenant.floor}</span>
@@ -747,6 +748,11 @@ function filterTenants() {
         const currentCount = parseInt(tenantCountElement.textContent) || 0;
         animateCounter(tenantCountElement, currentCount, filtered.length, 800);
     }
+
+    // Show/hide Reset button based on active filters
+    const hasActiveFilter = searchTerm || (document.getElementById('floorFilter') && document.getElementById('floorFilter').value) || (document.getElementById('categoryFilter') && document.getElementById('categoryFilter').value);
+    const resetBtn = document.getElementById('resetFiltersBtn');
+    if (resetBtn) resetBtn.style.display = hasActiveFilter ? 'flex' : 'none';
 
     // Debounce toast notification to avoid spamming while typing
     if (window.searchToastTimer) {
@@ -899,10 +905,13 @@ searchInput.addEventListener("input", () => {
 });
 
 sidebarSearch.addEventListener("input", () => {
+    // Sync sidebar search ke searchInput utama agar filter tercakup
+    const mainSearchInput = document.getElementById("searchInput");
+    if (mainSearchInput) mainSearchInput.value = sidebarSearch.value;
     createSearchSuggestions(sidebarSearch.value, "sidebarSearchSuggestions");
     if (currentView === "map") {
         updateMapView();
-        updateFloorCounts(); // Update counts when searching in map view
+        updateFloorCounts();
     } else {
         filterTenants();
     }
@@ -2572,11 +2581,50 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .getElementById("shareTwitter")
                 ?.addEventListener("click", () => shareStore("twitter"));
 
-            // Switch to map view by default and show 1st floor
-            switchToMapView();
+            // ===== #2: Auto-filter dari URL search param =====
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlSearch = urlParams.get('search');
+            if (urlSearch && urlSearch.trim()) {
+                const mainSearch = document.getElementById('searchInput');
+                if (mainSearch) {
+                    mainSearch.value = urlSearch.trim();
+                    filterTenants();
+                    // Show subtle toast so user knows search was applied
+                    showToast(`Showing results for "${urlSearch.trim()}"`, 'info', 2500);
+                }
+            }
+
+            // Default view: start with list view (not map) to avoid placeholder
+            switchToListView();
         }, 100);
-    }, 800); // Small delay to show shimmer effect
+    }, 800);
 });
+
+// ===== #4: Reset All Filters button handler =====
+const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+if (resetFiltersBtn) {
+    resetFiltersBtn.addEventListener('click', () => {
+        const searchInput = document.getElementById('searchInput');
+        const floorFilter = document.getElementById('floorFilter');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const sidebarSearch = document.getElementById('sidebarSearch');
+
+        if (searchInput) searchInput.value = '';
+        if (floorFilter) floorFilter.value = '';
+        if (categoryFilter) categoryFilter.value = '';
+        if (sidebarSearch) sidebarSearch.value = '';
+
+        resetFiltersBtn.style.display = 'none';
+        filterTenants();
+        showToast('All filters cleared', 'success', 2000);
+
+        // Clean URL param if any
+        if (window.history.replaceState) {
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+    });
+}
 
 // ===== RIPPLE EFFECT =====
 const buttons = document.querySelectorAll("button:not(#darkModeToggle)");

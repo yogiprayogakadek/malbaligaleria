@@ -215,7 +215,7 @@
                                     <circle cx="11" cy="11" r="8" stroke-width="2" />
                                     <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
                                 </svg>
-                                <input type="text" placeholder="Type to search..." id="searchInput">
+                                <input type="text" placeholder="Type to search..." id="searchInput" value="{{ request('search') }}" autocomplete="off">
                                 <div class="search-suggestions" id="searchInputSuggestions"></div>
                             </div>
                         </div>
@@ -254,9 +254,18 @@
 
 
                         <div class="filter-stats">
-                            <div class="filter-stats-number" id="tenantCount">17</div>
+                            <div class="filter-stats-number" id="tenantCount">{{ count($tenants) }}</div>
                             <div class="filter-stats-label">Tenants Found</div>
                         </div>
+
+                        {{-- Reset All Filters Button --}}
+                        <button class="reset-filters-btn" id="resetFiltersBtn" style="display:none;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
+                            </svg>
+                            Reset All Filters
+                        </button>
 
 
                         <div id="mapTenantList" style="display: none; margin-top: 25px;">
