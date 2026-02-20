@@ -116,18 +116,25 @@
         </nav>
 
         <div class="sidebar-search">
-            <div class="search-bar">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="8" stroke-width="2" />
-                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <input type="text" placeholder="Search">
-            </div>
+            <form action="{{ route('frontend.directory.index') }}" method="GET" id="sidebarSearchForm">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke-width="2" />
+                        <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <input type="text" name="search" id="sidebarSearchInput" placeholder="Search tenants..." autocomplete="off">
+                </div>
+            </form>
         </div>
     </div>
 
     <section class="hero" id="home">
-        <div class="hero-bg"></div>
+        <div class="hero-slider" id="heroSlider">
+            <div class="hero-slide active" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_1.png') }}')"></div>
+            <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_2.png') }}')"></div>
+            <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_3.png') }}')"></div>
+        </div>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
             <h2>The Pioneer Shopping Center in Bali</h2>
             <p>Enjoy the moment. Play without limits. Eat with passion. Shop the best.</p>
@@ -138,12 +145,17 @@
                 </button>
             </a>
         </div>
+        <div class="hero-slider-dots" id="heroSliderDots">
+            <span class="hero-dot active" data-index="0"></span>
+            <span class="hero-dot" data-index="1"></span>
+            <span class="hero-dot" data-index="2"></span>
+        </div>
     </section>
 
     <section class="about-section reveal" id="about">
         <div class="about-container">
             <div class="about-logo">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" loading="lazy">
             </div>
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
@@ -193,7 +205,8 @@
                                 <div class="tenant-card-image"
                                     style="background-image: url({{ $tenant->primaryPhoto && $tenant->primaryPhoto->path
                                         ? asset('storage/' . $tenant->primaryPhoto->path)
-                                        : asset('assets/images/no_image.jpg') }});">
+                                        : asset('assets/images/no_image.jpg') }});"
+                                    loading="lazy">
                                 </div>
                                 <div class="tenant-card-content">
                                     <h3>{{ $tenant->name }}</h3>
@@ -224,7 +237,8 @@
     <section class="experience-section reveal" id="experience">
         <div class="experience-container">
             <div class="experience-header">
-                <h2>COMMERCIALS - SHOPPING MALL</h2>
+                <h2>What's On at MBG</h2>
+                <p class="experience-subtitle">From exciting promos to brand-new stores — there's always something happening.</p>
                 <div class="header-divider"></div>
             </div>
 
@@ -308,12 +322,10 @@
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
-                                <span
-                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <span class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
-                                <p>{{ $event->description }}</p>
-                                <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
-                                    More →</a>
+                                <p class="event-desc">{{ Str::limit($event->description, 110) }}</p>
+                                <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn More →</a>
                             </div>
                         </div>
                     @empty
@@ -398,19 +410,19 @@
                     <div class="floor-list-wrapper" id="floorListWrapper">
                         <div class="floor-item active">
                             <h4>Level 1</h4>
-                            <p>IT, Games & Gadgets, Fashiion, Food, Island, and etc</p>
+                            <p>Your tech, fashion & flavor destination</p>
                         </div>
                         <div class="floor-item">
                             <h4>Level 2</h4>
-                            <p>Fashion, Kids & Play Zone, Salon, Drugs & Pharmacy, and etc</p>
+                            <p>Family fun, beauty & wellness — all in one level</p>
                         </div>
                         <div class="floor-item">
                             <h4>New Store</h4>
-                            <p>Fashion, Food & Beverage, Island, and etc </p>
+                            <p>Fresh arrivals — fashion, food & island vibes</p>
                         </div>
                         <div class="floor-item">
                             <h4>All Floor</h4>
-                            <p>All tenants</p>
+                            <p>Explore every tenant across all levels</p>
                         </div>
                     </div>
 
@@ -678,6 +690,30 @@
             </div>
         </div>
     </footer>
+
+    {{-- #7 Sticky Mobile CTA Bar --}}
+    <div class="mobile-sticky-cta" id="mobileStickyBar">
+        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>Lokasi</span>
+        </a>
+        <a href="{{ route('frontend.promotion.index') }}" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            <span>Promo</span>
+        </a>
+        <a href="tel:+62361755277" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Hubungi</span>
+        </a>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>

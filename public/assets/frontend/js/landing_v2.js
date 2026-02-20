@@ -109,35 +109,70 @@ darkModeToggle.addEventListener("click", function (e) {
 
 
 const hero = document.querySelector(".hero");
-const heroBg = document.querySelector(".hero-bg");
 
-window.addEventListener("scroll", () => {
-    const scrolled = window.pageYOffset;
+// ========================================
+// #1 HERO IMAGE SLIDER
+// ========================================
+(function initHeroSlider() {
+    const slides = document.querySelectorAll(".hero-slide");
+    const dots = document.querySelectorAll(".hero-dot");
+    if (!slides.length) return;
 
-    if (hero && heroBg && scrolled < hero.offsetHeight) {
+    let current = 0;
+    let sliderTimer;
 
-        const parallaxSpeed = 0.5;
-        heroBg.style.transform = `translateY(${
-            scrolled * parallaxSpeed
-        }px) scale(1.1)`;
-
-
-        const heroContent = document.querySelector(".hero-content");
-        const opacity = 1 - scrolled / (hero.offsetHeight * 0.7);
-        const translateY = scrolled * 0.3;
-
-        if (heroContent) {
-            heroContent.style.opacity = Math.max(0, opacity);
-            heroContent.style.transform = `translateY(${translateY}px)`;
-        }
-
-
-        const scale = 1.1 + scrolled * 0.0001;
-        heroBg.style.transform = `translateY(${
-            scrolled * parallaxSpeed
-        }px) scale(${Math.min(scale, 1.3)})`;
+    function goToSlide(index) {
+        slides[current].classList.remove("active");
+        dots[current].classList.remove("active");
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add("active");
+        dots[current].classList.add("active");
     }
-});
+
+    function startSlider() {
+        sliderTimer = setInterval(() => goToSlide(current + 1), 5000);
+    }
+
+    dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+            clearInterval(sliderTimer);
+            goToSlide(parseInt(dot.dataset.index));
+            startSlider();
+        });
+    });
+
+    // Parallax on scroll for hero content only
+    window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        if (hero && scrolled < hero.offsetHeight) {
+            const heroContent = document.querySelector(".hero-content");
+            const opacity = 1 - scrolled / (hero.offsetHeight * 0.7);
+            const translateY = scrolled * 0.3;
+            if (heroContent) {
+                heroContent.style.opacity = Math.max(0, opacity);
+                heroContent.style.transform = `translateY(${translateY}px)`;
+            }
+        }
+    });
+
+    startSlider();
+})();
+
+// ========================================
+// #2 SIDEBAR SEARCH — FUNGSIONAL
+// ========================================
+(function initSidebarSearch() {
+    const sidebarSearchInput = document.getElementById("sidebarSearchInput");
+    const sidebarSearchForm = document.getElementById("sidebarSearchForm");
+    if (!sidebarSearchInput || !sidebarSearchForm) return;
+
+    sidebarSearchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            sidebarSearchForm.submit();
+        }
+    });
+})();
 
 
 const revealElements = document.querySelectorAll(".reveal");

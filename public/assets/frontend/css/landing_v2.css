@@ -4680,3 +4680,188 @@ body.dark-mode .logo-pin {
     width: 14px;
     height: 14px;
 }
+
+/* ========================================
+   #1 HERO IMAGE SLIDER
+   ======================================== */
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-slider {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.30) 50%,
+        rgba(0, 0, 0, 0.65) 100%
+    );
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-slider-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 3;
+}
+
+.hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.hero-dot.active {
+    background: white;
+    border-color: white;
+    transform: scale(1.3);
+}
+
+/* ========================================
+   #4 EXPERIENCE SECTION SUBTITLE
+   ======================================== */
+.experience-subtitle {
+    font-size: 0.92rem;
+    color: var(--secondary-color);
+    margin-top: -10px;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+body.dark-mode .experience-subtitle {
+    color: var(--accent-color);
+}
+
+/* ========================================
+   #5 EVENT DESCRIPTION TRUNCATE
+   ======================================== */
+.event-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ========================================
+   #7 MOBILE STICKY CTA BAR
+   ======================================== */
+.mobile-sticky-cta {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(44, 95, 93, 0.12);
+    box-shadow: 0 -4px 20px rgba(44, 95, 93, 0.12);
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+body.dark-mode .mobile-sticky-cta {
+    background: rgba(26, 31, 30, 0.97);
+    border-top: 1px solid rgba(168, 197, 195, 0.15);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-cta-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.mobile-cta-btn:hover,
+.mobile-cta-btn:active {
+    background: rgba(44, 95, 93, 0.08);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+body.dark-mode .mobile-cta-btn {
+    color: var(--accent-color);
+}
+
+.mobile-cta-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--primary-color);
+    transition: stroke 0.2s ease;
+}
+
+body.dark-mode .mobile-cta-btn svg {
+    stroke: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+    .mobile-sticky-cta {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    /* Beri ruang di bawah agar konten footer tidak ketutupan sticky bar */
+    footer {
+        padding-bottom: 70px;
+    }
+
+    /* Geser dark mode toggle agar tidak overlapping dengan sticky bar */
+    .dark-mode-toggle {
+        bottom: 85px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+}
+

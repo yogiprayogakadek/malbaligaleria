@@ -1335,3 +1335,61 @@ body.dark-mode .notification-content span {
         max-width: none;
     }
 }
+
+/* ========================================
+   MOBILE STICKY CTA BAR (Event Detail)
+   ======================================== */
+.mobile-sticky-cta {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(44, 95, 93, 0.12);
+    box-shadow: 0 -4px 20px rgba(44, 95, 93, 0.12);
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+body.dark-mode .mobile-sticky-cta {
+    background: rgba(26, 31, 30, 0.97);
+    border-top: 1px solid rgba(168, 197, 195, 0.15);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-cta-btn-ev {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; padding: 6px 8px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: all 0.2s ease; border-radius: 8px;
+    font-family: "Montserrat", sans-serif;
+}
+.mobile-cta-btn-ev:hover, .mobile-cta-btn-ev:active {
+    background: rgba(44, 95, 93, 0.08);
+    color: var(--primary-color);
+}
+body.dark-mode .mobile-cta-btn-ev { color: var(--accent-color); }
+.mobile-cta-btn-ev svg {
+    width: 22px; height: 22px;
+    stroke: var(--primary-color);
+    fill: none;
+    transition: stroke 0.2s ease;
+}
+body.dark-mode .mobile-cta-btn-ev svg { stroke: var(--accent-color); }
+
+@media (max-width: 768px) {
+    .mobile-sticky-cta { display: flex; flex-direction: row; align-items: stretch; }
+
+    /* Beri ruang footer agar tidak tertutup sticky bar */
+    footer { padding-bottom: 70px !important; }
+
+    /* Dark mode toggle agar tidak overlap */
+    .dark-mode-toggle { bottom: 85px !important; right: 20px; width: 50px !important; height: 50px !important; }
+}
+

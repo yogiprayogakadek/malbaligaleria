@@ -73,7 +73,7 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;" loading="lazy">
             </a>
         </div>
 
@@ -119,14 +119,25 @@
 
 
     <main class="promotion-main">
+
+        {{-- Promo Hero Banner --}}
+        <div class="promo-hero-banner">
+            <div class="promo-hero-content">
+                <span class="promo-hero-eyebrow">Mal Bali Galeria</span>
+                <h1 class="promo-hero-title">{{ $setting->payload['page_title'] ?? 'Current Promotions' }}</h1>
+                <p class="promo-hero-subtitle">{{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}</p>
+                <a href="{{ route('frontend.landing') }}" class="promo-hero-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+
         <div class="promotion-container">
 
-            <div class="promotion-header">
-                <h1>{{ $setting->payload['page_title'] ?? 'Current Promotions' }}</h1>
-                <p>{{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}</p>
-            </div>
-
-
+            {{-- Remove old header because now using hero banner above --}}
             <div class="promotion-layout">
 
                 <aside class="tenant-filter-sidebar">
@@ -491,6 +502,30 @@
             <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
     </button>
+
+    {{-- Sticky Mobile CTA Bar --}}
+    <div class="mobile-sticky-cta" id="mobileStickyBar">
+        <a href="{{ route('frontend.landing') }}" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>Lokasi</span>
+        </a>
+        <a href="tel:+62361755277" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Hubungi</span>
+        </a>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/promotion/promotion.js') }}?v={{ time() }}"></script>

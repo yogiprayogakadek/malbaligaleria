@@ -81,7 +81,7 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;" loading="lazy">
             </a>
         </div>
 
@@ -346,7 +346,7 @@
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
 
 
-                        <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
 
                     </ul>
@@ -398,6 +398,32 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    {{-- Sticky Mobile CTA --}}
+    <div class="mobile-sticky-cta" id="mobileStickyBar">
+        <a href="{{ route('frontend.landing') }}" class="mobile-cta-btn-ev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="{{ route('frontend.event.index') }}" class="mobile-cta-btn-ev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>Events</span>
+        </a>
+        <a href="tel:+62361755277" class="mobile-cta-btn-ev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Hubungi</span>
+        </a>
+    </div>
 
     <script src="{{ asset('assets/frontend/js/event/detail.js') }}"></script>
 </body>
