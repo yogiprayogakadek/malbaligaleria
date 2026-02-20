@@ -326,33 +326,61 @@ body.dark-mode .btn-load-more:hover { background: var(--accent-color); color: va
 .no-events h3 { font-family: "Playfair Display", serif; font-size: 1.8rem; color: var(--primary-color); margin-bottom: 12px; }
 .no-events p { color: #888; font-size: 0.95rem; }
 
-/* ===== FOOTER (selaras dengan halaman lain) ===== */
+/* ===== FOOTER (identik dengan directory) ===== */
 footer {
-    background: var(--primary-gradient);
-    color: var(--text-light);
-    padding: 60px 0 30px;
+    background: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
+    color: white;
+    padding: 80px 40px 30px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-top: 60px;
 }
-.footer-container { max-width: 1400px; margin: 0 auto; padding: 0 60px; }
+footer::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="rgba(245, 245, 220,0.02)"/><circle cx="50" cy="50" r="30" fill="rgba(245, 245, 220,0.03)"/></svg>');
+    opacity: 0.5;
+}
+body.dark-mode footer { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+.footer-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; padding: 0; }
 .footer-content { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 60px; margin-bottom: 50px; }
-.footer-column h3 { font-family: "Playfair Display", serif; font-size: 20px; font-weight: 500; margin-bottom: 20px; color: white; }
-.footer-about p { font-size: 14px; line-height: 1.8; opacity: 0.8; margin-bottom: 25px; }
-.footer-social { display: flex; gap: 15px; }
-.footer-social-link { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-.footer-social-link:hover { background: rgba(255,255,255,0.15); border-color: white; transform: translateY(-3px); }
-.footer-social-link svg { width: 18px; height: 18px; }
-.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; transition: all 0.3s ease; }
-.footer-links a:hover { color: white; transform: translateX(5px); display: inline-block; }
-.footer-contact-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
-.footer-contact-item svg { width: 20px; height: 20px; fill: none; stroke: rgba(255,255,255,0.7); stroke-width: 2; flex-shrink: 0; margin-top: 2px; }
-.footer-contact-item a, .footer-contact-item p { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px; margin: 0; }
-.footer-contact-item a:hover { color: white; }
-.footer-divider { height: 1px; background: rgba(255,255,255,0.15); margin-bottom: 25px; }
-.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
-.footer-copyright { font-size: 13px; opacity: 0.6; }
-.footer-brand { text-align: right; }
-.footer-brand-logo { display: block; font-family: "Playfair Display", serif; font-size: 16px; color: white; }
-.footer-brand-text { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.5); }
+.footer-column h3 { font-family: "Playfair Display", serif; font-size: 24px; font-weight: 500; margin-bottom: 25px; color: white; }
+.footer-about p { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.9); margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 15px; }
+.footer-links a {
+    color: rgba(255,255,255,0.8); text-decoration: none; font-size: 15px;
+    transition: all 0.3s ease; display: inline-block; position: relative;
+}
+.footer-links a::before {
+    content: "\2192";
+    position: absolute; left: -20px; opacity: 0; transition: all 0.3s ease;
+}
+.footer-links a:hover { color: #f5f5dc; transform: translateX(10px); }
+.footer-links a:hover::before { left: -15px; opacity: 1; }
+.footer-contact-item { display: flex; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
+.footer-contact-item svg { width: 20px; height: 20px; fill: #f5f5dc; flex-shrink: 0; margin-top: 2px; }
+.footer-contact-item p { color: rgba(255,255,255,0.9); font-size: 14px; line-height: 1.6; margin: 0; }
+.footer-contact-item a { color: rgba(255,255,255,0.9); text-decoration: none; transition: color 0.3s ease; }
+.footer-contact-item a:hover { color: #f5f5dc; }
+.footer-social { display: flex; gap: 15px; margin-top: 25px; }
+.footer-social-link {
+    width: 45px; height: 45px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease; text-decoration: none;
+    backdrop-filter: blur(10px);
+}
+.footer-social-link:hover { background: var(--primary-color); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(44,95,93,0.3); }
+.footer-social-link svg { width: 20px; height: 20px; fill: white; }
+.footer-divider { height: 1px; background: rgba(255,255,255,0.2); margin: 40px 0 30px; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.footer-copyright { font-size: 14px; color: rgba(255,255,255,0.7); }
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-brand-logo { font-family: "Trebuchet MS", Arial, sans-serif; font-size: 20px; font-weight: 500; color: white; letter-spacing: 1px; }
+.footer-brand-text { font-size: 12px; color: rgba(255,255,255,0.6); }
 
 /* ===== MOBILE STICKY CTA ===== */
 .mobile-sticky-cta {
