@@ -232,7 +232,7 @@
                        data-month-label="{{ $monthLabel }}"
                        data-status="{{ strtolower($statusLabel) }}"
                        data-date="{{ $event->start_date }}"
-                       data-name="{{ $event->name }}">
+                       data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
                             <img src="{{ $imgUrl }}" alt="{{ $event->name }}" loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
