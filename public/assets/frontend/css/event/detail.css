@@ -359,11 +359,12 @@ main {
 .event-hero-banner {
     position: relative;
     width: 100%;
-    min-height: 280px;
+    min-height: 260px;
     background: var(--primary-gradient);
     display: flex;
     align-items: flex-end;
     overflow: hidden;
+    padding-bottom: 50px;
 }
 
 .event-hero-banner::before {
@@ -371,24 +372,9 @@ main {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.07) 0%, transparent 60%),
-        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08) 0%, transparent 55%),
+        radial-gradient(circle at 15% 70%, rgba(255,255,255,0.05) 0%, transparent 45%);
     pointer-events: none;
-}
-
-.event-hero-banner::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: var(--bg-light);
-    clip-path: ellipse(55% 100% at 50% 100%);
-}
-
-body.dark-mode .event-hero-banner::after {
-    background: var(--bg-dark);
 }
 
 .event-hero-content {
@@ -397,7 +383,7 @@ body.dark-mode .event-hero-banner::after {
     max-width: 1400px;
     width: 100%;
     margin: 0 auto;
-    padding: 60px 40px 80px;
+    padding: 50px 40px 0;
 }
 
 .event-hero-eyebrow {
@@ -451,10 +437,11 @@ body.dark-mode .event-hero-banner::after {
 
 @media (max-width: 768px) {
     .event-hero-content {
-        padding: 40px 20px 70px;
+        padding: 35px 20px 0;
     }
     .event-hero-banner {
-        min-height: 220px;
+        min-height: 200px;
+        padding-bottom: 40px;
     }
 }
 
@@ -666,10 +653,11 @@ body.dark-mode .event-hero-banner::after {
 
 /* --- Floating Glass Event Detail Section --- */
 .event-detail-glass-section {
-    padding: 40px 40px 80px;
+    padding: 0 40px 80px;
     background: var(--bg-light);
     position: relative;
     z-index: 20;
+    margin-top: -30px;
 }
 
 body.dark-mode .event-detail-glass-section {
@@ -919,7 +907,7 @@ body.dark-mode .info-cell p { color: var(--text-light); }
         padding: 40px 30px;
     }
     .event-detail-glass-section {
-        padding: 30px 30px 60px;
+        padding: 0 20px 60px;
     }
     .glass-event-image-wrap {
         max-height: 400px;
@@ -937,7 +925,7 @@ body.dark-mode .info-cell p { color: var(--text-light); }
     }
 }
 @media (max-width: 576px) {
-    .event-detail-glass-section { padding: 20px 20px 40px; }
+    .event-detail-glass-section { padding: 0 16px 40px; }
     .event-glass-card { padding: 30px 20px; }
     .glass-header h1 { font-size: 32px; }
     .glass-info-grid { grid-template-columns: 1fr; }
