@@ -166,6 +166,15 @@
         <section class="event-detail-glass-section">
             <div class="event-glass-container">
                 
+                <!-- Event Image -->
+                @if ($event['primaryPhoto'])
+                <div class="glass-event-image-wrap">
+                    <img src="{{ asset('storage/' . $event['primaryPhoto']) }}"
+                         alt="{{ $event['name'] }}"
+                         class="glass-event-image">
+                </div>
+                @endif
+
                 <!-- Main Floating Card -->
                 <div class="event-glass-card">
                     <!-- Left Sidebar (Meta & Actions) -->
