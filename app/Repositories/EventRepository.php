@@ -24,6 +24,7 @@ class EventRepository
             ->with($relationship)
             ->where('is_active', true)
             ->where('is_regular', false)
+            ->where('end_date', '>=', today())
             ->get();
     }
 
