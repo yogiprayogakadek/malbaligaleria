@@ -136,49 +136,62 @@
 
     <main>
 
-        <section class="carousel-section">
-            <div class="carousel-images" id="carouselImages">
-                @if (isset($event['photos']) && count($event['photos']) > 0)
-                    @foreach ($event['photos'] as $photo)
-                        <div class="carousel-image" style="background-image: url({{ $photo }});"></div>
-                    @endforeach
-                @else
-                    <div class="carousel-image"
-                        style="background-image: url({{ $event['primaryPhoto'] ?: asset('assets/images/no_image.jpg') }});">
-                    </div>
-                @endif
+        {{-- Event Hero Banner (no image, styled) --}}
+        <div class="event-hero-banner">
+            <div class="event-hero-content">
+                <span class="event-hero-eyebrow">Mal Bali Galeria</span>
+                <h1 class="event-hero-title">{{ $event['name'] }}</h1>
+                <p class="event-hero-subtitle">{{ $event['start_date'] }} – {{ $event['end_date'] }}</p>
+                <a href="{{ route('frontend.event.index') }}" class="event-hero-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Events
+                </a>
             </div>
-
-            @if (isset($event['photos']) && count($event['photos']) > 1)
-                <button class="carousel-arrow prev" id="carouselPrev">‹</button>
-                <button class="carousel-arrow next" id="carouselNext">›</button>
-
-                <div class="carousel-controls">
-                    @foreach ($event['photos'] as $index => $photo)
-                        <div class="carousel-dot {{ $index == 0 ? 'active' : '' }}"
-                            data-index="{{ $index }}"></div>
-                    @endforeach
-                </div>
-            @endif
-        </section>
+        </div>
 
 
         <section class="event-detail-glass-section">
             <div class="event-glass-container">
                 
-                <!-- Event Image -->
-                @if ($event['primaryPhoto'])
-                <div class="glass-event-image-wrap">
-                    <img src="{{ asset('storage/' . $event['primaryPhoto']) }}"
-                         alt="{{ $event['name'] }}"
-                         class="glass-event-image">
-                </div>
-                @endif
-
                 <!-- Main Floating Card -->
                 <div class="event-glass-card">
                     <!-- Left Sidebar (Meta & Actions) -->
                     <div class="glass-sidebar">
+
+                        {{-- Mini Image Carousel --}}
+                        <div class="glass-photo-carousel" id="glassPhotoCarousel">
+                            @php
+                                $photos = $event['photos'] ?? [];
+                                if (empty($photos) && $event['primaryPhoto']) {
+                                    $photos = [asset('storage/' . $event['primaryPhoto'])];
+                                }
+                            @endphp
+                            @if (count($photos) > 0)
+                                <div class="glass-photo-track" id="glassPhotoTrack">
+                                    @foreach ($photos as $i => $photo)
+                                        <div class="glass-photo-slide {{ $i == 0 ? 'active' : '' }}">
+                                            <img src="{{ $photo }}" alt="Event Photo {{ $i + 1 }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @if (count($photos) > 1)
+                                    <button class="gpc-arrow gpc-prev" id="gpcPrev">‹</button>
+                                    <button class="gpc-arrow gpc-next" id="gpcNext">›</button>
+                                    <div class="gpc-dots" id="gpcDots">
+                                        @foreach ($photos as $i => $photo)
+                                            <span class="gpc-dot {{ $i == 0 ? 'active' : '' }}" data-index="{{ $i }}"></span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            @else
+                                <div class="glass-photo-slide active">
+                                    <img src="{{ asset('assets/images/no_image.jpg') }}" alt="No Image">
+                                </div>
+                            @endif
+                        </div>
+
                         <div class="glass-meta-group">
                             <div class="glass-meta">
                                 <h4>Date & Time</h4>

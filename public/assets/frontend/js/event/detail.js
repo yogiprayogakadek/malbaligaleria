@@ -58,78 +58,53 @@ if (sidebarSearch) {
     });
 }
 
-/**
- * Custom Carousel Logic (if not using a library)
- * Supports basic dot navigation and auto-play
- */
+// ===== GLASS PHOTO CAROUSEL (GPC) =====
 document.addEventListener('DOMContentLoaded', () => {
-    const images = document.querySelector('.carousel-images');
-    const imageCount = document.querySelectorAll('.carousel-image').length;
-    const dots = document.querySelectorAll('.carousel-dot');
-    const prevBtn = document.querySelector('.carousel-arrow.prev'); // If added to HTML
-    const nextBtn = document.querySelector('.carousel-arrow.next'); // If added to HTML
-    
-    let currentIndex = 0;
-    let interval;
+    const slides = document.querySelectorAll('.glass-photo-slide');
+    const dots   = document.querySelectorAll('.gpc-dot');
+    const prevBtn = document.getElementById('gpcPrev');
+    const nextBtn = document.getElementById('gpcNext');
 
-    function showImage(index) {
-        if (index >= imageCount) index = 0;
-        if (index < 0) index = imageCount - 1;
-        
-        currentIndex = index;
-        
-        if (images) {
-            images.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
+    if (!slides.length) return;
 
-        dots.forEach(dot => dot.classList.remove('active'));
-        if (dots[currentIndex]) {
-            dots[currentIndex].classList.add('active');
-        }
+    let current = 0;
+    let autoTimer;
+
+    function goTo(index) {
+        slides[current].classList.remove('active');
+        if (dots[current]) dots[current].classList.remove('active');
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        if (dots[current]) dots[current].classList.add('active');
     }
 
-    function startAutoSlide() {
-        interval = setInterval(() => {
-            showImage(currentIndex + 1);
-        }, 5000);
+    function startAuto() {
+        if (slides.length <= 1) return;
+        autoTimer = setInterval(() => goTo(current + 1), 4000);
     }
 
-    function stopAutoSlide() {
-        clearInterval(interval);
-    }
+    function stopAuto() { clearInterval(autoTimer); }
 
-    // Dot Click Events
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            stopAutoSlide();
-            const index = parseInt(dot.getAttribute('data-index'));
-            showImage(index);
-            startAutoSlide();
-        });
-    });
+    if (prevBtn) prevBtn.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
 
-    // Arrow Click Events (if exist)
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            stopAutoSlide();
-            showImage(currentIndex - 1);
-            startAutoSlide();
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); }));
+
+    // Touch / swipe support
+    const carousel = document.getElementById('glassPhotoCarousel');
+    if (carousel) {
+        let startX = 0;
+        carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+        carousel.addEventListener('touchend', e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) { stopAuto(); goTo(diff > 0 ? current + 1 : current - 1); startAuto(); }
         });
     }
 
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            stopAutoSlide();
-            showImage(currentIndex + 1);
-            startAutoSlide();
-        });
-    }
-
-    // Initialize
-    if (imageCount > 0) {
-        startAutoSlide();
-    }
+    startAuto();
 });
+
+
 
 // Reveal on Scroll Animation
 const revealElements = document.querySelectorAll('.reveal');

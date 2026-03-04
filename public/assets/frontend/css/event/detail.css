@@ -355,16 +355,205 @@ main {
     padding-top: 80px;
 }
 
-/* --- Hero/Carousel Section --- */
-.carousel-section {
-    width: 100%;
+/* --- Event Hero Banner (no image, decorative) --- */
+.event-hero-banner {
     position: relative;
+    width: 100%;
+    min-height: 280px;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: flex-end;
     overflow: hidden;
-    margin-top: 0;
+}
+
+.event-hero-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.07) 0%, transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.event-hero-banner::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: var(--bg-light);
+    clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+body.dark-mode .event-hero-banner::after {
+    background: var(--bg-dark);
+}
+
+.event-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+}
+
+.event-hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 12px;
+}
+
+.event-hero-title {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 10px;
+    line-height: 1.2;
+    max-width: 800px;
+}
+
+.event-hero-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin: 0 0 24px;
+}
+
+.event-hero-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.event-hero-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+.event-hero-back:hover {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .event-hero-content {
+        padding: 40px 20px 70px;
+    }
+    .event-hero-banner {
+        min-height: 220px;
+    }
+}
+
+/* --- Glass Photo Carousel (in Sidebar) --- */
+.glass-photo-carousel {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
     background: #0d0d0d;
+    aspect-ratio: 3 / 4;   /* portrait friendly */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    flex-shrink: 0;
+}
+
+.glass-photo-track {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.glass-photo-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.glass-photo-slide.active {
+    opacity: 1;
+}
+
+.glass-photo-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* GPC Arrows */
+.gpc-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s, transform 0.3s;
+    opacity: 0;
+}
+
+.glass-photo-carousel:hover .gpc-arrow {
+    opacity: 1;
+}
+
+.gpc-arrow:hover {
+    background: rgba(255,255,255,0.35);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.gpc-prev { left: 8px; }
+.gpc-next { right: 8px; }
+
+/* GPC Dots */
+.gpc-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.gpc-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gpc-dot.active {
+    background: #fff;
+    transform: scale(1.3);
 }
 
 .carousel-images {
