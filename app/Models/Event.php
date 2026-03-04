@@ -26,7 +26,17 @@ class Event extends Model
         'price',
         'target_audience',
         'highlights',
-        'is_active'
+        'is_active',
+        'is_regular',
+        'recurring_days',
+        'recurring_label',
+    ];
+
+    protected $casts = [
+        'is_regular'     => 'boolean',
+        'recurring_days' => 'array',
+        'is_paid'        => 'boolean',
+        'is_active'      => 'boolean',
     ];
 
     protected static function boot()

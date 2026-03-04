@@ -17,13 +17,12 @@ class EventController extends Controller
 
     public function index()
     {
-        $events = $this->eventService->getEventsWithRelationshipAndCondition(
-            ['id', 'uuid', 'name', 'start_date'],
+        // Hanya tampilkan event NON-regular (is_regular = false) yang aktif
+        $events = $this->eventService->getEventsWithRelationship(
+            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location', 'is_paid'],
             [
                 'primaryPhoto:id,event_id,path',
-            ],
-            'is_active',
-            true
+            ]
         );
 
         return view('frontend.event.index', compact('events'));
@@ -32,7 +31,7 @@ class EventController extends Controller
     public function detail($uuid)
     {
         $event = $this->eventService->getEventsWithRelationshipAndCondition(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights'],
+            ['id', 'uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_regular', 'recurring_label'],
             [
                 'primaryPhoto:id,event_id,path',
                 'photos:id,event_id,path'
@@ -41,22 +40,24 @@ class EventController extends Controller
             $uuid
         )->map(function ($e) {
             return [
-                'id' => $e->id,
-                'uuid' => $e->uuid,
-                'name' => $e->name,
-                'start_date' => date_format(date_create($e->start_date), 'd M Y'),
-                'end_date' => date_format(date_create($e->end_date), 'd M Y'),
-                'start_time' => date_format(date_create($e->start_time), 'h:i A'),
-                'end_time' => date_format(date_create($e->end_time), 'h:i A'),
-                'description' => $e->description,
-                'location' => $e->location,
-                'organizer' => $e->organizer,
-                'is_paid' => $e->is_paid,
-                'price' => $e->price,
+                'id'              => $e->id,
+                'uuid'            => $e->uuid,
+                'name'            => $e->name,
+                'start_date'      => $e->start_date ? date_format(date_create($e->start_date), 'd M Y') : null,
+                'end_date'        => $e->end_date   ? date_format(date_create($e->end_date),   'd M Y') : null,
+                'start_time'      => $e->start_time ? date_format(date_create($e->start_time), 'h:i A') : null,
+                'end_time'        => $e->end_time   ? date_format(date_create($e->end_time),   'h:i A') : null,
+                'description'     => $e->description,
+                'location'        => $e->location,
+                'organizer'       => $e->organizer,
+                'is_paid'         => $e->is_paid,
+                'price'           => $e->price,
                 'target_audience' => $e->target_audience,
-                'highlights' => $e->highlights,
-                'primaryPhoto' => $e->primaryPhoto ? asset('storage/' . $e->primaryPhoto->path) : asset('assets/images/no_image.jpg'),
-                'photos' => $e->photos->map(function ($photos) {
+                'highlights'      => $e->highlights,
+                'is_regular'      => $e->is_regular,
+                'recurring_label' => $e->recurring_label,
+                'primaryPhoto'    => $e->primaryPhoto ? asset('storage/' . $e->primaryPhoto->path) : asset('assets/images/no_image.jpg'),
+                'photos'          => $e->photos->map(function ($photos) {
                     return $photos ? asset('storage/' . $photos->path) : asset('assets/images/no_image.jpg');
                 })
             ];
@@ -69,7 +70,6 @@ class EventController extends Controller
             ],
             $uuid
         );
-
 
         return view('frontend.event.detail', compact('event', 'upcomingEvents'));
     }

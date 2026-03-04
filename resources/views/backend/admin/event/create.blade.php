@@ -5,6 +5,30 @@
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .day-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+        .day-pill { display: none; }
+        .day-pill + label {
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 50px;
+            border: 1.5px solid #dee2e6;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            user-select: none;
+            color: #555;
+        }
+        .day-pill:checked + label {
+            background: #c9a96e;
+            border-color: #c9a96e;
+            color: #fff;
+        }
+        .recurring-section { display: none; }
+        .date-section { }
+        #regularToggle:checked ~ .card-body .recurring-section,
+        .show-recurring { display: block; }
+    </style>
 @endpush
 
 @section('content')
@@ -14,6 +38,7 @@
                 <div class="card-body">
                     <form action="{{ route('admin.event.store') }}" method="POST" id="form">
                         @csrf
+
                         {{-- Event Name --}}
                         <div class="mb-4 row align-items-center">
                             <label for="name" class="form-label col-sm-3 col-form-label">Name</label>
@@ -27,8 +52,63 @@
                             </div>
                         </div>
 
-                        {{-- Date --}}
+                        {{-- Regular Event Toggle --}}
                         <div class="mb-4 row align-items-center">
+                            <div class="col-sm-12">
+                                <div class="card border" style="background: #fffbf4; border-color: #f0ddb8 !important;">
+                                    <div class="card-body py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="form-check form-switch mb-0">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="is_regular" name="is_regular" value="1"
+                                                    {{ old('is_regular') ? 'checked' : '' }}>
+                                                <label class="form-check-label fw-semibold" for="is_regular">
+                                                    <i class="ti ti-repeat me-1" style="color:#c9a96e;"></i>
+                                                    Event Reguler / Rutin
+                                                </label>
+                                            </div>
+                                            <small class="text-muted">Aktifkan jika event ini berlangsung secara rutin (contoh: Live Music setiap akhir pekan)</small>
+                                        </div>
+
+                                        {{-- Recurring Fields (hidden by default) --}}
+                                        <div id="recurringSection" class="mt-3" style="display:none;">
+                                            <hr class="my-2">
+                                            <div class="mb-3">
+                                                <label class="form-label fw-semibold">Hari Pelaksanaan</label>
+                                                <div class="day-pills">
+                                                    @php
+                                                        $days = ['0' => 'Minggu', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu'];
+                                                        $oldDays = old('recurring_days', []);
+                                                    @endphp
+                                                    @foreach($days as $val => $label)
+                                                        <input type="checkbox" class="day-pill" id="day_{{ $val }}"
+                                                            name="recurring_days[]" value="{{ $val }}"
+                                                            {{ in_array($val, $oldDays) ? 'checked' : '' }}>
+                                                        <label for="day_{{ $val }}">{{ $label }}</label>
+                                                    @endforeach
+                                                </div>
+                                                @error('recurring_days')
+                                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label fw-semibold" for="recurring_label">Label Jadwal <small class="text-muted fw-normal">(ditampilkan ke pengunjung)</small></label>
+                                                <input type="text" class="form-control @error('recurring_label') is-invalid @enderror"
+                                                    id="recurring_label" name="recurring_label"
+                                                    placeholder="Contoh: Setiap Jum'at, Sabtu & Minggu"
+                                                    value="{{ old('recurring_label') }}">
+                                                @error('recurring_label')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Date (hidden when regular) --}}
+                        <div id="dateSection" class="mb-4 row align-items-center">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label for="start_date">Start Date</label>
@@ -80,7 +160,7 @@
                             <label for="description" class="form-label col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-12">
                                 <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
-                                    rows="10" id="description" name="description" placeholder="Enter event description">{{ old('description') }}</textarea>
+                                    rows="10" placeholder="Enter event description">{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -103,7 +183,6 @@
                         {{-- Entrance Fee & Price --}}
                         <div class="mb-4 row align-items-center">
                             <div class="row">
-                                {{-- Entrance Fee --}}
                                 <div class="col-sm-12" id="entrance_fee_col">
                                     <label for="is_paid">Entrance Fee</label>
                                     <select class="form-select @error('is_paid') is-invalid @enderror" id="is_paid"
@@ -115,8 +194,6 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-                                {{-- Price (Conditional) --}}
                                 <div class="col-sm-6" id="price_col" style="display: none;">
                                     <label for="price">Price</label>
                                     <input type="text" class="form-control @error('price') is-invalid @enderror"
@@ -144,22 +221,16 @@
 
                         {{-- Target Audience --}}
                         <div class="mb-4 row align-items-center">
-                            <label for="target_audience" class="form-label col-sm-3 col-form-label">Target
-                                Audience</label>
+                            <label for="target_audience" class="form-label col-sm-3 col-form-label">Target Audience</label>
                             <div class="col-sm-12">
                                 <select class="form-select @error('target_audience') is-invalid @enderror"
                                     id="target_audience" name="target_audience">
                                     <option value="">Select Target Audience</option>
-                                    <option value="General" {{ old('target_audience') == 'General' ? 'selected' : '' }}>
-                                        General</option>
-                                    <option value="Family" {{ old('target_audience') == 'Family' ? 'selected' : '' }}>
-                                        Family</option>
-                                    <option value="Kids" {{ old('target_audience') == 'Kids' ? 'selected' : '' }}>Kids
-                                    </option>
-                                    <option value="Adults" {{ old('target_audience') == 'Adults' ? 'selected' : '' }}>
-                                        Adults</option>
-                                    <option value="Teenagers"
-                                        {{ old('target_audience') == 'Teenagers' ? 'selected' : '' }}>Teenagers</option>
+                                    <option value="General" {{ old('target_audience') == 'General' ? 'selected' : '' }}>General</option>
+                                    <option value="Family" {{ old('target_audience') == 'Family' ? 'selected' : '' }}>Family</option>
+                                    <option value="Kids" {{ old('target_audience') == 'Kids' ? 'selected' : '' }}>Kids</option>
+                                    <option value="Adults" {{ old('target_audience') == 'Adults' ? 'selected' : '' }}>Adults</option>
+                                    <option value="Teenagers" {{ old('target_audience') == 'Teenagers' ? 'selected' : '' }}>Teenagers</option>
                                 </select>
                                 @error('target_audience')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -212,6 +283,20 @@
                 altFormat: "h:i K"
             });
 
+            // Toggle regular event section
+            function toggleRegular() {
+                const isRegular = $('#is_regular').is(':checked');
+                if (isRegular) {
+                    $('#recurringSection').slideDown(250);
+                    $('#dateSection').slideUp(250);
+                } else {
+                    $('#recurringSection').slideUp(250);
+                    $('#dateSection').slideDown(250);
+                }
+            }
+            $('#is_regular').on('change', toggleRegular);
+            toggleRegular();
+
             // Handle Entrance Fee Change
             $('#is_paid').change(function() {
                 if ($(this).val() == '1') {
@@ -224,7 +309,6 @@
                 }
             });
 
-            // Trigger on load
             $('#is_paid').trigger('change');
         });
     </script>

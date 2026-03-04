@@ -20,7 +20,20 @@ class EventRepository
 
     public function getEventsWithRelationship(array $fields, array $relationship)
     {
-        return $this->model::select($fields)->with($relationship)->where('is_active', true)->get();
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where('is_active', true)
+            ->where('is_regular', false)
+            ->get();
+    }
+
+    public function getRegularEvents(array $fields, array $relationship)
+    {
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where('is_active', true)
+            ->where('is_regular', true)
+            ->get();
     }
 
     public function getEventsWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
@@ -30,7 +43,12 @@ class EventRepository
 
     public function getUpcomingEvents(array $fields, array $relationship, string $uuid)
     {
-        return $this->model::select($fields)->with($relationship)->where('uuid', '!=', $uuid)->where('is_active', true)->get();
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where('uuid', '!=', $uuid)
+            ->where('is_active', true)
+            ->where('is_regular', false)
+            ->get();
     }
 
     public function findById(int $id, array $fields)

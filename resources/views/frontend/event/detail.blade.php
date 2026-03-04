@@ -163,107 +163,87 @@
         </section>
 
 
-        <section class="detail-section">
-            <div class="detail-container">
-                <div class="detail-left">
-                    <div class="tenant-logo-wrapper">
-
-                        <div class="tenant-logo">
-                            <img src="{{ $event['primaryPhoto'] ?: asset('assets/images/no_image.jpg') }}"
-                                alt="Event Thumbnail">
-                        </div>
-
-                        <div class="tenant-location">
-                            <h4>Date & Time</h4>
-                            <div class="location-item">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                    <line x1="16" y1="2" x2="16" y2="6" />
-                                    <line x1="8" y1="2" x2="8" y2="6" />
-                                    <line x1="3" y1="10" x2="21" y2="10" />
-                                </svg>
-                                <span>{{ $event['start_date'] }} - {{ $event['end_date'] }}</span>
+        <section class="event-detail-glass-section">
+            <div class="event-glass-container">
+                
+                <!-- Main Floating Card -->
+                <div class="event-glass-card">
+                    <!-- Left Sidebar (Meta & Actions) -->
+                    <div class="glass-sidebar">
+                        <div class="glass-meta-group">
+                            <div class="glass-meta">
+                                <h4>Date & Time</h4>
+                                <div class="meta-row">
+                                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                                    <span>{{ $event['start_date'] }} - {{ $event['end_date'] }}</span>
+                                </div>
+                                <div class="meta-row">
+                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                    <span>{{ $event['start_time'] }} - {{ $event['end_time'] }}</span>
+                                </div>
                             </div>
-                            <div class="location-item">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <polyline points="12 6 12 12 16 14" />
-                                </svg>
-                                <span>{{ $event['start_time'] }} - {{ $event['end_time'] }}</span>
-                            </div>
-                        </div>
 
-                        <div class="tenant-location">
-                            <h4>Location</h4>
-                            <div class="location-item">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
-                                <span>{{ $event['location'] ?? 'Information Desk' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tenant-info">
-                        <div class="tenant-header-group">
-                            <h1>{{ $event['name'] }}</h1>
-                            <span class="tenant-category">Event</span>
-                        </div>
-
-                        <div class="tenant-description">
-                            {!! nl2br(e($event['description'])) !!}
-                        </div>
-
-                        <div class="tenant-details-grid">
-                            <div class="detail-item">
-                                <label>Entrance Fee</label>
-                                <p>{{ $event['is_paid'] ? 'Rp ' . number_format($event['price'], 0, ',', '.') : 'Free Admission' }}
-                                </p>
-                            </div>
-                            <div class="detail-item">
-                                <label>Organizer</label>
-                                <p>{{ $event['organizer'] ?? 'Mal Bali Galeria' }}</p>
-                            </div>
-                            <div class="detail-item">
-                                <label>Target Audience</label>
-                                <p>{{ $event['target_audience'] ?? 'General' }}</p>
-                            </div>
-                            <div class="detail-item">
-                                <label>Highlights</label>
-                                <p>{{ $event['highlights'] ?? 'Special Event' }}</p>
+                            <div class="glass-meta">
+                                <h4>Location</h4>
+                                <div class="meta-row">
+                                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                    <span>{{ $event['location'] ?? 'Information Desk' }}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="tenant-actions">
-                            <a href="#" class="action-btn primary" id="addToCalendarBtn"
+                        <div class="glass-actions">
+                            <a href="#" class="glass-btn btn-primary" id="addToCalendarBtn"
                                 data-event-name="{{ $event['name'] }}"
                                 data-event-description="{{ strip_tags($event['description']) }}"
                                 data-event-location="{{ $event['location'] ?? 'Mal Bali Galeria' }}"
                                 data-event-start="{{ $event['start_date'] }} {{ $event['start_time'] }}"
                                 data-event-end="{{ $event['end_date'] }} {{ $event['end_time'] }}">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                 Add to Calendar
                             </a>
-                            <a href="#" class="action-btn secondary" id="shareEventBtn"
+                            <a href="#" class="glass-btn btn-secondary" id="shareEventBtn"
                                 data-event-name="{{ $event['name'] }}" data-event-url="{{ url()->current() }}">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                                    <polyline points="16 6 12 2 8 6" />
-                                    <line x1="12" y1="2" x2="12" y2="15" />
-                                </svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
                                 Share Event
                             </a>
                         </div>
                     </div>
+
+                    <!-- Right Main Content -->
+                    <div class="glass-content">
+                        <div class="glass-header">
+                            <span class="glass-badge">Special Event</span>
+                            <h1>{{ $event['name'] }}</h1>
+                        </div>
+
+                        <div class="glass-description">
+                            {!! nl2br(e($event['description'])) !!}
+                        </div>
+
+                        <div class="glass-info-grid">
+                            <div class="info-cell">
+                                <label>Entrance Fee</label>
+                                <p>{{ $event['is_paid'] ? 'Rp ' . number_format($event['price'], 0, ',', '.') : 'Free Admission' }}</p>
+                            </div>
+                            <div class="info-cell">
+                                <label>Organizer</label>
+                                <p>{{ $event['organizer'] ?? 'Mal Bali Galeria' }}</p>
+                            </div>
+                            <div class="info-cell">
+                                <label>Target Audience</label>
+                                <p>{{ $event['target_audience'] ?? 'General' }}</p>
+                            </div>
+                            <div class="info-cell">
+                                <label>Highlights</label>
+                                <p>{{ $event['highlights'] ?? 'Exclusive Shows' }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="similar-section">
+                <!-- Similar Upcoming Events -->
+                <div class="similar-section glass-similar">
                     <div class="similar-header">
                         <h3>Upcoming Events <span class="event-count">({{ count($upcomingEvents) }})</span></h3>
                     </div>
@@ -274,26 +254,27 @@
                                 <div class="similar-tenant-card"
                                     style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                     <div class="similar-tenant-content">
-                                        <span
-                                            class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
+                                        <span class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
                                         <h4>{{ $upcoming->name }}</h4>
-
-                                        <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
-                                            class="similar-tenant-link">View Details<span>→</span></a>
+                                        <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="similar-tenant-link">View Details<span>→</span></a>
                                     </div>
                                 </div>
                             @empty
-                                <p class="no-events-message">No upcoming events available.</p>
+                                <div class="no-events-improved" style="grid-column: 1/-1; padding: 40px; text-align: center; border-radius: 20px; background: rgba(0,0,0,0.03);">
+                                    <div class="no-events-emoji" style="font-size: 40px;">🎪</div>
+                                    <h3 style="margin: 10px 0; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-color);">No other events</h3>
+                                    <p style="color: #666; font-size: 0.95rem;">Check back later for more exciting events!</p>
+                                </div>
                             @endforelse
                         </div>
                         <button class="similar-arrow similar-next" id="similarNext">›</button>
-
 
                         @if (count($upcomingEvents) > 2)
                             <div class="carousel-scroll-indicators" id="scrollIndicators"></div>
                         @endif
                     </div>
                 </div>
+
             </div>
         </section>
     </main>

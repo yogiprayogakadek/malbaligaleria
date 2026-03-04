@@ -31,6 +31,11 @@ class EventService
         return $this->eventRepository->getEventsWithRelationship($fields, $relationship);
     }
 
+    public function getRegularEvents(array $fields = ['*'], array $relationship)
+    {
+        return $this->eventRepository->getRegularEvents($fields, $relationship);
+    }
+
     public function getEventsWithRelationshipAndCondition(array $fields = ['*'], array $relationship, string $column, string $condition)
     {
         return $this->eventRepository->getEventsWithRelationshipAndCondition($fields, $relationship, $column, $condition);
@@ -58,23 +63,11 @@ class EventService
 
     public function create(array $data)
     {
-        // if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
-        //     $data['logo'] = $this->uploadImage($data['logo']);
-        // }
-
         return $this->eventRepository->create($data);
     }
 
     public function update(array $data, string $uuid)
     {
-        // $tenant = $this->eventRepository->findByUuid($uuid, ['id', 'logo']);
-
-        // if (isset($data['logo']) && $data['logo'] instanceof UploadedFile) {
-        //     if (!empty($tenant->logo)) {
-        //         $this->deleteImage($tenant->logo);
-        //     }
-        //     $data['logo'] = $this->uploadImage($data['logo']);
-        // }
         return $this->eventRepository->update($data, $uuid);
     }
 

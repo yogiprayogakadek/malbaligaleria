@@ -21,7 +21,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active']);
+            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'recurring_label']);
 
             return DataTables::of($events)
                 ->addIndexColumn()
@@ -29,6 +29,11 @@ class EventController extends Controller
                     return $row->is_active == true
                         ? '<span class="badge bg-primary">Active</span>'
                         : '<span class="badge bg-danger">Inactive</span>';
+                })
+                ->editColumn('is_regular', function ($row) {
+                    return $row->is_regular
+                        ? '<span class="badge" style="background:#c9a96e;color:#fff;">Regular</span>'
+                        : '<span class="badge bg-secondary">One-time</span>';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.event.edit', $row->uuid) . '">
@@ -39,7 +44,7 @@ class EventController extends Controller
                         </button>
                     </a>                    ';
                 })
-                ->rawColumns(['action', 'is_active'])
+                ->rawColumns(['action', 'is_active', 'is_regular'])
                 ->make(true);
         }
 
@@ -53,19 +58,24 @@ class EventController extends Controller
 
     public function store(StoreEventRequest $request)
     {
+        $isRegular = $request->boolean('is_regular');
+
         $data = [
-            'name' => $request->name,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'description' => $request->description,
-            'location' => $request->location,
-            'organizer' => $request->organizer,
-            'is_paid' => $request->is_paid,
-            'price' => $request->price,
+            'name'            => $request->name,
+            'start_date'      => $isRegular ? null : $request->start_date,
+            'end_date'        => $isRegular ? null : $request->end_date,
+            'start_time'      => $request->start_time,
+            'end_time'        => $request->end_time,
+            'description'     => $request->description,
+            'location'        => $request->location,
+            'organizer'       => $request->organizer,
+            'is_paid'         => $request->is_paid,
+            'price'           => $request->price,
             'target_audience' => $request->target_audience,
-            'highlights' => $request->highlights,
+            'highlights'      => $request->highlights,
+            'is_regular'      => $isRegular,
+            'recurring_days'  => $isRegular ? $request->recurring_days : null,
+            'recurring_label' => $isRegular ? $request->recurring_label : null,
         ];
 
         $this->eventService->create($data);
@@ -75,27 +85,32 @@ class EventController extends Controller
 
     public function edit($uuid)
     {
-        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active']);
+        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'recurring_days', 'recurring_label']);
 
         return view('backend.admin.event.edit', compact('event'));
     }
 
     public function update(UpdateEventRequest $request, $uuid)
     {
+        $isRegular = $request->boolean('is_regular');
+
         $data = [
-            'name' => $request->name,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'description' => $request->description,
-            'location' => $request->location,
-            'organizer' => $request->organizer,
-            'is_paid' => $request->is_paid,
-            'price' => $request->price,
+            'name'            => $request->name,
+            'start_date'      => $isRegular ? null : $request->start_date,
+            'end_date'        => $isRegular ? null : $request->end_date,
+            'start_time'      => $request->start_time,
+            'end_time'        => $request->end_time,
+            'description'     => $request->description,
+            'location'        => $request->location,
+            'organizer'       => $request->organizer,
+            'is_paid'         => $request->is_paid,
+            'price'           => $request->price,
             'target_audience' => $request->target_audience,
-            'highlights' => $request->highlights,
-            'is_active' => $request->is_active
+            'highlights'      => $request->highlights,
+            'is_active'       => $request->is_active,
+            'is_regular'      => $isRegular,
+            'recurring_days'  => $isRegular ? $request->recurring_days : null,
+            'recurring_label' => $isRegular ? $request->recurring_label : null,
         ];
 
         $this->eventService->update($data, $uuid);

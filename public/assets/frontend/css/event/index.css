@@ -229,11 +229,13 @@ body.dark-mode .events-count-badge { background: rgba(138,169,167,0.12); color: 
     gap: 40px;
     min-width: 0; /* prevent grid from overflowing */
     width: 100%;
+    /* Override sembarang centering container ke start */
+    justify-content: start !important;
 }
 
 /* ===== EVENT CARD ===== */
 .event-card-v2 {
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; height: 100%;
     background: transparent;
     transition: all 0.4s ease;
     text-decoration: none; color: inherit;
@@ -277,7 +279,7 @@ body.dark-mode .event-date-badge { background: var(--bg-dark); }
     color: var(--secondary-color);
 }
 
-.event-card-info { display: flex; flex-direction: column; gap: 8px; }
+.event-card-info { display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .event-category-tag {
     font-size: 10px; font-weight: 700;
     color: var(--secondary-color);
@@ -297,7 +299,7 @@ body.dark-mode .event-title-v2 { color: var(--text-light); }
     font-size: 11px; font-weight: 700; color: var(--primary-color);
     text-transform: uppercase; letter-spacing: 1.5px;
     display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.3s ease; margin-top: 4px;
+    transition: all 0.3s ease; margin-top: auto; padding-top: 8px;
 }
 body.dark-mode .see-details-link { color: var(--accent-color); }
 .see-details-link svg { width: 16px; height: 16px; transition: transform 0.3s ease; }

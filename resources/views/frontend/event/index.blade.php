@@ -123,13 +123,18 @@
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat-item">
-                        <span class="hero-stat-number">{{ $events->where('start_date', '>=', now()->toDateString())->count() }}</span>
+                        @php
+                            $today = now()->toDateString();
+                            $upcomingCount = $events->filter(fn($e) => $e->start_date && $e->start_date > $today)->count();
+                            $ongoingCount  = $events->filter(fn($e) => $e->start_date && $e->start_date <= $today && ($e->end_date ?? $e->start_date) >= $today)->count();
+                        @endphp
+                        <span class="hero-stat-number">{{ $upcomingCount }}</span>
                         <span class="hero-stat-label">Upcoming</span>
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat-item">
-                        <span class="hero-stat-number">{{ $events->where('is_paid', false)->count() }}</span>
-                        <span class="hero-stat-label">Free Entry</span>
+                        <span class="hero-stat-number">{{ $ongoingCount }}</span>
+                        <span class="hero-stat-label">Ongoing</span>
                     </div>
                 </div>
                 <a href="{{ route('frontend.landing') }}" class="events-hero-back">
@@ -159,44 +164,57 @@
                         <button class="event-status-pill" data-status="ongoing">Ongoing</button>
                         <button class="event-status-pill" data-status="ended">Ended</button>
                     </div>
-                    {{-- Month filter (generated from events data) --}}
-                    <div class="event-month-pills" id="monthPills"></div>
                 </div>
                 <div class="events-filter-right">
-                    {{-- Sort --}}
-                    <select class="events-sort-select" id="eventsSort">
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="name_asc">A–Z</option>
-                    </select>
+                    <div style="display: flex; gap: 10px;">
+                        {{-- Month filter --}}
+                        <select class="events-sort-select" id="eventsMonth">
+                            <option value="all">All Months</option>
+                        </select>
+                        {{-- Year filter --}}
+                        <select class="events-sort-select" id="eventsYear">
+                            <option value="all">All Years</option>
+                        </select>
+                        {{-- Sort --}}
+                        <select class="events-sort-select" id="eventsSort">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="name_asc">A–Z</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div class="events-grid" id="eventsGrid">
-                @forelse ($events as $index => $event)
+                @foreach ($events as $index => $event)
                     @php
-                        $day      = date_format(date_create($event->start_date), 'd');
-                        $month    = date_format(date_create($event->start_date), 'M');
-                        $yearMonth = date_format(date_create($event->start_date), 'Y-m');
-                        $monthLabel = date_format(date_create($event->start_date), 'M Y');
-                        $fullDate = date_format(date_create($event->start_date), 'd M Y');
-                        $imgUrl   = $event->primaryPhoto && $event->primaryPhoto->path
+                        $startDate  = $event->start_date;
+                        $day        = $startDate ? date_format(date_create($startDate), 'd') : '—';
+                        $monthShort = $startDate ? date_format(date_create($startDate), 'M') : '';
+                        $monthValue = $startDate ? date_format(date_create($startDate), 'm') : 'regular';
+                        $monthLabel = $startDate ? date_format(date_create($startDate), 'F') : 'Regular';
+                        $yearValue  = $startDate ? date_format(date_create($startDate), 'Y') : 'regular';
+                        $fullDate   = $startDate ? date_format(date_create($startDate), 'd M Y') : 'Regular Event';
+                        $imgUrl     = $event->primaryPhoto && $event->primaryPhoto->path
                             ? asset('storage/' . $event->primaryPhoto->path)
                             : asset('assets/images/no_image.jpg');
 
-                        // #9: Date range if multi-day
-                        $endDate  = $event->end_date ?? null;
+                        // Date range if multi-day
+                        $endDate   = $event->end_date ?? null;
                         $dateRange = $fullDate;
-                        if ($endDate && $endDate !== $event->start_date) {
-                            $endFmt = date_format(date_create($endDate), 'd M Y');
+                        if ($endDate && $endDate !== $startDate) {
+                            $endFmt    = date_format(date_create($endDate), 'd M Y');
                             $dateRange = $fullDate . ' – ' . $endFmt;
                         }
 
-                        // #3: Event status
-                        $today     = now()->toDateString();
-                        $startStr  = $event->start_date;
-                        $endStr    = $endDate ?? $startStr;
-                        if ($today < $startStr) {
+                        // Event status — handle nullable date
+                        $today    = now()->toDateString();
+                        $startStr = $event->start_date;
+                        $endStr   = $endDate ?? $startStr;
+                        if (!$startStr) {
+                            $statusLabel = 'Regular';
+                            $statusClass = 'status-regular';
+                        } elseif ($today < $startStr) {
                             $statusLabel = 'Upcoming';
                             $statusClass = 'status-upcoming';
                         } elseif ($today >= $startStr && $today <= $endStr) {
@@ -228,8 +246,9 @@
                     @endphp
                     <a href="{{ route('frontend.event.detail', $event->uuid) }}"
                        class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
-                       data-month="{{ $yearMonth }}"
+                       data-month="{{ $monthValue }}"
                        data-month-label="{{ $monthLabel }}"
+                       data-year="{{ $yearValue }}"
                        data-status="{{ strtolower($statusLabel) }}"
                        data-date="{{ $event->start_date }}"
                        data-name="{{ e($event->name) }}">
@@ -238,20 +257,19 @@
                             <div class="event-img-overlay"></div>
                             <div class="event-date-badge">
                                 <span class="day">{{ $day }}</span>
-                                <span class="month">{{ $month }}</span>
+                                <span class="month">{{ $monthShort }}</span>
                             </div>
                             {{-- #3: Status badge --}}
                             <span class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                            {{-- #7: WA Share button --}}
-                            <a href="{{ $waHref }}" target="_blank" rel="noopener noreferrer"
-                               class="event-wa-share"
+                            {{-- #7: WA Share button (harus div agar tidak nested A tag) --}}
+                            <div class="event-wa-share"
                                title="Share via WhatsApp"
-                               onclick="event.stopPropagation(); event.preventDefault(); window.open(this.href, '_blank');">
+                               onclick="event.stopPropagation(); event.preventDefault(); window.open('{{ $waHref }}', '_blank');">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                                     <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
                                 </svg>
-                            </a>
+                            </div>
                         </div>
                         <div class="event-card-info">
                             {{-- #2 & #11: Dynamic category tag --}}
@@ -280,15 +298,15 @@
                             </div>
                         </div>
                     </a>
-                @empty
-                    {{-- #4: Better empty state --}}
-                    <div class="no-events-improved">
-                        <div class="no-events-emoji">🎪</div>
-                        <h3>No Events at the Moment</h3>
-                        <p>Kami sedang mempersiapkan event seru berikutnya. Stay tuned!</p>
-                        <a href="{{ route('frontend.landing') }}" class="no-events-cta">Kembali ke Beranda</a>
-                    </div>
-                @endforelse
+                @endforeach
+            </div>
+                
+            {{-- JS Empty State Filter (Di luar events-grid) --}}
+            <div class="no-events-improved" id="noEventsState" style="display: {{ count($events) == 0 ? 'flex' : 'none' }}; margin: 60px auto; max-width: 600px; padding: 40px;">
+                <div class="no-events-emoji">🎪</div>
+                <h3>No Data Event Available</h3>
+                <p>Silakan sesuaikan filter bulan, tahun, atau urutan Anda.</p>
+                <button type="button" class="no-events-cta" style="border:none; cursor:pointer;" onclick="document.getElementById('eventsMonth').value='all'; document.getElementById('eventsYear').value='all'; document.querySelector('.event-status-pill[data-status=&quot;all&quot;]').click();">Tampilkan Semua Event</button>
             </div>
 
             @if(count($events) > 8)
@@ -460,33 +478,56 @@
         // ===== #1 & #8: FILTER / SORT ENGINE =====
         let activeStatus = 'all';
         let activeMonth  = 'all';
+        let activeYear   = 'all';
         let activeSort   = 'newest';
 
         // Collect all event cards (including hidden initially)
         const allCards = [...document.querySelectorAll('.event-card-v2')];
 
-        // Build month pills from unique months in data
+        // Build month & year dropdown from unique data
         const monthMap = new Map();
+        const yearMap = new Map();
         allCards.forEach(card => {
             const m = card.dataset.month;
             const ml = card.dataset.monthLabel;
-            if (m && !monthMap.has(m)) monthMap.set(m, ml);
+            const y = card.dataset.year;
+            
+            if (m && m !== 'regular' && !monthMap.has(m)) monthMap.set(m, ml);
+            if (y && y !== 'regular' && !yearMap.has(y)) yearMap.set(y, y);
         });
-        const monthPillsEl = document.getElementById('monthPills');
-        if (monthPillsEl && monthMap.size > 1) {
-            monthMap.forEach((label, key) => {
-                const btn = document.createElement('button');
-                btn.className = 'event-month-pill';
-                btn.dataset.month = key;
-                btn.textContent = label;
-                btn.addEventListener('click', () => {
-                    activeMonth = activeMonth === key ? 'all' : key;
-                    document.querySelectorAll('.event-month-pill').forEach(b => b.classList.remove('active'));
-                    if (activeMonth !== 'all') btn.classList.add('active');
-                    applyFilters();
-                });
-                monthPillsEl.appendChild(btn);
+
+        const monthSelectEl = document.getElementById('eventsMonth');
+        if (monthSelectEl && monthMap.size > 0) {
+            const sortedMonths = Array.from(monthMap.entries()).sort((a,b) => a[0].localeCompare(b[0]));
+            sortedMonths.forEach(([key, label]) => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = label;
+                monthSelectEl.appendChild(opt);
             });
+            monthSelectEl.addEventListener('change', () => {
+                activeMonth = monthSelectEl.value;
+                applyFilters();
+            });
+        } else if (monthSelectEl) {
+            monthSelectEl.style.display = 'none';
+        }
+
+        const yearSelectEl = document.getElementById('eventsYear');
+        if (yearSelectEl && yearMap.size > 0) {
+            const sortedYears = Array.from(yearMap.entries()).sort((a,b) => b[0].localeCompare(a[0]));
+            sortedYears.forEach(([key, label]) => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = label;
+                yearSelectEl.appendChild(opt);
+            });
+            yearSelectEl.addEventListener('change', () => {
+                activeYear = yearSelectEl.value;
+                applyFilters();
+            });
+        } else if (yearSelectEl) {
+            yearSelectEl.style.display = 'none';
         }
 
         // Status pill clicks
@@ -513,7 +554,8 @@
             let visible = allCards.filter(card => {
                 const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
                 const monthMatch  = activeMonth === 'all'  || card.dataset.month  === activeMonth;
-                return statusMatch && monthMatch;
+                const yearMatch   = activeYear === 'all'   || card.dataset.year   === activeYear;
+                return statusMatch && monthMatch && yearMatch;
             });
 
             // Sort
@@ -538,9 +580,15 @@
             const countEl = document.getElementById('eventsShownCount');
             if (countEl) countEl.textContent = `${visible.length} Event${visible.length !== 1 ? 's' : ''}`;
 
+            // Show empty state if needed
+            const emptyState = document.getElementById('noEventsState');
+            if (emptyState) {
+                emptyState.style.display = visible.length === 0 ? 'flex' : 'none';
+            }
+
             // Hide load more when filtering (show all filtered results)
             const lmContainer = document.querySelector('.load-more-container');
-            if (lmContainer) lmContainer.style.display = (activeStatus === 'all' && activeMonth === 'all') ? '' : 'none';
+            if (lmContainer) lmContainer.style.display = (visible.length === 0 || activeStatus !== 'all' || activeMonth !== 'all' || activeYear !== 'all') ? 'none' : '';
         }
 
         // ===== #6: LOAD MORE with animation =====
