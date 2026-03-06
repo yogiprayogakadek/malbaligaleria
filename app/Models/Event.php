@@ -28,12 +28,14 @@ class Event extends Model
         'highlights',
         'is_active',
         'is_regular',
+        'is_exhibition',
         'recurring_days',
         'recurring_label',
     ];
 
     protected $casts = [
         'is_regular'     => 'boolean',
+        'is_exhibition'  => 'boolean',
         'recurring_days' => 'array',
         'is_paid'        => 'boolean',
         'is_active'      => 'boolean',

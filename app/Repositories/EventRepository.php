@@ -24,6 +24,7 @@ class EventRepository
             ->with($relationship)
             ->where('is_active', true)
             ->where('is_regular', false)
+            ->where('is_exhibition', false)
             ->where('end_date', '>=', today())
             ->get();
     }
@@ -34,6 +35,16 @@ class EventRepository
             ->with($relationship)
             ->where('is_active', true)
             ->where('is_regular', true)
+            ->get();
+    }
+
+    public function getExhibitionEvents(array $fields, array $relationship)
+    {
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where('is_active', true)
+            ->where('is_exhibition', true)
+            ->where('end_date', '>=', today())
             ->get();
     }
 

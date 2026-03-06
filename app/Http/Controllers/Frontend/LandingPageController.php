@@ -44,7 +44,14 @@ class LandingPageController extends Controller
             ]
         );
 
-        return view('landing_v2', compact('tenants', 'events', 'regularEvents'));
+        $exhibitionEvents = $this->eventService->getExhibitionEvents(
+            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location'],
+            [
+                'primaryPhoto:id,path,caption,event_id,is_primary'
+            ]
+        );
+
+        return view('landing_v2', compact('tenants', 'events', 'regularEvents', 'exhibitionEvents'));
     }
 
     public function tenantData($cat = "new store", $isNew)

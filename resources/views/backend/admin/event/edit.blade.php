@@ -104,6 +104,28 @@
                             </div>
                         </div>
 
+                        {{-- Exhibition Toggle --}}
+                        <div class="mb-4 row align-items-center">
+                            <div class="col-sm-12">
+                                <div class="card border" style="background: #f4f7ff; border-color: #b8c8f0 !important;">
+                                    <div class="card-body py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="form-check form-switch mb-0">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="is_exhibition" name="is_exhibition" value="1"
+                                                    {{ $event->is_exhibition ? 'checked' : '' }}>
+                                                <label class="form-check-label fw-semibold" for="is_exhibition">
+                                                    <i class="ti ti-building-store me-1" style="color:#5b8dee;"></i>
+                                                    Exhibition / Pameran
+                                                </label>
+                                            </div>
+                                            <small class="text-muted">Aktifkan jika event ini adalah pameran (exhibition) yang ditampilkan di bagian khusus halaman utama</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Date (hidden when regular) --}}
                         <div id="dateSection" class="mb-4 row align-items-center">
                             <div class="row">

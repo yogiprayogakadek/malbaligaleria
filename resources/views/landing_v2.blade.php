@@ -368,6 +368,55 @@
     </section>
     @endif
 
+    {{-- ===== EXHIBITION SECTION ===== --}}
+    @if(isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
+    <section class="exhibition-section reveal" id="exhibition">
+        <div class="exhibition-container">
+            <div class="exhibition-header">
+                <div class="exhibition-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    Pameran
+                </div>
+                <h2>Exhibition</h2>
+                <p class="exhibition-subtitle">Temukan pameran eksklusif dan pengalaman unik di Mal Bali Galeria</p>
+            </div>
+
+            <div class="exhibition-grid">
+                @foreach($exhibitionEvents as $exEvent)
+                <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="exhibition-card" style="text-decoration:none;">
+                    <div class="exc-image-wrap">
+                        <div class="exc-image" style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
+                        <div class="exc-overlay"></div>
+                        @if($exEvent->start_date && $exEvent->end_date)
+                        <div class="exc-date-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            {{ date('d M', strtotime($exEvent->start_date)) }}
+                            @if($exEvent->start_date != $exEvent->end_date)
+                                – {{ date('d M Y', strtotime($exEvent->end_date)) }}
+                            @else
+                                {{ date(' Y', strtotime($exEvent->start_date)) }}
+                            @endif
+                        </div>
+                        @endif
+                    </div>
+                    <div class="exc-content">
+                        <h3 class="exc-title">{{ $exEvent->name }}</h3>
+                        <p class="exc-desc">{{ Str::limit($exEvent->description, 90) }}</p>
+                        @if($exEvent->location)
+                        <div class="exc-location">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            {{ $exEvent->location }}
+                        </div>
+                        @endif
+                        <span class="exc-cta">Lihat Detail →</span>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     <section class="event-section reveal" id="events">
         <div class="event-container">
             <h2>Upcoming Events</h2>

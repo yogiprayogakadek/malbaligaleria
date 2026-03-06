@@ -36,6 +36,11 @@ class EventService
         return $this->eventRepository->getRegularEvents($fields, $relationship);
     }
 
+    public function getExhibitionEvents(array $fields = ['*'], array $relationship)
+    {
+        return $this->eventRepository->getExhibitionEvents($fields, $relationship);
+    }
+
     public function getEventsWithRelationshipAndCondition(array $fields = ['*'], array $relationship, string $column, string $condition)
     {
         return $this->eventRepository->getEventsWithRelationshipAndCondition($fields, $relationship, $column, $condition);
