@@ -1718,7 +1718,7 @@ body.dark-mode .header-divider {
 .event-section {
     min-height: 100vh;
     background: var(--bg-light);
-    padding: 100px 40px;
+    padding: 0px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5168,7 +5168,7 @@ body.dark-mode .rsc-desc {
 
 /* ===== EXHIBITION SECTION ===== */
 .exhibition-section {
-    padding: 40px 40px 80px;
+    padding: 40px 40px 10px;
     background: linear-gradient(180deg, #f7f7f5 0%, #ffffff 100%);
     position: relative;
 }
