@@ -234,9 +234,14 @@
 
                     <!-- Right Main Content -->
                     <div class="glass-content">
-                        <div class="glass-header">
-                            <span class="glass-badge">Special Event</span>
-                            <h1>{{ $event['name'] }}</h1>
+                    <div class="glass-header">
+                            @if($event['is_exhibition'])
+                                <span class="glass-badge glass-badge-exhibition">Exhibition</span>
+                            @elseif($event['is_regular'])
+                                <span class="glass-badge glass-badge-regular">Regular Show</span>
+                            @else
+                                <span class="glass-badge">Special Event</span>
+                            @endif
                         </div>
 
                         <div class="glass-description">
@@ -269,9 +274,9 @@
                     <div class="similar-header">
                         <h3>Upcoming Events <span class="event-count">({{ count($upcomingEvents) }})</span></h3>
                     </div>
-                    <div class="similar-carousel-wrapper">
-                        <button class="similar-arrow similar-prev" id="similarPrev">‹</button>
-                        <div class="similar-tenants" id="similarTenants">
+                    @if(count($upcomingEvents) <= 2)
+                        {{-- Grid layout for few events --}}
+                        <div class="similar-tenants similar-tenants-grid">
                             @forelse ($upcomingEvents as $upcoming)
                                 <div class="similar-tenant-card"
                                     style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
@@ -289,12 +294,26 @@
                                 </div>
                             @endforelse
                         </div>
-                        <button class="similar-arrow similar-next" id="similarNext">›</button>
-
-                        @if (count($upcomingEvents) > 2)
+                    @else
+                        {{-- Carousel for 3+ events --}}
+                        <div class="similar-carousel-wrapper">
+                            <button class="similar-arrow similar-prev" id="similarPrev">‹</button>
+                            <div class="similar-tenants" id="similarTenants">
+                                @foreach ($upcomingEvents as $upcoming)
+                                    <div class="similar-tenant-card"
+                                        style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                        <div class="similar-tenant-content">
+                                            <span class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
+                                            <h4>{{ $upcoming->name }}</h4>
+                                            <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="similar-tenant-link">View Details<span>→</span></a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button class="similar-arrow similar-next" id="similarNext">›</button>
                             <div class="carousel-scroll-indicators" id="scrollIndicators"></div>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
 
             </div>

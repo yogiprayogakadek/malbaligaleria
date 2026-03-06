@@ -31,7 +31,7 @@ class EventController extends Controller
     public function detail($uuid)
     {
         $event = $this->eventService->getEventsWithRelationshipAndCondition(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_regular', 'recurring_label'],
+            ['id', 'uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_regular', 'is_exhibition', 'recurring_label'],
             [
                 'primaryPhoto:id,event_id,path',
                 'photos:id,event_id,path'
@@ -55,6 +55,7 @@ class EventController extends Controller
                 'target_audience' => $e->target_audience,
                 'highlights'      => $e->highlights,
                 'is_regular'      => $e->is_regular,
+                'is_exhibition'   => $e->is_exhibition,
                 'recurring_label' => $e->recurring_label,
                 'primaryPhoto'    => $e->primaryPhoto ? asset('storage/' . $e->primaryPhoto->path) : asset('assets/images/no_image.jpg'),
                 'photos'          => $e->photos->map(function ($photos) {

@@ -850,6 +850,16 @@ body.dark-mode .glass-header { border-bottom-color: rgba(255,255,255,0.1); }
     box-shadow: 0 4px 10px rgba(44, 95, 93, 0.2);
 }
 
+.glass-badge-exhibition {
+    background: linear-gradient(135deg, #4a6fa5 0%, #2c4a7c 100%);
+    box-shadow: 0 4px 10px rgba(74, 111, 165, 0.3);
+}
+
+.glass-badge-regular {
+    background: linear-gradient(135deg, #c9a96e 0%, #a07840 100%);
+    box-shadow: 0 4px 10px rgba(201, 169, 110, 0.3);
+}
+
 .glass-header h1 {
     font-family: "Playfair Display", serif;
     font-size: 42px;
@@ -1067,6 +1077,21 @@ body.dark-mode .similar-arrow:disabled:hover {
 
 .similar-tenants::-webkit-scrollbar {
     display: none;
+}
+
+.similar-tenants-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    height: auto;
+    overflow: visible;
+}
+
+.similar-tenants-grid .similar-tenant-card {
+    flex: 0 0 320px;
+    max-width: 480px;
+    scroll-snap-align: unset;
 }
 
 .similar-tenant-card {
