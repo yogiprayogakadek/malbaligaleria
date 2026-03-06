@@ -1081,16 +1081,17 @@ body.dark-mode .similar-arrow:disabled:hover {
 
 .similar-tenants-grid {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
     gap: 25px;
-    justify-content: center;
     height: auto;
     overflow: visible;
 }
 
 .similar-tenants-grid .similar-tenant-card {
-    flex: 0 0 320px;
-    max-width: 480px;
+    flex: 1;
+    width: auto;
+    min-width: 0;
     scroll-snap-align: unset;
 }
 
