@@ -36,7 +36,7 @@ class EventPhotoController extends Controller
                     return $row->event->name;
                 })
                 ->addColumn('action', function ($row) {
-                    return '<a href="' . route('admin.event.photo.edit', $row->id) . '">
+                    return '<a href="' . route('admin.event.photo.edit', $row->event_id) . '">
                         <button type="button"
                             class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
                             <i class="ti ti-pencil fs-4 me-2"></i>
