@@ -21,7 +21,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'recurring_label']);
+            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_label']);
 
             return DataTables::of($events)
                 ->addIndexColumn()
@@ -31,8 +31,11 @@ class EventController extends Controller
                         : '<span class="badge bg-danger">Inactive</span>';
                 })
                 ->editColumn('is_regular', function ($row) {
+                    if ($row->is_exhibition) {
+                        return '<span class="badge" style="background:#4a6fa5;color:#fff;"><i class="ti ti-building-store me-1"></i>Exhibition</span>';
+                    }
                     return $row->is_regular
-                        ? '<span class="badge" style="background:#c9a96e;color:#fff;">Regular</span>'
+                        ? '<span class="badge" style="background:#c9a96e;color:#fff;"><i class="ti ti-repeat me-1"></i>Regular</span>'
                         : '<span class="badge bg-secondary">One-time</span>';
                 })
                 ->addColumn('action', function ($row) {
@@ -74,6 +77,7 @@ class EventController extends Controller
             'target_audience' => $request->target_audience,
             'highlights'      => $request->highlights,
             'is_regular'      => $isRegular,
+            'is_exhibition'   => $request->boolean('is_exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
             'recurring_label' => $isRegular ? $request->recurring_label : null,
         ];
@@ -85,7 +89,7 @@ class EventController extends Controller
 
     public function edit($uuid)
     {
-        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'recurring_days', 'recurring_label']);
+        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label']);
 
         return view('backend.admin.event.edit', compact('event'));
     }
@@ -109,6 +113,7 @@ class EventController extends Controller
             'highlights'      => $request->highlights,
             'is_active'       => $request->is_active,
             'is_regular'      => $isRegular,
+            'is_exhibition'   => $request->boolean('is_exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
             'recurring_label' => $isRegular ? $request->recurring_label : null,
         ];

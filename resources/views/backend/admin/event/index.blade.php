@@ -34,6 +34,7 @@
                                     <th>End Date</th>
                                     <th>Start Time</th>
                                     <th>End Time</th>
+                                    <th>Type</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -82,6 +83,12 @@
                     {
                         data: 'end_time',
                         name: 'end_time',
+                    },
+                    {
+                        data: 'is_regular',
+                        name: 'is_regular',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'is_active',
