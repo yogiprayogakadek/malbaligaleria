@@ -469,11 +469,11 @@
                     <div class="floor-list-wrapper" id="floorListWrapper">
                         <div class="floor-item active">
                             <h4>Level 1</h4>
-                            <p>Your tech, fashion & flavor destination</p>
+                            <p>IT, Games & Gadgets · Anchor Tenant · Fashion · Beauty & Accessories · Food & Beverages · Island Counter · Household Goods & Furniture · Bookstore · Sport & Swim Apparel</p>
                         </div>
                         <div class="floor-item">
                             <h4>Level 2</h4>
-                            <p>Family fun, beauty & wellness — all in one level</p>
+                            <p>Anchor Tenant · Fashion · Beauty & Accessories · Kids & Play Zone · Sport & Swim Apparel · Salon · Office & Services · Food & Beverages · Island Counter · Household Goods & Furniture · IT, Games & Gadgets · Drugs & Pharmacy</p>
                         </div>
                         <div class="floor-item">
                             <h4>New Store</h4>
