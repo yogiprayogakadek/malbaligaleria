@@ -1739,7 +1739,7 @@ body.dark-mode .event-section {
     font-size: 52px;
     font-weight: 500;
     color: var(--text-dark);
-    margin-bottom: 70px;
+    margin-bottom: 12px;
     text-align: center;
     opacity: 0;
     transform: translateY(30px);
@@ -1754,6 +1754,25 @@ body.dark-mode .event-section {
 
 body.dark-mode .event-container h2 {
     color: var(--text-light);
+}
+
+.event-subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: #5a5a5a;
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+
+.reveal.active .event-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.dark-mode .event-subtitle {
+    color: #b0b0b0;
 }
 
 .event-slider-wrapper {
