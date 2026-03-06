@@ -373,12 +373,8 @@
     <section class="exhibition-section reveal" id="exhibition">
         <div class="exhibition-container">
             <div class="exhibition-header">
-                <div class="exhibition-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                    Pameran
-                </div>
                 <h2>Exhibition</h2>
-                <p class="exhibition-subtitle">Temukan pameran eksklusif dan pengalaman unik di Mal Bali Galeria</p>
+                <p class="exhibition-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
             </div>
 
             <div class="exhibition-grid">
