@@ -60,6 +60,7 @@ class EventRepository
             ->where('uuid', '!=', $uuid)
             ->where('is_active', true)
             ->where('is_regular', false)
+            ->where('is_exhibition', false)
             ->get();
     }
 
