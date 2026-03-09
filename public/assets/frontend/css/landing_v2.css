@@ -4921,7 +4921,7 @@ body.dark-mode .mobile-cta-btn svg {
 
 .regular-shows-section {
     background: var(--bg-light);
-    padding: 100px 40px;
+    padding: 70px 40px;
     position: relative;
     overflow: hidden;
 }
@@ -4991,8 +4991,9 @@ body.dark-mode .regular-shows-subtitle {
 /* Grid Layout */
 .regular-shows-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 420px));
+    justify-content: center;
+    gap: 24px;
 }
 
 /* Card */
@@ -5009,6 +5010,7 @@ body.dark-mode .regular-shows-subtitle {
     cursor: pointer;
     position: relative;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    width: 100%;
 }
 
 body.dark-mode .regular-show-card {
@@ -5028,11 +5030,11 @@ body.dark-mode .regular-show-card:hover {
                 0 0 0 1px rgba(201, 169, 110, 0.4);
 }
 
-/* Image */
+/* Image — portrait-friendly ratio (4:5) */
 .rsc-image-wrap {
     position: relative;
     width: 100%;
-    padding-top: 60%;
+    padding-top: 125%;
     overflow: hidden;
     flex-shrink: 0;
 }
@@ -5166,7 +5168,7 @@ body.dark-mode .rsc-desc {
 /* Responsive */
 @media (max-width: 768px) {
     .regular-shows-section {
-        padding: 70px 20px;
+        padding: 50px 20px;
     }
 
     .regular-shows-grid {
@@ -5175,7 +5177,11 @@ body.dark-mode .rsc-desc {
     }
 
     .regular-shows-header {
-        margin-bottom: 40px;
+        margin-bottom: 30px;
+    }
+
+    .rsc-image-wrap {
+        padding-top: 100%;
     }
 }
 
