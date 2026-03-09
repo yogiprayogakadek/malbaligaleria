@@ -356,7 +356,7 @@
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24" fill="#f5f5dc"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" fill="#2c5f5d"/></svg>
                         <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer">
-                            <p>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali 80361</p>
+                            <p>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
                         </a>
                     </div>
                     <div class="footer-contact-item">

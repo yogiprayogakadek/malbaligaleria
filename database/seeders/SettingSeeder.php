@@ -75,7 +75,7 @@ class SettingSeeder extends Seeder
                 'pages' => 'others',
                 'name' => 'default',
                 'payload' => json_encode([
-                    'company_address' => 'Jl. Bypass Ngurah Rai, Kuta, Badung, Bali 80361',
+                    'company_address' => 'Jl. Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361',
                     'contact_email' => 'info@malbaligaleria.com',
                     'contact_phone' => '(0361) 755277',
                     'social_facebook' => '',
