@@ -1633,40 +1633,19 @@ function renderModalMap(data) {
             floorBadge.textContent = floorText;
         }
         
-        if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
-            floorMapImg.src = window.FLOOR_MAPS[floorId];
-            console.log("Using FLOOR_MAPS URL:", window.FLOOR_MAPS[floorId]);
-        } else {
-            const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
-            floorMapImg.src = `${baseUrl}/${floorImg}`;
-            console.log("Using fallback URL:", `${baseUrl}/${floorImg}`);
-        }
-        
         // Set logo (only if elements exist)
         if (logoImg && data.logo) {
             logoImg.src = data.logo;
         }
-        
-        // Function to position marker after image loads
+
+        // Define positionMarker closure (captures current tenant's data)
         const positionMarker = () => {
-            // Calculate percentage positions
-            // Priority: 1) map_original_size from backend, 2) naturalWidth/Height from loaded image, 3) fallback
             const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
             const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
 
             const xPos = (data.x / mapWidth) * 100;
             const yPos = (data.y / mapHeight) * 100;
-            
-            console.log("Marker position:", { 
-                xPos, 
-                yPos, 
-                mapWidth, 
-                mapHeight,
-                naturalWidth: floorMapImg.naturalWidth,
-                naturalHeight: floorMapImg.naturalHeight,
-                hasOriginalSize: !!data.map_original_size
-            });
-            
+
             if (markerLogo) {
                 markerLogo.style.left = `${xPos}%`;
                 markerLogo.style.top = `${yPos}%`;
@@ -1674,11 +1653,23 @@ function renderModalMap(data) {
             }
         };
 
-        // If image is already loaded, position immediately
+        // Always clear previous onload FIRST to prevent stale handler from
+        // re-positioning pin to a previous tenant's coordinates.
+        floorMapImg.onload = null;
+
+        // Set the floor map src
+        if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
+            floorMapImg.src = window.FLOOR_MAPS[floorId];
+        } else {
+            const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
+            floorMapImg.src = `${baseUrl}/${floorImg}`;
+        }
+
+        // If image is already cached (complete), call positionMarker directly.
+        // Otherwise set onload so it fires once the image finishes loading.
         if (floorMapImg.complete && floorMapImg.naturalWidth > 0) {
             positionMarker();
         } else {
-            // Wait for image to load to get accurate dimensions
             floorMapImg.onload = positionMarker;
         }
     } else {
