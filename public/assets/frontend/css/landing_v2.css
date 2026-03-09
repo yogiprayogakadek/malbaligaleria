@@ -5191,6 +5191,13 @@ body.dark-mode .rsc-desc {
     }
 }
 
+/* Single card — tetap di tengah sempurna */
+.regular-shows-grid:has(.regular-show-card:only-child) {
+    grid-template-columns: minmax(340px, 420px);
+    justify-content: center;
+    padding: 0;
+}
+
 /* ===== EXHIBITION SECTION ===== */
 .exhibition-section {
     padding: 40px 40px 10px;
@@ -5444,5 +5451,12 @@ body.dark-mode .exc-desc {
     .exhibition-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Single card exhibition \u2014 tetap di tengah sempurna */
+.exhibition-grid:has(.exhibition-card:only-child) {
+    grid-template-columns: minmax(340px, 420px);
+    justify-content: center;
+    padding: 0;
 }
 
