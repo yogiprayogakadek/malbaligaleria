@@ -31,6 +31,13 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() + 1 }}">
+    <style>
+        @media (max-width: 768px) {
+            .hero-slide {
+                background-image: url('{{ asset('assets/bg_responsive.jpg') }}') !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
