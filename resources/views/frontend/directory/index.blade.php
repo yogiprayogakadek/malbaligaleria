@@ -702,13 +702,10 @@
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
                         <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
-                        <li><a href="{{ route('frontend.promotion.index') }}">Promotions</a></li>
+                        <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
-
-
-
-
 
                 <div class="footer-column">
                     <h3>Contact Us</h3>

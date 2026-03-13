@@ -759,6 +759,8 @@
                         <li><a href="#about">About Us</a></li>
                         <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="#events">Events</a></li>
+                        <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
 

@@ -196,6 +196,8 @@
                         {{-- <li><a href="#experience">Experiences</a></li> --}}
                         <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
+                        <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                        <li><a href="#contact">Contact</a></li>
                         {{-- <li><a href="#career">Careers</a></li> --}}
                     </ul>
                 </div>
