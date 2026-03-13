@@ -166,8 +166,13 @@
                                 </svg>
                                 Categories
                             </h4>
-                            <div class="category-filter-chips" id="categoryFilterChips">
-
+                            <div class="filter-input styled-select" style="margin-top: 10px;">
+                                <select id="categoryFilter" aria-label="Filter by category">
+                                    <option value="">All Categories</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 

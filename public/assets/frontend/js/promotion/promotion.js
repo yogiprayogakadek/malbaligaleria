@@ -239,50 +239,13 @@ function initializePage() {
     updateFavoritesCount();
 
     setTimeout(() => {
-        populateCategoryFilter();
         populateTenantFilter();
         renderPromotions('all');
         setupScrollToTop();
     }, 800);
 }
 
-// ===== CATEGORY FILTER =====
-async function populateCategoryFilter() {
-    const promoData = await loadPromotions();
-    const categoryChips = document.getElementById('categoryFilterChips');
-    if (!categoryChips) return;
-
-    const categoryMap = new Map();
-    promoData.forEach(promo => {
-        if (categoryMap.has(promo.category)) {
-            categoryMap.get(promo.category).count++;
-        } else {
-            categoryMap.set(promo.category, { count: 1 });
-        }
-    });
-
-    // Fallback jika kategori kosong
-    if (categoryMap.size === 0) {
-        categoryChips.innerHTML = `<p class="filter-empty-hint">No categories available</p>`;
-        return;
-    }
-
-    let html = `
-        <div class="category-chip active" data-category="all">
-            All <span class="category-chip-count">${promoData.length}</span>
-        </div>
-    `;
-
-    categoryMap.forEach((data, category) => {
-        html += `
-            <div class="category-chip" data-category="${category}">
-                ${category} <span class="category-chip-count">${data.count}</span>
-            </div>
-        `;
-    });
-
-    categoryChips.innerHTML = html;
-}
+// ===== CATEGORY FILTER (select dropdown) =====
 
 // ===== TENANT FILTER =====
 async function populateTenantFilter() {
@@ -382,14 +345,15 @@ async function renderPromotions(filter = 'all', category = 'all') {
 }
 
 function updateActiveCategoryOrFavorite(activeId) {
-    // Categories
-    document.querySelectorAll('.category-chip').forEach(chip => {
-        if (chip.dataset.category === activeId) {
-            chip.classList.add('active');
+    // Sync category select dropdown
+    const categoryFilterSelect = document.getElementById('categoryFilter');
+    if (categoryFilterSelect) {
+        if (activeId === 'all' || activeId === 'favorites') {
+            categoryFilterSelect.value = '';
         } else {
-            chip.classList.remove('active');
+            categoryFilterSelect.value = activeId;
         }
-    });
+    }
 
     // Favorites Filter Item
     const favFilter = document.getElementById('favoritesFilter');
@@ -808,23 +772,14 @@ function setupEventListeners() {
         }
     });
 
-    // Category filter clicks
-    document.addEventListener('click', (e) => {
-        const categoryItem = e.target.closest('.category-chip');
-        if (categoryItem) {
-            const category = categoryItem.dataset.category;
+    // Category filter via select dropdown
+    const categoryFilterSelect = document.getElementById('categoryFilter');
+    if (categoryFilterSelect) {
+        categoryFilterSelect.addEventListener('change', (e) => {
+            const category = e.target.value || 'all';
             renderPromotions(currentFilter, category);
-
-            // Update active state
-            document.querySelectorAll('.category-chip').forEach(chip => {
-                if (chip.dataset.category === category) {
-                    chip.classList.add('active');
-                } else {
-                    chip.classList.remove('active');
-                }
-            });
-        }
-    });
+        });
+    }
 
     // Favorites filter click
     const favFilter = document.getElementById('favoritesFilter');
@@ -899,14 +854,14 @@ function setupEventListeners() {
              const searchInput = document.getElementById('tenantSearchInput');
              if (searchInput) searchInput.value = '';
 
+             // Reset category select
+             const categoryFilterSelect = document.getElementById('categoryFilter');
+             if (categoryFilterSelect) categoryFilterSelect.value = '';
+
              // Reset UI Active States
              document.querySelectorAll('.tenant-filter-item').forEach(i => i.classList.remove('active'));
              const allFilter = document.querySelector('.tenant-filter-item[data-tenant="all"]');
              if (allFilter) allFilter.classList.add('active');
-
-             document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-             const allCategory = document.querySelector('.category-chip[data-category="all"]');
-             if (allCategory) allCategory.classList.add('active');
 
              // Render
              renderPromotions('all', 'all');
