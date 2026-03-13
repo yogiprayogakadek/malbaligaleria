@@ -58,9 +58,11 @@ class EventController extends Controller
                 'is_exhibition'   => $e->is_exhibition,
                 'recurring_label' => $e->recurring_label,
                 'primaryPhoto'    => $e->primaryPhoto ? asset('storage/' . $e->primaryPhoto->path) : asset('assets/images/no_image.jpg'),
-                'photos'          => $e->photos->map(function ($photos) {
-                    return $photos ? asset('storage/' . $photos->path) : asset('assets/images/no_image.jpg');
-                })
+                'photos'          => collect()
+                    ->when($e->primaryPhoto, fn($c) => $c->push($e->primaryPhoto->path))
+                    ->merge($e->photos->pluck('path'))
+                    ->map(fn($path) => asset('storage/' . $path))
+                    ->values()
             ];
         })->first();
 

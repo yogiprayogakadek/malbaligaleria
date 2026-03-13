@@ -164,9 +164,6 @@
                         <div class="glass-photo-carousel" id="glassPhotoCarousel">
                             @php
                                 $photos = $event['photos'] ?? [];
-                                if (empty($photos) && $event['primaryPhoto']) {
-                                    $photos = [asset('storage/' . $event['primaryPhoto'])];
-                                }
                             @endphp
                             @if (count($photos) > 0)
                                 <div class="glass-photo-track" id="glassPhotoTrack">
