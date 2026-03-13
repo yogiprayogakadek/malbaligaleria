@@ -222,7 +222,7 @@
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
                         </svg>
-                        <p>Jl. Sunset Road No. 89, Kuta, Badung, Bali 80361</p>
+                        <p>Jl. Simpang Dewa Ruci Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
                     </div>
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24">
