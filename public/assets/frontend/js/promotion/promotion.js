@@ -249,12 +249,34 @@ function initializePage() {
 
 // ===== TENANT FILTER =====
 async function populateTenantFilter() {
+    await refreshTenantFilter('all');
+}
+
+async function refreshTenantFilter(categoryFilter) {
     const tenantList = document.getElementById('tenantFilterList');
     const promoData = await loadPromotions();
     if (!tenantList) return;
 
+    // Filter promo berdasarkan category yang aktif
+    const relevantPromos = (categoryFilter && categoryFilter !== 'all')
+        ? promoData.filter(p => p.category === categoryFilter)
+        : promoData;
+
+    // Update "All Promotions" count
+    const allPromoCount = document.getElementById('allPromoCount');
+    if (allPromoCount) {
+        allPromoCount.textContent = `${relevantPromos.length} promo${relevantPromos.length !== 1 ? 's' : ''}`;
+    }
+
+    // Jika tidak ada promo di category ini, kosongkan list
+    if (relevantPromos.length === 0) {
+        tenantList.innerHTML = '';
+        return;
+    }
+
+    // Build tenant map dari promo yang relevan
     const tenantMap = new Map();
-    promoData.forEach(promo => {
+    relevantPromos.forEach(promo => {
         if (tenantMap.has(promo.tenant)) {
             tenantMap.get(promo.tenant).count++;
         } else {
@@ -265,11 +287,6 @@ async function populateTenantFilter() {
             });
         }
     });
-
-    const allPromoCount = document.getElementById('allPromoCount');
-    if (allPromoCount) {
-        allPromoCount.textContent = `${promoData.length} promos`;
-    }
 
     let html = '';
     tenantMap.forEach((data, tenant) => {
@@ -293,11 +310,19 @@ async function populateTenantFilter() {
 async function renderPromotions(filter = 'all', category = 'all') {
     // If selecting favorites, force reset tenant filter to 'all' for logic
     const promoData = await loadPromotions();
+
+    const prevCategory = currentCategoryFilter;
+
     if (category === 'favorites') {
         currentCategoryFilter = 'favorites';
         currentFilter = 'all'; // Reset tenant filter internally
     } else {
-        currentFilter = filter;
+        // If category changed, reset tenant filter so stale tenant doesn't persist
+        if (category !== prevCategory) {
+            currentFilter = 'all';
+        } else {
+            currentFilter = filter;
+        }
         if (category !== undefined) {
             currentCategoryFilter = category;
         }
@@ -339,8 +364,12 @@ async function renderPromotions(filter = 'all', category = 'all') {
 
     displayedPromotions = filtered;
 
-    updateActiveFilter(filter);
-    updateActiveFilterPill(filter !== 'all' ? filter : null, currentCategoryFilter);
+    updateActiveFilter(currentFilter);
+    updateActiveFilterPill(currentFilter !== 'all' ? currentFilter : null, currentCategoryFilter);
+
+    // Refresh tenant list to match selected category
+    await refreshTenantFilter(currentCategoryFilter === 'favorites' ? 'all' : currentCategoryFilter);
+
     displayPromotions();
 }
 

@@ -293,7 +293,7 @@
                     <div class="empty-state" id="emptyState" style="display: none;">
                         <div class="empty-state-emoji">🛍️</div>
                         <h3>No promotions found</h3>
-                        <p id="emptyStateMsg">Belum ada promo yang cocok dengan filter kamu. Coba ubah filter atau cek lagi nanti ya!</p>
+                        <p id="emptyStateMsg">No promotions match your current filter. Try adjusting the filter or check back later!</p>
                         <button class="clear-filters-btn" id="clearFiltersBtn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:6px;">
                                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" />
