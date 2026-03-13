@@ -34,7 +34,7 @@ class EventController extends Controller
             ['id', 'uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_regular', 'is_exhibition', 'recurring_label'],
             [
                 'primaryPhoto:id,event_id,path',
-                'photos:id,event_id,path'
+                'photos:id,event_id,path,sort_order'
             ],
             'uuid',
             $uuid
