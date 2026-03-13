@@ -249,18 +249,18 @@
                         </div>
 
                         <div class="glass-info-grid">
-                            <div class="info-cell">
+                            <!-- <div class="info-cell">
                                 <label>Entrance Fee</label>
                                 <p>{{ $event['is_paid'] ? 'Rp ' . number_format($event['price'], 0, ',', '.') : 'Free Admission' }}</p>
-                            </div>
+                            </div> -->
                             <div class="info-cell">
                                 <label>Organizer</label>
                                 <p>{{ $event['organizer'] ?? 'Mal Bali Galeria' }}</p>
                             </div>
-                            <div class="info-cell">
+                            <!-- <div class="info-cell">
                                 <label>Target Audience</label>
                                 <p>{{ $event['target_audience'] ?? 'General' }}</p>
-                            </div>
+                            </div> -->
                             <div class="info-cell">
                                 <label>Highlights</label>
                                 <p>{{ $event['highlights'] ?? 'Exclusive Shows' }}</p>
