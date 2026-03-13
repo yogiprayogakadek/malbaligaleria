@@ -10,7 +10,8 @@ class EventPhoto extends Model
         'event_id',
         'path',
         'caption',
-        'is_primary'
+        'is_primary',
+        'sort_order'
     ];
 
     public function event()

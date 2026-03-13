@@ -25,7 +25,7 @@ class EventPhotoRepository
 
     public function getPhotoIsPrimary(int $event_id, bool $is_primary, array $fields)
     {
-        return $this->model::select($fields)->where('event_id', $event_id)->where('is_primary', $is_primary)->get();
+        return $this->model::select($fields)->where('event_id', $event_id)->where('is_primary', $is_primary)->orderBy('sort_order')->get();
     }
 
     public function create(array $data)

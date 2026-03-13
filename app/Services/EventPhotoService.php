@@ -53,12 +53,13 @@ class EventPhotoService
         }
 
         if (isset($data['album']) && is_array($data['album'])) {
-            foreach ($data['album'] as $file) {
+            foreach ($data['album'] as $index => $file) {
                 if ($file instanceof UploadedFile) {
                     $albumData = [
-                        'event_id'  => $eventId,
+                        'event_id'   => $eventId,
                         'caption'    => $caption,
                         'is_primary' => false,
+                        'sort_order' => $index,
                         'path'       => $this->uploadImage($file)
                     ];
                     $results[] = $this->eventPhotoRepository->create($albumData);
@@ -91,12 +92,13 @@ class EventPhotoService
                 $this->delete($al->id);
             }
 
-            foreach ($data['album'] as $file) {
+            foreach ($data['album'] as $index => $file) {
                 if ($file instanceof UploadedFile) {
                     $albumData = [
-                        'event_id'  => $event_id,
+                        'event_id'   => $event_id,
                         'caption'    => $caption,
                         'is_primary' => false,
+                        'sort_order' => $index,
                         'path'       => $this->uploadImage($file)
                     ];
                     $results[] = $this->eventPhotoRepository->create($albumData);
