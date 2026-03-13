@@ -73,7 +73,7 @@
                     </svg>
                     <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer"
                         style="text-decoration: none">
-                        <p>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
+                        <p>Jl. Simpang Dewa Ruci Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
                     </a>
                 </div>
                 <div class="footer-contact-item">
