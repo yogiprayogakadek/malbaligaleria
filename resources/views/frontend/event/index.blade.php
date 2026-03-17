@@ -255,13 +255,11 @@
                         <div class="event-img-wrapper">
                             <img src="{{ $imgUrl }}" alt="{{ $event->name }}" loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
-                            <div class="event-date-badge">
-                                <span class="day">{{ $day }}</span>
-                                <span class="month">{{ $monthShort }}</span>
-                            </div>
-                            {{-- #3: Status badge --}}
+
+                            {{-- Status badge top-left --}}
                             <span class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                            {{-- #7: WA Share button (harus div agar tidak nested A tag) --}}
+
+                            {{-- WA Share button (div agar tidak nested A tag) --}}
                             <div class="event-wa-share"
                                title="Share via WhatsApp"
                                onclick="event.stopPropagation(); event.preventDefault(); window.open('{{ $waHref }}', '_blank');">
@@ -270,31 +268,20 @@
                                     <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
                                 </svg>
                             </div>
-                        </div>
-                        <div class="event-card-info">
-                            {{-- #2 & #11: Dynamic category tag --}}
-                            <span class="event-category-tag {{ $catClass }}">{{ $catLabel }}</span>
-                            <h3 class="event-title-v2">{{ $event->name }}</h3>
-                            {{-- #9: Date range --}}
-                            <span class="event-date-v2">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                    <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                                </svg>
-                                {{ $dateRange }}
-                            </span>
-                            @if($event->location)
-                            <span class="event-location-v2">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-                                </svg>
-                                {{ $event->location }}
-                            </span>
-                            @endif
-                            <div class="see-details-link">
-                                See Details
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
+
+                            {{-- Content overlay at bottom (event-card style from landing_v2) --}}
+                            <div class="event-card-info">
+                                <span class="event-date-pill">{{ $fullDate }}</span>
+                                <h3 class="event-title-v2">{{ $event->name }}</h3>
+                                @if($event->location)
+                                <span class="event-location-v2">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                    {{ $event->location }}
+                                </span>
+                                @endif
+                                <span class="event-learn-more-btn">Learn More →</span>
                             </div>
                         </div>
                     </a>
