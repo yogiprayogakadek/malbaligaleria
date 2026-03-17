@@ -341,7 +341,6 @@
                 @foreach($regularEvents as $rEvent)
                 <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="regular-show-card" style="text-decoration:none;">
                     <div class="rsc-card-bg" style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
-                    <div class="rsc-card-overlay"></div>
                     <div class="rsc-card-content">
                         <span class="event-date">Every Weekend</span>
                         <h3>{{ $rEvent->name }}</h3>
