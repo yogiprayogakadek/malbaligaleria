@@ -818,7 +818,7 @@
             2: "{{ asset('assets/images/floors/2nd_floor.png') }}"
         };
     </script>
-    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}"></script>
+    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
 
 </body>
 

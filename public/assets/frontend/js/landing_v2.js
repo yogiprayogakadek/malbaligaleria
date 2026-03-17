@@ -879,7 +879,7 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
                             </div>
                         </div>
                         <button class="see-details-btn" data-id="${tenant.id}">
-                            See Details
+                            Learn More
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
@@ -1205,7 +1205,7 @@ async function openTenantModal(tenant_id) {
                 category: gridCard.querySelector('.tenant-category')?.textContent?.trim() || "-",
                 unit: gridCard.querySelector('.meta-item:first-child span')?.textContent?.replace('Unit ', '') || "",
                 hours: "10:00 AM - 10:00 PM",
-                description: "Memuat informasi tenant...",
+                description: "Learn more about this tenant and their premium offerings. Visit us today for an unforgettable shopping experience!",
                 images: [gridLogo],
                 has_album: false
             };

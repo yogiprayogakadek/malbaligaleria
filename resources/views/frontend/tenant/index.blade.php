@@ -1733,7 +1733,7 @@
                                 style="background-image: url('https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800');">
                                 <div class="similar-tenant-content">
                                     <h4>H&M</h4>
-                                    <a href="#" class="similar-tenant-link">See Details<span>→</span></a>
+                                    <a href="#" class="similar-tenant-link">Learn More<span>→</span></a>
                                 </div>
                             </div>
 
@@ -1741,7 +1741,7 @@
                                 style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=800');">
                                 <div class="similar-tenant-content">
                                     <h4>Uniqlo</h4>
-                                    <a href="#" class="similar-tenant-link">See Details<span>→</span></a>
+                                    <a href="#" class="similar-tenant-link">Learn More<span>→</span></a>
                                 </div>
                             </div>
 
@@ -1749,7 +1749,7 @@
                                 style="background-image: url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800');">
                                 <div class="similar-tenant-content">
                                     <h4>Pull & Bear</h4>
-                                    <a href="#" class="similar-tenant-link">See Details<span>→</span></a>
+                                    <a href="#" class="similar-tenant-link">Learn More<span>→</span></a>
                                 </div>
                             </div>
 
@@ -1757,7 +1757,7 @@
                                 style="background-image: url('https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=800');">
                                 <div class="similar-tenant-content">
                                     <h4>Mango</h4>
-                                    <a href="#" class="similar-tenant-link">See Details<span>→</span></a>
+                                    <a href="#" class="similar-tenant-link">Learn More<span>→</span></a>
                                 </div>
                             </div>
 
@@ -1765,7 +1765,7 @@
                                 style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea197ce7?w=800');">
                                 <div class="similar-tenant-content">
                                     <h4>Massimo Dutti</h4>
-                                    <a href="#" class="similar-tenant-link">See Details<span>→</span></a>
+                                    <a href="#" class="similar-tenant-link">Learn More<span>→</span></a>
                                 </div>
                             </div>
 
