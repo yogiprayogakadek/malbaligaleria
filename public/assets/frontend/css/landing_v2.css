@@ -2217,10 +2217,44 @@ body.dark-mode .regular-show-card {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 35px;
+    padding: 28px;
     z-index: 2;
     color: white;
 }
+
+/* Override event-date badge inside rsc card — more compact */
+.rsc-card-content .event-date {
+    padding: 7px 16px;
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
+/* Override h3 inside rsc card — smaller and tighter */
+.rsc-card-content h3 {
+    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: white;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+}
+
+/* Override event-desc inside rsc card — 2 lines only */
+.rsc-card-content .event-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+/* Override event-link inside rsc card */
+.rsc-card-content .event-link {
+    font-size: 12px;
+    padding: 6px 16px;
+}
+
 
 /* Controls */
 .regular-shows-controls {
