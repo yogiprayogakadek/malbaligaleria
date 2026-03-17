@@ -162,7 +162,6 @@
                         <button class="event-status-pill active" data-status="all">All</button>
                         <button class="event-status-pill" data-status="upcoming">Upcoming</button>
                         <button class="event-status-pill" data-status="ongoing">Ongoing</button>
-                        <button class="event-status-pill" data-status="ended">Ended</button>
                     </div>
                 </div>
                 <div class="events-filter-right">
