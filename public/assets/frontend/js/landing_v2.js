@@ -466,7 +466,7 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
     const controls = document.getElementById("regularShowsControls");
     if (!grid || !prevBtn || !nextBtn) return;
 
-    const cards = grid.querySelectorAll(".event-card");
+    const cards = grid.querySelectorAll(".regular-show-card");
     let currentIndex = 0;
     let cardsPerView = window.innerWidth <= 768 ? 1 : 2;
 
