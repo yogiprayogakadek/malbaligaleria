@@ -198,7 +198,7 @@
                 </div>
                 <div class="info-item">
                     <h3>Address</h3>
-                    <p>Jl. Bypass Ngurah Rai,<br>Kuta, Badung, Bali, Indonesia 80361</p>
+                    <p>Jl. Simpang Dewa Ruci Bypass Ngurah Rai,<br>Kuta, Badung, Bali, Indonesia 80361</p>
                 </div>
                 <div class="divider"></div>
             </div>
