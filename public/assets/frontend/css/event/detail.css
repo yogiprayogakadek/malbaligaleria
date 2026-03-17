@@ -1632,6 +1632,15 @@ body.dark-mode .mobile-cta-btn-ev svg { stroke: var(--accent-color); }
     border-color: white;
 }
 
+/* Remove underline from any anchor inside event-card (override landing.css global a:hover) */
+.event-card a,
+.event-card a:hover,
+.event-card a:visited,
+.event-card a:focus {
+    text-decoration: none !important;
+    outline: none;
+}
+
 .event-controls {
     display: flex;
     justify-content: center;

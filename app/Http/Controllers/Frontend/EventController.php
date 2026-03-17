@@ -67,7 +67,7 @@ class EventController extends Controller
         })->first();
 
         $upcomingEvents = $this->eventService->getUpcomingEvents(
-            ['id', 'uuid', 'name', 'start_date'],
+            ['id', 'uuid', 'name', 'start_date', 'description'],
             [
                 'primaryPhoto:id,event_id,path',
             ],
