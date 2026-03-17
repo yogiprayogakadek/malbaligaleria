@@ -749,7 +749,7 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ asset('assets/frontend/js/directory/directory.js') }}"></script>
+    <script src="{{ asset('assets/frontend/js/directory/directory.js') }}?v={{ time() }}"></script>
 
     {{-- Sticky Mobile CTA Bar --}}
     <div class="dir-mobile-sticky-cta" id="dirMobileStickyBar">
