@@ -1706,6 +1706,9 @@ body.dark-mode .similar-header h3 {
 .glass-similar .event-slider-wrapper {
     overflow: hidden;
     width: 100%;
+    /* Override reveal animation from landing.css */
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 /* Grid — flex row, no wrap, transitions for slider */
