@@ -170,6 +170,18 @@
                         {{-- Month filter --}}
                         <select class="events-sort-select" id="eventsMonth">
                             <option value="all">All Months</option>
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
                         </select>
                         {{-- Year filter --}}
                         <select class="events-sort-select" id="eventsYear">
@@ -473,32 +485,18 @@
         const allCards = [...document.querySelectorAll('.event-card-v2')];
 
         // Build month & year dropdown from unique data
-        const monthMap = new Map();
         const yearMap = new Map();
         allCards.forEach(card => {
-            const m = card.dataset.month;
-            const ml = card.dataset.monthLabel;
             const y = card.dataset.year;
-            
-            if (m && m !== 'regular' && !monthMap.has(m)) monthMap.set(m, ml);
             if (y && y !== 'regular' && !yearMap.has(y)) yearMap.set(y, y);
         });
 
         const monthSelectEl = document.getElementById('eventsMonth');
-        if (monthSelectEl && monthMap.size > 0) {
-            const sortedMonths = Array.from(monthMap.entries()).sort((a,b) => a[0].localeCompare(b[0]));
-            sortedMonths.forEach(([key, label]) => {
-                const opt = document.createElement('option');
-                opt.value = key;
-                opt.textContent = label;
-                monthSelectEl.appendChild(opt);
-            });
+        if (monthSelectEl) {
             monthSelectEl.addEventListener('change', () => {
                 activeMonth = monthSelectEl.value;
                 applyFilters();
             });
-        } else if (monthSelectEl) {
-            monthSelectEl.style.display = 'none';
         }
 
         const yearSelectEl = document.getElementById('eventsYear');
