@@ -10,5 +10,5 @@ Artisan::command('inspire', function () {
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('app:check-expiring-promos')->dailyAt('09:00');
-Schedule::command('app:deactivate-expired-events')->dailyAt('06:00');
+Schedule::command('app:deactivate-expired-events')->dailyAt('06:00')->timezone('Asia/Makassar');
 

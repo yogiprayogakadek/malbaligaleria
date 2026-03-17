@@ -16,7 +16,7 @@ class DeactivateExpiredEvents extends Command
         $this->info('Checking for expired events...');
 
         $expiredCount = Event::where('is_active', true)
-            ->whereDate('end_date', '<', now()->toDateString())
+            ->whereDate('end_date', '<', now('Asia/Makassar')->toDateString())
             ->update(['is_active' => false]);
 
         $this->info("Deactivated {$expiredCount} expired event(s).");
