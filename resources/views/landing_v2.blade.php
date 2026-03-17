@@ -326,50 +326,30 @@
 
     {{-- ===== REGULAR SHOWS SECTION ===== --}}
     @if(isset($regularEvents) && $regularEvents->count() > 0)
-    <section class="regular-shows-section reveal" id="regular-shows">
-        <div class="regular-shows-container">
-            <div class="regular-shows-header">
-                <div class="regular-shows-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                    Live Entertainment
+    <section class="event-section reveal" id="regular-shows">
+        <div class="event-container">
+            <h2>Regular Shows</h2>
+            <p class="event-subtitle">Hadir setiap minggu, menghibur selalu</p>
+            <div class="event-slider-wrapper">
+                <div class="event-grid" id="regularShowsGrid">
+                    @foreach($regularEvents as $rEvent)
+                        <div class="event-card">
+                            <div class="event-card-bg"
+                                style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"
+                            ></div>
+                            <div class="event-card-content">
+                                <span class="event-date">{{ $rEvent->recurring_label ?? 'Rutin' }}</span>
+                                <h3>{{ $rEvent->name }}</h3>
+                                <p class="event-desc">{{ Str::limit($rEvent->description, 110) }}</p>
+                                <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="event-link">Lihat Detail →</a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <h2>Regular Shows</h2>
-                <p class="regular-shows-subtitle">Hadir setiap minggu, menghibur selalu</p>
             </div>
-
-            <div class="regular-shows-grid">
-                @foreach($regularEvents as $rEvent)
-                <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="regular-show-card" style="text-decoration:none;">
-                    <div class="rsc-image-wrap">
-                        <div class="rsc-image" style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
-                        <div class="rsc-overlay"></div>
-                        <div class="rsc-schedule-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            {{ $rEvent->recurring_label ?? 'Rutin' }}
-                        </div>
-                    </div>
-                    <div class="rsc-content">
-                        <h3 class="rsc-title">{{ $rEvent->name }}</h3>
-                        <p class="rsc-desc">{{ Str::limit($rEvent->description, 90) }}</p>
-                        <div class="rsc-meta">
-                            @if($rEvent->start_time)
-                            <span class="rsc-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                {{ date('H:i', strtotime($rEvent->start_time)) }}
-                                @if($rEvent->end_time) – {{ date('H:i', strtotime($rEvent->end_time)) }} @endif
-                            </span>
-                            @endif
-                            @if($rEvent->location)
-                            <span class="rsc-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                {{ $rEvent->location }}
-                            </span>
-                            @endif
-                        </div>
-                        <span class="rsc-cta">Lihat Detail →</span>
-                    </div>
-                </a>
-                @endforeach
+            <div class="event-controls" id="regularShowsControls">
+                <button class="event-nav-btn" id="regularShowsPrevBtn">←</button>
+                <button class="event-nav-btn" id="regularShowsNextBtn">→</button>
             </div>
         </div>
     </section>
@@ -377,44 +357,39 @@
 
     {{-- ===== EXHIBITION SECTION ===== --}}
     @if(isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
-    <section class="exhibition-section reveal" id="exhibition">
-        <div class="exhibition-container">
-            <div class="exhibition-header">
-                <h2>Exhibition</h2>
-                <p class="exhibition-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
+    <section class="event-section reveal" id="exhibition">
+        <div class="event-container">
+            <h2>Exhibition</h2>
+            <p class="event-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
+            <div class="event-slider-wrapper">
+                <div class="event-grid" id="exhibitionGrid">
+                    @foreach($exhibitionEvents as $exEvent)
+                        <div class="event-card">
+                            <div class="event-card-bg"
+                                style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"
+                            ></div>
+                            <div class="event-card-content">
+                                @if($exEvent->start_date)
+                                <span class="event-date">
+                                    {{ date('d M', strtotime($exEvent->start_date)) }}
+                                    @if($exEvent->end_date && $exEvent->start_date != $exEvent->end_date)
+                                        – {{ date('d M Y', strtotime($exEvent->end_date)) }}
+                                    @else
+                                        {{ date('Y', strtotime($exEvent->start_date)) }}
+                                    @endif
+                                </span>
+                                @endif
+                                <h3>{{ $exEvent->name }}</h3>
+                                <p class="event-desc">{{ Str::limit($exEvent->description, 110) }}</p>
+                                <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-link">Lihat Detail →</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-
-            <div class="exhibition-grid">
-                @foreach($exhibitionEvents as $exEvent)
-                <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="exhibition-card" style="text-decoration:none;">
-                    <div class="exc-image-wrap">
-                        <div class="exc-image" style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
-                        <div class="exc-overlay"></div>
-                        @if($exEvent->start_date && $exEvent->end_date)
-                        <div class="exc-date-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                            {{ date('d M', strtotime($exEvent->start_date)) }}
-                            @if($exEvent->start_date != $exEvent->end_date)
-                                – {{ date('d M Y', strtotime($exEvent->end_date)) }}
-                            @else
-                                {{ date(' Y', strtotime($exEvent->start_date)) }}
-                            @endif
-                        </div>
-                        @endif
-                    </div>
-                    <div class="exc-content">
-                        <h3 class="exc-title">{{ $exEvent->name }}</h3>
-                        <p class="exc-desc">{{ Str::limit($exEvent->description, 90) }}</p>
-                        @if($exEvent->location)
-                        <div class="exc-location">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            {{ $exEvent->location }}
-                        </div>
-                        @endif
-                        <span class="exc-cta">Lihat Detail →</span>
-                    </div>
-                </a>
-                @endforeach
+            <div class="event-controls" id="exhibitionControls">
+                <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
+                <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
             </div>
         </div>
     </section>
