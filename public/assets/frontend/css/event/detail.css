@@ -1641,6 +1641,13 @@ body.dark-mode .mobile-cta-btn-ev svg { stroke: var(--accent-color); }
     outline: none;
 }
 
+/* Hide ::before pseudo-element on event-link that creates a teal line (from glass-btn inherited style) */
+.event-card .event-link::before,
+.glass-similar .event-link::before {
+    content: none !important;
+    display: none !important;
+}
+
 .event-controls {
     display: flex;
     justify-content: center;
