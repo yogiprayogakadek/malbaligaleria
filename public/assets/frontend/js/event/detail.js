@@ -149,116 +149,44 @@ if (footerElements.length > 0) {
     }
 }
 
-// Similar Events Carousel Navigation
-const similarTenants = document.getElementById('similarTenants');
-const similarPrev = document.getElementById('similarPrev');
-const similarNext = document.getElementById('similarNext');
-const scrollIndicators = document.getElementById('scrollIndicators');
-const carouselWrapper = document.querySelector('.similar-carousel-wrapper');
+// ========================================
+// SIMILAR EVENTS SLIDER (event-card style)
+// ========================================
+(function initSimilarEventSlider() {
+    const grid = document.getElementById("similarEventGrid");
+    const prevBtn = document.getElementById("similarEventPrevBtn");
+    const nextBtn = document.getElementById("similarEventNextBtn");
+    const controls = document.getElementById("similarEventControls");
+    if (!grid || !prevBtn || !nextBtn) return;
 
-if (similarTenants && similarPrev && similarNext) {
-    // Count total "pages" (pairs of events)
-    const totalCards = similarTenants.querySelectorAll('.similar-tenant-card').length;
-    const cardsPerPage = 2; // 2 cards visible at a time (vertical stack)
-    const totalPages = Math.ceil(totalCards / cardsPerPage);
-    
-    // Create scroll indicator dots
-    if (scrollIndicators && totalPages > 1) {
-        for (let i = 0; i < totalPages; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'scroll-indicator-dot';
-            dot.setAttribute('data-page', i);
-            scrollIndicators.appendChild(dot);
+    const cards = grid.querySelectorAll(".event-card");
+    let currentIndex = 0;
+    let cardsPerView = window.innerWidth <= 768 ? 1 : 3;
+
+    const update = () => {
+        if (!cards.length) return;
+        const cardWidth = cards[0].offsetWidth;
+        const gap = 30;
+        grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= cards.length - cardsPerView;
+        if (controls) {
+            controls.classList.toggle("hidden", cards.length <= cardsPerView);
         }
-    }
-    
-    const dots = scrollIndicators ? scrollIndicators.querySelectorAll('.scroll-indicator-dot') : [];
-    
-    // Scroll the carousel when clicking the navigation buttons
-    // Scroll by full container width to show next 2 events
-    similarNext.addEventListener('click', () => {
-        const scrollAmount = similarTenants.clientWidth;
-        similarTenants.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    });
+    };
 
-    similarPrev.addEventListener('click', () => {
-        const scrollAmount = similarTenants.clientWidth;
-        similarTenants.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-        });
-    });
+    const onResize = () => {
+        cardsPerView = window.innerWidth <= 768 ? 1 : 3;
+        currentIndex = 0;
+        update();
+    };
 
-    // Update active dot and scroll hints based on scroll position
-    function updateCarouselState() {
-        const maxScroll = similarTenants.scrollWidth - similarTenants.clientWidth;
-        const currentScroll = similarTenants.scrollLeft;
-        const containerWidth = similarTenants.clientWidth;
+    prevBtn.addEventListener("click", () => { if (currentIndex > 0) { currentIndex--; update(); } });
+    nextBtn.addEventListener("click", () => { if (currentIndex < cards.length - cardsPerView) { currentIndex++; update(); } });
 
-        // Disable/enable prev button at the start
-        if (currentScroll <= 0) {
-            similarPrev.disabled = true;
-        } else {
-            similarPrev.disabled = false;
-        }
-
-        // Disable/enable next button at the end
-        if (currentScroll >= maxScroll - 5) { // -5 for tolerance
-            similarNext.disabled = true;
-        } else {
-            similarNext.disabled = false;
-        }
-        
-        // Update active dot
-        if (dots.length > 0) {
-            const currentPage = Math.round(currentScroll / containerWidth);
-            dots.forEach((dot, index) => {
-                if (index === currentPage) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-        
-        // Show/hide scroll hints
-        if (carouselWrapper) {
-            // Show right hint if not at the end
-            if (currentScroll < maxScroll - 10) {
-                carouselWrapper.classList.add('show-right-hint');
-            } else {
-                carouselWrapper.classList.remove('show-right-hint');
-            }
-            
-            // Show left hint if not at the start
-            if (currentScroll > 10) {
-                carouselWrapper.classList.add('show-left-hint');
-            } else {
-                carouselWrapper.classList.remove('show-left-hint');
-            }
-        }
-    }
-
-    // Click on dots to navigate
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            const containerWidth = similarTenants.clientWidth;
-            similarTenants.scrollTo({
-                left: index * containerWidth,
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Update carousel state on scroll
-    similarTenants.addEventListener('scroll', updateCarouselState);
-    
-    // Initialize carousel state
-    updateCarouselState();
-}
+    window.addEventListener("resize", onResize);
+    update();
+})();
 
 // ===== ADD TO CALENDAR FUNCTIONALITY =====
 const addToCalendarBtn = document.getElementById('addToCalendarBtn');

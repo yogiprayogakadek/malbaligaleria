@@ -266,49 +266,39 @@
                     </div>
                 </div>
 
-                <!-- Similar Upcoming Events -->
+                {{-- Similar Upcoming Events — same card design as landing Upcoming Events --}}
                 <div class="similar-section glass-similar">
                     <div class="similar-header">
                         <h3>Upcoming Events <span class="event-count">({{ count($upcomingEvents) }})</span></h3>
                     </div>
-                    @if(count($upcomingEvents) <= 2)
-                        {{-- Grid layout for few events --}}
-                        <div class="similar-tenants similar-tenants-grid">
-                            @forelse ($upcomingEvents as $upcoming)
-                                <div class="similar-tenant-card"
-                                    style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
-                                    <div class="similar-tenant-content">
-                                        <span class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
-                                        <h4>{{ $upcoming->name }}</h4>
-                                        <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="similar-tenant-link">View Details<span>→</span></a>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="no-events-improved" style="grid-column: 1/-1; padding: 40px; text-align: center; border-radius: 20px; background: rgba(0,0,0,0.03);">
-                                    <div class="no-events-emoji" style="font-size: 40px;">🎪</div>
-                                    <h3 style="margin: 10px 0; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-color);">No other events</h3>
-                                    <p style="color: #666; font-size: 0.95rem;">Check back later for more exciting events!</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    @else
-                        {{-- Carousel for 3+ events --}}
-                        <div class="similar-carousel-wrapper">
-                            <button class="similar-arrow similar-prev" id="similarPrev">‹</button>
-                            <div class="similar-tenants" id="similarTenants">
-                                @foreach ($upcomingEvents as $upcoming)
-                                    <div class="similar-tenant-card"
-                                        style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
-                                        <div class="similar-tenant-content">
-                                            <span class="similar-tenant-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
-                                            <h4>{{ $upcoming->name }}</h4>
-                                            <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="similar-tenant-link">View Details<span>→</span></a>
+
+                    @if(count($upcomingEvents) > 0)
+                        <div class="event-slider-wrapper">
+                            <div class="event-grid" id="similarEventGrid">
+                                @foreach($upcomingEvents as $upcoming)
+                                    <div class="event-card">
+                                        <div class="event-card-bg"
+                                            style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                        </div>
+                                        <div class="event-card-content">
+                                            <span class="event-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
+                                            <h3>{{ $upcoming->name }}</h3>
+                                            <p class="event-desc">{{ Str::limit($upcoming->description, 110) }}</p>
+                                            <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="event-link">Learn More →</a>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                            <button class="similar-arrow similar-next" id="similarNext">›</button>
-                            <div class="carousel-scroll-indicators" id="scrollIndicators"></div>
+                        </div>
+                        <div class="event-controls" id="similarEventControls">
+                            <button class="event-nav-btn" id="similarEventPrevBtn">←</button>
+                            <button class="event-nav-btn" id="similarEventNextBtn">→</button>
+                        </div>
+                    @else
+                        <div style="padding: 40px; text-align: center; border-radius: 20px; background: rgba(0,0,0,0.03);">
+                            <div style="font-size: 40px;">🎪</div>
+                            <h3 style="margin: 10px 0; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-color);">No other events</h3>
+                            <p style="color: #666; font-size: 0.95rem;">Check back later for more exciting events!</p>
                         </div>
                     @endif
                 </div>
