@@ -340,33 +340,13 @@
             <div class="regular-shows-grid" id="regularShowsGrid">
                 @foreach($regularEvents as $rEvent)
                 <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="regular-show-card" style="text-decoration:none;">
-                    <div class="rsc-image-wrap">
-                        <div class="rsc-image" style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
-                        <div class="rsc-overlay"></div>
-                        <div class="rsc-schedule-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            {{ $rEvent->recurring_label ?? 'Weekly' }}
-                        </div>
-                    </div>
-                    <div class="rsc-content">
-                        <h3 class="rsc-title">{{ $rEvent->name }}</h3>
-                        <p class="rsc-desc">{{ Str::limit($rEvent->description, 90) }}</p>
-                        <div class="rsc-meta">
-                            @if($rEvent->start_time)
-                            <span class="rsc-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                {{ date('H:i', strtotime($rEvent->start_time)) }}
-                                @if($rEvent->end_time) – {{ date('H:i', strtotime($rEvent->end_time)) }} @endif
-                            </span>
-                            @endif
-                            @if($rEvent->location)
-                            <span class="rsc-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                {{ $rEvent->location }}
-                            </span>
-                            @endif
-                        </div>
-                        <span class="rsc-cta">Learn More →</span>
+                    <div class="rsc-card-bg" style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
+                    <div class="rsc-card-overlay"></div>
+                    <div class="rsc-card-content">
+                        <span class="event-date">Every Weekend</span>
+                        <h3>{{ $rEvent->name }}</h3>
+                        <p class="event-desc">{{ Str::limit($rEvent->description, 110) }}</p>
+                        <span class="event-link">Learn More →</span>
                     </div>
                 </a>
                 @endforeach
@@ -379,6 +359,7 @@
         </div>
     </section>
     @endif
+
 
     {{-- ===== EXHIBITION SECTION ===== --}}
     @if(isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
