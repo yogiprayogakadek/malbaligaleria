@@ -629,6 +629,38 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     .header-left {
         display: none;
     }
+
+    /* Mobile Hero Overrides */
+    .hero-slide {
+        background-image: url("../../facade/portrait.jpg") !important;
+        background-size: cover !important;
+        background-position: center 40% !important;
+    }
+
+    .hero {
+        height: 80dvh !important;
+        aspect-ratio: auto !important;
+    }
+
+    .hero-content {
+        transform: translateY(-20px) !important;
+    }
+
+    .hero h2 {
+        font-size: 32px !important;
+        margin-bottom: 15px !important;
+        line-height: 1.1 !important;
+    }
+
+    .hero p {
+        font-size: 15px !important;
+        margin-bottom: 30px !important;
+        padding: 0 10px !important;
+    }
+
+    .explore-btn {
+        transform: translateY(20px) !important;
+    }
 }
 
 .logo {
