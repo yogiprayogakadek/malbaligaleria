@@ -1002,6 +1002,10 @@ body.dark-mode .sidebar nav ul li a {
     }
 }
 
+.hero h2, .hero p {
+    transform: translateY(-40px);
+}
+
 .hero h2 {
     font-size: 50px;
     font-weight: 400;
@@ -1034,6 +1038,7 @@ body.dark-mode .sidebar nav ul li a {
     overflow: visible;
     font-weight: 500;
     height: 50px;
+    transform: translateY(80px);
 }
 
 .explore-btn::before {

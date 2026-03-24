@@ -42,10 +42,6 @@
                 height: 80dvh !important;
                 aspect-ratio: auto !important;
             }
-            .hero-content a {
-                display: inline-block;
-                transform: translateY(80px) !important;
-            }
         }
     </style>
 </head>
