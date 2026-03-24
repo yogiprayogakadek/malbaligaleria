@@ -39,7 +39,7 @@
                 background-position: center center !important;
             }
             .hero {
-                height: 90dvh !important;
+                height: 85dvh !important;
                 aspect-ratio: auto !important;
             }
         }
