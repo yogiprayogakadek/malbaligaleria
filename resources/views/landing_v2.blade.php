@@ -35,9 +35,12 @@
         @media (max-width: 768px) {
             .hero-slide {
                 background-image: url('{{ asset('assets/facade/portrait.jpg') }}') !important;
+                background-size: cover !important;
+                background-position: center center !important;
             }
             .hero {
-                aspect-ratio: 3 / 4 !important;
+                height: 100dvh !important;
+                aspect-ratio: auto !important;
             }
         }
     </style>
