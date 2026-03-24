@@ -140,8 +140,8 @@
         <div class="hero-slider" id="heroSlider">
             <div class="hero-slide active" style="background-image: url('{{ asset('assets/facade/landscape.jpg') }}')">
             </div>
-            <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div>
-            <!-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> -->
+            {{-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> --}}
+            {{-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> --}}
             {{-- <div class="hero-slide active" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_1.png') }}')"></div>
             <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_2.png') }}')"></div>
             <div class="hero-slide" style="background-image: url('{{ asset('assets/frontend/images/hero/hero_slide_3.png') }}')"></div> --}}
@@ -159,8 +159,6 @@
         </div>
         <div class="hero-slider-dots" id="heroSliderDots" style="display: none;">
             <span class="hero-dot active" data-index="0"></span>
-            <span class="hero-dot" data-index="1"></span>
-            <span class="hero-dot" data-index="2"></span>
         </div>
     </section>
 
