@@ -42,6 +42,10 @@
                 height: 80dvh !important;
                 aspect-ratio: auto !important;
             }
+            .hero-content a {
+                display: block;
+                margin-top: 100px !important;
+            }
         }
     </style>
 </head>
