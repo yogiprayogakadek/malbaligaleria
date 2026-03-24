@@ -276,7 +276,7 @@
                         <div class="event-slider-wrapper">
                             <div class="event-grid" id="similarEventGrid">
                                 @foreach($upcomingEvents as $upcoming)
-                                    <div class="event-card">
+                                    <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="event-card" style="text-decoration:none;">
                                         <div class="event-card-bg"
                                             style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                         </div>
@@ -284,9 +284,9 @@
                                             <span class="event-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
                                             <h3>{{ $upcoming->name }}</h3>
                                             <p class="event-desc">{{ Str::limit($upcoming->description, 110) }}</p>
-                                            <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="event-link">Learn More →</a>
+                                            <span class="event-link">Learn More →</span>
                                         </div>
-                                    </div>
+                                    </a>
                                 @endforeach
                             </div>
                         </div>
