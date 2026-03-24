@@ -157,7 +157,7 @@
                 </button>
             </a>
         </div>
-        <div class="hero-slider-dots" id="heroSliderDots">
+        <div class="hero-slider-dots" id="heroSliderDots" style="display: none;">
             <span class="hero-dot active" data-index="0"></span>
             <span class="hero-dot" data-index="1"></span>
             <span class="hero-dot" data-index="2"></span>
