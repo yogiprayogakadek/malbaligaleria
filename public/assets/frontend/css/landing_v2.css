@@ -949,9 +949,7 @@ body.dark-mode .sidebar nav ul li a {
 
 .hero {
     position: relative;
-    width: 100%;
-    aspect-ratio: 2388 / 1648;
-    min-height: 320px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -5010,7 +5008,7 @@ body.dark-mode .logo-pin {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center center;
+    background-position: center 25%;
     background-repeat: no-repeat;
     opacity: 0;
     transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
