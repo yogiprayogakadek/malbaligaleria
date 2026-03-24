@@ -634,7 +634,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     .hero-slide {
         background-image: url("../../facade/portrait.jpg") !important;
         background-size: cover !important;
-        background-position: center 85% !important;
+        background-position: center bottom !important;
     }
 
     .hero {
