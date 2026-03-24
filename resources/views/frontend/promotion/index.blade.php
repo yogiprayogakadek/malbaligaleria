@@ -331,17 +331,17 @@
                     <div class="carousel-images" id="modalCarouselImages">
 
                     </div>
-                    <button class="carousel-nav prev" id="modalCarouselPrev">
+                    <button class="carousel-nav prev" id="modalCarouselPrev" style="display: none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="modalCarouselNext">
+                    <button class="carousel-nav next" id="modalCarouselNext" style="display: none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
-                    <div class="carousel-swipe-hint" id="carouselSwipeHint">
+                    <div class="carousel-swipe-hint" id="carouselSwipeHint" style="display: none;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
