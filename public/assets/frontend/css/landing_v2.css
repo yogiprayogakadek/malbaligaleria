@@ -1038,7 +1038,7 @@ body.dark-mode .sidebar nav ul li a {
     overflow: visible;
     font-weight: 500;
     height: 50px;
-    transform: translateY(130px);
+    transform: translateY(180px);
 }
 
 .explore-btn::before {
@@ -1129,7 +1129,7 @@ body.dark-mode .sidebar nav ul li a {
 }
 
 .explore-btn:hover {
-    transform: translateY(128px);
+    transform: translateY(178px);
     box-shadow: 0 10px 25px rgba(245, 245, 220, 0.3);
 }
 
