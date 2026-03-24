@@ -373,7 +373,7 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="exhibitionGrid">
                     @foreach($exhibitionEvents as $exEvent)
-                        <div class="event-card">
+                        <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-card" style="text-decoration:none;">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"
                             ></div>
@@ -390,9 +390,9 @@
                                 @endif
                                 <h3>{{ $exEvent->name }}</h3>
                                 <p class="event-desc">{{ Str::limit($exEvent->description, 110) }}</p>
-                                <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-link">Learn More →</a>
+                                <span class="event-link">Learn More →</span>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -411,7 +411,7 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
-                        <div class="event-card">
+                        <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-card" style="text-decoration:none;">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
@@ -420,10 +420,10 @@
                                     class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p class="event-desc">{{ Str::limit($event->description, 110) }}</p>
-                                <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-link">Learn
-                                    More →</a>
+                                <span class="event-link">Learn
+                                    More →</span>
                             </div>
-                        </div>
+                        </a>
                     @empty
                         <h3 class="text-center">No data available</h3>
                     @endforelse

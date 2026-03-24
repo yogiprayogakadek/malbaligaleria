@@ -2249,10 +2249,16 @@ body.dark-mode .regular-show-card {
     line-clamp: 2;
 }
 
-/* Override event-link inside rsc card */
 .rsc-card-content .event-link {
     font-size: 12px;
     padding: 6px 16px;
+}
+
+.regular-show-card:hover .event-link {
+    background: white;
+    color: var(--primary-color);
+    border-color: white;
+    gap: 12px;
 }
 
 
