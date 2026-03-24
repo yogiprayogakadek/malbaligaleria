@@ -659,7 +659,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     }
 
     .explore-btn {
-        transform: translateY(20px) !important;
+        transform: translateY(100px) !important;
     }
 }
 
@@ -1066,6 +1066,7 @@ body.dark-mode .sidebar nav ul li a {
     overflow: visible;
     font-weight: 500;
     height: 50px;
+    transform: translateY(60px);
 }
 
 .explore-btn::before {
@@ -1156,7 +1157,7 @@ body.dark-mode .sidebar nav ul li a {
 }
 
 .explore-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(58px);
     box-shadow: 0 10px 25px rgba(245, 245, 220, 0.3);
 }
 
