@@ -638,7 +638,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     }
 
     .hero {
-        height: 80dvh !important;
+        height: 100dvh !important;
         aspect-ratio: auto !important;
     }
 
