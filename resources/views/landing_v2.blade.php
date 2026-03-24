@@ -43,8 +43,8 @@
                 aspect-ratio: auto !important;
             }
             .hero-content a {
-                display: block;
-                margin-top: 180px !important;
+                display: inline-block;
+                transform: translateY(80px) !important;
             }
         }
     </style>
