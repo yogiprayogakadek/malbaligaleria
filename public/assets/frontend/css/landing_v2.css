@@ -5008,7 +5008,7 @@ body.dark-mode .logo-pin {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center 25%;
+    background-position: center bottom;
     background-repeat: no-repeat;
     opacity: 0;
     transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
