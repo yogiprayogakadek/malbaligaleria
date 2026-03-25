@@ -342,7 +342,7 @@
                                     style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="rsc-card-content">
-                                    <span class="event-date">Every Weekend</span>
+                                    <span class="event-date">{{ $rEvent->recurring_label ?: 'Every Weekend' }}</span>
                                     <h3>{{ $rEvent->name }}</h3>
                                     <p class="event-desc">{{ Str::limit($rEvent->description, 80) }}</p>
                                     <span class="event-link">Learn More →</span>
