@@ -370,12 +370,12 @@
                 <div class="event-slider-wrapper">
                     <div class="event-grid" id="exhibitionGrid">
                         @foreach ($exhibitionEvents as $exEvent)
-                            <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-card"
+                            <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="regular-show-card"
                                 style="text-decoration:none;">
-                                <div class="event-card-bg"
+                                <div class="rsc-card-bg"
                                     style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
-                                <div class="event-card-content">
+                                <div class="rsc-card-content">
                                     @if ($exEvent->start_date)
                                         <span class="event-date">
                                             {{ date('d M', strtotime($exEvent->start_date)) }}
@@ -409,18 +409,17 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
-                        <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-card"
+                        <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="regular-show-card"
                             style="text-decoration:none;">
-                            <div class="event-card-bg"
+                            <div class="rsc-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
-                            <div class="event-card-content">
+                            <div class="rsc-card-content">
                                 <span
                                     class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p class="event-desc">{{ Str::limit($event->description, 110) }}</p>
-                                <span class="event-link">Learn
-                                    More →</span>
+                                <span class="event-link">Learn More →</span>
                             </div>
                         </a>
                     @empty
