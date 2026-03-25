@@ -290,7 +290,7 @@
                 </div>
 
                 {{-- Similar Upcoming Events — same card design as landing Upcoming Events --}}
-                <div class="similar-section glass-similar">
+                {{-- <div class="similar-section glass-similar">
                     <div class="similar-header">
                         <h3>Upcoming Events <span class="event-count">({{ count($upcomingEvents) }})</span></h3>
                     </div>
@@ -385,7 +385,7 @@
                             <p style="color: #666; font-size: 0.95rem;">Check back later for more exciting events!</p>
                         </div>
                     @endif
-                </div>
+                </div> --}}
 
             </div>
         </section>
