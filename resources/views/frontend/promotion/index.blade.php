@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $setting->payload['site_title'] ?? 'Promotions' }} | Mal Bali Galeria</title>
-    <meta name="description" content="Check out the latest promotions and exclusive deals at Mal Bali Galeria. Your premium shopping experience simplified.">
-    
+    <meta name="description"
+        content="Check out the latest promotions and exclusive deals at Mal Bali Galeria. Your premium shopping experience simplified.">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -18,7 +19,8 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ $setting->payload['site_title'] ?? 'Promotions' }} | Mal Bali Galeria">
-    <meta property="twitter:description" content="Check out the latest promotions and exclusive deals at Mal Bali Galeria.">
+    <meta property="twitter:description"
+        content="Check out the latest promotions and exclusive deals at Mal Bali Galeria.">
     <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
 
     <link
@@ -65,7 +67,8 @@
             <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor"
+                stroke-width="2" />
         </svg>
     </button>
 
@@ -73,15 +76,14 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;" loading="lazy">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;"
+                    loading="lazy">
             </a>
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}" 
-                 alt="Mal Bali Galeria" 
-                 class="header-main-logo"
-                 style="height: 45px; width: auto; object-fit: contain;">
+            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
+                style="height: 45px; width: auto; object-fit: contain;">
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -125,7 +127,9 @@
             <div class="promo-hero-content">
                 <span class="promo-hero-eyebrow">Mal Bali Galeria</span>
                 <h1 class="promo-hero-title">{{ $setting->payload['page_title'] ?? 'Current Promotions' }}</h1>
-                <p class="promo-hero-subtitle">{{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}</p>
+                <p class="promo-hero-subtitle">
+                    {{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}
+                </p>
                 <a href="{{ route('frontend.landing') }}" class="promo-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -293,10 +297,13 @@
                     <div class="empty-state" id="emptyState" style="display: none;">
                         <div class="empty-state-emoji">🛍️</div>
                         <h3>No promotions found</h3>
-                        <p id="emptyStateMsg">No promotions match your current filter. Try adjusting the filter or check back later!</p>
+                        <p id="emptyStateMsg">No promotions match your current filter. Try adjusting the filter or
+                            check back later!</p>
                         <button class="clear-filters-btn" id="clearFiltersBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:6px;">
-                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" />
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                style="width:16px;height:16px;margin-right:6px;">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
                             </svg>
                             Reset All Filters
                         </button>
@@ -357,7 +364,7 @@
 
                 <div class="modal-scroll-hint">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
                     </svg>
                     <span>Scroll down for more details</span>
                 </div>
@@ -400,10 +407,13 @@
                     </div>
 
                     {{-- #9 Share to WhatsApp button --}}
-                    <a href="#" id="modalShareWA" target="_blank" rel="noopener noreferrer" class="modal-wa-share-btn">
+                    <a href="#" id="modalShareWA" target="_blank" rel="noopener noreferrer"
+                        class="modal-wa-share-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                            <path
+                                d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z" />
                         </svg>
                         Share via WhatsApp
                     </a>
@@ -535,15 +545,17 @@
         </a>
         <a href="{{ route('frontend.directory.index') }}" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+                <path
+                    d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
             </svg>
             <span>Directory</span>
         </a>
         <a href="tel:+62361755277" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span>Hubungi</span>
+            <span>Call</span>
         </a>
     </div>
 

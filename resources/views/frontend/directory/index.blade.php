@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenant Directory | Mal Bali Galeria</title>
-    <meta name="description" content="Explore our collection of premium brands and stores at Mal Bali Galeria. Find your favorite shops across all levels.">
-    
+    <meta name="description"
+        content="Explore our collection of premium brands and stores at Mal Bali Galeria. Find your favorite shops across all levels.">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -18,7 +19,8 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="Tenant Directory | Mal Bali Galeria">
-    <meta property="twitter:description" content="Explore our collection of premium brands and stores at Mal Bali Galeria.">
+    <meta property="twitter:description"
+        content="Explore our collection of premium brands and stores at Mal Bali Galeria.">
     <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
@@ -65,7 +67,8 @@
             <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor"
+                stroke-width="2" />
         </svg>
     </button>
 
@@ -73,15 +76,14 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;" loading="lazy">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;"
+                    loading="lazy">
             </a>
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}" 
-                 alt="Mal Bali Galeria" 
-                 class="header-main-logo"
-                 style="height: 45px; width: auto; object-fit: contain;">
+            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
+                style="height: 45px; width: auto; object-fit: contain;">
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -151,7 +153,8 @@
             <div class="directory-hero-content">
                 <span class="directory-hero-eyebrow">Mal Bali Galeria</span>
                 <h1 class="directory-hero-title">Tenant Directory</h1>
-                <p class="directory-hero-subtitle">Discover our collection of premium brands and stores across all levels</p>
+                <p class="directory-hero-subtitle">Discover our collection of premium brands and stores across all
+                    levels</p>
                 <a href="{{ route('frontend.landing') }}" class="directory-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -215,7 +218,8 @@
                                     <circle cx="11" cy="11" r="8" stroke-width="2" />
                                     <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
                                 </svg>
-                                <input type="text" placeholder="Type to search..." id="searchInput" value="{{ request('search') }}" autocomplete="off">
+                                <input type="text" placeholder="Type to search..." id="searchInput"
+                                    value="{{ request('search') }}" autocomplete="off">
                                 <div class="search-suggestions" id="searchInputSuggestions"></div>
                             </div>
                         </div>
@@ -769,9 +773,10 @@
         </a>
         <a href="tel:+62361755277" class="dir-mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span>Hubungi</span>
+            <span>Call</span>
         </a>
     </div>
 </body>

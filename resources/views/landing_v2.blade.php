@@ -131,7 +131,8 @@
 
     <section class="hero" id="home">
         <div class="hero-slider" id="heroSlider">
-            <div class="hero-slide active" style="background-image: url('{{ asset('assets/facade/landscape.jpg') }}')">
+            <div class="hero-slide active"
+                style="background-image: url('{{ asset('assets/facade/landscape.jpg') }}')">
             </div>
             {{-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> --}}
             {{-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> --}}
@@ -316,81 +317,89 @@
     </section> --}}
 
     {{-- ===== REGULAR SHOWS SECTION ===== --}}
-    @if(isset($regularEvents) && $regularEvents->count() > 0)
-    <section class="regular-shows-section reveal" id="regular-shows">
-        <div class="regular-shows-container">
-            <div class="regular-shows-header">
-                <div class="regular-shows-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                    Live Entertainment
+    @if (isset($regularEvents) && $regularEvents->count() > 0)
+        <section class="regular-shows-section reveal" id="regular-shows">
+            <div class="regular-shows-container">
+                <div class="regular-shows-header">
+                    <div class="regular-shows-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
+                        Live Entertainment
+                    </div>
+                    <h2>Regular Shows</h2>
+                    <p class="regular-shows-subtitle">Every week, always entertaining</p>
                 </div>
-                <h2>Regular Shows</h2>
-                <p class="regular-shows-subtitle">Every week, always entertaining</p>
-            </div>
 
-            <div class="regular-shows-slider-wrapper">
-                <div class="regular-shows-grid" id="regularShowsGrid">
-                    @foreach($regularEvents as $rEvent)
-                    <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="regular-show-card" style="text-decoration:none;">
-                        <div class="rsc-card-bg" style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"></div>
-                        <div class="rsc-card-content">
-                            <span class="event-date">Every Weekend</span>
-                            <h3>{{ $rEvent->name }}</h3>
-                            <p class="event-desc">{{ Str::limit($rEvent->description, 110) }}</p>
-                            <span class="event-link">Learn More →</span>
-                        </div>
-                    </a>
-                    @endforeach
+                <div class="regular-shows-slider-wrapper">
+                    <div class="regular-shows-grid" id="regularShowsGrid">
+                        @foreach ($regularEvents as $rEvent)
+                            <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="regular-show-card"
+                                style="text-decoration:none;">
+                                <div class="rsc-card-bg"
+                                    style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                </div>
+                                <div class="rsc-card-content">
+                                    <span class="event-date">Every Weekend</span>
+                                    <h3>{{ $rEvent->name }}</h3>
+                                    <p class="event-desc">{{ Str::limit($rEvent->description, 110) }}</p>
+                                    <span class="event-link">Learn More →</span>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="regular-shows-controls" id="regularShowsControls">
+                    <button class="event-nav-btn" id="regularShowsPrevBtn">←</button>
+                    <button class="event-nav-btn" id="regularShowsNextBtn">→</button>
                 </div>
             </div>
-
-            <div class="regular-shows-controls" id="regularShowsControls">
-                <button class="event-nav-btn" id="regularShowsPrevBtn">←</button>
-                <button class="event-nav-btn" id="regularShowsNextBtn">→</button>
-            </div>
-        </div>
-    </section>
+        </section>
     @endif
 
 
     {{-- ===== EXHIBITION SECTION ===== --}}
-    @if(isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
-    <section class="event-section reveal" id="exhibition">
-        <div class="event-container">
-            <h2>Exhibition</h2>
-            <p class="event-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
-            <div class="event-slider-wrapper">
-                <div class="event-grid" id="exhibitionGrid">
-                    @foreach($exhibitionEvents as $exEvent)
-                        <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-card" style="text-decoration:none;">
-                            <div class="event-card-bg"
-                                style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});"
-                            ></div>
-                            <div class="event-card-content">
-                                @if($exEvent->start_date)
-                                <span class="event-date">
-                                    {{ date('d M', strtotime($exEvent->start_date)) }}
-                                    @if($exEvent->end_date && $exEvent->start_date != $exEvent->end_date)
-                                        – {{ date('d M Y', strtotime($exEvent->end_date)) }}
-                                    @else
-                                        {{ date('Y', strtotime($exEvent->start_date)) }}
+    @if (isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
+        <section class="event-section reveal" id="exhibition">
+            <div class="event-container">
+                <h2>Exhibition</h2>
+                <p class="event-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
+                <div class="event-slider-wrapper">
+                    <div class="event-grid" id="exhibitionGrid">
+                        @foreach ($exhibitionEvents as $exEvent)
+                            <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-card"
+                                style="text-decoration:none;">
+                                <div class="event-card-bg"
+                                    style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                </div>
+                                <div class="event-card-content">
+                                    @if ($exEvent->start_date)
+                                        <span class="event-date">
+                                            {{ date('d M', strtotime($exEvent->start_date)) }}
+                                            @if ($exEvent->end_date && $exEvent->start_date != $exEvent->end_date)
+                                                – {{ date('d M Y', strtotime($exEvent->end_date)) }}
+                                            @else
+                                                {{ date('Y', strtotime($exEvent->start_date)) }}
+                                            @endif
+                                        </span>
                                     @endif
-                                </span>
-                                @endif
-                                <h3>{{ $exEvent->name }}</h3>
-                                <p class="event-desc">{{ Str::limit($exEvent->description, 110) }}</p>
-                                <span class="event-link">Learn More →</span>
-                            </div>
-                        </a>
-                    @endforeach
+                                    <h3>{{ $exEvent->name }}</h3>
+                                    <p class="event-desc">{{ Str::limit($exEvent->description, 110) }}</p>
+                                    <span class="event-link">Learn More →</span>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="event-controls" id="exhibitionControls">
+                    <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
+                    <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
                 </div>
             </div>
-            <div class="event-controls" id="exhibitionControls">
-                <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
-                <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
-            </div>
-        </div>
-    </section>
+        </section>
     @endif
 
     <section class="event-section reveal" id="events">
@@ -400,7 +409,8 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
-                        <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-card" style="text-decoration:none;">
+                        <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-card"
+                            style="text-decoration:none;">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
@@ -786,7 +796,7 @@
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
             </svg>
-            <span>Lokasi</span>
+            <span>Location</span>
         </a>
         <a href="{{ route('frontend.promotion.index') }}" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -800,7 +810,7 @@
                 <path
                     d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span>Hubungi</span>
+            <span>Call</span>
         </a>
     </div>
 

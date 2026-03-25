@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events | Mal Bali Galeria</title>
-    <meta name="description" content="Stay updated with the latest events and happenings at Mal Bali Galeria. From cultural festivals to shopping marathons.">
+    <meta name="description"
+        content="Stay updated with the latest events and happenings at Mal Bali Galeria. From cultural festivals to shopping marathons.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -18,11 +19,14 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="Events | Mal Bali Galeria">
-    <meta property="twitter:description" content="Stay updated with the latest events and happenings at Mal Bali Galeria.">
+    <meta property="twitter:description"
+        content="Stay updated with the latest events and happenings at Mal Bali Galeria.">
     <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/index.css') }}?v={{ time() }}">
 </head>
 
@@ -32,7 +36,8 @@
         <div class="loader-content">
             <div class="loader-logo">
                 <div class="loader-logo-circle">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image" onerror="this.style.display='none'">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
+                        onerror="this.style.display='none'">
                 </div>
             </div>
             <div class="loader-spinner">
@@ -49,7 +54,9 @@
 
     <!-- Dark Mode Toggle -->
     <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
         <svg class="sun-icon" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="5" />
             <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" />
@@ -59,7 +66,8 @@
             <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor"
+                stroke-width="2" />
         </svg>
     </button>
 
@@ -67,16 +75,14 @@
     <header id="mainHeader">
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;" loading="lazy">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;"
+                    loading="lazy">
             </a>
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}"
-                 alt="Mal Bali Galeria"
-                 class="header-main-logo"
-                 style="height: 45px; width: auto; object-fit: contain;"
-                 loading="lazy">
+            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
+                style="height: 45px; width: auto; object-fit: contain;" loading="lazy">
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -114,7 +120,8 @@
             <div class="events-hero-content">
                 <span class="events-hero-eyebrow">Mal Bali Galeria</span>
                 <h1 class="events-hero-title">What's Happening</h1>
-                <p class="events-hero-subtitle">Experience extraordinary moments at Bali's favorite lifestyle destination. From musical performances to seasonal festivals.</p>
+                <p class="events-hero-subtitle">Experience extraordinary moments at Bali's favorite lifestyle
+                    destination. From musical performances to seasonal festivals.</p>
                 {{-- #5: Hero stat --}}
                 <div class="events-hero-stats">
                     <div class="hero-stat-item">
@@ -125,8 +132,16 @@
                     <div class="hero-stat-item">
                         @php
                             $today = now()->toDateString();
-                            $upcomingCount = $events->filter(fn($e) => $e->start_date && $e->start_date > $today)->count();
-                            $ongoingCount  = $events->filter(fn($e) => $e->start_date && $e->start_date <= $today && ($e->end_date ?? $e->start_date) >= $today)->count();
+                            $upcomingCount = $events
+                                ->filter(fn($e) => $e->start_date && $e->start_date > $today)
+                                ->count();
+                            $ongoingCount = $events
+                                ->filter(
+                                    fn($e) => $e->start_date &&
+                                        $e->start_date <= $today &&
+                                        ($e->end_date ?? $e->start_date) >= $today,
+                                )
+                                ->count();
                         @endphp
                         <span class="hero-stat-number">{{ $upcomingCount }}</span>
                         <span class="hero-stat-label">Upcoming</span>
@@ -199,29 +214,30 @@
             <div class="events-grid" id="eventsGrid">
                 @foreach ($events as $index => $event)
                     @php
-                        $startDate  = $event->start_date;
-                        $day        = $startDate ? date_format(date_create($startDate), 'd') : '—';
+                        $startDate = $event->start_date;
+                        $day = $startDate ? date_format(date_create($startDate), 'd') : '—';
                         $monthShort = $startDate ? date_format(date_create($startDate), 'M') : '';
                         $monthValue = $startDate ? date_format(date_create($startDate), 'm') : 'regular';
                         $monthLabel = $startDate ? date_format(date_create($startDate), 'F') : 'Regular';
-                        $yearValue  = $startDate ? date_format(date_create($startDate), 'Y') : 'regular';
-                        $fullDate   = $startDate ? date_format(date_create($startDate), 'd M Y') : 'Regular Event';
-                        $imgUrl     = $event->primaryPhoto && $event->primaryPhoto->path
-                            ? asset('storage/' . $event->primaryPhoto->path)
-                            : asset('assets/images/no_image.jpg');
+                        $yearValue = $startDate ? date_format(date_create($startDate), 'Y') : 'regular';
+                        $fullDate = $startDate ? date_format(date_create($startDate), 'd M Y') : 'Regular Event';
+                        $imgUrl =
+                            $event->primaryPhoto && $event->primaryPhoto->path
+                                ? asset('storage/' . $event->primaryPhoto->path)
+                                : asset('assets/images/no_image.jpg');
 
                         // Date range if multi-day
-                        $endDate   = $event->end_date ?? null;
+                        $endDate = $event->end_date ?? null;
                         $dateRange = $fullDate;
                         if ($endDate && $endDate !== $startDate) {
-                            $endFmt    = date_format(date_create($endDate), 'd M Y');
+                            $endFmt = date_format(date_create($endDate), 'd M Y');
                             $dateRange = $fullDate . ' – ' . $endFmt;
                         }
 
                         // Event status — handle nullable date
-                        $today    = now()->toDateString();
+                        $today = now()->toDateString();
                         $startStr = $event->start_date;
-                        $endStr   = $endDate ?? $startStr;
+                        $endStr = $endDate ?? $startStr;
                         if (!$startStr) {
                             $statusLabel = 'Regular';
                             $statusClass = 'status-regular';
@@ -237,8 +253,8 @@
                         }
 
                         // #2 & #11: Dynamic category from event attributes
-                        $isPaid     = $event->is_paid ?? false;
-                        $location   = strtolower($event->location ?? '');
+                        $isPaid = $event->is_paid ?? false;
+                        $location = strtolower($event->location ?? '');
                         if (!$isPaid) {
                             $catLabel = 'Free Entry';
                             $catClass = 'cat-free';
@@ -251,20 +267,25 @@
                         }
 
                         // #7: WA share URL
-                        $shareUrl  = route('frontend.event.detail', $event->uuid);
-                        $waText    = urlencode('Jangan lewatkan event seru di Mal Bali Galeria: ' . $event->name . ' 📅 ' . $dateRange . ' 👉 ' . $shareUrl);
-                        $waHref    = 'https://wa.me/?text=' . $waText;
+                        $shareUrl = route('frontend.event.detail', $event->uuid);
+                        $waText = urlencode(
+                            'Jangan lewatkan event seru di Mal Bali Galeria: ' .
+                                $event->name .
+                                ' 📅 ' .
+                                $dateRange .
+                                ' 👉 ' .
+                                $shareUrl,
+                        );
+                        $waHref = 'https://wa.me/?text=' . $waText;
                     @endphp
                     <a href="{{ route('frontend.event.detail', $event->uuid) }}"
-                       class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
-                       data-month="{{ $monthValue }}"
-                       data-month-label="{{ $monthLabel }}"
-                       data-year="{{ $yearValue }}"
-                       data-status="{{ strtolower($statusLabel) }}"
-                       data-date="{{ $event->start_date }}"
-                       data-name="{{ e($event->name) }}">
+                        class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
+                        data-month="{{ $monthValue }}" data-month-label="{{ $monthLabel }}"
+                        data-year="{{ $yearValue }}" data-status="{{ strtolower($statusLabel) }}"
+                        data-date="{{ $event->start_date }}" data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
-                            <img src="{{ $imgUrl }}" alt="{{ $event->name }}" loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
+                            <img src="{{ $imgUrl }}" alt="{{ $event->name }}"
+                                loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
 
                             {{-- Status badge top-left --}}
@@ -284,13 +305,15 @@
                             <div class="event-card-info">
                                 <span class="event-date-pill">{{ $fullDate }}</span>
                                 <h3 class="event-title-v2">{{ $event->name }}</h3>
-                                @if($event->location)
-                                <span class="event-location-v2">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-                                    </svg>
-                                    {{ $event->location }}
-                                </span>
+                                @if ($event->location)
+                                    <span class="event-location-v2">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        {{ $event->location }}
+                                    </span>
                                 @endif
                                 <span class="event-learn-more-btn">Learn More →</span>
                             </div>
@@ -298,16 +321,19 @@
                     </a>
                 @endforeach
             </div>
-                
+
             {{-- JS Empty State Filter (Di luar events-grid) --}}
-            <div class="no-events-improved" id="noEventsState" style="display: {{ count($events) == 0 ? 'flex' : 'none' }}; margin: 60px auto; max-width: 600px; padding: 40px;">
+            <div class="no-events-improved" id="noEventsState"
+                style="display: {{ count($events) == 0 ? 'flex' : 'none' }}; margin: 60px auto; max-width: 600px; padding: 40px;">
                 <div class="no-events-emoji">🎪</div>
                 <h3>No Events Found</h3>
                 <p>Please adjust your month, year, or sort filters to find what you're looking for.</p>
-                <button type="button" class="no-events-cta" style="border:none; cursor:pointer;" onclick="document.getElementById('eventsMonth').value='all'; document.getElementById('eventsYear').value='all'; document.querySelector('.event-status-pill[data-status=&quot;all&quot;]').click();">Show All Events</button>
+                <button type="button" class="no-events-cta" style="border:none; cursor:pointer;"
+                    onclick="document.getElementById('eventsMonth').value='all'; document.getElementById('eventsYear').value='all'; document.querySelector('.event-status-pill[data-status=&quot;all&quot;]').click();">Show
+                    All Events</button>
             </div>
 
-            @if(count($events) > 8)
+            @if (count($events) > 8)
                 <div class="load-more-container">
                     <button id="loadMoreBtn" class="btn-load-more">Load More Events</button>
                     <p class="load-more-hint" id="loadMoreHint"></p>
@@ -324,17 +350,35 @@
                     <h3>Mal Bali Galeria</h3>
                     <p>The FIRST Premium Shopping Mall &amp; Life Style Destination in Bali</p>
                     <div class="footer-social">
-                        <a href="https://www.instagram.com/malbaligaleria/" class="footer-social-link" aria-label="Instagram">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="white" stroke-width="2" /><circle cx="12" cy="12" r="4" fill="none" stroke="white" stroke-width="2" /><circle cx="18" cy="6" r="1" fill="white" /></svg>
+                        <a href="https://www.instagram.com/malbaligaleria/" class="footer-social-link"
+                            aria-label="Instagram">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
+                                    fill="none" stroke="white" stroke-width="2" />
+                                <circle cx="12" cy="12" r="4" fill="none" stroke="white"
+                                    stroke-width="2" />
+                                <circle cx="18" cy="6" r="1" fill="white" />
+                            </svg>
                         </a>
-                        <a href="https://www.facebook.com/p/Mal-Bali-Galeria-100063642820316/?locale=id_ID" class="footer-social-link" aria-label="Facebook">
-                            <svg viewBox="0 0 24 24"><path fill="white" d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" /></svg>
+                        <a href="https://www.facebook.com/p/Mal-Bali-Galeria-100063642820316/?locale=id_ID"
+                            class="footer-social-link" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                            </svg>
                         </a>
                         <a href="https://x.com/infombg" class="footer-social-link" aria-label="Twitter">
-                            <svg viewBox="0 0 24 24"><path fill="white" d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" /></svg>
+                            <svg viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
+                            </svg>
                         </a>
-                        <a href="https://www.tiktok.com/@malbaligaleria" class="footer-social-link" aria-label="TikTok">
-                            <svg viewBox="0 0 24 24"><path fill="white" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" /></svg>
+                        <a href="https://www.tiktok.com/@malbaligaleria" class="footer-social-link"
+                            aria-label="TikTok">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="white"
+                                    d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -353,17 +397,27 @@
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <div class="footer-contact-item">
-                        <svg viewBox="0 0 24 24" fill="#f5f5dc"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" fill="#2c5f5d"/></svg>
-                        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" fill="#f5f5dc">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" fill="#2c5f5d" />
+                        </svg>
+                        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank"
+                            rel="noopener noreferrer">
                             <p>Jl. Simpang Dewa Ruci Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
                         </a>
                     </div>
                     <div class="footer-contact-item">
-                        <svg viewBox="0 0 24 24" fill="#f5f5dc"><path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                        <svg viewBox="0 0 24 24" fill="#f5f5dc">
+                            <path
+                                d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
                         <a href="tel:+62361755277">(0361) 755277</a>
                     </div>
                     <div class="footer-contact-item">
-                        <svg viewBox="0 0 24 24" fill="#f5f5dc"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" fill="none" stroke="#2c5f5d" stroke-width="1.5"/></svg>
+                        <svg viewBox="0 0 24 24" fill="#f5f5dc">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" fill="none" stroke="#2c5f5d" stroke-width="1.5" />
+                        </svg>
                         <a href="mailto:info@malbaligaleria.co.id">info@malbaligaleria.co.id</a>
                     </div>
                 </div>
@@ -399,9 +453,10 @@
         </a>
         <a href="tel:+62361755277" class="mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span>Hubungi</span>
+            <span>Call</span>
         </a>
     </div>
 
@@ -462,9 +517,11 @@
         const darkModeToggle = document.getElementById("darkModeToggle");
         if (localStorage.getItem("darkMode") === "enabled") document.body.classList.add("dark-mode");
         darkModeToggle.addEventListener("click", (e) => {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             document.body.classList.toggle("dark-mode");
-            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" :
+            "disabled");
         });
 
         // ===== #10: SCROLL TO TOP =====
@@ -472,13 +529,16 @@
         window.addEventListener("scroll", () => {
             scrollTopBtn.classList.toggle("visible", window.pageYOffset > 400);
         });
-        scrollTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        scrollTopBtn.addEventListener("click", () => window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        }));
 
         // ===== #1 & #8: FILTER / SORT ENGINE =====
         let activeStatus = 'all';
-        let activeMonth  = 'all';
-        let activeYear   = 'all';
-        let activeSort   = 'newest';
+        let activeMonth = 'all';
+        let activeYear = 'all';
+        let activeSort = 'newest';
 
         // Collect all event cards (including hidden initially)
         const allCards = [...document.querySelectorAll('.event-card-v2')];
@@ -500,7 +560,7 @@
 
         const yearSelectEl = document.getElementById('eventsYear');
         if (yearSelectEl && yearMap.size > 0) {
-            const sortedYears = Array.from(yearMap.entries()).sort((a,b) => b[0].localeCompare(a[0]));
+            const sortedYears = Array.from(yearMap.entries()).sort((a, b) => b[0].localeCompare(a[0]));
             sortedYears.forEach(([key, label]) => {
                 const opt = document.createElement('option');
                 opt.value = key;
@@ -538,21 +598,24 @@
             const grid = document.getElementById('eventsGrid');
             let visible = allCards.filter(card => {
                 const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
-                const monthMatch  = activeMonth === 'all'  || card.dataset.month  === activeMonth;
-                const yearMatch   = activeYear === 'all'   || card.dataset.year   === activeYear;
+                const monthMatch = activeMonth === 'all' || card.dataset.month === activeMonth;
+                const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
                 return statusMatch && monthMatch && yearMatch;
             });
 
             // Sort
             visible.sort((a, b) => {
-                if (activeSort === 'newest')   return b.dataset.date.localeCompare(a.dataset.date);
-                if (activeSort === 'oldest')   return a.dataset.date.localeCompare(b.dataset.date);
+                if (activeSort === 'newest') return b.dataset.date.localeCompare(a.dataset.date);
+                if (activeSort === 'oldest') return a.dataset.date.localeCompare(b.dataset.date);
                 if (activeSort === 'name_asc') return (a.dataset.name || '').localeCompare(b.dataset.name || '');
                 return 0;
             });
 
             // Hide all first
-            allCards.forEach(c => { c.style.display = 'none'; c.classList.remove('event-reveal'); });
+            allCards.forEach(c => {
+                c.style.display = 'none';
+                c.classList.remove('event-reveal');
+            });
 
             // Show filtered with animation (#6)
             visible.forEach((card, i) => {
@@ -573,7 +636,8 @@
 
             // Hide load more when filtering (show all filtered results)
             const lmContainer = document.querySelector('.load-more-container');
-            if (lmContainer) lmContainer.style.display = (visible.length === 0 || activeStatus !== 'all' || activeMonth !== 'all' || activeYear !== 'all') ? 'none' : '';
+            if (lmContainer) lmContainer.style.display = (visible.length === 0 || activeStatus !== 'all' || activeMonth !==
+                'all' || activeYear !== 'all') ? 'none' : '';
         }
 
         // ===== #6: LOAD MORE with animation =====
@@ -585,8 +649,13 @@
                     const card = $(this);
                     setTimeout(() => {
                         card.removeClass('event-hidden')
-                            .css({ opacity: 0, transform: 'translateY(20px)' })
-                            .animate({ opacity: 1 }, 300);
+                            .css({
+                                opacity: 0,
+                                transform: 'translateY(20px)'
+                            })
+                            .animate({
+                                opacity: 1
+                            }, 300);
                         card[0].style.transform = 'translateY(0)';
                         card[0].style.transition = 'transform 0.4s ease';
                     }, i * 80);

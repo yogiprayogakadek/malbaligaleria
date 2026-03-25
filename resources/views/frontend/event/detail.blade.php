@@ -81,7 +81,8 @@
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;" loading="lazy">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;"
+                    loading="lazy">
             </a>
         </div>
 
@@ -154,7 +155,7 @@
 
         <section class="event-detail-glass-section">
             <div class="event-glass-container">
-                
+
                 <!-- Main Floating Card -->
                 <div class="event-glass-card">
                     <!-- Left Sidebar (Meta & Actions) -->
@@ -178,7 +179,8 @@
                                     <button class="gpc-arrow gpc-next" id="gpcNext">›</button>
                                     <div class="gpc-dots" id="gpcDots">
                                         @foreach ($photos as $i => $photo)
-                                            <span class="gpc-dot {{ $i == 0 ? 'active' : '' }}" data-index="{{ $i }}"></span>
+                                            <span class="gpc-dot {{ $i == 0 ? 'active' : '' }}"
+                                                data-index="{{ $i }}"></span>
                                         @endforeach
                                     </div>
                                 @endif
@@ -193,11 +195,20 @@
                             <div class="glass-meta">
                                 <h4>Date & Time</h4>
                                 <div class="meta-row">
-                                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"
+                                            ry="2" />
+                                        <line x1="16" y1="2" x2="16" y2="6" />
+                                        <line x1="8" y1="2" x2="8" y2="6" />
+                                        <line x1="3" y1="10" x2="21" y2="10" />
+                                    </svg>
                                     <span>{{ $event['start_date'] }} - {{ $event['end_date'] }}</span>
                                 </div>
                                 <div class="meta-row">
-                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
                                     <span>{{ $event['start_time'] }} - {{ $event['end_time'] }}</span>
                                 </div>
                             </div>
@@ -205,7 +216,10 @@
                             <div class="glass-meta">
                                 <h4>Location</h4>
                                 <div class="meta-row">
-                                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" />
+                                    </svg>
                                     <span>{{ $event['location'] ?? 'Information Desk' }}</span>
                                 </div>
                             </div>
@@ -218,12 +232,21 @@
                                 data-event-location="{{ $event['location'] ?? 'Mal Bali Galeria' }}"
                                 data-event-start="{{ $event['start_date'] }} {{ $event['start_time'] }}"
                                 data-event-end="{{ $event['end_date'] }} {{ $event['end_time'] }}">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
                                 Add to Calendar
                             </a>
                             <a href="#" class="glass-btn btn-secondary" id="shareEventBtn"
                                 data-event-name="{{ $event['name'] }}" data-event-url="{{ url()->current() }}">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                                    <polyline points="16 6 12 2 8 6" />
+                                    <line x1="12" y1="2" x2="12" y2="15" />
+                                </svg>
                                 Share Event
                             </a>
                         </div>
@@ -231,8 +254,8 @@
 
                     <!-- Right Main Content -->
                     <div class="glass-content">
-                    <div class="glass-header">
-                            @if($event['is_exhibition'])
+                        <div class="glass-header">
+                            @if ($event['is_exhibition'])
                                 <span class="glass-badge glass-badge-exhibition">Exhibition</span>
                             @elseif($event['is_regular'])
                                 <span class="glass-badge glass-badge-regular">Regular Show</span>
@@ -272,16 +295,18 @@
                         <h3>Upcoming Events <span class="event-count">({{ count($upcomingEvents) }})</span></h3>
                     </div>
 
-                    @if(count($upcomingEvents) > 0)
+                    @if (count($upcomingEvents) > 0)
                         <div class="event-slider-wrapper">
                             <div class="event-grid" id="similarEventGrid">
-                                @foreach($upcomingEvents as $upcoming)
-                                    <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}" class="event-card" style="text-decoration:none;">
+                                @foreach ($upcomingEvents as $upcoming)
+                                    <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
+                                        class="event-card" style="text-decoration:none;">
                                         <div class="event-card-bg"
                                             style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                         </div>
                                         <div class="event-card-content">
-                                            <span class="event-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
+                                            <span
+                                                class="event-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
                                             <h3>{{ $upcoming->name }}</h3>
                                             <p class="event-desc">{{ Str::limit($upcoming->description, 110) }}</p>
                                             <span class="event-link">Learn More →</span>
@@ -295,9 +320,12 @@
                             <button class="event-nav-btn" id="similarEventNextBtn">→</button>
                         </div>
                     @else
-                        <div style="padding: 40px; text-align: center; border-radius: 20px; background: rgba(0,0,0,0.03);">
+                        <div
+                            style="padding: 40px; text-align: center; border-radius: 20px; background: rgba(0,0,0,0.03);">
                             <div style="font-size: 40px;">🎪</div>
-                            <h3 style="margin: 10px 0; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-color);">No other events</h3>
+                            <h3
+                                style="margin: 10px 0; font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-color);">
+                                No other events</h3>
                             <p style="color: #666; font-size: 0.95rem;">Check back later for more exciting events!</p>
                         </div>
                     @endif
@@ -430,9 +458,10 @@
         </a>
         <a href="tel:+62361755277" class="mobile-cta-btn-ev">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <span>Hubungi</span>
+            <span>Call</span>
         </a>
     </div>
 
