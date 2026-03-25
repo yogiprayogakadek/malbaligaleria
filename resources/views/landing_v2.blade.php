@@ -329,7 +329,7 @@
                         </svg>
                         Live Entertainment
                     </div> --}}
-                    <h2>This Month Events</h2>
+                    <h2>What's Happening</h2>
                     <p class="regular-shows-subtitle">Every week, always entertaining</p>
                 </div>
 
