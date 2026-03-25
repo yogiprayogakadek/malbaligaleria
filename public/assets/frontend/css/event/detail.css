@@ -1652,11 +1652,15 @@ body.dark-mode .mobile-cta-btn-ev svg { stroke: var(--accent-color); }
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 30px;
+    margin-top: 35px;
+    position: relative;
+    z-index: 50;
+    min-height: 60px;
+    align-items: center;
 }
 
 .event-controls.hidden {
-    display: none;
+    display: none !important;
 }
 
 .event-nav-btn {
@@ -1885,11 +1889,15 @@ body.dark-mode .event-img-wrapper { background: #252a29; }
     display: flex;
     justify-content: center;
     gap: 14px;
-    margin-top: 28px;
+    margin-top: 35px;
+    position: relative;
+    z-index: 50;
+    min-height: 60px;
+    clear: both;
 }
 
 .glass-similar .event-controls.hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Single card — center it */

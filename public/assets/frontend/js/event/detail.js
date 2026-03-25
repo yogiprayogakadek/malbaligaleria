@@ -161,22 +161,34 @@ if (footerElements.length > 0) {
 
     const cards = grid.querySelectorAll(".event-card");
     let currentIndex = 0;
-    let cardsPerView = window.innerWidth <= 768 ? 1 : 3;
+    
+    // Improved cardsPerView logic for better responsiveness
+    const getCardsPerView = () => {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 1100) return 2;
+        return 3;
+    };
+    
+    let cardsPerView = getCardsPerView();
 
     const update = () => {
         if (!cards.length) return;
         const cardWidth = cards[0].offsetWidth;
-        const gap = 30;
+        // Sync gap with CSS (24px for glass-similar .event-grid)
+        const gap = 24; 
         grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
+        
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex >= cards.length - cardsPerView;
+        
         if (controls) {
+            // Show controls if cards length is strictly greater than what we can see
             controls.classList.toggle("hidden", cards.length <= cardsPerView);
         }
     };
 
     const onResize = () => {
-        cardsPerView = window.innerWidth <= 768 ? 1 : 3;
+        cardsPerView = getCardsPerView();
         currentIndex = 0;
         update();
     };
