@@ -375,16 +375,17 @@ body.dark-mode .menu-btn span {
 .sidebar {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 0;
     width: 400px;
     height: 100vh;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 102;
     padding: 100px 50px 120px;
     overflow-y: auto;
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
 }
 
 body.dark-mode .sidebar {
@@ -393,7 +394,7 @@ body.dark-mode .sidebar {
 }
 
 .sidebar.active {
-    right: 0;
+    transform: translateX(0);
 }
 
 .sidebar-logo {
