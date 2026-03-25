@@ -305,6 +305,9 @@
                             <div class="event-card-info">
                                 <span class="event-date-pill">{{ $fullDate }}</span>
                                 <h3 class="event-title-v2">{{ $event->name }}</h3>
+                                @if ($event->description)
+                                    <p class="event-desc-v2">{{ Str::limit($event->description, 80) }}</p>
+                                @endif
                                 @if ($event->location)
                                     <span class="event-location-v2">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -348,7 +351,7 @@
             <div class="footer-content">
                 <div class="footer-column footer-about">
                     <h3>Mal Bali Galeria</h3>
-                    <p>The FIRST Premium Shopping Mall &amp; Life Style Destination in Bali</p>
+                    <p>The FIRST Premium Shopping Mall &amp; Life Style Destination in Bali.</p>
                     <div class="footer-social">
                         <a href="https://www.instagram.com/malbaligaleria/" class="footer-social-link"
                             aria-label="Instagram">
@@ -426,7 +429,7 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved.</p>
+                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
                 <div class="footer-brand">
                     <span class="footer-brand-logo">Mal Bali Galeria</span>
                     <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
@@ -435,30 +438,7 @@
         </div>
     </footer>
 
-    <!-- Sticky Mobile CTA -->
-    <div class="mobile-sticky-cta" id="mobileStickyBar">
-        <a href="{{ route('frontend.landing') }}" class="mobile-cta-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-            <span>Home</span>
-        </a>
-        <a href="{{ route('frontend.promotion.index') }}" class="mobile-cta-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                <line x1="7" y1="7" x2="7.01" y2="7" />
-            </svg>
-            <span>Promo</span>
-        </a>
-        <a href="tel:+62361755277" class="mobile-cta-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-            <span>Call</span>
-        </a>
-    </div>
+
 
     {{-- #10: Scroll to top --}}
     <button class="event-scroll-top" id="scrollToTop" aria-label="Scroll to top">
