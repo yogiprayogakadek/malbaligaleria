@@ -951,7 +951,7 @@ body.dark-mode .info-cell p { color: var(--text-light); }
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding-top: 120px;
+    /* padding-top: 120px; */
     position: relative;
 }
 
