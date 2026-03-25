@@ -1664,19 +1664,30 @@ body.dark-mode .mobile-cta-btn-ev svg { stroke: var(--accent-color); }
 }
 
 .event-nav-btn {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background: var(--primary-gradient, linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%));
-    border: none;
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 15px rgba(44, 95, 93, 0.25);
+    width: 55px !important;
+    height: 55px !important;
+    border-radius: 50% !important;
+    background: var(--primary-color, #2c5f5d) !important;
+    background: var(--primary-gradient, linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%)) !important;
+    border: none !important;
+    color: white !important;
+    font-size: 22px !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 3px 15px rgba(44, 95, 93, 0.25) !important;
+    position: relative !important;
+    z-index: 100 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.event-nav-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
 }
 
 .event-nav-btn:hover {

@@ -359,8 +359,18 @@
                             </div>
                         </div>
                         <div class="event-controls" id="similarEventControls">
-                            <button class="event-nav-btn" id="similarEventPrevBtn">←</button>
-                            <button class="event-nav-btn" id="similarEventNextBtn">→</button>
+                            <button class="event-nav-btn" id="similarEventPrevBtn" aria-label="Previous">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="3"
+                                    fill="none">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button class="event-nav-btn" id="similarEventNextBtn" aria-label="Next">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="3"
+                                    fill="none">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
                         </div>
                     @else
                         <div
