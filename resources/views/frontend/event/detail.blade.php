@@ -142,7 +142,7 @@
             <div class="event-hero-content">
                 <span class="event-hero-eyebrow">Mal Bali Galeria</span>
                 <h1 class="event-hero-title">{{ $event['name'] }}</h1>
-                <p class="event-hero-subtitle">{{ $event['start_date'] }} – {{ $event['end_date'] }}</p>
+                <p class="event-hero-subtitle">{{ $event['start_date'] }} {{ $event['end_date'] }}</p>
                 <a href="{{ route('frontend.event.index') }}" class="event-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7" />
