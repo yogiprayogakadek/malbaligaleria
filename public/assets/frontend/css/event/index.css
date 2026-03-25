@@ -846,7 +846,19 @@ body.dark-mode .event-location-v2 { color: #777; }
     .events-sort-select { width: 100%; box-sizing: border-box; }
     .event-scroll-top { bottom: 90px; right: 16px; width: 42px; height: 42px; }
     .events-section-label { flex-wrap: wrap; gap: 10px; }
+    .events-count-badge { flex-shrink: 0; }
     .events-main { padding: 30px 16px 80px; }
+    .events-filter-right { width: 100%; }
+    .events-filter-right > div {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .events-sort-select {
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
 }
 @media (max-width: 480px) {
     .events-hero-stats {
