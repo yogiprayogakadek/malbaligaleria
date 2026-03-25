@@ -301,7 +301,9 @@
                                 @foreach ($upcomingEvents as $upcoming)
                                     @php
                                         $startDate = $upcoming->start_date;
-                                        $fullDate = $startDate ? date_format(date_create($startDate), 'd M Y') : 'Regular Event';
+                                        $fullDate = $startDate
+                                            ? date_format(date_create($startDate), 'd M Y')
+                                            : 'Regular Event';
                                         $imgUrl =
                                             $upcoming->primaryPhoto && $upcoming->primaryPhoto->path
                                                 ? asset('storage/' . $upcoming->primaryPhoto->path)
@@ -344,7 +346,8 @@
                                                 @if ($upcoming->location)
                                                     <span class="event-location-v2">
                                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                                            stroke-width="2"
+                                                            style="width:13px;height:13px;flex-shrink:0;">
                                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                                             <circle cx="12" cy="10" r="3" />
                                                         </svg>
@@ -360,14 +363,14 @@
                         </div>
                         <div class="event-controls" id="similarEventControls">
                             <button class="event-nav-btn" id="similarEventPrevBtn" aria-label="Previous">
-                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="3"
-                                    fill="none">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
+                                    stroke-width="3" fill="none">
                                     <polyline points="15 18 9 12 15 6"></polyline>
                                 </svg>
                             </button>
                             <button class="event-nav-btn" id="similarEventNextBtn" aria-label="Next">
-                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="3"
-                                    fill="none">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
+                                    stroke-width="3" fill="none">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
                             </button>
@@ -456,7 +459,7 @@
                         </svg>
                         <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer"
                             style="text-decoration: none">
-                            <p>Jl. Simpang Dewa Ruci Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
+                            <p>Simpang Dewa Ruci<br>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
                         </a>
                     </div>
                     <div class="footer-contact-item">

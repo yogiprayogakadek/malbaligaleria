@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Stores | Mal Bali Galeria</title>
-    <meta name="description" content="Welcome our newest brands and stores at Mal Bali Galeria. Discover the latest arrivals in Bali's premium shopping destination.">
-    
+    <meta name="description"
+        content="Welcome our newest brands and stores at Mal Bali Galeria. Discover the latest arrivals in Bali's premium shopping destination.">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -222,7 +223,7 @@
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
                         </svg>
-                        <p>Jl. Simpang Dewa Ruci Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
+                        <p>Simpang Dewa Ruci<br>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
                     </div>
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24">
