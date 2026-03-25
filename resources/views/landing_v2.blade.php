@@ -344,7 +344,7 @@
                                 <div class="rsc-card-content">
                                     <span class="event-date">Every Weekend</span>
                                     <h3>{{ $rEvent->name }}</h3>
-                                    <p class="event-desc">{{ Str::limit($rEvent->description, 110) }}</p>
+                                    <p class="event-desc">{{ Str::limit($rEvent->description, 80) }}</p>
                                     <span class="event-link">Learn More →</span>
                                 </div>
                             </a>
@@ -387,7 +387,17 @@
                                         </span>
                                     @endif
                                     <h3>{{ $exEvent->name }}</h3>
-                                    <p class="event-desc">{{ Str::limit($exEvent->description, 110) }}</p>
+                                    <p class="event-desc">{{ Str::limit($exEvent->description, 80) }}</p>
+                                    @if ($exEvent->location)
+                                        <span class="event-location">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                                <circle cx="12" cy="10" r="3" />
+                                            </svg>
+                                            {{ $exEvent->location }}
+                                        </span>
+                                    @endif
                                     <span class="event-link">Learn More →</span>
                                 </div>
                             </a>
@@ -418,7 +428,17 @@
                                 <span
                                     class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
-                                <p class="event-desc">{{ Str::limit($event->description, 110) }}</p>
+                                <p class="event-desc">{{ Str::limit($event->description, 80) }}</p>
+                                @if ($event->location)
+                                    <span class="event-location" style="margin-bottom: 12px;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        {{ $event->location }}
+                                    </span>
+                                @endif
                                 <span class="event-link">Learn More →</span>
                             </div>
                         </a>

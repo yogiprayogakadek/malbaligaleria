@@ -1950,16 +1950,25 @@ body.dark-mode .event-card:hover {
     color: rgba(255, 255, 255, 1);
 }
 
+.event-location {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
 .event-link {
     display: inline-flex;
     align-items: center;
     color: #ffffff;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     gap: 8px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 8px 20px;
+    padding: 10px 24px;
     letter-spacing: 1px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50px;
@@ -2258,6 +2267,14 @@ body.dark-mode .regular-show-card {
 }
 
 /* Override event-desc inside rsc card — 2 lines only */
+.rsc-card-content .event-card p {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
 .rsc-card-content .event-desc {
     font-size: 13px;
     line-height: 1.5;
