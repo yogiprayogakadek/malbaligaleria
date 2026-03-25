@@ -299,17 +299,58 @@
                         <div class="event-slider-wrapper">
                             <div class="event-grid" id="similarEventGrid">
                                 @foreach ($upcomingEvents as $upcoming)
+                                    @php
+                                        $startDate = $upcoming->start_date;
+                                        $fullDate = $startDate ? date_format(date_create($startDate), 'd M Y') : 'Regular Event';
+                                        $imgUrl =
+                                            $upcoming->primaryPhoto && $upcoming->primaryPhoto->path
+                                                ? asset('storage/' . $upcoming->primaryPhoto->path)
+                                                : asset('assets/images/no_image.jpg');
+
+                                        // Status calculation
+                                        $today = now()->toDateString();
+                                        $endDate = $upcoming->end_date ?? $startDate;
+                                        if (!$startDate) {
+                                            $statusLabel = 'Regular';
+                                            $statusClass = 'status-regular';
+                                        } elseif ($today < $startDate) {
+                                            $statusLabel = 'Upcoming';
+                                            $statusClass = 'status-upcoming';
+                                        } elseif ($today >= $startDate && $today <= $endDate) {
+                                            $statusLabel = 'Ongoing';
+                                            $statusClass = 'status-ongoing';
+                                        } else {
+                                            $statusLabel = 'Ended';
+                                            $statusClass = 'status-ended';
+                                        }
+                                    @endphp
                                     <a href="{{ route('frontend.event.detail', $upcoming->uuid) }}"
-                                        class="event-card" style="text-decoration:none;">
-                                        <div class="event-card-bg"
-                                            style="background-image: url({{ $upcoming->primaryPhoto && $upcoming->primaryPhoto->path ? asset('storage/' . $upcoming->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
-                                        </div>
-                                        <div class="event-card-content">
+                                        class="event-card event-card-v2" style="text-decoration:none;">
+                                        <div class="event-img-wrapper">
+                                            <img src="{{ $imgUrl }}" alt="{{ $upcoming->name }}">
+                                            <div class="event-img-overlay"></div>
                                             <span
-                                                class="event-date">{{ date_format(date_create($upcoming->start_date), 'd M Y') }}</span>
-                                            <h3>{{ $upcoming->name }}</h3>
-                                            <p class="event-desc">{{ Str::limit($upcoming->description, 110) }}</p>
-                                            <span class="event-link">Learn More →</span>
+                                                class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
+
+                                            <div class="event-card-info">
+                                                <span class="event-date-pill">{{ $fullDate }}</span>
+                                                <h3 class="event-title-v2">{{ $upcoming->name }}</h3>
+                                                @if ($upcoming->description)
+                                                    <p class="event-desc-v2">
+                                                        {{ Str::limit($upcoming->description, 80) }}</p>
+                                                @endif
+                                                @if ($upcoming->location)
+                                                    <span class="event-location-v2">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                                            <circle cx="12" cy="10" r="3" />
+                                                        </svg>
+                                                        {{ $upcoming->location }}
+                                                    </span>
+                                                @endif
+                                                <span class="event-learn-more-btn">Learn More →</span>
+                                            </div>
                                         </div>
                                     </a>
                                 @endforeach
