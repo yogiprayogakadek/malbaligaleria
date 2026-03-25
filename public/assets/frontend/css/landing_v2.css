@@ -1827,7 +1827,7 @@ body.dark-mode .event-subtitle {
 
 .event-card {
     position: relative;
-    height: 450px;
+    height: 580px;            /* portrait height matching regular-shows */
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
@@ -1897,7 +1897,7 @@ body.dark-mode .event-card:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 35px;
+    padding: 28px;            /* matching rsc-card-content */
     z-index: 2;
     color: white;
 }
@@ -1906,11 +1906,11 @@ body.dark-mode .event-card:hover {
     display: inline-block;
     background: var(--primary-gradient);
     color: white;
-    padding: 10px 24px;
+    padding: 7px 16px;        /* tighter padding matching rsc */
     border-radius: 25px;
-    font-size: 13px;
+    font-size: 11px;          /* matching rsc */
     font-weight: 700;
-    margin-bottom: 18px;
+    margin-bottom: 10px;      /* matching rsc */
     letter-spacing: 1.2px;
     text-transform: uppercase;
     box-shadow: 0 3px 15px rgba(44, 95, 93, 0.3);
@@ -1924,19 +1924,19 @@ body.dark-mode .event-card:hover {
 
 .event-card h3 {
     font-family: "Playfair Display", serif;
-    font-size: 32px;
+    font-size: 22px;          /* matching rsc-card-content h3 */
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 8px;       /* matching rsc */
     color: white;
-    line-height: 1.3;
+    line-height: 1.2;         /* matching rsc */
     letter-spacing: 0.5px;
 }
 
 .event-card p {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 13px;          /* matching rsc */
+    line-height: 1.5;         /* matching rsc */
     color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 20px;
+    margin-bottom: 14px;      /* matching rsc */
     letter-spacing: 0.3px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
