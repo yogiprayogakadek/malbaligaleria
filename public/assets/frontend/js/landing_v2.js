@@ -352,56 +352,44 @@ window.addEventListener("resize", () => {
 updateCardsPerView();
 
 
-const eventGrid = document.getElementById("eventGrid");
-const eventPrevBtn = document.getElementById("eventPrevBtn");
-const eventNextBtn = document.getElementById("eventNextBtn");
-const eventControls = document.getElementById("eventControls");
-const eventCards = document.querySelectorAll(".event-card");
+// ========================================
+// UPCOMING EVENTS SLIDER
+// ========================================
+(function initUpcomingEventsSlider() {
+    const eventGrid = document.getElementById("eventGrid");
+    const eventPrevBtn = document.getElementById("eventPrevBtn");
+    const eventNextBtn = document.getElementById("eventNextBtn");
+    const eventControls = document.getElementById("eventControls");
+    if (!eventGrid || !eventPrevBtn || !eventNextBtn) return;
 
-let eventCurrentIndex = 0;
-let eventCardsPerView = 2;
+    // SCOPED SELECTOR: Only cards within this grid
+    const eventCards = eventGrid.querySelectorAll(".event-card");
+    let eventCurrentIndex = 0;
+    let eventCardsPerView = window.innerWidth <= 768 ? 1 : 2;
 
+    const updateEventSlider = () => {
+        if (!eventCards.length) return;
+        const cardWidth = eventCards[0].offsetWidth;
+        const gap = 30;
+        const offset = -(eventCurrentIndex * (cardWidth + gap));
+        eventGrid.style.transform = `translateX(${offset}px)`;
 
-const updateEventCardsPerView = () => {
-    if (window.innerWidth <= 768) {
-        eventCardsPerView = 1;
-    } else {
-        eventCardsPerView = 2;
-    }
-    updateEventSlider();
-    updateEventControlsVisibility();
-};
-
-const updateEventSlider = () => {
-    if (!eventGrid || eventCards.length === 0) return;
-
-    const cardWidth = eventCards[0].offsetWidth;
-    const gap = 30;
-    const offset = -(eventCurrentIndex * (cardWidth + gap));
-    eventGrid.style.transform = `translateX(${offset}px)`;
-
-
-    if (eventPrevBtn && eventNextBtn) {
         eventPrevBtn.disabled = eventCurrentIndex === 0;
-        eventNextBtn.disabled =
-            eventCurrentIndex >= eventCards.length - eventCardsPerView;
-    }
-};
+        eventNextBtn.disabled = eventCurrentIndex >= eventCards.length - eventCardsPerView;
+    };
 
-const updateEventControlsVisibility = () => {
-    if (!eventControls) return;
+    const updateEventControlsVisibility = () => {
+        if (!eventControls) return;
+        const shouldHideControls = eventCards.length <= eventCardsPerView;
+        eventControls.classList.toggle("hidden", shouldHideControls);
+    };
 
+    const onResize = () => {
+        eventCardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        updateEventSlider();
+        updateEventControlsVisibility();
+    };
 
-    const shouldHideControls = eventCards.length <= eventCardsPerView;
-
-    if (shouldHideControls) {
-        eventControls.classList.add("hidden");
-    } else {
-        eventControls.classList.remove("hidden");
-    }
-};
-
-if (eventPrevBtn && eventNextBtn && eventGrid) {
     eventPrevBtn.addEventListener("click", () => {
         if (eventCurrentIndex > 0) {
             eventCurrentIndex--;
@@ -416,41 +404,30 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
         }
     });
 
-
+    // Autoplay logic
     let eventAutoplayInterval = setInterval(() => {
         if (eventCards.length > eventCardsPerView) {
-            if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
-                eventCurrentIndex++;
-            } else {
-                eventCurrentIndex = 0;
-            }
+            eventCurrentIndex = (eventCurrentIndex < eventCards.length - eventCardsPerView) ? eventCurrentIndex + 1 : 0;
             updateEventSlider();
         }
     }, 6000);
 
-
-    eventGrid.addEventListener("mouseenter", () => {
-        clearInterval(eventAutoplayInterval);
-    });
-
+    eventGrid.addEventListener("mouseenter", () => clearInterval(eventAutoplayInterval));
     eventGrid.addEventListener("mouseleave", () => {
         eventAutoplayInterval = setInterval(() => {
             if (eventCards.length > eventCardsPerView) {
-                if (eventCurrentIndex < eventCards.length - eventCardsPerView) {
-                    eventCurrentIndex++;
-                } else {
-                    eventCurrentIndex = 0;
-                }
+                eventCurrentIndex = (eventCurrentIndex < eventCards.length - eventCardsPerView) ? eventCurrentIndex + 1 : 0;
                 updateEventSlider();
             }
         }, 6000);
     });
 
-
-    window.addEventListener("resize", () => {
-        updateEventCardsPerView();
-    });
-
+    window.addEventListener("resize", onResize);
+    
+    // Initial call
+    updateEventSlider();
+    updateEventControlsVisibility();
+})();
 
     updateEventCardsPerView();
 }
