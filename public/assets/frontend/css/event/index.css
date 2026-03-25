@@ -500,10 +500,16 @@ body.dark-mode .mobile-cta-btn svg { stroke: var(--accent-color); }
         left: auto;
     }
     .header-left { display: none; }
-    /* Match landing_v2: keep logo at 45px height / 168px width */
+    /* Match landing_v2: keep logo at 45px height */
     .header-main-logo { height: 45px !important; width: auto !important; max-width: none !important; max-height: none !important; object-fit: contain; }
     .mobile-sticky-cta { display: flex; flex-direction: row; align-items: stretch; }
     footer { padding: 60px 20px 70px; }
+    /* Match landing_v2 footer responsive layout */
+    .footer-content { grid-template-columns: 1fr; gap: 40px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .footer-contact-item a { font-size: 14px; }
+    .footer-links a { font-size: 14px; }
+    .footer-column h3 { font-size: 20px; margin-bottom: 18px; }
     .dark-mode-toggle { bottom: 85px; right: 16px; width: 46px; height: 46px; }
 }
 
