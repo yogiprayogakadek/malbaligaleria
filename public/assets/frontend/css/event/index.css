@@ -228,10 +228,11 @@ body.dark-mode .events-count-badge { background: rgba(138,169,167,0.12); color: 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
-    min-width: 0; /* prevent grid from overflowing */
+    min-width: 0;
     width: 100%;
-    /* Override sembarang centering container ke start */
+    max-width: 100%;
     justify-content: start !important;
+    box-sizing: border-box;
 }
 
 /* ===== EVENT CARD ===== */
@@ -241,6 +242,9 @@ body.dark-mode .events-count-badge { background: rgba(138,169,167,0.12); color: 
     transition: all 0.4s ease;
     text-decoration: none; color: inherit;
     cursor: pointer;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .event-img-wrapper {
     position: relative; width: 100%;
@@ -396,6 +400,7 @@ footer {
     position: relative;
     overflow: hidden;
     margin-top: 60px;
+    box-sizing: border-box;
 }
 footer::before {
     content: "";
@@ -487,7 +492,7 @@ body.dark-mode .mobile-cta-btn svg { stroke: var(--accent-color); }
     .footer-brand { text-align: center; }
 }
 @media (max-width: 768px) {
-    header { padding: 12px 16px; }
+    header { padding: 15px 20px; }
     /* Make .logo part of flex flow on mobile so hamburger stays right */
     .logo {
         position: static;
@@ -495,11 +500,10 @@ body.dark-mode .mobile-cta-btn svg { stroke: var(--accent-color); }
         left: auto;
     }
     .header-left { display: none; }
-    /* Keep same size as desktop - no shrink on mobile */
-    .header-logo-circle { width: 50px; height: 50px; }
-    .header-main-logo { max-width: 120px; max-height: 40px; }
+    /* Match landing_v2: keep logo at 45px height / 168px width */
+    .header-main-logo { height: 45px !important; width: auto !important; max-width: none !important; max-height: none !important; object-fit: contain; }
     .mobile-sticky-cta { display: flex; flex-direction: row; align-items: stretch; }
-    footer { padding-bottom: 70px; }
+    footer { padding: 60px 20px 70px; }
     .dark-mode-toggle { bottom: 85px; right: 16px; width: 46px; height: 46px; }
 }
 
