@@ -469,12 +469,22 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
     const cards = grid.querySelectorAll(".regular-show-card");
     let currentIndex = 0;
     let cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+    const isMobile = () => window.innerWidth <= 768;
 
     const update = () => {
         if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth;
-        const gap = 30;
-        grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
+
+        if (isMobile()) {
+            // On mobile, use native scroll-snap scrollTo
+            const cardWidth = grid.offsetWidth;
+            grid.scrollTo({ left: currentIndex * cardWidth, behavior: "smooth" });
+        } else {
+            // On desktop, use transform translateX
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 30;
+            grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
+        }
+
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex >= cards.length - cardsPerView;
         if (controls) {
@@ -484,6 +494,13 @@ if (eventPrevBtn && eventNextBtn && eventGrid) {
 
     const onResize = () => {
         cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        if (!isMobile()) {
+            // Reset scroll when switching back to desktop
+            grid.scrollLeft = 0;
+        } else {
+            grid.style.transform = "";
+        }
+        currentIndex = 0;
         update();
     };
 
