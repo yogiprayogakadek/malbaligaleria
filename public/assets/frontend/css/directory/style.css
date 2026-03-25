@@ -719,7 +719,7 @@ body.dark-mode .menu-btn span {
 
 /* Header Logo Circle */
 .header-logo-circle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 50px;
@@ -2556,7 +2556,7 @@ body.dark-mode .map-container {
         margin-top: -6px !important;
         margin-left: 6px !important;
     }
-    
+
     /* Disable ALL hover effects on mobile */
     .map-pin-logo:hover,
     .map-pin-logo:active,
@@ -2565,7 +2565,7 @@ body.dark-mode .map-container {
         background: white !important;
         border-color: #f5f5dc !important;
     }
-    
+
     .map-pin-logo.small:hover,
     .map-pin-logo.small:active,
     .map-pin-logo.small:focus {
@@ -5127,10 +5127,10 @@ body.dark-mode .zoom-btn:hover {
     height: 20px;
 }
 
-/* 
+/*
    ==========================================================================
    LOADING SKELETON STYLES
-   ========================================================================== 
+   ==========================================================================
 */
 
 /* Base skeleton styles */

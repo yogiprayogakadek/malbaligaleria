@@ -608,7 +608,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
 }
 
 .header-logo-circle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 50px;
@@ -1827,7 +1827,7 @@ body.dark-mode .event-subtitle {
 
 .event-card {
     position: relative;
-    height: 580px;            /* portrait height matching regular-shows */
+    height: 580px; /* portrait height matching regular-shows */
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
@@ -1897,7 +1897,7 @@ body.dark-mode .event-card:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 28px;            /* matching rsc-card-content */
+    padding: 28px; /* matching rsc-card-content */
     z-index: 2;
     color: white;
 }
@@ -1906,11 +1906,11 @@ body.dark-mode .event-card:hover {
     display: inline-block;
     background: var(--primary-gradient);
     color: white;
-    padding: 7px 16px;        /* tighter padding matching rsc */
+    padding: 7px 16px; /* tighter padding matching rsc */
     border-radius: 25px;
-    font-size: 11px;          /* matching rsc */
+    font-size: 11px; /* matching rsc */
     font-weight: 700;
-    margin-bottom: 10px;      /* matching rsc */
+    margin-bottom: 10px; /* matching rsc */
     letter-spacing: 1.2px;
     text-transform: uppercase;
     box-shadow: 0 3px 15px rgba(44, 95, 93, 0.3);
@@ -1924,19 +1924,19 @@ body.dark-mode .event-card:hover {
 
 .event-card h3 {
     font-family: "Playfair Display", serif;
-    font-size: 22px;          /* matching rsc-card-content h3 */
+    font-size: 22px; /* matching rsc-card-content h3 */
     font-weight: 600;
-    margin-bottom: 8px;       /* matching rsc */
+    margin-bottom: 8px; /* matching rsc */
     color: white;
-    line-height: 1.2;         /* matching rsc */
+    line-height: 1.2; /* matching rsc */
     letter-spacing: 0.5px;
 }
 
 .event-card p {
-    font-size: 13px;          /* matching rsc */
-    line-height: 1.5;         /* matching rsc */
+    font-size: 13px; /* matching rsc */
+    line-height: 1.5; /* matching rsc */
     color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 14px;      /* matching rsc */
+    margin-bottom: 14px; /* matching rsc */
     letter-spacing: 0.3px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -2167,7 +2167,7 @@ body.dark-mode .regular-shows-subtitle {
     opacity: 0;
     transform: translateY(30px);
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 
 .reveal.active .regular-shows-grid {
@@ -2180,7 +2180,7 @@ body.dark-mode .regular-shows-subtitle {
     flex: 0 0 calc(50% - 15px);
     min-width: calc(50% - 15px);
     position: relative;
-    height: 580px;            /* portrait height */
+    height: 580px; /* portrait height */
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
@@ -2190,7 +2190,8 @@ body.dark-mode .regular-shows-subtitle {
 
 .regular-show-card:hover {
     transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(44, 95, 93, 0.2), 0 0 60px rgba(44, 95, 93, 0.08);
+    box-shadow: 0 20px 50px rgba(44, 95, 93, 0.2),
+        0 0 60px rgba(44, 95, 93, 0.08);
 }
 
 body.dark-mode .regular-show-card {
@@ -2295,7 +2296,6 @@ body.dark-mode .regular-show-card {
     gap: 12px;
 }
 
-
 /* Controls */
 .regular-shows-controls {
     display: flex;
@@ -2332,7 +2332,6 @@ body.dark-mode .regular-show-card {
         padding: 60px 20px;
     }
 }
-
 
 .map-section {
     min-height: 100vh;
@@ -5064,7 +5063,7 @@ body.dark-mode .logo-pin {
     background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0.45) 0%,
-        rgba(0, 0, 0, 0.30) 50%,
+        rgba(0, 0, 0, 0.3) 50%,
         rgba(0, 0, 0, 0.65) 100%
     );
     z-index: 1;
@@ -5264,7 +5263,7 @@ body.dark-mode .regular-shows-section {
 }
 
 .regular-shows-header h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: "Playfair Display", serif;
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 600;
     color: var(--text-dark);
@@ -5304,8 +5303,7 @@ body.dark-mode .regular-shows-subtitle {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.08);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.35s ease;
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s ease;
     cursor: pointer;
     position: relative;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
@@ -5320,13 +5318,13 @@ body.dark-mode .regular-show-card {
 .regular-show-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(201, 169, 110, 0.4);
+        0 0 0 1px rgba(201, 169, 110, 0.4);
     border-color: rgba(201, 169, 110, 0.4);
 }
 
 body.dark-mode .regular-show-card:hover {
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(201, 169, 110, 0.4);
+        0 0 0 1px rgba(201, 169, 110, 0.4);
 }
 
 /* Image — portrait-friendly ratio (4:5) */
@@ -5355,8 +5353,8 @@ body.dark-mode .regular-show-card:hover {
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.05) 0%,
-        rgba(0,0,0,0.55) 100%
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.55) 100%
     );
 }
 
@@ -5396,7 +5394,7 @@ body.dark-mode .regular-show-card:hover {
 }
 
 .rsc-title {
-    font-family: 'Playfair Display', serif;
+    font-family: "Playfair Display", serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--text-dark);
@@ -5780,4 +5778,3 @@ body.dark-mode .exc-desc {
     justify-content: center;
     padding: 0;
 }
-

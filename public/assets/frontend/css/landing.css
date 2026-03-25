@@ -517,7 +517,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
 
 /* Header Logo Circle */
 .header-logo-circle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 50px;

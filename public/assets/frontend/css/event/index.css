@@ -224,7 +224,7 @@ body.dark-mode header {
     text-decoration: none;
 }
 .header-logo-circle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 50px;
@@ -1655,7 +1655,9 @@ body.dark-mode .event-location-v2 {
 .dir-mobile-sticky-cta {
     display: none;
     position: fixed;
-    bottom: 0; left: 0; right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 200;
     background: rgba(255, 255, 255, 0.97);
     backdrop-filter: blur(20px);
@@ -1673,14 +1675,20 @@ body.dark-mode .dir-mobile-sticky-cta {
 
 .dir-mobile-cta-btn {
     flex: 1;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 4px; padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
     text-decoration: none;
     color: var(--primary-color, #2c5f5d);
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 0.5px; text-transform: uppercase;
-    transition: all 0.2s ease; border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    border-radius: 8px;
     font-family: "Montserrat", sans-serif;
 }
 
@@ -1695,7 +1703,8 @@ body.dark-mode .dir-mobile-cta-btn {
 }
 
 .dir-mobile-cta-btn svg {
-    width: 22px; height: 22px;
+    width: 22px;
+    height: 22px;
     stroke: var(--primary-color, #2c5f5d);
     fill: none;
     transition: stroke 0.2s ease;

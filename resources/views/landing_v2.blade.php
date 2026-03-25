@@ -174,12 +174,12 @@
                     Right in the vibrant heart of Kuta at the iconic Simpang Dewa Ruci, Mal Bali Galeria is where Bali
                     comes to life. As the island’s pioneer of premium retail concepts, the mall continues to set the
                     standard for trendsetting brands, exciting experiences, and unforgettable moments.
-                    With its signature motto, Enjoy. Play. Eat. Shop., Mal Bali Galeria is more than a shopping
-                    destination—it’s a lifestyle playground. From fashion-forward retail and curated dining spots to
+                    With its signature motto, Enjoy Play Eat Shop, Mal Bali Galeria is more than a shopping
+                    destination, it’s a lifestyle playground. From fashion, forward retail and curated dining spots to
                     thrilling, high-energy events that light up the calendar, there’s always something happening.
                     Designed as a dynamic Family Mall, it’s the place where friends gather, families connect, cultures
                     meet, and excitement never stops. Every visit brings new discoveries, fresh flavors, and vibrant
-                    experiences—all under one roof.
+                    experiences, all under one roof.
                 </p>
             </div>
 
@@ -370,8 +370,8 @@
                 <div class="event-slider-wrapper">
                     <div class="event-grid" id="exhibitionGrid">
                         @foreach ($exhibitionEvents as $exEvent)
-                            <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}" class="event-card regular-show-card"
-                                style="text-decoration:none;">
+                            <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}"
+                                class="event-card regular-show-card" style="text-decoration:none;">
                                 <div class="event-card-bg"
                                     style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
@@ -419,8 +419,8 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
-                        <a href="{{ route('frontend.event.detail', $event->uuid) }}" class="event-card regular-show-card"
-                            style="text-decoration:none;">
+                        <a href="{{ route('frontend.event.detail', $event->uuid) }}"
+                            class="event-card regular-show-card" style="text-decoration:none;">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>

@@ -512,7 +512,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
 
 /* Header Logo Circle */
 .header-logo-circle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 50px;
@@ -550,7 +550,8 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     font-weight: 300;
     letter-spacing: 3px;
     /* text-transform: lowercase; */
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
     transition: all 0.3s ease;
 }
 
@@ -662,7 +663,8 @@ body.dark-mode .sidebar {
     font-weight: 300;
     letter-spacing: 2px;
     /* text-transform: lowercase; */
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
 }
 
 body.dark-mode .sidebar-logo h2 {
@@ -813,7 +815,7 @@ body.dark-mode .sidebar-search .search-bar input::placeholder {
     transition-delay: 0.9s;
 }
 .sidebar.active nav ul li:nth-child(7) {
-    transition-delay: 1.0s;
+    transition-delay: 1s;
 }
 
 .sidebar nav ul li a {
@@ -1023,7 +1025,8 @@ body.dark-mode footer {
 }
 
 .footer-brand-logo {
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
     font-size: 20px;
     font-weight: 500;
     color: white;

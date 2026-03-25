@@ -288,7 +288,7 @@ body.dark-mode header.scrolled {
 }
 
 .header-logo-circle {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     width: 50px;
@@ -2630,8 +2630,13 @@ body.dark-mode .promotion-card.shimmer .promotion-info > * {
 }
 
 @keyframes bounceUpDown {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 @media (min-width: 1025px) {
@@ -2646,10 +2651,15 @@ body.dark-mode .promotion-card.shimmer .promotion-info > * {
         right: 20px;
         width: max-content;
     }
-    
+
     @keyframes bounceUpDown {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
     }
 }
 
@@ -2666,18 +2676,22 @@ body.dark-mode .promotion-card.shimmer .promotion-info > * {
 }
 
 .promo-hero-banner::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -50%;
     left: -20%;
     width: 60%;
     height: 200%;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0.06) 0%, transparent 70%);
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 70%
+    );
     pointer-events: none;
 }
 
 .promo-hero-banner::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -1px;
     left: 0;
@@ -2877,8 +2891,12 @@ body.dark-mode .mobile-cta-btn svg {
 }
 
 @keyframes countdownPulse {
-    from { opacity: 1; }
-    to { opacity: 0.7; }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.7;
+    }
 }
 
 .countdown-text {
@@ -2895,11 +2913,13 @@ body.dark-mode .mobile-cta-btn svg {
 /* Urgent card — subtle left border glow */
 .promotion-card.urgent {
     border-left: 3px solid #e74c3c;
-    box-shadow: -3px 0 12px rgba(231, 76, 60, 0.15), 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: -3px 0 12px rgba(231, 76, 60, 0.15),
+        0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 body.dark-mode .promotion-card.urgent {
-    box-shadow: -3px 0 16px rgba(231, 76, 60, 0.25), 0 4px 24px rgba(0,0,0,0.25);
+    box-shadow: -3px 0 16px rgba(231, 76, 60, 0.25),
+        0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 body.dark-mode .promo-countdown-bar {
@@ -2956,8 +2976,14 @@ body.dark-mode .promo-result-count {
 }
 
 @keyframes pillFadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .pill-remove {
@@ -2973,7 +2999,9 @@ body.dark-mode .promo-result-count {
     font-weight: 700;
 }
 
-.pill-remove:hover { opacity: 1; }
+.pill-remove:hover {
+    opacity: 1;
+}
 
 body.dark-mode .active-filter-pill {
     background: rgba(95, 207, 218, 0.1);
@@ -2988,21 +3016,31 @@ body.dark-mode .active-filter-pill {
 }
 
 .promo-hero-banner::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -50%;
     right: -20%;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 70%
+    );
     border-radius: 50%;
     animation: heroPulse 6s ease-in-out infinite alternate;
     pointer-events: none;
 }
 
 @keyframes heroPulse {
-    from { transform: scale(1) translate(0,0); opacity: 0.4; }
-    to { transform: scale(1.2) translate(-30px, 20px); opacity: 0.08; }
+    from {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.4;
+    }
+    to {
+        transform: scale(1.2) translate(-30px, 20px);
+        opacity: 0.08;
+    }
 }
 
 /* ===== #5: EMPTY STATE with emoji ===== */
@@ -3014,8 +3052,12 @@ body.dark-mode .active-filter-pill {
 }
 
 @keyframes emojiFloat {
-    from { transform: translateY(0); }
-    to { transform: translateY(-8px); }
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-8px);
+    }
 }
 
 .empty-state .clear-filters-btn {
