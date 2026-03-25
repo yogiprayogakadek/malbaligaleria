@@ -659,7 +659,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
     }
 
     .explore-btn {
-        transform: translateY(100px) !important;
+        display: none;
     }
 }
 
@@ -1050,23 +1050,7 @@ body.dark-mode .sidebar nav ul li a {
 }
 
 .explore-btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    background: transparent;
-    color: white;
-    padding: 0;
-    padding-right: 35px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-size: 16px;
-    transition: all 0.4s ease;
-    border: none;
-    cursor: pointer;
-    overflow: visible;
-    font-weight: 500;
-    height: 50px;
-    transform: translateY(60px);
+    display: none;
 }
 
 .explore-btn::before {
