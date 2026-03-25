@@ -429,10 +429,6 @@ updateCardsPerView();
     updateEventControlsVisibility();
 })();
 
-    updateEventCardsPerView();
-}
-
-
 // ========================================
 // REGULAR SHOWS SLIDER
 // ========================================
