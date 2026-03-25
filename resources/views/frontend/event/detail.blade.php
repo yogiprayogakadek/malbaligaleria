@@ -228,7 +228,7 @@
                         <div class="glass-actions">
                             <a href="#" class="glass-btn btn-primary" id="addToCalendarBtn"
                                 data-event-name="{{ $event['name'] }}"
-                                data-event-description="{{ strip_tags($event['description']) }}"
+                                data-event-description="{!! strip_tags($event['description']) !!}"
                                 data-event-location="{{ $event['location'] ?? 'Mal Bali Galeria' }}"
                                 data-event-start="{{ $event['start_date'] }} {{ $event['start_time'] }}"
                                 data-event-end="{{ $event['end_date'] }} {{ $event['end_time'] }}">
