@@ -164,7 +164,7 @@
         <!-- Events Grid -->
         <div class="events-main">
             <div class="events-section-label">
-                <h2>Upcoming Events</h2>
+                <h2>What's Happening</h2>
                 <div class="divider"></div>
                 <span class="events-count-badge" id="eventsShownCount">{{ count($events) }} Events</span>
             </div>
