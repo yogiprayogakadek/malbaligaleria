@@ -649,6 +649,30 @@
             });
         });
     </script>
+    {{-- Sticky Mobile CTA Bar --}}
+    <div class="dir-mobile-sticky-cta" id="eventMobileStickyBar">
+        <a href="{{ route('frontend.landing') }}" class="dir-mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="{{ route('frontend.promotion.index') }}" class="dir-mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            <span>Promo</span>
+        </a>
+        <a href="tel:+62361755277" class="dir-mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Call</span>
+        </a>
+    </div>
 </body>
 
 </html>

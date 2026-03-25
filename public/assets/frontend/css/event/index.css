@@ -1648,3 +1648,83 @@ body.dark-mode .event-location-v2 {
         padding: 4px 8px;
     }
 }
+
+/* ========================================
+   MOBILE STICKY CTA (Events)
+   ======================================== */
+.dir-mobile-sticky-cta {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(44, 95, 93, 0.12);
+    box-shadow: 0 -4px 20px rgba(44, 95, 93, 0.12);
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+body.dark-mode .dir-mobile-sticky-cta {
+    background: rgba(26, 31, 30, 0.97);
+    border-top: 1px solid rgba(168, 197, 195, 0.15);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.dir-mobile-cta-btn {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px; padding: 6px 8px;
+    text-decoration: none;
+    color: var(--primary-color, #2c5f5d);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: all 0.2s ease; border-radius: 8px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.dir-mobile-cta-btn:hover,
+.dir-mobile-cta-btn:active {
+    background: rgba(44, 95, 93, 0.08);
+    color: var(--primary-color, #2c5f5d);
+}
+
+body.dark-mode .dir-mobile-cta-btn {
+    color: var(--accent-light, #f5f5dc);
+}
+
+.dir-mobile-cta-btn svg {
+    width: 22px; height: 22px;
+    stroke: var(--primary-color, #2c5f5d);
+    fill: none;
+    transition: stroke 0.2s ease;
+}
+
+body.dark-mode .dir-mobile-cta-btn svg {
+    stroke: var(--accent-light, #f5f5dc);
+}
+
+@media (max-width: 768px) {
+    .dir-mobile-sticky-cta {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    footer {
+        padding-bottom: 80px !important;
+    }
+
+    .dark-mode-toggle {
+        bottom: 85px !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .event-scroll-top {
+        bottom: 145px !important;
+        right: 20px !important;
+    }
+}
