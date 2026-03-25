@@ -329,8 +329,10 @@
                                         <div class="event-img-wrapper">
                                             <img src="{{ $imgUrl }}" alt="{{ $upcoming->name }}">
                                             <div class="event-img-overlay"></div>
-                                            <span
-                                                class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                                            @if ($statusLabel !== 'Ended')
+                                                <span
+                                                    class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                                            @endif
 
                                             <div class="event-card-info">
                                                 <span class="event-date-pill">{{ $fullDate }}</span>
