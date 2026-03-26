@@ -248,15 +248,15 @@
                 <div class="header-divider"></div>
             </div>
 
-            <a href="{{ route('frontend.event.index') }}" class="experience-card events">
-                <div class="experience-card-content">
-                    <div class="experience-card-title">
-                        <h4>Events</h4>
-                    </div>
-                </div>
-            </a>
-
             <div class="experience-cards">
+                <a href="{{ route('frontend.event.index') }}" class="experience-card events">
+                    <div class="experience-card-content">
+                        <div class="experience-card-title">
+                            <h4>Events</h4>
+                        </div>
+                    </div>
+                </a>
+
                 <a href="{{ route('frontend.promotion.index') }}" class="experience-card promotion">
                     <div class="experience-card-content">
                         <div class="experience-card-title">
@@ -338,8 +338,7 @@
                     <div class="regular-shows-grid" id="regularShowsGrid">
                         @foreach ($regularEvents as $rEvent)
                             <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
-                                data-event-uuid="{{ $rEvent->uuid }}"
-                                data-event-name="{{ $rEvent->name }}"
+                                data-event-uuid="{{ $rEvent->uuid }}" data-event-name="{{ $rEvent->name }}"
                                 data-event-date="{{ $rEvent->recurring_label ?: 'Every Weekend' }}"
                                 data-event-desc="{{ $rEvent->description }}"
                                 data-event-location="{{ $rEvent->location }}"
@@ -389,10 +388,8 @@
                                 }
                             @endphp
                             <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                                data-event-uuid="{{ $exEvent->uuid }}"
-                                data-event-name="{{ $exEvent->name }}"
-                                data-event-date="{{ $exDateStr }}"
-                                data-event-desc="{{ $exEvent->description }}"
+                                data-event-uuid="{{ $exEvent->uuid }}" data-event-name="{{ $exEvent->name }}"
+                                data-event-date="{{ $exDateStr }}" data-event-desc="{{ $exEvent->description }}"
                                 data-event-location="{{ $exEvent->location }}"
                                 data-event-image="{{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
                                 data-event-type="Exhibition">
@@ -437,18 +434,17 @@
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ $event->uuid }}"
-                            data-event-name="{{ $event->name }}"
+                            data-event-uuid="{{ $event->uuid }}" data-event-name="{{ $event->name }}"
                             data-event-date="{{ date_format(date_create($event->start_date), 'd M Y') }}"
-                            data-event-desc="{{ $event->description }}"
-                            data-event-location="{{ $event->location }}"
+                            data-event-desc="{{ $event->description }}" data-event-location="{{ $event->location }}"
                             data-event-image="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="Upcoming Event">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
-                                <span class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <span
+                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p class="event-desc">{{ Str::limit($event->description, 80) }}</p>
                                 @if ($event->location)
