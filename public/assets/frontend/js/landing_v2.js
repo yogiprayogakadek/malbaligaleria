@@ -1784,3 +1784,173 @@ function renderModalMap(data) {
         }
     }
 }
+
+// ========================================
+// EVENT DETAIL MODAL
+// ========================================
+(function initEventDetailModal() {
+    const modal = document.getElementById("eventDetailModal");
+    const overlay = document.getElementById("eventModalOverlay");
+    const closeBtn = document.getElementById("eventModalCloseBtn");
+    const carouselImages = document.getElementById("eventModalCarouselImages");
+    const carouselIndicators = document.getElementById("eventModalCarouselIndicators");
+    const carouselPrev = document.getElementById("eventModalCarouselPrev");
+    const carouselNext = document.getElementById("eventModalCarouselNext");
+    const swipeHint = document.getElementById("eventModalCarouselSwipeHint");
+    
+    const typeBadge = document.getElementById("eventModalTypeBadge");
+    const dateEl = document.getElementById("eventModalDate");
+    const titleEl = document.getElementById("eventModalTitle");
+    const descEl = document.getElementById("eventModalDescription");
+    const locationEl = document.getElementById("eventModalLocation");
+    const detailLink = document.getElementById("eventModalDetailLink");
+    const shareBtn = document.getElementById("eventModalShareBtn");
+
+    if (!modal) return;
+
+    let currentEventUuid = null;
+    let eventImages = [];
+    let currentImageIndex = 0;
+    const eventCache = {};
+
+    async function fetchEventData(uuid) {
+        if (eventCache[uuid]) return eventCache[uuid];
+        try {
+            const data = await $.get(`/find/events/${uuid}`);
+            eventCache[uuid] = data;
+            return data;
+        } catch (error) {
+            console.error("Failed to fetch event data", error);
+            return null;
+        }
+    }
+
+    function renderCarousel(images, name) {
+        if (!carouselImages || !carouselIndicators) return;
+        
+        eventImages = images;
+        currentImageIndex = 0;
+
+        carouselImages.innerHTML = images.map((img, idx) => `
+            <div class="carousel-image">
+                <img src="${img}" alt="${name} - Image ${idx + 1}" onerror="this.src='/assets/images/no_image.jpg'">
+            </div>
+        `).join("");
+
+        carouselIndicators.innerHTML = images.map((_, idx) => `
+            <div class="carousel-indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}"></div>
+        `).join("");
+
+        updateCarousel();
+
+        // Re-attach indicator listeners
+        carouselIndicators.querySelectorAll(".carousel-indicator").forEach(indicator => {
+            indicator.addEventListener("click", () => {
+                currentImageIndex = parseInt(indicator.dataset.index);
+                updateCarousel();
+            });
+        });
+    }
+
+    function updateCarousel() {
+        if (!carouselImages) return;
+        const offset = -currentImageIndex * 100;
+        carouselImages.style.transform = `translateX(${offset}%)`;
+
+        const indicators = carouselIndicators.querySelectorAll(".carousel-indicator");
+        indicators.forEach((indicator, idx) => {
+            indicator.classList.toggle("active", idx === currentImageIndex);
+        });
+    }
+
+    if (carouselPrev) {
+        carouselPrev.addEventListener("click", () => {
+            currentImageIndex = (currentImageIndex - 1 + eventImages.length) % eventImages.length;
+            updateCarousel();
+        });
+    }
+
+    if (carouselNext) {
+        carouselNext.addEventListener("click", () => {
+            currentImageIndex = (currentImageIndex + 1) % eventImages.length;
+            updateCarousel();
+        });
+    }
+
+    async function openEventModal(card) {
+        const uuid = card.dataset.eventUuid;
+        if (!uuid) return;
+
+        currentEventUuid = uuid;
+
+        // Show modal with skeleton or partial data first
+        if (titleEl) titleEl.textContent = card.dataset.eventName || "Loading...";
+        if (dateEl) dateEl.textContent = card.dataset.eventDate || "";
+        if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
+        if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
+        
+        // Use card image as placeholder in carousel
+        const placeholderImg = card.dataset.eventImage || "/assets/images/no_image.jpg";
+        renderCarousel([placeholderImg], card.dataset.eventName || "Event");
+
+        document.body.style.overflow = "hidden";
+        modal.classList.add("active");
+
+        // Fetch full data
+        const data = await fetchEventData(uuid);
+        if (data && currentEventUuid === uuid) {
+            if (titleEl) titleEl.textContent = data.name;
+            if (dateEl) dateEl.textContent = data.date;
+            if (locationEl) locationEl.textContent = data.location;
+            if (typeBadge) typeBadge.textContent = data.type;
+            if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
+            if (detailLink) detailLink.href = `/event/${data.uuid}`;
+            
+            renderCarousel(data.images, data.name);
+        }
+
+        // Swipe hint logic
+        if (swipeHint) {
+            swipeHint.classList.remove("hidden");
+            setTimeout(() => swipeHint.classList.add("hidden"), 3000);
+        }
+    }
+
+    function closeEventModal() {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+        currentEventUuid = null;
+    }
+
+    document.addEventListener("click", (e) => {
+        const card = e.target.closest(".event-modal-trigger");
+        if (card) {
+            e.preventDefault();
+            openEventModal(card);
+        }
+    });
+
+    if (closeBtn) closeBtn.addEventListener("click", closeEventModal);
+    if (overlay) overlay.addEventListener("click", closeEventModal);
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+            closeEventModal();
+        }
+    });
+
+    if (shareBtn) {
+        shareBtn.addEventListener("click", () => {
+            const url = currentEventUuid ? `${window.location.origin}/event/${currentEventUuid}` : window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: titleEl ? titleEl.textContent : "Event at MBG",
+                    text: "Check out this event at Mal Bali Galeria!",
+                    url: url
+                }).catch(() => copyToClipboard(url));
+            } else {
+                copyToClipboard(url);
+            }
+        });
+    }
+})();

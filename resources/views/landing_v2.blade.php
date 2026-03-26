@@ -108,9 +108,10 @@
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -247,19 +248,19 @@
                 <div class="header-divider"></div>
             </div>
 
+            <a href="{{ route('frontend.event.index') }}" class="experience-card events">
+                <div class="experience-card-content">
+                    <div class="experience-card-title">
+                        <h4>Events</h4>
+                    </div>
+                </div>
+            </a>
+
             <div class="experience-cards">
                 <a href="{{ route('frontend.promotion.index') }}" class="experience-card promotion">
                     <div class="experience-card-content">
                         <div class="experience-card-title">
                             <h4>Promotion</h4>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="{{ route('frontend.event.index') }}" class="experience-card events">
-                    <div class="experience-card-content">
-                        <div class="experience-card-title">
-                            <h4>Events</h4>
                         </div>
                     </div>
                 </a>
@@ -336,8 +337,14 @@
                 <div class="regular-shows-slider-wrapper">
                     <div class="regular-shows-grid" id="regularShowsGrid">
                         @foreach ($regularEvents as $rEvent)
-                            <a href="{{ route('frontend.event.detail', $rEvent->uuid) }}" class="regular-show-card"
-                                style="text-decoration:none;">
+                            <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
+                                data-event-uuid="{{ $rEvent->uuid }}"
+                                data-event-name="{{ $rEvent->name }}"
+                                data-event-date="{{ $rEvent->recurring_label ?: 'Every Weekend' }}"
+                                data-event-desc="{{ $rEvent->description }}"
+                                data-event-location="{{ $rEvent->location }}"
+                                data-event-image="{{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                                data-event-type="Regular Show">
                                 <div class="rsc-card-bg"
                                     style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
@@ -347,7 +354,7 @@
                                     <p class="event-desc">{{ Str::limit($rEvent->description, 80) }}</p>
                                     <span class="event-link">Learn More →</span>
                                 </div>
-                            </a>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -370,21 +377,31 @@
                 <div class="event-slider-wrapper">
                     <div class="event-grid" id="exhibitionGrid">
                         @foreach ($exhibitionEvents as $exEvent)
-                            <a href="{{ route('frontend.event.detail', $exEvent->uuid) }}"
-                                class="event-card regular-show-card" style="text-decoration:none;">
+                            @php
+                                $exDateStr = '';
+                                if ($exEvent->start_date) {
+                                    $exDateStr = date('d M', strtotime($exEvent->start_date));
+                                    if ($exEvent->end_date && $exEvent->start_date != $exEvent->end_date) {
+                                        $exDateStr .= ' – ' . date('d M Y', strtotime($exEvent->end_date));
+                                    } else {
+                                        $exDateStr .= ' ' . date('Y', strtotime($exEvent->start_date));
+                                    }
+                                }
+                            @endphp
+                            <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
+                                data-event-uuid="{{ $exEvent->uuid }}"
+                                data-event-name="{{ $exEvent->name }}"
+                                data-event-date="{{ $exDateStr }}"
+                                data-event-desc="{{ $exEvent->description }}"
+                                data-event-location="{{ $exEvent->location }}"
+                                data-event-image="{{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                                data-event-type="Exhibition">
                                 <div class="event-card-bg"
                                     style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="event-card-content">
                                     @if ($exEvent->start_date)
-                                        <span class="event-date">
-                                            {{ date('d M', strtotime($exEvent->start_date)) }}
-                                            @if ($exEvent->end_date && $exEvent->start_date != $exEvent->end_date)
-                                                – {{ date('d M Y', strtotime($exEvent->end_date)) }}
-                                            @else
-                                                {{ date('Y', strtotime($exEvent->start_date)) }}
-                                            @endif
-                                        </span>
+                                        <span class="event-date">{{ $exDateStr }}</span>
                                     @endif
                                     <h3>{{ $exEvent->name }}</h3>
                                     <p class="event-desc">{{ Str::limit($exEvent->description, 80) }}</p>
@@ -400,7 +417,7 @@
                                     @endif
                                     <span class="event-link">Learn More →</span>
                                 </div>
-                            </a>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -419,14 +436,19 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
-                        <a href="{{ route('frontend.event.detail', $event->uuid) }}"
-                            class="event-card regular-show-card" style="text-decoration:none;">
+                        <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
+                            data-event-uuid="{{ $event->uuid }}"
+                            data-event-name="{{ $event->name }}"
+                            data-event-date="{{ date_format(date_create($event->start_date), 'd M Y') }}"
+                            data-event-desc="{{ $event->description }}"
+                            data-event-location="{{ $event->location }}"
+                            data-event-image="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="Upcoming Event">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
-                                <span
-                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <span class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
                                 <h3>{{ $event->name }}</h3>
                                 <p class="event-desc">{{ Str::limit($event->description, 80) }}</p>
                                 @if ($event->location)
@@ -441,7 +463,7 @@
                                 @endif
                                 <span class="event-link">Learn More →</span>
                             </div>
-                        </a>
+                        </div>
                     @empty
                         <h3 class="text-center">No data available</h3>
                     @endforelse
@@ -710,6 +732,104 @@
                                 <div class="marker-pulse"></div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ===== EVENT DETAIL MODAL ===== --}}
+    <div class="event-detail-modal" id="eventDetailModal">
+        <div class="event-modal-overlay" id="eventModalOverlay"></div>
+        <div class="event-modal-container">
+
+            <button class="event-modal-close" id="eventModalCloseBtn" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <button class="event-modal-share-btn" id="eventModalShareBtn" title="Share Event">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+            </button>
+
+            <div class="event-modal-content">
+                <div class="event-modal-carousel">
+                    <div class="carousel-swipe-hint" id="eventModalCarouselSwipeHint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                        Swipe to browse
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </div>
+
+                    <div class="carousel-images" id="eventModalCarouselImages">
+                        <!-- Dynamic images -->
+                    </div>
+
+                    <button class="carousel-nav prev" id="eventModalCarouselPrev">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <button class="carousel-nav next" id="eventModalCarouselNext">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+
+                    <div class="carousel-indicators" id="eventModalCarouselIndicators">
+                        <!-- Dynamic indicators -->
+                    </div>
+                </div>
+
+                <div class="event-modal-details">
+                    <div class="event-modal-header">
+                        <span class="event-modal-badge" id="eventModalTypeBadge"></span>
+                        <h2 id="eventModalTitle"></h2>
+                    </div>
+
+                    <div class="event-modal-info">
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Date & Time</span>
+                                <span class="info-value" id="eventModalDate"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Location</span>
+                                <span class="info-value" id="eventModalLocation"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-modal-description" id="eventModalDescription"></div>
+
+                    <div class="event-modal-actions">
+                        <a href="#" id="eventModalDetailLink" class="event-modal-detail-btn">
+                            View Full Details →
+                        </a>
                     </div>
                 </div>
             </div>

@@ -50,6 +50,7 @@ Route::name('frontend.')
             Route::get('/', 'index')->name('landing');
             Route::get('/tenants/{cat}/{isNew}', 'tenantData');
             Route::get('/find/tenants/{tenant_id}', 'findTenantById');
+            Route::get('/find/events/{uuid}', 'findEventByUuid');
         });
 
         Route::controller(PromotionPageController::class)

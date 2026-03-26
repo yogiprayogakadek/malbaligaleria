@@ -123,4 +123,58 @@ class LandingPageController extends Controller
 
         return response()->json($tenant[0]);
     }
+
+    public function findEventByUuid($uuid)
+    {
+        $event = $this->eventService->getEventsWithRelationshipAndCondition(
+            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location', 'recurring_label'],
+            [
+                'primaryPhoto:id,event_id,path',
+                'albumPhoto:id,event_id,path',
+            ],
+            'uuid',
+            $uuid
+        )->map(function ($data) {
+            $photos = collect()
+                ->when(
+                    filled($data->primaryPhoto?->path),
+                    fn($c) => $c->push(\Illuminate\Support\Facades\Storage::url($data->primaryPhoto->path))
+                )
+                ->concat(
+                    collect($data->albumPhoto ?? [])
+                        ->filter(fn($photo) => filled($photo->path))
+                        ->map(fn($photo) => \Illuminate\Support\Facades\Storage::url($photo->path))
+                )
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
+
+            $dateStr = '';
+            if ($data->start_date) {
+                $dateStr = date('d M Y', strtotime($data->start_date));
+                if ($data->end_date && $data->start_date != $data->end_date) {
+                    $dateStr = date('d M', strtotime($data->start_date)) . ' - ' . date('d M Y', strtotime($data->end_date));
+                }
+            } else if ($data->recurring_label) {
+                $dateStr = $data->recurring_label;
+            }
+
+            return [
+                'name' => $data->name,
+                'uuid' => $data->uuid,
+                'date' => $dateStr,
+                'location' => $data->location ?: 'Mal Bali Galeria',
+                'description' => $data->description,
+                'images' => !empty($photos) ? $photos : [asset('assets/images/no_image.jpg')],
+                'type' => $data->recurring_label ? 'Regular Show' : 'Event',
+            ];
+        });
+
+        if ($event->isEmpty()) {
+            return response()->json(['error' => 'Event not found'], 404);
+        }
+
+        return response()->json($event[0]);
+    }
 }
