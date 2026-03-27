@@ -366,6 +366,52 @@
         </section>
     @endif
 
+    <!-- EVENTS -->
+    <section class="event-section reveal" id="events">
+        <div class="event-container">
+            <h2>Upcoming Events</h2>
+            <p class="event-subtitle">Don't miss out — explore what's coming up at Mal Bali Galeria</p>
+            <div class="event-slider-wrapper">
+                <div class="event-grid" id="eventGrid">
+                    @forelse ($events as $event)
+                        <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
+                            data-event-uuid="{{ $event->uuid }}" data-event-name="{{ $event->name }}"
+                            data-event-date="{{ date_format(date_create($event->start_date), 'd M Y') }}"
+                            data-event-desc="{{ $event->description }}" data-event-location="{{ $event->location }}"
+                            data-event-image="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="Upcoming Event">
+                            <div class="event-card-bg"
+                                style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                            </div>
+                            <div class="event-card-content">
+                                <span
+                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
+                                <h3>{{ $event->name }}</h3>
+                                <p class="event-desc">{{ Str::limit($event->description, 80) }}</p>
+                                @if ($event->location)
+                                    <span class="event-location" style="margin-bottom: 12px;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        {{ $event->location }}
+                                    </span>
+                                @endif
+                                <span class="event-link">Learn More →</span>
+                            </div>
+                        </div>
+                    @empty
+                        <h3 class="text-center">No data available</h3>
+                    @endforelse
+                </div>
+            </div>
+            <div class="event-controls" id="eventControls">
+                <button class="event-nav-btn" id="eventPrevBtn">←</button>
+                <button class="event-nav-btn" id="eventNextBtn">→</button>
+            </div>
+        </div>
+    </section>
 
     {{-- ===== EXHIBITION SECTION ===== --}}
     @if (isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
@@ -425,52 +471,6 @@
             </div>
         </section>
     @endif
-
-    <section class="event-section reveal" id="events">
-        <div class="event-container">
-            <h2>Upcoming Events</h2>
-            <p class="event-subtitle">Don't miss out — explore what's coming up at Mal Bali Galeria</p>
-            <div class="event-slider-wrapper">
-                <div class="event-grid" id="eventGrid">
-                    @forelse ($events as $event)
-                        <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ $event->uuid }}" data-event-name="{{ $event->name }}"
-                            data-event-date="{{ date_format(date_create($event->start_date), 'd M Y') }}"
-                            data-event-desc="{{ $event->description }}" data-event-location="{{ $event->location }}"
-                            data-event-image="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="Upcoming Event">
-                            <div class="event-card-bg"
-                                style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
-                            </div>
-                            <div class="event-card-content">
-                                <span
-                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
-                                <h3>{{ $event->name }}</h3>
-                                <p class="event-desc">{{ Str::limit($event->description, 80) }}</p>
-                                @if ($event->location)
-                                    <span class="event-location" style="margin-bottom: 12px;">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                            <circle cx="12" cy="10" r="3" />
-                                        </svg>
-                                        {{ $event->location }}
-                                    </span>
-                                @endif
-                                <span class="event-link">Learn More →</span>
-                            </div>
-                        </div>
-                    @empty
-                        <h3 class="text-center">No data available</h3>
-                    @endforelse
-                </div>
-            </div>
-            <div class="event-controls" id="eventControls">
-                <button class="event-nav-btn" id="eventPrevBtn">←</button>
-                <button class="event-nav-btn" id="eventNextBtn">→</button>
-            </div>
-        </div>
-    </section>
 
     <section class="map-section reveal">
         <div class="map-container">
