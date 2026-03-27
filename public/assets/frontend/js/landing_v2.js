@@ -369,10 +369,21 @@ updateCardsPerView();
 
     const updateEventSlider = () => {
         if (!eventCards.length) return;
-        const cardWidth = eventCards[0].offsetWidth;
-        const gap = 30;
-        const offset = -(eventCurrentIndex * (cardWidth + gap));
-        eventGrid.style.transform = `translateX(${offset}px)`;
+
+        const needsSlider = eventCards.length > eventCardsPerView;
+
+        if (!needsSlider) {
+            // Center cards when count <= cardsPerView
+            eventGrid.style.transform = "translateX(0)";
+            eventGrid.style.justifyContent = "center";
+            eventCurrentIndex = 0;
+        } else {
+            eventGrid.style.justifyContent = "flex-start";
+            const cardWidth = eventCards[0].offsetWidth;
+            const gap = 30;
+            const offset = -(eventCurrentIndex * (cardWidth + gap));
+            eventGrid.style.transform = `translateX(${offset}px)`;
+        }
 
         eventPrevBtn.disabled = eventCurrentIndex === 0;
         eventNextBtn.disabled = eventCurrentIndex >= eventCards.length - eventCardsPerView;
@@ -423,7 +434,7 @@ updateCardsPerView();
     });
 
     window.addEventListener("resize", onResize);
-    
+
     // Initial call
     updateEventSlider();
     updateEventControlsVisibility();
@@ -454,15 +465,25 @@ updateCardsPerView();
     const update = () => {
         if (!cards.length) return;
 
+        const needsSlider = cards.length > cardsPerView;
+
         // Clamp currentIndex so we don't go past the last full page
         const maxIndex = Math.max(0, cards.length - cardsPerView);
         if (currentIndex > maxIndex) currentIndex = maxIndex;
 
-        if (isMobile()) {
+        if (!needsSlider) {
+            // Center cards when count <= cardsPerView
+            grid.style.transform = "translateX(0)";
+            grid.style.justifyContent = "center";
+            if (!isMobile()) grid.scrollLeft = 0;
+            currentIndex = 0;
+        } else if (isMobile()) {
+            grid.style.justifyContent = "";
             // On mobile, use native scroll-snap scrollTo
             const cardWidth = grid.offsetWidth;
             grid.scrollTo({ left: currentIndex * cardWidth, behavior: "smooth" });
         } else {
+            grid.style.justifyContent = "flex-start";
             // On desktop/tablet, use transform translateX
             const cardWidth = cards[0].offsetWidth;
             const gap = 30;
@@ -472,7 +493,7 @@ updateCardsPerView();
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex >= cards.length - cardsPerView;
         if (controls) {
-            controls.classList.toggle("hidden", cards.length <= cardsPerView);
+            controls.classList.toggle("hidden", !needsSlider);
         }
     };
 
@@ -528,13 +549,25 @@ updateCardsPerView();
 
     const update = () => {
         if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth;
-        const gap = 30;
-        grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
+
+        const needsSlider = cards.length > cardsPerView;
+
+        if (!needsSlider) {
+            // Center cards when count <= cardsPerView
+            grid.style.transform = "translateX(0)";
+            grid.style.justifyContent = "center";
+            currentIndex = 0;
+        } else {
+            grid.style.justifyContent = "flex-start";
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 30;
+            grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
+        }
+
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex >= cards.length - cardsPerView;
         if (controls) {
-            controls.classList.toggle("hidden", cards.length <= cardsPerView);
+            controls.classList.toggle("hidden", !needsSlider);
         }
     };
 
