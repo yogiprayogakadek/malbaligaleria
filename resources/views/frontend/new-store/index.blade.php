@@ -125,26 +125,49 @@
             <p>Welcome our newest brands and stores</p>
         </section>
 
-        <section class="new-store-grid">
-            @forelse($tenants as $tenant)
-                @php
-                    $isJustOpened = $tenant->launched_at && $tenant->launched_at->diffInDays(now()) < 3;
-                    $badgeText = $isJustOpened ? 'Just Opened' : 'New Store';
-                    $badgeClass = 'store-badge';
-                @endphp
-                <a href="#" class="store-card">
-                    <div class="store-image-wrapper">
-                        <div class="{{ $badgeClass }}">{{ $badgeText }}</div>
-                        <div class="store-img"
-                            style="background-image: url('{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/placeholder-store.jpg') }}')">
+        <section class="new-store-grid" id="tenantGrid">
+            @forelse($tenants as $index => $tenant)
+                <div class="tenant-card stagger-card show" data-unit="{{ $tenant->unit }}"
+                    data-floor="{{ $tenant->map_coords['floor'] }}" data-coords-x="{{ $tenant->map_coords['x'] }}"
+                    data-coords-y="{{ $tenant->map_coords['y'] }}" style="animation-delay: {{ $index * 0.1 }}s">
+                    <div class="tenant-logo">
+                        <img src="{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/placeholder-logo.png') }}"
+                            alt="{{ $tenant->name }}" loading="lazy">
+                    </div>
+                    <div class="tenant-info">
+                        <span class="floor-badge">{{ $tenant->map_coords['floor'] == 1 ? '1st Floor' : '2nd Floor' }}</span>
+                        <h3>{{ $tenant->name }}</h3>
+                        <p class="tenant-category">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+                            </svg>
+                            {{ $tenant->category->name }}
+                        </p>
+                        <div class="tenant-meta">
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <span>Unit {{ $tenant->unit }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span class="store-hours">{{ $tenant->hours }}</span>
+                            </div>
                         </div>
+                        <button class="see-details-btn" onclick="openStoreModal({{ $tenant->id }})">
+                            Learn More
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
-                    <div class="store-info">
-                        <h3 class="store-title">{{ $tenant->name }}</h3>
-                        <div class="store-meta">{{ $tenant->map_coords['floor'] == 1 ? 'Ground Floor' : 'Level 2' }}
-                            &bull; {{ $tenant->category->name }}</div>
-                    </div>
-                </a>
+                </div>
             @empty
                 <div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
                     <h3>No new stores to display yet.</h3>
@@ -153,6 +176,122 @@
             @endforelse
         </section>
     </main>
+
+    {{-- Tenant Modal (Info + Map) --}}
+    <div class="tenant-modal" id="tenantModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-container">
+            <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <div class="modal-content">
+                <div class="modal-carousel">
+                    <div class="carousel-loading" id="modalCarouselLoading">
+                        <div class="loading-status">
+                            <div class="loading-spinner"></div>
+                            <span>Memuat Album...</span>
+                        </div>
+                    </div>
+                    <div class="carousel-images" id="modalCarouselImages"></div>
+                    <button class="carousel-nav prev" id="modalCarouselPrev">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <button class="carousel-nav next" id="modalCarouselNext">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                    <div class="carousel-indicators" id="modalCarouselIndicators"></div>
+                </div>
+
+                <div class="modal-details">
+                    {{-- Info View --}}
+                    <div id="modalInfoView">
+                        <div class="modal-header">
+                            <div class="modal-logo" id="modalLogo"></div>
+                            <div class="modal-title">
+                                <span class="modal-floor-badge" id="modalFloorBadge"></span>
+                                <h2 id="modalTenantName"></h2>
+                                <div class="modal-category" id="modalCategory">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+                                    </svg>
+                                    <span id="modalCategoryText"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-info">
+                            <div class="modal-info-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <div>
+                                    <span class="info-label">Operating Hours</span>
+                                    <span class="info-value" id="modalHours"></span>
+                                </div>
+                            </div>
+                            <div class="modal-info-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <div>
+                                    <span class="info-label">Location</span>
+                                    <span class="info-value" id="modalLocation"></span>
+                                </div>
+                            </div>
+                            <div class="modal-info-item highlight" id="showOnMapBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                                    <line x1="8" y1="2" x2="8" y2="18" />
+                                    <line x1="16" y1="6" x2="16" y2="22" />
+                                </svg>
+                                <div>
+                                    <span class="info-label">Direction</span>
+                                    <span class="info-value">Show on Map</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-description" id="modalDescription"></div>
+                    </div>
+
+                    {{-- Map View --}}
+                    <div id="modalMapView" style="display: none;">
+                        <div class="modal-map-header">
+                            <button class="modal-map-back" id="btnBackToInfo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                                Back to Info
+                            </button>
+                            <div class="modal-map-floors">
+                                <button class="floor-btn" data-floor="1">1st Floor</button>
+                                <button class="floor-btn" data-floor="2">2nd Floor</button>
+                            </div>
+                        </div>
+                        <div class="modal-map-container">
+                            <div class="map-wrapper" id="modalMapWrapper">
+                                <img src="" alt="Mall Map" id="modalMapImage">
+                                <div class="map-marker" id="modalMapMarker">
+                                    <div class="marker-pin"></div>
+                                    <div class="marker-pulse"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="reveal" id="contact">
@@ -292,6 +431,171 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
+
+    <script>
+        // Store Data from PHP
+        const tenants = @json($tenants);
+        let currentTenant = null;
+        let currentPhotoIndex = 0;
+        let currentMapFloor = 1;
+
+        // Modal Elements
+        const modal = document.getElementById('tenantModal');
+        const carouselImages = document.getElementById('modalCarouselImages');
+        const carouselIndicators = document.getElementById('modalCarouselIndicators');
+        const modalInfoView = document.getElementById('modalInfoView');
+        const modalMapView = document.getElementById('modalMapView');
+        const mapImage = document.getElementById('modalMapImage');
+        const mapMarker = document.getElementById('modalMapMarker');
+
+        // Map Paths
+        const floorMaps = {
+            1: "{{ asset('assets/images/floors/1st_floor.png') }}",
+            2: "{{ asset('assets/images/floors/2nd_floor.png') }}"
+        };
+
+        function openStoreModal(id) {
+            currentTenant = tenants.find(t => t.id == id);
+            if (!currentTenant) return;
+
+            // Reset View
+            modalInfoView.style.display = 'block';
+            modalMapView.style.display = 'none';
+            currentPhotoIndex = 0;
+
+            // Populate Info
+            document.getElementById('modalTenantName').textContent = currentTenant.name;
+            document.getElementById('modalCategoryText').textContent = currentTenant.category.name;
+            document.getElementById('modalHours').textContent = currentTenant.hours || '10:00 AM - 10:00 PM';
+            document.getElementById('modalLocation').textContent = `Unit ${currentTenant.unit}, ${currentTenant.map_coords.floor == 1 ? '1st Floor' : '2nd Floor'}`;
+            document.getElementById('modalDescription').innerHTML = currentTenant.description || 'No description available.';
+            document.getElementById('modalFloorBadge').textContent = currentTenant.map_coords.floor == 1 ? '1st Floor' : '2nd Floor';
+
+            // Logo
+            const logoContainer = document.getElementById('modalLogo');
+            const logoUrl = currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '/assets/images/placeholder-logo.png';
+            logoContainer.innerHTML = `<img src="${logoUrl}" alt="${currentTenant.name}">`;
+
+            // Carousel
+            renderCarousel();
+
+            // Show Modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderCarousel() {
+            carouselImages.innerHTML = '';
+            carouselIndicators.innerHTML = '';
+
+            const photos = currentTenant.photos && currentTenant.photos.length > 0 
+                ? currentTenant.photos 
+                : (currentTenant.primaryPhoto ? [currentTenant.primaryPhoto] : []);
+
+            if (photos.length === 0) {
+                carouselImages.innerHTML = `<img src="/assets/images/placeholder-store.jpg" alt="No Image">`;
+                return;
+            }
+
+            photos.forEach((photo, index) => {
+                const img = document.createElement('img');
+                img.src = `/storage/${photo.path}`;
+                carouselImages.appendChild(img);
+
+                const dot = document.createElement('div');
+                dot.className = `indicator-dot ${index === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToPhoto(index);
+                carouselIndicators.appendChild(dot);
+            });
+
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const width = carouselImages.parentElement.offsetWidth;
+            carouselImages.style.transform = `translateX(-${currentPhotoIndex * width}px)`;
+            
+            document.querySelectorAll('.indicator-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentPhotoIndex);
+            });
+        }
+
+        function goToPhoto(index) {
+            currentPhotoIndex = index;
+            updateCarousel();
+        }
+
+        // Event Listeners
+        document.getElementById('modalCloseBtn').onclick = closeModal;
+        document.getElementById('modalOverlay').onclick = closeModal;
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modalCarouselPrev').onclick = () => {
+            const photosCount = carouselImages.children.length;
+            currentPhotoIndex = (currentPhotoIndex - 1 + photosCount) % photosCount;
+            updateCarousel();
+        };
+
+        document.getElementById('modalCarouselNext').onclick = () => {
+            const photosCount = carouselImages.children.length;
+            currentPhotoIndex = (currentPhotoIndex + 1) % photosCount;
+            updateCarousel();
+        };
+
+        // Map Logic
+        document.getElementById('showOnMapBtn').onclick = () => {
+            modalInfoView.style.display = 'none';
+            modalMapView.style.display = 'block';
+            
+            setMapFloor(currentTenant.map_coords.floor);
+            positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
+        };
+
+        document.getElementById('btnBackToInfo').onclick = () => {
+            modalMapView.style.display = 'none';
+            modalInfoView.style.display = 'block';
+        };
+
+        function setMapFloor(floor) {
+            currentMapFloor = floor;
+            mapImage.src = floorMaps[floor];
+            
+            document.querySelectorAll('.floor-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.floor == floor);
+            });
+
+            // If switching to a floor that isn't the tenant's floor, hide marker
+            if (floor != currentTenant.map_coords.floor) {
+                mapMarker.style.display = 'none';
+            } else {
+                mapMarker.style.display = 'block';
+                positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
+            }
+        }
+
+        function positionMarker(x, y) {
+            mapMarker.style.left = x + '%';
+            mapMarker.style.top = y + '%';
+        }
+
+        document.querySelectorAll('.floor-btn').forEach(btn => {
+            btn.onclick = () => setMapFloor(btn.dataset.floor);
+        });
+
+        // Initialize reveal animations for cards
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.stagger-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 50) {
+                    card.classList.add('show');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
