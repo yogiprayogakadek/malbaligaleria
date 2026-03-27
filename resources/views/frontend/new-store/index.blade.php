@@ -127,46 +127,21 @@
 
         <section class="new-store-grid" id="tenantGrid">
             @forelse($tenants as $index => $tenant)
-                <div class="tenant-card stagger-card show" data-unit="{{ $tenant->map_coords['unit'] ?? '' }}"
-                    data-floor="{{ $tenant->map_coords['floor'] }}" data-coords-x="{{ $tenant->map_coords['x'] }}"
-                    data-coords-y="{{ $tenant->map_coords['y'] }}" style="animation-delay: {{ $index * 0.1 }}s"
+                <div class="tenant-card stagger-card show" style="animation-delay: {{ $index * 0.1 }}s"
                     onclick="openStoreModal({{ $tenant->id }})">
-                    <div class="tenant-logo">
-                        <img src="{{ $tenant->logo ? asset('storage/' . $tenant->logo) : ($tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg')) }}"
-                            alt="{{ $tenant->name }}" loading="lazy">
+                    <div class="tenant-card-image"
+                        style="background-image: url({{ $tenant->logo ? asset('storage/' . $tenant->logo) : ($tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg')) }});"
+                        loading="lazy">
                     </div>
-                    <div class="tenant-info">
-                        <span class="floor-badge">{{ ($tenant->map_coords['floor'] ?? 1) == 1 ? '1st Floor' : '2nd Floor' }}</span>
+                    <div class="tenant-card-content">
                         <h3>{{ $tenant->name }}</h3>
-                        <p class="tenant-category">
-                            <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
-                            </svg>
-                            {{ $tenant->category->name }}
-                        </p>
-                        <div class="tenant-meta">
-                            <div class="meta-item">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
-                                <span>Unit {{ $tenant->map_coords['unit'] ?? '' }}</span>
-                            </div>
-                            <div class="meta-item">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <polyline points="12 6 12 12 16 14" />
-                                </svg>
-                                <span class="store-hours">{{ $tenant->hours }}</span>
-                            </div>
-                        </div>
-                        <button class="see-details-btn">
-                            Learn More
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </button>
+                        <p>{{ $tenant->category->name }}</p>
+                        <span class="tenant-card-tag">
+                            @php
+                                $floor = $tenant->map_coords['floor'] ?? 1;
+                            @endphp
+                            {{ $floor == 1 ? '1st Floor' : '2nd Floor' }}
+                        </span>
                     </div>
                 </div>
             @empty
@@ -189,8 +164,34 @@
                 </svg>
             </button>
 
+            <button class="favorite-btn" id="modalFavoriteBtn" data-unit="">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+            </button>
+
+            <button class="share-btn" id="modalShareBtn" title="Share Store">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+            </button>
+
             <div class="modal-content">
                 <div class="modal-carousel">
+                    <div class="carousel-swipe-hint" id="carouselSwipeHint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                        Swipe to browse
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </div>
                     <div class="carousel-loading" id="modalCarouselLoading">
                         <div class="loading-status">
                             <div class="loading-spinner"></div>
@@ -475,6 +476,12 @@
             document.getElementById('modalDescription').innerHTML = currentTenant.description || 'No description available.';
             document.getElementById('modalFloorBadge').textContent = (currentTenant.map_coords.floor || 1) == 1 ? '1st Floor' : '2nd Floor';
 
+            // Favorite Button State
+            const favBtn = document.getElementById('modalFavoriteBtn');
+            const favorites = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+            favBtn.classList.toggle('active', favorites.includes(currentTenant.map_coords.unit));
+            favBtn.dataset.unit = currentTenant.map_coords.unit;
+
             // Logo
             const logoContainer = document.getElementById('modalLogo');
             const logoUrl = currentTenant.logo ? `/storage/${currentTenant.logo}` : (currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}');
@@ -486,6 +493,16 @@
             // Show Modal
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Show swipe hint if multiple photos
+            const photosCount = (currentTenant.photos && currentTenant.photos.length) || (currentTenant.primaryPhoto ? 1 : 0);
+            const hint = document.getElementById('carouselSwipeHint');
+            if (photosCount > 1) {
+                hint.classList.add('show');
+                setTimeout(() => hint.classList.remove('show'), 3000);
+            } else {
+                hint.classList.remove('show');
+            }
         }
 
         function renderCarousel() {
@@ -538,14 +555,49 @@
             document.body.style.overflow = '';
         }
 
+        // Favorite Button Logic
+        const favBtn = document.getElementById('modalFavoriteBtn');
+        favBtn.onclick = () => {
+            const unit = favBtn.dataset.unit;
+            let favorites = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+            
+            if (favorites.includes(unit)) {
+                favorites = favorites.filter(f => f !== unit);
+                favBtn.classList.remove('active');
+            } else {
+                favorites.push(unit);
+                favBtn.classList.add('active');
+            }
+            
+            localStorage.setItem('mbg_favorites', JSON.stringify(favorites));
+        };
+
+        // Share Button Logic
+        document.getElementById('modalShareBtn').onclick = () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: currentTenant.name + ' | Mal Bali Galeria',
+                    text: 'Check out ' + currentTenant.name + ' at Mal Bali Galeria',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('Link copied to clipboard!');
+                });
+            }
+        };
+
         document.getElementById('modalCarouselPrev').onclick = () => {
             const photosCount = carouselImages.children.length;
+            if (photosCount <= 1) return;
             currentPhotoIndex = (currentPhotoIndex - 1 + photosCount) % photosCount;
             updateModalCarousel();
         };
 
         document.getElementById('modalCarouselNext').onclick = () => {
             const photosCount = carouselImages.children.length;
+            if (photosCount <= 1) return;
             currentPhotoIndex = (currentPhotoIndex + 1) % photosCount;
             updateModalCarousel();
         };
