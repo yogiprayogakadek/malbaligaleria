@@ -402,7 +402,16 @@
                             </div>
                         </div>
                     @empty
-                        <h3 class="text-center">No data available</h3>
+                        <div class="event-empty-state">
+                            <div class="empty-state-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="m11.995 13.7h.01M11.995 16.7h.01M8.291 13.7h.01M8.291 16.7h.01M15.701 13.7h.01M15.701 16.7h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <h3>No events scheduled at the moment</h3>
+                            <p>Check back soon for exciting upcoming events and activities at Mal Bali Galeria.</p>
+                        </div>
                     @endforelse
                 </div>
             </div>
@@ -414,63 +423,72 @@
     </section>
 
     {{-- ===== EXHIBITION SECTION ===== --}}
-    @if (isset($exhibitionEvents) && $exhibitionEvents->count() > 0)
-        <section class="event-section reveal" id="exhibition">
-            <div class="event-container">
-                <h2>Exhibition</h2>
-                <p class="event-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
-                <div class="event-slider-wrapper">
-                    <div class="event-grid" id="exhibitionGrid">
-                        @foreach ($exhibitionEvents as $exEvent)
-                            @php
-                                $exDateStr = '';
-                                if ($exEvent->start_date) {
-                                    $exDateStr = date('d M', strtotime($exEvent->start_date));
-                                    if ($exEvent->end_date && $exEvent->start_date != $exEvent->end_date) {
-                                        $exDateStr .= ' – ' . date('d M Y', strtotime($exEvent->end_date));
-                                    } else {
-                                        $exDateStr .= ' ' . date('Y', strtotime($exEvent->start_date));
-                                    }
+    <section class="event-section reveal" id="exhibition">
+        <div class="event-container">
+            <h2>Exhibition</h2>
+            <p class="event-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
+            <div class="event-slider-wrapper">
+                <div class="event-grid" id="exhibitionGrid">
+                    @forelse ($exhibitionEvents ?? [] as $exEvent)
+                        @php
+                            $exDateStr = '';
+                            if ($exEvent->start_date) {
+                                $exDateStr = date('d M', strtotime($exEvent->start_date));
+                                if ($exEvent->end_date && $exEvent->start_date != $exEvent->end_date) {
+                                    $exDateStr .= ' – ' . date('d M Y', strtotime($exEvent->end_date));
+                                } else {
+                                    $exDateStr .= ' ' . date('Y', strtotime($exEvent->start_date));
                                 }
-                            @endphp
-                            <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                                data-event-uuid="{{ $exEvent->uuid }}" data-event-name="{{ $exEvent->name }}"
-                                data-event-date="{{ $exDateStr }}" data-event-desc="{{ $exEvent->description }}"
-                                data-event-location="{{ $exEvent->location }}"
-                                data-event-image="{{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                                data-event-type="Exhibition">
-                                <div class="event-card-bg"
-                                    style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
-                                </div>
-                                <div class="event-card-content">
-                                    @if ($exEvent->start_date)
-                                        <span class="event-date">{{ $exDateStr }}</span>
-                                    @endif
-                                    <h3>{{ $exEvent->name }}</h3>
-                                    <p class="event-desc">{{ Str::limit($exEvent->description, 80) }}</p>
-                                    @if ($exEvent->location)
-                                        <span class="event-location">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                <circle cx="12" cy="10" r="3" />
-                                            </svg>
-                                            {{ $exEvent->location }}
-                                        </span>
-                                    @endif
-                                    <span class="event-link">Learn More →</span>
-                                </div>
+                            }
+                        @endphp
+                        <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
+                            data-event-uuid="{{ $exEvent->uuid }}" data-event-name="{{ $exEvent->name }}"
+                            data-event-date="{{ $exDateStr }}" data-event-desc="{{ $exEvent->description }}"
+                            data-event-location="{{ $exEvent->location }}"
+                            data-event-image="{{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="Exhibition">
+                            <div class="event-card-bg"
+                                style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="event-controls" id="exhibitionControls">
-                    <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
-                    <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
+                            <div class="event-card-content">
+                                @if ($exEvent->start_date)
+                                    <span class="event-date">{{ $exDateStr }}</span>
+                                @endif
+                                <h3>{{ $exEvent->name }}</h3>
+                                <p class="event-desc">{{ Str::limit($exEvent->description, 80) }}</p>
+                                @if ($exEvent->location)
+                                    <span class="event-location">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        {{ $exEvent->location }}
+                                    </span>
+                                @endif
+                                <span class="event-link">Learn More →</span>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="event-empty-state">
+                            <div class="empty-state-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="m11.995 13.7h.01M11.995 16.7h.01M8.291 13.7h.01M8.291 16.7h.01M15.701 13.7h.01M15.701 16.7h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <h3>No exhibitions scheduled at the moment</h3>
+                            <p>Stay tuned for upcoming exclusive experiences and unique showcases at Mal Bali Galeria.</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
-        </section>
-    @endif
+            <div class="event-controls" id="exhibitionControls">
+                <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
+                <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
+            </div>
+        </div>
+    </section>
 
     <section class="map-section reveal">
         <div class="map-container">
