@@ -746,16 +746,6 @@
                 </svg>
             </button>
 
-            <button class="event-modal-share-btn" id="eventModalShareBtn" title="Share Event">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="18" cy="5" r="3" />
-                    <circle cx="6" cy="12" r="3" />
-                    <circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                </svg>
-            </button>
-
             <div class="event-modal-content">
                 <div class="event-modal-carousel">
                     <div class="carousel-swipe-hint" id="eventModalCarouselSwipeHint">
@@ -818,14 +808,41 @@
                                 <span class="info-value" id="eventModalLocation"></span>
                             </div>
                         </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                <line x1="7" y1="7" x2="7.01" y2="7" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Type</span>
+                                <span class="info-value" id="eventModalType"></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="event-modal-description" id="eventModalDescription"></div>
 
                     <div class="event-modal-actions">
-                        <a href="#" id="eventModalDetailLink" class="event-modal-detail-btn">
-                            View Full Details →
-                        </a>
+                        <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            Add to Calendar
+                        </button>
+                        <button class="event-modal-share-btn" id="eventModalShareBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3" />
+                                <circle cx="6" cy="12" r="3" />
+                                <circle cx="18" cy="19" r="3" />
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                            </svg>
+                            Share Event
+                        </button>
                     </div>
                 </div>
             </div>

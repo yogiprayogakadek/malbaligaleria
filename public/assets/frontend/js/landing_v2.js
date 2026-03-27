@@ -1860,7 +1860,8 @@ function renderModalMap(data) {
     const titleEl = document.getElementById("eventModalTitle");
     const descEl = document.getElementById("eventModalDescription");
     const locationEl = document.getElementById("eventModalLocation");
-    const detailLink = document.getElementById("eventModalDetailLink");
+    const typeEl = document.getElementById("eventModalType");
+    const calendarBtn = document.getElementById("eventModalCalendarBtn");
     const shareBtn = document.getElementById("eventModalShareBtn");
 
     if (!modal) return;
@@ -1945,6 +1946,7 @@ function renderModalMap(data) {
         if (dateEl) dateEl.textContent = card.dataset.eventDate || "";
         if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
         if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
+        if (typeEl) typeEl.textContent = card.dataset.eventType || "Event";
         
         // Use card image as placeholder in carousel
         const placeholderImg = card.dataset.eventImage || "/assets/images/no_image.jpg";
@@ -1960,8 +1962,8 @@ function renderModalMap(data) {
             if (dateEl) dateEl.textContent = data.date;
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
+            if (typeEl) typeEl.textContent = data.type;
             if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
-            if (detailLink) detailLink.href = `/event/${data.uuid}`;
             
             renderCarousel(data.images, data.name);
         }
@@ -1995,6 +1997,21 @@ function renderModalMap(data) {
             closeEventModal();
         }
     });
+
+    if (calendarBtn) {
+        calendarBtn.addEventListener("click", () => {
+            if (!titleEl) return;
+            const title = titleEl.textContent;
+            const location = locationEl ? locationEl.textContent : "Mal Bali Galeria";
+            const details = descEl ? descEl.textContent.trim() : "";
+            const rawDate = dateEl ? dateEl.textContent : "";
+            
+            // Basic date parsing (MBG usually uses DD MMM YYYY or similar)
+            // If parsing fails, just use current time or simplified link
+            const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`;
+            window.open(calendarUrl, "_blank");
+        });
+    }
 
     if (shareBtn) {
         shareBtn.addEventListener("click", () => {

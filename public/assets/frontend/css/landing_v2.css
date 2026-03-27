@@ -6096,7 +6096,7 @@ body.dark-mode .event-modal-share-btn:hover {
         text-align: center;
     }
 }
-@charset " UTF-8\;
+@charset "UTF-8";
 
 /* ========================================
  EVENT DETAIL MODAL (NEW DESIGN)
@@ -6155,10 +6155,11 @@ body.dark-mode .event-modal-container {
  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Close & Share Buttons */
-.event-modal-close,
-.event-modal-share-btn {
+/* Close Button */
+.event-modal-close {
  position: absolute;
+ top: 20px;
+ right: 20px;
  width: 40px;
  height: 40px;
  background: rgba(255, 255, 255, 0.9);
@@ -6173,29 +6174,22 @@ body.dark-mode .event-modal-container {
  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.event-modal-close { top: 20px; right: 20px; }
-.event-modal-share-btn { top: 20px; right: 70px; }
-
-.event-modal-close:hover,
-.event-modal-share-btn:hover {
+.event-modal-close:hover {
  transform: scale(1.1);
  background: white;
 }
 
-.event-modal-close svg,
-.event-modal-share-btn svg {
+.event-modal-close svg {
  width: 20px;
  height: 20px;
  stroke: #333;
 }
 
-body.dark-mode .event-modal-close,
-body.dark-mode .event-modal-share-btn {
+body.dark-mode .event-modal-close {
  background: rgba(40, 40, 40, 0.9);
 }
 
-body.dark-mode .event-modal-close svg, 
-body.dark-mode .event-modal-share-btn svg {
+body.dark-mode .event-modal-close svg {
  stroke: white;
 }
 
@@ -6245,7 +6239,7 @@ body.dark-mode .event-modal-carousel {
 .event-modal-carousel .carousel-image img {
  width: 100%;
  height: 100%;
- object-fit: cover;
+ object-fit: contain;
 }
 
 /* Info Section */
@@ -6343,22 +6337,82 @@ body.dark-mode .event-modal-description {
 
 .event-modal-actions {
  margin-top: auto;
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 12px;
 }
 
-.event-modal-detail-btn {
+@media (max-width: 480px) {
+ .event-modal-actions {
+ grid-template-columns: 1fr;
+ }
+}
+
+.event-modal-calendar-btn,
+.event-modal-share-btn {
  display: inline-flex;
  align-items: center;
- padding: 14px 28px;
- background: var(--primary-gradient);
- color: white;
+ justify-content: center;
+ gap: 10px;
+ padding: 14px 20px;
  border-radius: 50px;
- text-decoration: none;
  font-weight: 600;
  font-size: 14px;
  transition: all 0.3s ease;
+ cursor: pointer;
+ border: none;
+ text-decoration: none;
+ width: 100%;
 }
 
-.event-modal-detail-btn:hover {
- transform: translateY(-2px);
- box-shadow: 0 10px 20px rgba(44, 95, 93, 0.3);
+.event-modal-calendar-btn {
+ background: var(--primary-gradient);
+ color: white;
+ box-shadow: 0 4px 15px rgba(44, 95, 93, 0.2);
+}
+
+.event-modal-calendar-btn:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 8px 20px rgba(44, 95, 93, 0.3);
+}
+
+.event-modal-share-btn {
+ background: #f0f0f0;
+ color: #333;
+ border: 1.5px solid #e0e0e0;
+}
+
+.event-modal-share-btn:hover {
+ background: #e8e8e8;
+ border-color: #d0d0d0;
+ transform: translateY(-3px);
+}
+
+body.dark-mode .event-modal-share-btn {
+ background: rgba(255, 255, 255, 0.05);
+ color: #eee;
+ border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .event-modal-share-btn:hover {
+ background: rgba(255, 255, 255, 0.1);
+ border-color: rgba(255, 255, 255, 0.2);
+}
+
+.event-modal-calendar-btn svg,
+.event-modal-share-btn svg {
+ width: 18px;
+ height: 18px;
+}
+
+.event-modal-calendar-btn svg {
+ stroke: white;
+}
+
+.event-modal-share-btn svg {
+ stroke: #333;
+}
+
+body.dark-mode .event-modal-share-btn svg {
+ stroke: white;
 }
