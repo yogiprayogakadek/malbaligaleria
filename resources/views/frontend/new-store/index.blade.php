@@ -129,19 +129,41 @@
             @forelse($tenants as $index => $tenant)
                 <div class="tenant-card stagger-card show" style="animation-delay: {{ $index * 0.1 }}s"
                     onclick="openStoreModal({{ $tenant->id }})">
-                    <div class="tenant-card-image"
-                        style="background-image: url({{ $tenant->logo ? asset('storage/' . $tenant->logo) : ($tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg')) }});"
-                        loading="lazy">
+                    <div class="tenant-logo">
+                        <img src="{{ $tenant->logo ? asset('storage/' . $tenant->logo) : ($tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg')) }}"
+                            alt="{{ $tenant->name }}" loading="lazy">
                     </div>
-                    <div class="tenant-card-content">
+                    <div class="tenant-info">
+                        <span class="floor-badge">{{ ($tenant->map_coords['floor'] ?? 1) == 1 ? '1st Floor' : '2nd Floor' }}</span>
                         <h3>{{ $tenant->name }}</h3>
-                        <p>{{ $tenant->category->name }}</p>
-                        <span class="tenant-card-tag">
-                            @php
-                                $floor = $tenant->map_coords['floor'] ?? 1;
-                            @endphp
-                            {{ $floor == 1 ? '1st Floor' : '2nd Floor' }}
-                        </span>
+                        <p class="tenant-category">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
+                            </svg>
+                            {{ $tenant->category->name }}
+                        </p>
+                        <div class="tenant-meta">
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <span>Unit {{ $tenant->map_coords['unit'] ?? '' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <span>{{ $tenant->hours ?: '10:00 - 22:00' }}</span>
+                            </div>
+                        </div>
+                        <button class="see-details-btn">
+                            Learn More
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             @empty
