@@ -231,6 +231,26 @@
                             </div>
                         </div>
 
+                        {{-- Is new --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="isNew" class="form-label col-sm-3 col-form-label">New Store</label>
+                            <div class="col-sm-12">
+                                <div class="col-sm-12">
+                                    <select name="is_new" id="isNew"
+                                        class="form-control @error('is_new') is-invalid @enderror">
+                                        <option value="">Choose if this is new store...</option>
+                                        <option value="1" {{ $tenant->is_new == '1' ? 'selected' : '' }}>
+                                            Yes, it is new
+                                        </option>
+                                    </select>
+                                    <small>Leave empty for existing stores</small>
+                                    @error('is_new')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Tenant Description --}}
                         <div class="mb-4 row align-items-center">
                             <label for="description" class="form-label col-sm-3 col-form-label">Description</label>
