@@ -69,16 +69,24 @@
         </svg>
     </button>
 
-    <header class="scrolled">
+    <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" style="height: 30px; width: auto;"
+                    loading="lazy">
             </a>
         </div>
+
         <div class="logo">
-            <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
+            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
+                style="height: 45px; width: auto; object-fit: contain;">
         </div>
-        <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+
+        <button class="menu-btn" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
     <!-- Sidebar -->
@@ -86,30 +94,29 @@
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
-        <button class="sidebar-close" id="sidebarClose"><span></span><span></span><span></span></button>
+
+        <button class="sidebar-close" id="sidebarClose">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <nav>
             <ul>
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
-                {{-- <li><a href="#tenants">Tenants</a></li> --}}
-                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
-                {{-- <li><a href="#experience">Experience</a></li> --}}
-                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
+
+                <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
+                @role('admin')
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                @endrole
             </ul>
         </nav>
-
-        <!-- Search in Sidebar for Mobile -->
-        <div class="sidebar-search">
-            <div class="search-bar">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="8" stroke-width="2" />
-                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <input type="text" placeholder="Search">
-            </div>
-        </div>
     </div>
 
     <main>
@@ -193,13 +200,11 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
-                        {{-- <li><a href="#tenants">Store Directory</a></li> --}}
-                        {{-- <li><a href="#experience">Experiences</a></li> --}}
-                        <li><a href="{{ route('frontend.dining.index') }}">Tenants Directory</a></li>
-                        <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
+                        <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
                         <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        {{-- <li><a href="#career">Careers</a></li> --}}
+                        <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                        <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
                     </ul>
                 </div>
 
@@ -253,6 +258,37 @@
             </div>
         </div>
     </footer>
+
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7" />
+        </svg>
+    </button>
+
+    {{-- Sticky Mobile CTA Bar --}}
+    <div class="mobile-sticky-cta" id="mobileStickyBar">
+        <a href="{{ route('frontend.landing') }}" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="{{ route('frontend.directory.index') }}" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z" />
+            </svg>
+            <span>Directory</span>
+        </a>
+        <a href="tel:+62361755277" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Call</span>
+        </a>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
