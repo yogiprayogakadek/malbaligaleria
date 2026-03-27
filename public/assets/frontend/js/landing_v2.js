@@ -441,18 +441,29 @@ updateCardsPerView();
 
     const cards = grid.querySelectorAll(".regular-show-card");
     let currentIndex = 0;
-    let cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+
+    const getCardsPerView = () => {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 1100) return 2;
+        return 3;
+    };
+
+    let cardsPerView = getCardsPerView();
     const isMobile = () => window.innerWidth <= 768;
 
     const update = () => {
         if (!cards.length) return;
+
+        // Clamp currentIndex so we don't go past the last full page
+        const maxIndex = Math.max(0, cards.length - cardsPerView);
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
 
         if (isMobile()) {
             // On mobile, use native scroll-snap scrollTo
             const cardWidth = grid.offsetWidth;
             grid.scrollTo({ left: currentIndex * cardWidth, behavior: "smooth" });
         } else {
-            // On desktop, use transform translateX
+            // On desktop/tablet, use transform translateX
             const cardWidth = cards[0].offsetWidth;
             const gap = 30;
             grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
@@ -466,9 +477,8 @@ updateCardsPerView();
     };
 
     const onResize = () => {
-        cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        cardsPerView = getCardsPerView();
         if (!isMobile()) {
-            // Reset scroll when switching back to desktop
             grid.scrollLeft = 0;
         } else {
             grid.style.transform = "";
