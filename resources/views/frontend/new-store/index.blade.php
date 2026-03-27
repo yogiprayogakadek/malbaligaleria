@@ -127,16 +127,16 @@
 
         <section class="new-store-grid" id="tenantGrid">
             @forelse($tenants as $index => $tenant)
-                <div class="tenant-card stagger-card show" data-unit="{{ $tenant->unit }}"
+                <div class="tenant-card stagger-card show" data-unit="{{ $tenant->map_coords['unit'] ?? '' }}"
                     data-floor="{{ $tenant->map_coords['floor'] }}" data-coords-x="{{ $tenant->map_coords['x'] }}"
                     data-coords-y="{{ $tenant->map_coords['y'] }}" style="animation-delay: {{ $index * 0.1 }}s"
                     onclick="openStoreModal({{ $tenant->id }})">
                     <div class="tenant-logo">
-                        <img src="{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                        <img src="{{ $tenant->logo ? asset('storage/' . $tenant->logo) : ($tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg')) }}"
                             alt="{{ $tenant->name }}" loading="lazy">
                     </div>
                     <div class="tenant-info">
-                        <span class="floor-badge">{{ $tenant->map_coords['floor'] == 1 ? '1st Floor' : '2nd Floor' }}</span>
+                        <span class="floor-badge">{{ ($tenant->map_coords['floor'] ?? 1) == 1 ? '1st Floor' : '2nd Floor' }}</span>
                         <h3>{{ $tenant->name }}</h3>
                         <p class="tenant-category">
                             <svg viewBox="0 0 24 24">
@@ -151,7 +151,7 @@
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                     <circle cx="12" cy="10" r="3" />
                                 </svg>
-                                <span>Unit {{ $tenant->unit }}</span>
+                                <span>Unit {{ $tenant->map_coords['unit'] ?? '' }}</span>
                             </div>
                             <div class="meta-item">
                                 <svg viewBox="0 0 24 24">
@@ -265,7 +265,6 @@
                         <div class="modal-description" id="modalDescription"></div>
                     </div>
 
-                    {{-- Map View --}}
                     <div id="modalMapView" style="display: none;">
                         <div class="modal-map-header">
                             <button class="modal-map-back" id="btnBackToInfo">
@@ -274,19 +273,23 @@
                                 </svg>
                                 Back to Info
                             </button>
-                            <div class="modal-map-floors">
-                                <button class="floor-btn" data-floor="1">1st Floor</button>
-                                <button class="floor-btn" data-floor="2">2nd Floor</button>
+                            <h4 class="modal-map-title">
+                                Store Location
+                                <span class="modal-map-floor-badge" id="modalMapFloorBadge"></span>
+                            </h4>
+                        </div>
+                        <div class="modal-map-wrapper">
+                            <img src="" id="modalFloorMap" alt="Floor Map">
+                            <div class="map-marker-logo" id="modalMapMarkerLogo">
+                                <div class="logo-pin">
+                                    <img src="" id="markerLogoImg" alt="">
+                                </div>
+                                <div class="marker-pulse"></div>
                             </div>
                         </div>
-                        <div class="modal-map-container">
-                            <div class="map-wrapper" id="modalMapWrapper">
-                                <img src="" alt="Mall Map" id="modalMapImage">
-                                <div class="map-marker" id="modalMapMarker">
-                                    <div class="marker-pin"></div>
-                                    <div class="marker-pulse"></div>
-                                </div>
-                            </div>
+                        <div class="map-floors" style="padding-top: 15px;">
+                            <button class="floor-btn" data-floor="1">1st Floor</button>
+                            <button class="floor-btn" data-floor="2">2nd Floor</button>
                         </div>
                     </div>
                 </div>
@@ -468,13 +471,13 @@
             document.getElementById('modalTenantName').textContent = currentTenant.name;
             document.getElementById('modalCategoryText').textContent = currentTenant.category.name;
             document.getElementById('modalHours').textContent = currentTenant.hours || '10:00 AM - 10:00 PM';
-            document.getElementById('modalLocation').textContent = `Unit ${currentTenant.unit}, ${currentTenant.map_coords.floor == 1 ? '1st Floor' : '2nd Floor'}`;
+            document.getElementById('modalLocation').textContent = `Unit ${currentTenant.map_coords.unit || ''}, ${currentTenant.map_coords.floor == 1 ? '1st Floor' : '2nd Floor'}`;
             document.getElementById('modalDescription').innerHTML = currentTenant.description || 'No description available.';
-            document.getElementById('modalFloorBadge').textContent = currentTenant.map_coords.floor == 1 ? '1st Floor' : '2nd Floor';
+            document.getElementById('modalFloorBadge').textContent = (currentTenant.map_coords.floor || 1) == 1 ? '1st Floor' : '2nd Floor';
 
             // Logo
             const logoContainer = document.getElementById('modalLogo');
-            const logoUrl = currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}';
+            const logoUrl = currentTenant.logo ? `/storage/${currentTenant.logo}` : (currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}');
             logoContainer.innerHTML = `<img src="${logoUrl}" alt="${currentTenant.name}">`;
 
             // Carousel
@@ -552,6 +555,10 @@
             modalInfoView.style.display = 'none';
             modalMapView.style.display = 'block';
             
+            // Marker Logo
+            const logoUrl = currentTenant.logo ? `/storage/${currentTenant.logo}` : (currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}');
+            document.getElementById('markerLogoImg').src = logoUrl;
+            
             setMapFloor(currentTenant.map_coords.floor);
             positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
         };
@@ -563,24 +570,26 @@
 
         function setMapFloor(floor) {
             currentMapFloor = floor;
-            mapImage.src = floorMaps[floor];
+            document.getElementById('modalFloorMap').src = floorMaps[floor];
+            document.getElementById('modalMapFloorBadge').textContent = floor == 1 ? '1st Floor' : '2nd Floor';
             
             document.querySelectorAll('.floor-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.floor == floor);
             });
 
-            // If switching to a floor that isn't the tenant's floor, hide marker
+            const markerContainer = document.getElementById('modalMapMarkerLogo');
             if (floor != currentTenant.map_coords.floor) {
-                mapMarker.style.display = 'none';
+                markerContainer.style.display = 'none';
             } else {
-                mapMarker.style.display = 'block';
+                markerContainer.style.display = 'block';
                 positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
             }
         }
 
         function positionMarker(x, y) {
-            mapMarker.style.left = x + '%';
-            mapMarker.style.top = y + '%';
+            const markerContainer = document.getElementById('modalMapMarkerLogo');
+            markerContainer.style.left = x + '%';
+            markerContainer.style.top = y + '%';
         }
 
         document.querySelectorAll('.floor-btn').forEach(btn => {
