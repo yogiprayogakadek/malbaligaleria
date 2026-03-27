@@ -113,6 +113,9 @@
                 <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 <li><a href="#contact">Contact</a></li>
+                @role('admin')
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                @endrole
             </ul>
         </nav>
 
@@ -405,8 +408,12 @@
                         <div class="event-empty-state">
                             <div class="empty-state-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="m11.995 13.7h.01M11.995 16.7h.01M8.291 13.7h.01M8.291 16.7h.01M15.701 13.7h.01M15.701 16.7h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                    <path
+                                        d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path
+                                        d="m11.995 13.7h.01M11.995 16.7h.01M8.291 13.7h.01M8.291 16.7h.01M15.701 13.7h.01M15.701 16.7h.01"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                 </svg>
                             </div>
                             <h3>No events scheduled at the moment</h3>
@@ -415,7 +422,8 @@
                     @endforelse
                 </div>
             </div>
-            <div class="event-controls {{ !isset($events) || $events->count() == 0 ? 'hidden' : '' }}" id="eventControls">
+            <div class="event-controls {{ !isset($events) || $events->count() == 0 ? 'hidden' : '' }}"
+                id="eventControls">
                 <button class="event-nav-btn" id="eventPrevBtn">←</button>
                 <button class="event-nav-btn" id="eventNextBtn">→</button>
             </div>
@@ -473,17 +481,23 @@
                         <div class="event-empty-state">
                             <div class="empty-state-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="m11.995 13.7h.01M11.995 16.7h.01M8.291 13.7h.01M8.291 16.7h.01M15.701 13.7h.01M15.701 16.7h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                    <path
+                                        d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path
+                                        d="m11.995 13.7h.01M11.995 16.7h.01M8.291 13.7h.01M8.291 16.7h.01M15.701 13.7h.01M15.701 16.7h.01"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                                 </svg>
                             </div>
                             <h3>No exhibitions scheduled at the moment</h3>
-                            <p>Stay tuned for upcoming exclusive experiences and unique showcases at Mal Bali Galeria.</p>
+                            <p>Stay tuned for upcoming exclusive experiences and unique showcases at Mal Bali Galeria.
+                            </p>
                         </div>
                     @endforelse
                 </div>
             </div>
-            <div class="event-controls {{ !isset($exhibitionEvents) || $exhibitionEvents->count() == 0 ? 'hidden' : '' }}" id="exhibitionControls">
+            <div class="event-controls {{ !isset($exhibitionEvents) || $exhibitionEvents->count() == 0 ? 'hidden' : '' }}"
+                id="exhibitionControls">
                 <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
                 <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
             </div>
@@ -829,7 +843,8 @@
 
                         <div class="event-modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                <path
+                                    d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
                                 <line x1="7" y1="7" x2="7.01" y2="7" />
                             </svg>
                             <div>
@@ -910,9 +925,10 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="#about">About Us</a></li>
-                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="#regular-shows">Events</a></li>
                         <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                        <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>

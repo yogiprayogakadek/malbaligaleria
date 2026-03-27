@@ -120,12 +120,14 @@
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
 
+                <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
 
-                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
-                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
                 @role('admin')
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                     <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get
                             Coordinates</a></li>
                 @endrole
@@ -704,10 +706,11 @@
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
-                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
-                        <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
+                        <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
                         <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                        <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
                     </ul>
                 </div>
 
