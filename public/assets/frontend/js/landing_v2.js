@@ -365,7 +365,14 @@ updateCardsPerView();
     // SCOPED SELECTOR: Only cards within this grid
     const eventCards = eventGrid.querySelectorAll(".event-card");
     let eventCurrentIndex = 0;
-    let eventCardsPerView = window.innerWidth <= 768 ? 1 : 2;
+
+    const getEventCardsPerView = () => {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 1100) return 2;
+        return 3;
+    };
+
+    let eventCardsPerView = getEventCardsPerView();
 
     const updateEventSlider = () => {
         if (!eventCards.length) return;
@@ -396,7 +403,7 @@ updateCardsPerView();
     };
 
     const onResize = () => {
-        eventCardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        eventCardsPerView = getEventCardsPerView();
         updateEventSlider();
         updateEventControlsVisibility();
     };
@@ -545,7 +552,14 @@ updateCardsPerView();
 
     const cards = grid.querySelectorAll(".event-card");
     let currentIndex = 0;
-    let cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+
+    const getCardsPerView = () => {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 1100) return 2;
+        return 3;
+    };
+
+    let cardsPerView = getCardsPerView();
 
     const update = () => {
         if (!cards.length) return;
@@ -572,7 +586,7 @@ updateCardsPerView();
     };
 
     const onResize = () => {
-        cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        cardsPerView = getCardsPerView();
         update();
     };
 
