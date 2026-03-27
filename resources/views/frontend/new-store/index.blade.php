@@ -235,7 +235,7 @@
                 </div>
 
                 <div class="modal-details">
-                    {{-- Info View --}}
+                    <!-- Detail View (Initially Shown) -->
                     <div id="modalInfoView">
                         <div class="modal-header">
                             <div class="modal-logo" id="modalLogo"></div>
@@ -263,6 +263,7 @@
                                     <span class="info-value" id="modalHours"></span>
                                 </div>
                             </div>
+
                             <div class="modal-info-item">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -273,6 +274,7 @@
                                     <span class="info-value" id="modalLocation"></span>
                                 </div>
                             </div>
+
                             <div class="modal-info-item highlight" id="showOnMapBtn">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
@@ -285,6 +287,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal-description" id="modalDescription"></div>
                     </div>
 
@@ -634,6 +637,10 @@
             document.getElementById('markerLogoImg').src = logoUrl;
             
             setMapFloor(currentTenant.map_coords.floor);
+            
+            // Force marker visibility and position
+            const markerContainer = document.getElementById('modalMapMarkerLogo');
+            markerContainer.style.display = 'block';
             positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
         };
 
