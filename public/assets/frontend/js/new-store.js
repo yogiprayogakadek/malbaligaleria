@@ -363,7 +363,6 @@
         const floorMapImg = document.getElementById("modalFloorMap");
         const markerLogo = document.getElementById("modalMapMarkerLogo");
         const logoImg = document.getElementById("markerLogoImg");
-        const floorBadge = document.getElementById("modalMapFloorBadge");
 
         // Try to get coordinates from flat or nested structure
         const coords = {
@@ -373,34 +372,48 @@
         };
 
         if (coords.x && coords.y) {
-            const floorText = coords.floor == 2 ? "2nd Floor" : "1st Floor";
+            const floorId = coords.floor;
+            const floorText = floorId == 2 ? "2nd Floor" : "1st Floor";
             
+            // Update floor badge
+            const floorBadge = document.getElementById("modalMapFloorBadge");
             if (floorBadge) floorBadge.textContent = floorText;
-            if (logoImg) logoImg.src = data.logo;
+            
+            // Set marker logo
+            if (logoImg && data.logo) logoImg.src = data.logo;
+
+            // Define positionMarker closure
+            const positionMarker = () => {
+                const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
+                const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
+
+                const xPos = (coords.x / mapWidth) * 100;
+                const yPos = (coords.y / mapHeight) * 100;
+
+                if (markerLogo) {
+                    markerLogo.style.left = `${xPos}%`;
+                    markerLogo.style.top = `${yPos}%`;
+                    markerLogo.style.display = "block";
+                }
+            };
+
+            // Always clear previous onload
+            floorMapImg.onload = null;
 
             // Determine floor map source
             if (floorMapImg && window.FLOOR_MAPS) {
-                floorMapImg.src = window.FLOOR_MAPS[coords.floor] || window.FLOOR_MAPS[1];
+                const mapUrl = window.FLOOR_MAPS[floorId] || window.FLOOR_MAPS[1];
+                floorMapImg.src = mapUrl;
             }
 
-            // Calculation based on original map size (usually 1400x1000)
-            let xPos = parseFloat(coords.x);
-            let yPos = parseFloat(coords.y);
-            
-            if (xPos > 100 || yPos > 100) {
-                const mapWidth = 1400; 
-                const mapHeight = 1000;
-                xPos = (xPos / mapWidth) * 100;
-                yPos = (yPos / mapHeight) * 100;
-            }
-
-            if (markerLogo) {
-                markerLogo.style.left = `${xPos}%`;
-                markerLogo.style.top = `${yPos}%`;
-                markerLogo.style.display = "block";
+            // If image is already cached (complete), call positionMarker directly.
+            if (floorMapImg.complete && floorMapImg.naturalWidth > 0) {
+                positionMarker();
+            } else {
+                floorMapImg.onload = positionMarker;
             }
         } else {
-            console.warn("No coordinates for tenant:", data.name, data);
+            console.warn("Missing coordinates for tenant:", data.name, data);
             if (markerLogo) markerLogo.style.display = "none";
         }
     }
