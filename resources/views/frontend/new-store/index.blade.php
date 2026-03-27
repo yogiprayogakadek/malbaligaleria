@@ -127,11 +127,12 @@
 
         <section class="new-store-grid" id="tenantGrid">
             @forelse($tenants as $index => $tenant)
-                <div class="tenant-card stagger-card show" style="animation-delay: {{ $index * 0.1 }}s"
-                    onclick="openStoreModal({{ $tenant->id }})">
+                <div class="tenant-card stagger-card" 
+                     data-id="{{ $tenant->id }}"
+                     style="animation-delay: {{ $index * 0.1 }}s">
                     <div class="tenant-logo">
                         <img src="{{ $tenant->logo ? asset('storage/' . $tenant->logo) : ($tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg')) }}"
-                            alt="{{ $tenant->name }}" loading="lazy">
+                             alt="{{ $tenant->name }}" loading="lazy">
                     </div>
                     <div class="tenant-info">
                         <span class="floor-badge">{{ ($tenant->map_coords['floor'] ?? 1) == 1 ? '1st Floor' : '2nd Floor' }}</span>
@@ -158,7 +159,7 @@
                                 <span>{{ $tenant->hours ?: '10:00 - 22:00' }}</span>
                             </div>
                         </div>
-                        <button class="see-details-btn">
+                        <button class="see-details-btn" data-id="{{ $tenant->id }}">
                             Learn More
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -460,224 +461,17 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
-
     <script>
-        // Use var for better global access in scripts
-        window.tenants = @json($tenants);
-        var currentTenant = null;
-        var currentPhotoIndex = 0;
-        var currentMapFloor = 1;
-
-        // Modal Elements
-        const modal = document.getElementById('tenantModal');
-        const carouselImages = document.getElementById('modalCarouselImages');
-        const carouselIndicators = document.getElementById('modalCarouselIndicators');
-        const modalInfoView = document.getElementById('modalInfoView');
-        const modalMapView = document.getElementById('modalMapView');
-        const mapImage = document.getElementById('modalMapImage');
-        const mapMarker = document.getElementById('modalMapMarker');
-
-        // Map Paths
-        const floorMaps = {
+        window.FLOOR_MAPS = {
             1: "{{ asset('assets/images/floors/1st_floor.png') }}",
             2: "{{ asset('assets/images/floors/2nd_floor.png') }}"
         };
+        // window.tenants = @json($tenants); // Opt-in if local data is preferred over AJAX
+    </script>
+    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
 
-        function openStoreModal(id) {
-            currentTenant = window.tenants.find(t => t.id == id);
-            if (!currentTenant) return;
-
-            // Reset View
-            modalInfoView.style.display = 'block';
-            modalMapView.style.display = 'none';
-            currentPhotoIndex = 0;
-
-            // Populate Info
-            document.getElementById('modalTenantName').textContent = currentTenant.name;
-            document.getElementById('modalCategoryText').textContent = currentTenant.category.name;
-            document.getElementById('modalHours').textContent = currentTenant.hours || '10:00 AM - 10:00 PM';
-            document.getElementById('modalLocation').textContent = `Unit ${currentTenant.map_coords.unit || ''}, ${currentTenant.map_coords.floor == 1 ? '1st Floor' : '2nd Floor'}`;
-            document.getElementById('modalDescription').innerHTML = currentTenant.description || 'No description available.';
-            document.getElementById('modalFloorBadge').textContent = (currentTenant.map_coords.floor || 1) == 1 ? '1st Floor' : '2nd Floor';
-
-            // Favorite Button State
-            const favBtn = document.getElementById('modalFavoriteBtn');
-            const favorites = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
-            favBtn.classList.toggle('active', favorites.includes(currentTenant.map_coords.unit));
-            favBtn.dataset.unit = currentTenant.map_coords.unit;
-
-            // Logo
-            const logoContainer = document.getElementById('modalLogo');
-            const logoUrl = currentTenant.logo ? `/storage/${currentTenant.logo}` : (currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}');
-            logoContainer.innerHTML = `<img src="${logoUrl}" alt="${currentTenant.name}">`;
-
-            // Carousel
-            renderCarousel();
-
-            // Show Modal
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            // Show swipe hint if multiple photos
-            const photosCount = (currentTenant.photos && currentTenant.photos.length) || (currentTenant.primaryPhoto ? 1 : 0);
-            const hint = document.getElementById('carouselSwipeHint');
-            if (photosCount > 1) {
-                hint.classList.add('show');
-                setTimeout(() => hint.classList.remove('show'), 3000);
-            } else {
-                hint.classList.remove('show');
-            }
-        }
-
-        function renderCarousel() {
-            carouselImages.innerHTML = '';
-            carouselIndicators.innerHTML = '';
-
-            const photos = currentTenant.photos && currentTenant.photos.length > 0 
-                ? currentTenant.photos 
-                : (currentTenant.primaryPhoto ? [currentTenant.primaryPhoto] : []);
-
-            if (photos.length === 0) {
-                carouselImages.innerHTML = `<img src="{{ asset('assets/images/no_image.jpg') }}" alt="No Image">`;
-                return;
-            }
-
-            photos.forEach((photo, index) => {
-                const img = document.createElement('img');
-                img.src = `/storage/${photo.path}`;
-                carouselImages.appendChild(img);
-
-                const dot = document.createElement('div');
-                dot.className = `indicator-dot ${index === 0 ? 'active' : ''}`;
-                dot.onclick = () => goToPhoto(index);
-                carouselIndicators.appendChild(dot);
-            });
-
-            updateModalCarousel();
-        }
-
-        function updateModalCarousel() {
-            const width = carouselImages.parentElement.offsetWidth;
-            carouselImages.style.transform = `translateX(-${currentPhotoIndex * width}px)`;
-            
-            document.querySelectorAll('.indicator-dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentPhotoIndex);
-            });
-        }
-
-        function goToPhoto(index) {
-            currentPhotoIndex = index;
-            updateModalCarousel();
-        }
-
-        // Event Listeners
-        document.getElementById('modalCloseBtn').onclick = closeModal;
-        document.getElementById('modalOverlay').onclick = closeModal;
-
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // Favorite Button Logic
-        const favBtn = document.getElementById('modalFavoriteBtn');
-        favBtn.onclick = () => {
-            const unit = favBtn.dataset.unit;
-            let favorites = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
-            
-            if (favorites.includes(unit)) {
-                favorites = favorites.filter(f => f !== unit);
-                favBtn.classList.remove('active');
-            } else {
-                favorites.push(unit);
-                favBtn.classList.add('active');
-            }
-            
-            localStorage.setItem('mbg_favorites', JSON.stringify(favorites));
-        };
-
-        // Share Button Logic
-        document.getElementById('modalShareBtn').onclick = () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: currentTenant.name + ' | Mal Bali Galeria',
-                    text: 'Check out ' + currentTenant.name + ' at Mal Bali Galeria',
-                    url: window.location.href
-                }).catch(console.error);
-            } else {
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copied to clipboard!');
-                });
-            }
-        };
-
-        document.getElementById('modalCarouselPrev').onclick = () => {
-            const photosCount = carouselImages.children.length;
-            if (photosCount <= 1) return;
-            currentPhotoIndex = (currentPhotoIndex - 1 + photosCount) % photosCount;
-            updateModalCarousel();
-        };
-
-        document.getElementById('modalCarouselNext').onclick = () => {
-            const photosCount = carouselImages.children.length;
-            if (photosCount <= 1) return;
-            currentPhotoIndex = (currentPhotoIndex + 1) % photosCount;
-            updateModalCarousel();
-        };
-
-        // Map Logic
-        document.getElementById('showOnMapBtn').onclick = () => {
-            modalInfoView.style.display = 'none';
-            modalMapView.style.display = 'block';
-            
-            // Marker Logo
-            const logoUrl = currentTenant.logo ? `/storage/${currentTenant.logo}` : (currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}');
-            document.getElementById('markerLogoImg').src = logoUrl;
-            
-            setMapFloor(currentTenant.map_coords.floor);
-            
-            // Force marker visibility and position
-            const markerContainer = document.getElementById('modalMapMarkerLogo');
-            markerContainer.style.display = 'block';
-            positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
-        };
-
-        document.getElementById('btnBackToInfo').onclick = () => {
-            modalMapView.style.display = 'none';
-            modalInfoView.style.display = 'block';
-        };
-
-        function setMapFloor(floor) {
-            currentMapFloor = floor;
-            document.getElementById('modalFloorMap').src = floorMaps[floor];
-            document.getElementById('modalMapFloorBadge').textContent = floor == 1 ? '1st Floor' : '2nd Floor';
-            
-            document.querySelectorAll('.floor-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.floor == floor);
-            });
-
-            const markerContainer = document.getElementById('modalMapMarkerLogo');
-            if (floor != currentTenant.map_coords.floor) {
-                markerContainer.style.display = 'none';
-            } else {
-                markerContainer.style.display = 'block';
-                positionMarker(currentTenant.map_coords.x, currentTenant.map_coords.y);
-            }
-        }
-
-        function positionMarker(x, y) {
-            const markerContainer = document.getElementById('modalMapMarkerLogo');
-            markerContainer.style.left = x + '%';
-            markerContainer.style.top = y + '%';
-        }
-
-        document.querySelectorAll('.floor-btn').forEach(btn => {
-            btn.onclick = () => setMapFloor(btn.dataset.floor);
-        });
-
-        // Initialize reveal animations for cards
+    <script>
+        // Initialize reveal animations for cards (if not handled by landing_v2.js)
         window.addEventListener('scroll', () => {
             document.querySelectorAll('.stagger-card').forEach(card => {
                 const rect = card.getBoundingClientRect();
