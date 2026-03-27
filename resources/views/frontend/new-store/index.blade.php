@@ -42,7 +42,7 @@
             <div class="loader-logo">
                 <div class="loader-logo-circle">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
-                        style="display: block;">
+                        onerror="this.style.display='none'">
                 </div>
                 <h1>Mal Bali Galeria</h1>
                 <span>Enjoy, Play, Eat, Shop</span>

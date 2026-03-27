@@ -39,7 +39,8 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
-
+                <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span>
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
