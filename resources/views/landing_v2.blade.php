@@ -415,7 +415,7 @@
                     @endforelse
                 </div>
             </div>
-            <div class="event-controls" id="eventControls">
+            <div class="event-controls {{ !isset($events) || $events->count() == 0 ? 'hidden' : '' }}" id="eventControls">
                 <button class="event-nav-btn" id="eventPrevBtn">←</button>
                 <button class="event-nav-btn" id="eventNextBtn">→</button>
             </div>
@@ -483,7 +483,7 @@
                     @endforelse
                 </div>
             </div>
-            <div class="event-controls" id="exhibitionControls">
+            <div class="event-controls {{ !isset($exhibitionEvents) || $exhibitionEvents->count() == 0 ? 'hidden' : '' }}" id="exhibitionControls">
                 <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
                 <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
             </div>
