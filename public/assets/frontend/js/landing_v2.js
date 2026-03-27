@@ -365,7 +365,7 @@ updateCardsPerView();
     // SCOPED SELECTOR: Only cards within this grid
     const eventCards = eventGrid.querySelectorAll(".event-card");
     let eventCurrentIndex = 0;
-    let eventCardsPerView = window.innerWidth <= 768 ? 1 : 2;
+    let eventcardsPerView = window.innerWidth <= 768 ? 1 : 3;
 
     const updateEventSlider = () => {
         if (!eventCards.length) return;
@@ -385,7 +385,7 @@ updateCardsPerView();
     };
 
     const onResize = () => {
-        eventCardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        eventcardsPerView = window.innerWidth <= 768 ? 1 : 3;
         updateEventSlider();
         updateEventControlsVisibility();
     };
@@ -441,7 +441,7 @@ updateCardsPerView();
 
     const cards = grid.querySelectorAll(".regular-show-card");
     let currentIndex = 0;
-    let cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+    let cardsPerView = window.innerWidth <= 768 ? 1 : 3;
     const isMobile = () => window.innerWidth <= 768;
 
     const update = () => {
@@ -454,7 +454,7 @@ updateCardsPerView();
         } else {
             // On desktop, use transform translateX
             const cardWidth = cards[0].offsetWidth;
-            const gap = 30;
+            const gap = 20;
             grid.style.transform = `translateX(${-(currentIndex * (cardWidth + gap))}px)`;
         }
 
@@ -466,7 +466,7 @@ updateCardsPerView();
     };
 
     const onResize = () => {
-        cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        cardsPerView = window.innerWidth <= 768 ? 1 : 3;
         if (!isMobile()) {
             // Reset scroll when switching back to desktop
             grid.scrollLeft = 0;
@@ -514,7 +514,7 @@ updateCardsPerView();
 
     const cards = grid.querySelectorAll(".event-card");
     let currentIndex = 0;
-    let cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+    let cardsPerView = window.innerWidth <= 768 ? 1 : 3;
 
     const update = () => {
         if (!cards.length) return;
@@ -529,7 +529,7 @@ updateCardsPerView();
     };
 
     const onResize = () => {
-        cardsPerView = window.innerWidth <= 768 ? 1 : 2;
+        cardsPerView = window.innerWidth <= 768 ? 1 : 3;
         update();
     };
 
