@@ -54,14 +54,21 @@ body.dark-mode .page-header h1 {
     color: #666;
 }
 
-/* 4-Column Grid (Responsive) */
+/* 3-Column Grid (Landing Sync) */
 .new-store-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     padding: 0 4rem 10rem;
-    max-width: 1800px;
+    max-width: 1400px;
     margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+    .new-store-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 2rem 8rem;
+    }
 }
 
 @media (max-width: 600px) {
@@ -74,193 +81,140 @@ body.dark-mode .page-header h1 {
     }
 }
 
-/* Tenant Card (Premium Directory Design) */
+/* Tenant Card (Premium Directory Design Sync) */
 .tenant-card {
     background: white;
     border-radius: 1.5rem;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
     position: relative;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 body.dark-mode .tenant-card {
-    background: rgba(42, 42, 42, 0.2);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(40, 40, 40, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .tenant-card.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    opacity: 1 !important;
+    transform: none !important;
+    animation: cardFadeIn 0.6s ease forwards;
+}
+
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .tenant-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(44, 95, 93, 0.1);
+    transform: translateY(-8px) !important;
+    box-shadow: 0 15px 30px rgba(44, 95, 93, 0.15);
 }
 
 .tenant-logo {
-    height: 200px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #f8f9fa;
     padding: 20px;
     position: relative;
-    overflow: hidden;
 }
 
 body.dark-mode .tenant-logo {
-    background: #1a1a1a;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .tenant-logo img {
-    max-width: 220px;
-    max-height: 160px;
+    max-width: 120px;
+    max-height: 100px;
     object-fit: contain;
-    transition: transform 0.5s ease;
+    filter: grayscale(1);
+    opacity: 0.7;
+    transition: all 0.3s ease;
 }
 
 .tenant-card:hover .tenant-logo img {
+    filter: grayscale(0);
+    opacity: 1;
     transform: scale(1.1);
 }
 
-/* Premium Map Marker Styles (Landing Sync) */
-.map-marker-logo {
-    position: absolute;
-    width: 45px;
-    height: 45px;
-    z-index: 100;
-    pointer-events: none;
-    transform: translate(-50%, -100%);
-    display: none;
-}
-
-.logo-pin {
-    width: 38px;
-    height: 38px;
-    background: #ffffff;
-    border: 3px solid #f5f5dc;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -19px;
-    margin-left: -19px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    z-index: 2;
-}
-
-.logo-pin img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    transform: rotate(45deg);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -14px;
-    margin-left: -14px;
-}
-
-.map-marker-logo .marker-pulse {
-    width: 50px;
-    height: 50px;
-    background: rgba(245, 245, 220, 0.6);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: logoMarkerPulse 2s infinite;
-    z-index: 1;
-}
-
-@keyframes logoMarkerPulse {
-    0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.8; }
-    100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
-}
-
-body.dark-mode .logo-pin {
-    background: #333;
-    border-color: #2c5f5d;
-}
-
 .tenant-info {
-    padding: 25px;
-    position: relative;
-    text-align: left;
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .floor-badge {
     position: absolute;
-    top: -12px;
-    right: 25px;
+    top: 12px;
+    right: 12px;
     background: linear-gradient(135deg, #f5f5dc 0%, #e8e6ca 100%);
     color: #2c5f5d;
     padding: 6px 16px;
     border-radius: 20px;
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.8px;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(245, 245, 220, 0.3);
 }
 
 .tenant-info h3 {
     font-family: "Playfair Display", serif;
-    font-size: 1.45rem;
-    font-weight: 600;
-    color: var(--text-dark);
+    font-size: 20px;
     margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 700;
 }
 
 body.dark-mode .tenant-info h3 {
-    color: #f0f0f0;
+    color: #e0e0e0;
 }
 
 .tenant-category {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    color: #888;
+    font-size: 13px;
+    color: #6a7a78;
     margin-bottom: 15px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 6px;
-    text-transform: uppercase;
-    font-weight: 600;
 }
 
 .tenant-category svg {
     width: 14px;
     height: 14px;
-    fill: #2c5f5d;
+    fill: #f5f5dc;
 }
 
 .tenant-meta {
+    margin-top: auto;
     display: flex;
     gap: 15px;
-    margin-bottom: 20px;
+    font-size: 12px;
+    color: #666;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .tenant-meta {
+    border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    color: #666;
-    font-family: 'Montserrat', sans-serif;
-}
-
-body.dark-mode .meta-item {
-    color: #b0b0b0;
+    gap: 6px;
 }
 
 .meta-item svg {
@@ -271,16 +225,14 @@ body.dark-mode .meta-item {
 
 .see-details-btn {
     width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
-    color: white;
-    border: none;
+    margin-top: 15px;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #2c5f5d;
+    color: #2c5f5d;
     border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -289,13 +241,8 @@ body.dark-mode .meta-item {
 }
 
 .see-details-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(44, 95, 93, 0.3);
-}
-
-.see-details-btn svg {
-    width: 14px;
-    height: 14px;
+    background: #2c5f5d;
+    color: white;
 }
 
 /* Modal Improvements */
