@@ -1,24 +1,119 @@
 /**
  * New Store Page - Dedicated JavaScript
- * Handles tenant modal, carousel, and map functionality
+ * Handles global UI (Loader, Sidebar, Dark Mode) and tenant modal
  */
 
 (function() {
     'use strict';
 
-    // State
+    // Global UI Elements
+    const pageLoader = document.getElementById("pageLoader");
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarClose = document.getElementById("sidebarClose");
+    const darkModeToggle = document.getElementById("darkModeToggle");
+
+    // State for Modal
     let tenantData = null;
     let tenantCache = {};
     let modalImages = [];
     let currentModalImageIndex = 0;
 
-    // Elements
+    // Elements for Modal
     const tenantModal = document.getElementById("tenantModal");
     const modalOverlay = document.getElementById("modalOverlay");
     const modalCarouselImages = document.getElementById("modalCarouselImages");
     const modalCarouselIndicators = document.getElementById("modalCarouselIndicators");
     const modalCarouselPrev = document.getElementById("modalCarouselPrev");
     const modalCarouselNext = document.getElementById("modalCarouselNext");
+
+    // --- GLOBAL UI LOGIC ---
+
+    /**
+     * Page Loader Logic
+     */
+    function initLoader() {
+        if (!pageLoader) return;
+        
+        const minLoadTime = 2500; // Slightly faster than landing for efficiency
+        const loadStartTime = Date.now();
+
+        window.addEventListener("load", () => {
+            const loadTime = Date.now() - loadStartTime;
+            const remainingTime = Math.max(0, minLoadTime - loadTime);
+
+            setTimeout(() => {
+                pageLoader.classList.add("hidden");
+                document.body.classList.add("loaded");
+                setTimeout(() => {
+                    pageLoader.style.display = "none";
+                }, 500);
+            }, remainingTime);
+        });
+
+        // Fail-safe
+        setTimeout(() => {
+            if (!document.body.classList.contains("loaded") && pageLoader) {
+                pageLoader.classList.add("hidden");
+                document.body.classList.add("loaded");
+                setTimeout(() => {
+                    pageLoader.style.display = "none";
+                }, 500);
+            }
+        }, 5000);
+    }
+
+    /**
+     * Sidebar / Menu Logic
+     */
+    function initSidebar() {
+        if (!menuBtn || !sidebar || !sidebarClose) return;
+
+        menuBtn.addEventListener("click", () => {
+            menuBtn.classList.toggle("active");
+            sidebar.classList.toggle("active");
+            document.body.classList.toggle("menu-open");
+        });
+
+        sidebarClose.addEventListener("click", () => {
+            menuBtn.classList.remove("active");
+            sidebar.classList.remove("active");
+            document.body.classList.remove("menu-open");
+        });
+
+        sidebar.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                menuBtn.classList.remove("active");
+                sidebar.classList.remove("active");
+                document.body.classList.remove("menu-open");
+            });
+        });
+    }
+
+    /**
+     * Dark Mode Logic
+     */
+    function initDarkMode() {
+        if (!darkModeToggle) return;
+
+        // Apply saved state
+        if (localStorage.getItem("darkMode") === "enabled") {
+            document.body.classList.add("dark-mode");
+        }
+
+        darkModeToggle.addEventListener("click", (e) => {
+            e.preventDefault();
+            document.body.classList.toggle("dark-mode");
+            
+            if (document.body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkMode", "enabled");
+            } else {
+                localStorage.setItem("darkMode", "disabled");
+            }
+        });
+    }
+
+    // --- MODAL LOGIC ---
 
     /**
      * Fetch tenant data by ID
@@ -282,7 +377,12 @@
         }
     }
 
-    // Event Listeners
+    // Initialize Everything
+    initLoader();
+    initSidebar();
+    initDarkMode();
+
+    // Event Listeners for Modal
     if (modalCarouselPrev) {
         modalCarouselPrev.addEventListener("click", () => {
             currentModalImageIndex = (currentModalImageIndex - 1 + modalImages.length) % modalImages.length;
@@ -335,11 +435,11 @@
         if (e.key === "Escape") closeTenantModal();
     });
 
-    // Deep Link
+    // URL Param Check
     const urlParams = new URLSearchParams(window.location.search);
     const tenantId = urlParams.get("id");
     if (tenantId) {
-        setTimeout(() => openTenantModal(tenantId), 500);
+        setTimeout(() => openTenantModal(tenantId), 1000);
     }
 
 })();
