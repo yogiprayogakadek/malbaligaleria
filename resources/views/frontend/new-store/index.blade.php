@@ -129,9 +129,10 @@
             @forelse($tenants as $index => $tenant)
                 <div class="tenant-card stagger-card show" data-unit="{{ $tenant->unit }}"
                     data-floor="{{ $tenant->map_coords['floor'] }}" data-coords-x="{{ $tenant->map_coords['x'] }}"
-                    data-coords-y="{{ $tenant->map_coords['y'] }}" style="animation-delay: {{ $index * 0.1 }}s">
+                    data-coords-y="{{ $tenant->map_coords['y'] }}" style="animation-delay: {{ $index * 0.1 }}s"
+                    onclick="openStoreModal({{ $tenant->id }})">
                     <div class="tenant-logo">
-                        <img src="{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/placeholder-logo.png') }}"
+                        <img src="{{ $tenant->primaryPhoto ? asset('storage/' . $tenant->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
                             alt="{{ $tenant->name }}" loading="lazy">
                     </div>
                     <div class="tenant-info">
@@ -160,7 +161,7 @@
                                 <span class="store-hours">{{ $tenant->hours }}</span>
                             </div>
                         </div>
-                        <button class="see-details-btn" onclick="openStoreModal({{ $tenant->id }})">
+                        <button class="see-details-btn">
                             Learn More
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -433,11 +434,11 @@
     <script src="{{ asset('assets/frontend/js/landing.js') }}"></script>
 
     <script>
-        // Store Data from PHP
-        const tenants = @json($tenants);
-        let currentTenant = null;
-        let currentPhotoIndex = 0;
-        let currentMapFloor = 1;
+        // Use var for better global access in scripts
+        window.tenants = @json($tenants);
+        var currentTenant = null;
+        var currentPhotoIndex = 0;
+        var currentMapFloor = 1;
 
         // Modal Elements
         const modal = document.getElementById('tenantModal');
@@ -455,7 +456,7 @@
         };
 
         function openStoreModal(id) {
-            currentTenant = tenants.find(t => t.id == id);
+            currentTenant = window.tenants.find(t => t.id == id);
             if (!currentTenant) return;
 
             // Reset View
@@ -473,7 +474,7 @@
 
             // Logo
             const logoContainer = document.getElementById('modalLogo');
-            const logoUrl = currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '/assets/images/placeholder-logo.png';
+            const logoUrl = currentTenant.primaryPhoto ? `/storage/${currentTenant.primaryPhoto.path}` : '{{ asset('assets/images/no_image.jpg') }}';
             logoContainer.innerHTML = `<img src="${logoUrl}" alt="${currentTenant.name}">`;
 
             // Carousel
@@ -493,7 +494,7 @@
                 : (currentTenant.primaryPhoto ? [currentTenant.primaryPhoto] : []);
 
             if (photos.length === 0) {
-                carouselImages.innerHTML = `<img src="/assets/images/placeholder-store.jpg" alt="No Image">`;
+                carouselImages.innerHTML = `<img src="{{ asset('assets/images/no_image.jpg') }}" alt="No Image">`;
                 return;
             }
 
@@ -508,10 +509,10 @@
                 carouselIndicators.appendChild(dot);
             });
 
-            updateCarousel();
+            updateModalCarousel();
         }
 
-        function updateCarousel() {
+        function updateModalCarousel() {
             const width = carouselImages.parentElement.offsetWidth;
             carouselImages.style.transform = `translateX(-${currentPhotoIndex * width}px)`;
             
@@ -522,7 +523,7 @@
 
         function goToPhoto(index) {
             currentPhotoIndex = index;
-            updateCarousel();
+            updateModalCarousel();
         }
 
         // Event Listeners
@@ -537,13 +538,13 @@
         document.getElementById('modalCarouselPrev').onclick = () => {
             const photosCount = carouselImages.children.length;
             currentPhotoIndex = (currentPhotoIndex - 1 + photosCount) % photosCount;
-            updateCarousel();
+            updateModalCarousel();
         };
 
         document.getElementById('modalCarouselNext').onclick = () => {
             const photosCount = carouselImages.children.length;
             currentPhotoIndex = (currentPhotoIndex + 1) % photosCount;
-            updateCarousel();
+            updateModalCarousel();
         };
 
         // Map Logic

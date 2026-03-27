@@ -57,11 +57,11 @@ body.dark-mode .page-header h1 {
 /* 4-Column Grid */
 .new-store-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    column-gap: 2rem;
-    row-gap: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    column-gap: 2.5rem;
+    row-gap: 4rem;
     padding: 0 4rem 10rem;
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
 }
 
@@ -119,12 +119,12 @@ body.dark-mode .tenant-card {
 }
 
 .tenant-logo {
-    height: 180px;
+    height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #f8f9fa;
-    padding: 30px;
+    padding: 20px;
     position: relative;
     overflow: hidden;
 }
@@ -134,8 +134,8 @@ body.dark-mode .tenant-logo {
 }
 
 .tenant-logo img {
-    max-width: 140px;
-    max-height: 100px;
+    max-width: 180px;
+    max-height: 140px;
     object-fit: contain;
     transition: transform 0.5s ease;
 }

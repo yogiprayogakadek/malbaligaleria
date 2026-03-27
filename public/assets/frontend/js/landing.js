@@ -176,7 +176,7 @@ let isTransitioning = false;
 
 // Clone first 4 cards for infinite loop
 // Ensure container exists before appending
-if (originalCardsCount > 0 && carouselContainer) {
+if (carouselContainer && originalCardsCount > 0) {
     const clonesNeeded = 4;
     for (let i = 0; i < clonesNeeded; i++) {
         // Use modulus to handle case where originalCardsCount < 4
@@ -190,15 +190,9 @@ if (originalCardsCount > 0 && carouselContainer) {
 
     // Re-query cards after appending clones
     // We must maintain the same selector strategy
-    if (
-        carouselContainer.querySelectorAll(".tenant-card").length >
-        originalCardsCount
-    ) {
-        cards = carouselContainer.querySelectorAll(".tenant-card");
-    } else {
-        cards = document.querySelectorAll(".tenant-card");
-    }
+    cards = carouselContainer.querySelectorAll(".tenant-card");
 }
+
 
 // Update cards per view based on screen size
 const updateCardsPerView = () => {
@@ -243,14 +237,16 @@ const updateCarousel = (instant = false) => {
 };
 
 // Handle Infinite Loop Reset
-carouselContainer.addEventListener("transitionend", () => {
-    // If we've scrolled past the original set
-    if (currentIndex >= originalCardsCount) {
-        currentIndex = currentIndex % originalCardsCount;
-        updateCarousel(true); // Snap back instantly
-    }
-    isTransitioning = false;
-});
+if (carouselContainer) {
+    carouselContainer.addEventListener("transitionend", () => {
+        // If we've scrolled past the original set
+        if (currentIndex >= originalCardsCount) {
+            currentIndex = currentIndex % originalCardsCount;
+            updateCarousel(true); // Snap back instantly
+        }
+        isTransitioning = false;
+    });
+}
 
 prevBtn.addEventListener("click", () => {
     if (isTransitioning) return;
