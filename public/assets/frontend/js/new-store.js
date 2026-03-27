@@ -358,29 +358,80 @@
      * Map Pinpoint
      */
     function renderModalMap(data) {
+        if (!data) return;
+        
         const floorMapImg = document.getElementById("modalFloorMap");
         const markerLogo = document.getElementById("modalMapMarkerLogo");
         const logoImg = document.getElementById("markerLogoImg");
+        const floorBadge = document.getElementById("modalMapFloorBadge");
 
-        if (data.x && data.y) {
-            const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
-            if (floorMapImg && window.FLOOR_MAPS) {
-                floorMapImg.src = window.FLOOR_MAPS[floorId] || window.FLOOR_MAPS[1];
-            }
+        // Try to get coordinates from flat or nested structure
+        const coords = {
+            x: data.x || data.map_coords?.x || 0,
+            y: data.y || data.map_coords?.y || 0,
+            floor: data.floor_id || data.map_coords?.floor || 1
+        };
 
+        if (coords.x && coords.y) {
+            const floorText = coords.floor == 2 ? "2nd Floor" : "1st Floor";
+            
+            if (floorBadge) floorBadge.textContent = floorText;
             if (logoImg) logoImg.src = data.logo;
 
-            if (markerLogo) {
-                markerLogo.style.left = `${data.x}%`;
-                markerLogo.style.top = `${data.y}%`;
+            // Determine floor map source
+            if (floorMapImg && window.FLOOR_MAPS) {
+                floorMapImg.src = window.FLOOR_MAPS[coords.floor] || window.FLOOR_MAPS[1];
             }
+
+            // Calculation based on original map size (usually 1400x1000)
+            let xPos = parseFloat(coords.x);
+            let yPos = parseFloat(coords.y);
+            
+            if (xPos > 100 || yPos > 100) {
+                const mapWidth = 1400; 
+                const mapHeight = 1000;
+                xPos = (xPos / mapWidth) * 100;
+                yPos = (yPos / mapHeight) * 100;
+            }
+
+            if (markerLogo) {
+                markerLogo.style.left = `${xPos}%`;
+                markerLogo.style.top = `${yPos}%`;
+                markerLogo.style.display = "block";
+            }
+        } else {
+            console.warn("No coordinates for tenant:", data.name, data);
+            if (markerLogo) markerLogo.style.display = "none";
         }
+    }
+
+    /**
+     * Scroll Reveal Logic
+     */
+    function initReveal() {
+        const revealElements = document.querySelectorAll(".reveal");
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const revealPoint = 100;
+
+            revealElements.forEach((element) => {
+                const elementTop = element.getBoundingClientRect().top;
+                if (elementTop < windowHeight - revealPoint) {
+                    element.classList.add("active");
+                }
+            });
+        };
+
+        window.addEventListener("scroll", revealOnScroll);
+        // Initial check
+        setTimeout(revealOnScroll, 500);
     }
 
     // Initialize Everything
     initLoader();
     initSidebar();
     initDarkMode();
+    initReveal();
 
     // Event Listeners for Modal
     if (modalCarouselPrev) {
@@ -421,6 +472,34 @@
             tenantModal.classList.remove("map-active-mobile");
         });
     }
+
+    // Floor Switching in Modal
+    document.querySelectorAll(".floor-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".floor-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            
+            const floorId = btn.dataset.floor;
+            const floorMapImg = document.getElementById("modalFloorMap");
+            if (floorMapImg && window.FLOOR_MAPS) {
+                floorMapImg.src = window.FLOOR_MAPS[floorId];
+            }
+            
+            // Re-render map to update pin visibility for current floor
+            if (tenantData) {
+                const markerLogo = document.getElementById("modalMapMarkerLogo");
+                const tenantFloor = tenantData.floor_id || tenantData.map_coords?.floor || 1;
+                if (markerLogo) {
+                    markerLogo.style.display = (tenantFloor == floorId) ? "block" : "none";
+                }
+                
+                const floorBadge = document.getElementById("modalMapFloorBadge");
+                if (floorBadge) {
+                    floorBadge.textContent = floorId == 2 ? "2nd Floor" : "1st Floor";
+                }
+            }
+        });
+    });
 
     // Delegate Click for Cards
     document.addEventListener("click", (e) => {
