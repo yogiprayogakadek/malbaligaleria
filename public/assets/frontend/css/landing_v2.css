@@ -1735,7 +1735,7 @@ body.dark-mode .header-divider {
 .event-section {
     min-height: auto;
     background: var(--bg-light);
-    padding: 100px 40px;
+    padding: 40px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
