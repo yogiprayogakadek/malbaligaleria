@@ -54,12 +54,12 @@ body.dark-mode .page-header h1 {
     color: #666;
 }
 
-/* 3-Column Grid (Landing Sync) */
+/* 3-Column Grid (Optimized for space) */
 .new-store-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    padding: 0 4rem 10rem;
+    padding: 0 2rem 10rem;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -122,8 +122,8 @@ body.dark-mode .tenant-logo {
 }
 
 .tenant-logo img {
-    max-width: 140px;
-    max-height: 110px;
+    max-width: 80%;
+    max-height: 80%;
     object-fit: contain;
     filter: grayscale(1);
     opacity: 0.7;
@@ -189,8 +189,10 @@ body.dark-mode .tenant-info h3 {
 .tenant-meta {
     margin-top: auto;
     display: flex;
-    gap: 15px;
-    font-size: 12px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 11px;
     color: #666;
     padding-top: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
@@ -203,12 +205,13 @@ body.dark-mode .tenant-meta {
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
+    white-space: nowrap;
 }
 
 .meta-item svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     fill: #f5f5dc;
 }
 

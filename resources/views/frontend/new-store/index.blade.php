@@ -466,21 +466,25 @@
             1: "{{ asset('assets/images/floors/1st_floor.png') }}",
             2: "{{ asset('assets/images/floors/2nd_floor.png') }}"
         };
-        // window.tenants = @json($tenants); // Opt-in if local data is preferred over AJAX
     </script>
-    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/frontend/js/new-store.js') }}?v={{ time() }}"></script>
 
     <script>
-        // Initialize reveal animations for cards (if not handled by landing_v2.js)
-        window.addEventListener('scroll', () => {
-            document.querySelectorAll('.stagger-card').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                if (rect.top < window.innerHeight - 50) {
+        // Staggered reveal for cards
+        function revealCards() {
+            const cards = document.querySelectorAll('.stagger-card');
+            const triggerBottom = window.innerHeight * 0.9;
+
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                if (cardTop < triggerBottom) {
                     card.classList.add('show');
                 }
             });
-        });
+        }
+
+        window.addEventListener('scroll', revealCards);
+        document.addEventListener('DOMContentLoaded', revealCards);
     </script>
 </body>
-
 </html>
