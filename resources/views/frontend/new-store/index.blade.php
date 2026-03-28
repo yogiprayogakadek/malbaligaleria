@@ -379,62 +379,6 @@
                     </ul>
                 </div>
 
-                <!-- Services -->
-                {{-- <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="{{ url('/') }}#valet">Valet Parking</a></li>
-                        <li><a href="{{ url('/') }}#concierge">Concierge</a></li>
-                        <li><a href="{{ url('/') }}#gift">Gift Cards</a></li>
-                        <li><a href="{{ url('/') }}#member">Membership</a></li>
-                        <li><a href="{{ url('/') }}#faq">FAQ</a></li>
-                    </ul>
-                </div> --}}
-
-                <!-- Contact -->
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <div class="footer-contact-item">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
-                        </svg>
-                        <p>Simpang Dewa Ruci<br>Jl. Bypass Ngurah Rai, Kuta, Badung, Bali, Indonesia 80361</p>
-                    </div>
-                    <div class="footer-contact-item">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <a href="tel:+62361755277">(0361) 755277</a>
-                    </div>
-                    <div class="footer-contact-item">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                            <polyline points="22,6 12,13 2,6" />
-                        </svg>
-                        <a href="mailto:info@malbaligaleria.co.id">info@malbaligaleria.co.id</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-divider"></div>
-
-            <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Mal Bali Galeria. All Rights Reserved. | Sites by Yogi Prayoga</p>
-                <div class="footer-brand">
-                    <span class="footer-brand-logo">Mal Bali Galeria</span>
-                    <span class="footer-brand-text">Enjoy, Play, Eat, Shop</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19V5M5 12l7-7 7 7" />
-        </svg>
-    </button>
 
     {{-- Sticky Mobile CTA Bar --}}
     <div class="mobile-sticky-cta" id="mobileStickyBar">
