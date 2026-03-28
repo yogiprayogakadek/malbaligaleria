@@ -59,7 +59,8 @@
         </div>
     </div>
 
-    <!-- Toggle & Header -->
+    <div class="main-content">
+        <!-- Toggle & Header -->
     <button class="dark-mode-toggle" id="darkModeToggle">
         <svg class="moon-icon" viewBox="0 0 24 24">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
@@ -459,6 +460,10 @@
             <span>Call</span>
         </a>
     </div>
+
+    </div> {{-- End .main-content --}}
+
+    @include('frontend.landing_v2.footer')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
