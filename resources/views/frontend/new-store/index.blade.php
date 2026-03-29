@@ -120,11 +120,21 @@
         </nav>
     </div>
 
-    <main>
-        <section class="page-header">
-            <h1>Latest Additions</h1>
-            <p>Welcome our newest brands and stores</p>
-        </section>
+    <main class="new-store-main">
+        {{-- Hero Banner --}}
+        <div class="promo-hero-banner">
+            <div class="promo-hero-content">
+                <span class="promo-hero-eyebrow">Mal Bali Galeria</span>
+                <h1 class="promo-hero-title">Latest Additions</h1>
+                <p class="promo-hero-subtitle">Welcome our newest brands and stores</p>
+                <a href="{{ route('frontend.landing') }}" class="promo-hero-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
 
         <section class="new-store-grid" id="tenantGrid">
             @forelse($tenants as $index => $tenant)

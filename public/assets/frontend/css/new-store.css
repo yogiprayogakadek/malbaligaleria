@@ -30,40 +30,143 @@ body.new-store-page {
     --accent-color: #8ba9a7;
     --bg-light: #fafaf8;
     --bg-dark: #1a1f1e;
+    --primary-gradient: linear-gradient(135deg, #2c5f5d 0%, #1a3a38 100%);
+    --secondary-gradient: linear-gradient(135deg, #7d9d9c 0%, #5a7c7a 100%);
+    --accent-gradient: linear-gradient(135deg, #a8c5c3 0%, #8ba9a7 100%);
 }
 
-/* Modern Header */
-.page-header {
-    padding-top: 180px;
-    padding-bottom: 60px;
+/* New Store Main Layout */
+.new-store-main {
+    padding-top: 80px;
+    min-height: 100vh;
+}
+
+/* Promo Hero Banner (Synchronized with Promotion Page) */
+.promo-hero-banner {
+    background: var(--primary-gradient);
+    padding: 100px 2.5rem 60px;
+    position: relative;
+    overflow: hidden;
     text-align: center;
-    background: #fff;
-    transition: background-color 0.3s;
+    margin-bottom: 0;
 }
 
-body.dark-mode .page-header {
+.promo-hero-banner::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+.promo-hero-banner::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--bg-light);
+    clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+body.dark-mode .promo-hero-banner::after {
     background: var(--bg-dark);
 }
 
-.page-header h1 {
-    font-family: "Argesta Display", serif;
-    font-size: 4.5rem;
-    font-weight: 400;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
+.promo-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
-body.dark-mode .page-header h1 {
-    color: #f0f0f0;
-}
-
-.page-header p {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
+.promo-hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    color: #666;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 14px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.promo-hero-title {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    line-height: 1.15;
+}
+
+.promo-hero-subtitle {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+.promo-hero-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    padding: 9px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.promo-hero-back:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateX(-4px);
+}
+
+.promo-hero-back svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.promo-hero-back:hover svg {
+    transform: translateX(-3px);
+}
+
+/* Float Animation */
+.promo-hero-banner::after {
+    animation: heroPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes heroPulse {
+    from {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.4;
+    }
+    to {
+        transform: scale(1.2) translate(-30px, 20px);
+        opacity: 0.08;
+    }
 }
 
 /* 3-Column Grid (Optimized for space) */
@@ -88,8 +191,8 @@ body.dark-mode .page-header h1 {
         grid-template-columns: 1fr;
         padding: 0 1.5rem 6rem;
     }
-    .page-header h1 {
-        font-size: 3rem;
+    .promo-hero-banner {
+        padding: 90px 1.5rem 55px;
     }
 }
 
