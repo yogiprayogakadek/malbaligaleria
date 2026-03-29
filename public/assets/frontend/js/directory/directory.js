@@ -788,18 +788,6 @@ function filterTenants() {
 
     // Update tenant count per floor
     updateFloorCounts();
-
-    // Auto-switch floor if search has 1 match on another floor and we are in map view
-    if (currentView === "map" && combinedSearch && combinedSearch.length > 2) {
-        const globalMatch = tenants.find(t => 
-            t.name.toLowerCase().includes(combinedSearch) || 
-            t.category.toLowerCase().includes(combinedSearch)
-        );
-        
-        if (globalMatch && globalMatch.floor !== selectedFloor) {
-            changeFloor(globalMatch.floor);
-        }
-    }
 }
 
 // Reusable floor switcher
@@ -964,7 +952,15 @@ sidebarSearch.addEventListener("focus", () => {
         );
     }
 });
-document.getElementById("floorFilter").addEventListener("change", () => {
+document.getElementById("floorFilter").addEventListener("change", function () {
+    const floorValue = this.value;
+    const floorKey = floorValue === "1st Floor" ? "floor1" : "floor2";
+    
+    // Always sync buttons when selection changes
+    document.querySelectorAll(".floor-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.floor === floorKey);
+    });
+
     if (currentView === "map") {
         updateMapView();
         updateFloorCounts(); // Update counts when filtering by floor
