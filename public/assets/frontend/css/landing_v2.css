@@ -1895,8 +1895,12 @@ body.dark-mode .event-empty-state p {
 
 @media (max-width: 768px) {
     .event-card {
-        flex: 0 0 100%;
-        min-width: 100%;
+        flex: 0 0 100% !important;
+        min-width: 100% !important;
+    }
+    
+    .event-grid {
+        overflow: visible !important;
     }
 }
 
@@ -5210,6 +5214,7 @@ body.dark-mode .experience-subtitle {
 .event-desc {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5502,6 +5507,7 @@ body.dark-mode .rsc-title {
     line-height: 1.6;
     margin: 0;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -5565,10 +5571,10 @@ body.dark-mode .rsc-desc {
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         gap: 0 !important;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
+        overflow-x: visible !important;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
+        scroll-snap-type: none !important;
     }
 
     .regular-shows-grid::-webkit-scrollbar {
@@ -5578,8 +5584,8 @@ body.dark-mode .rsc-desc {
     .regular-show-card {
         flex: 0 0 100% !important;
         min-width: 100% !important;
-        scroll-snap-align: start;
         width: 100%;
+        scroll-snap-align: none !important;
     }
 
     .regular-shows-header {
@@ -5798,6 +5804,7 @@ body.dark-mode .exc-title {
     flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }

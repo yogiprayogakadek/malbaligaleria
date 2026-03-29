@@ -351,19 +351,19 @@
                         @endphp
                         @foreach ($regularEvents as $rEvent)
                             <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
-                                data-event-uuid="{{ $rEvent->uuid }}" data-event-name="{{ $rEvent->name }}"
-                                data-event-date="{{ $rEvent->recurring_label ?: 'Every Weekend' }}"
-                                data-event-desc="{{ $rEvent->description }}"
-                                data-event-location="{{ $rEvent->location }}"
-                                data-event-image="{{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                                data-event-type="{{ $typeLabels[$rEvent->type] ?? 'Event' }}">
+                                data-event-uuid="{{ optional($rEvent)->uuid }}" data-event-name="{{ optional($rEvent)->name }}"
+                                data-event-date="{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}"
+                                data-event-desc="{{ optional($rEvent)->description }}"
+                                data-event-location="{{ optional($rEvent)->location }}"
+                                data-event-image="{{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
+                                data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}">
                                 <div class="rsc-card-bg"
-                                    style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                    style="background-image: url({{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="rsc-card-content">
-                                    <span class="event-date">{{ $rEvent->recurring_label ?: 'Every Weekend' }}</span>
-                                    <h3>{{ $rEvent->name }}</h3>
-                                    <p class="event-desc">{{ Str::limit($rEvent->description, 80) }}</p>
+                                    <span class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
+                                    <h3>{{ optional($rEvent)->name }}</h3>
+                                    <p class="event-desc">{{ Str::limit(optional($rEvent)->description, 80) }}</p>
                                     <span class="event-link">Learn More →</span>
                                 </div>
                             </div>
@@ -388,27 +388,27 @@
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ $event->uuid }}" data-event-name="{{ $event->name }}"
-                            data-event-date="{{ date_format(date_create($event->start_date), 'd M Y') }}"
-                            data-event-desc="{{ $event->description }}" data-event-location="{{ $event->location }}"
-                            data-event-image="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ $typeLabels[$event->type] ?? 'Upcoming Event' }}">
+                            data-event-uuid="{{ optional($event)->uuid }}" data-event-name="{{ optional($event)->name }}"
+                            data-event-date="{{ date_format(date_create(optional($event)->start_date), 'd M Y') }}"
+                            data-event-desc="{{ optional($event)->description }}" data-event-location="{{ optional($event)->location }}"
+                            data-event-image="{{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="{{ $typeLabels[optional($event)->type] ?? 'Upcoming Event' }}">
                             <div class="event-card-bg"
-                                style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
                                 <span
-                                    class="event-date">{{ date_format(date_create($event->start_date), 'd M Y') }}</span>
-                                <h3>{{ $event->name }}</h3>
-                                <p class="event-desc">{{ Str::limit($event->description, 80) }}</p>
-                                @if ($event->location)
+                                    class="event-date">{{ date_format(date_create(optional($event)->start_date), 'd M Y') }}</span>
+                                <h3>{{ optional($event)->name }}</h3>
+                                <p class="event-desc">{{ Str::limit(optional($event)->description, 80) }}</p>
+                                @if (optional($event)->location)
                                     <span class="event-location" style="margin-bottom: 12px;">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                             <circle cx="12" cy="10" r="3" />
                                         </svg>
-                                        {{ $event->location }}
+                                        {{ optional($event)->location }}
                                     </span>
                                 @endif
                                 <span class="event-link">Learn More →</span>
@@ -450,38 +450,38 @@
                     @forelse ($exhibitionEvents ?? [] as $exEvent)
                         @php
                             $exDateStr = '';
-                            if ($exEvent->start_date) {
-                                $exDateStr = date('d M', strtotime($exEvent->start_date));
-                                if ($exEvent->end_date && $exEvent->start_date != $exEvent->end_date) {
-                                    $exDateStr .= ' – ' . date('d M Y', strtotime($exEvent->end_date));
+                            if (optional($exEvent)->start_date) {
+                                $exDateStr = date('d M', strtotime(optional($exEvent)->start_date));
+                                if (optional($exEvent)->end_date && optional($exEvent)->start_date != optional($exEvent)->end_date) {
+                                    $exDateStr .= ' – ' . date('d M Y', strtotime(optional($exEvent)->end_date));
                                 } else {
-                                    $exDateStr .= ' ' . date('Y', strtotime($exEvent->start_date));
+                                    $exDateStr .= ' ' . date('Y', strtotime(optional($exEvent)->start_date));
                                 }
                             }
                         @endphp
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ $exEvent->uuid }}" data-event-name="{{ $exEvent->name }}"
-                            data-event-date="{{ $exDateStr }}" data-event-desc="{{ $exEvent->description }}"
-                            data-event-location="{{ $exEvent->location }}"
-                            data-event-image="{{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ $typeLabels[$exEvent->type] ?? 'Exhibition' }}">
+                            data-event-uuid="{{ optional($exEvent)->uuid }}" data-event-name="{{ optional($exEvent)->name }}"
+                            data-event-date="{{ $exDateStr }}" data-event-desc="{{ optional($exEvent)->description }}"
+                            data-event-location="{{ optional($exEvent)->location }}"
+                            data-event-image="{{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($exEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="{{ $typeLabels[optional($exEvent)->type] ?? 'Exhibition' }}">
                             <div class="event-card-bg"
-                                style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($exEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
-                                @if ($exEvent->start_date)
+                                @if (optional($exEvent)->start_date)
                                     <span class="event-date">{{ $exDateStr }}</span>
                                 @endif
-                                <h3>{{ $exEvent->name }}</h3>
-                                <p class="event-desc">{{ Str::limit($exEvent->description, 80) }}</p>
-                                @if ($exEvent->location)
+                                <h3>{{ optional($exEvent)->name }}</h3>
+                                <p class="event-desc">{{ Str::limit(optional($exEvent)->description, 80) }}</p>
+                                @if (optional($exEvent)->location)
                                     <span class="event-location">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                             <circle cx="12" cy="10" r="3" />
                                         </svg>
-                                        {{ $exEvent->location }}
+                                        {{ optional($exEvent)->location }}
                                     </span>
                                 @endif
                                 <span class="event-link">Learn More →</span>

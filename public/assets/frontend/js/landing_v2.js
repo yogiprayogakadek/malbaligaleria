@@ -375,9 +375,9 @@ updateCardsPerView();
 
     let eventCardsPerView = getEventCardsPerView();
 
-    // Cloning for infinite loop
+    // Cloning for infinite loop - use a larger buffer (8)
     if (originalCardsCount > eventCardsPerView) {
-        const clonesNeeded = 4;
+        const clonesNeeded = 8;
         for (let i = 0; i < clonesNeeded; i++) {
             const cardToClone = eventCards[i % originalCardsCount];
             if (cardToClone) {
@@ -412,7 +412,6 @@ updateCardsPerView();
             eventGrid.style.transform = `translateX(${offset}px)`;
         }
 
-        // Buttons always active in infinite loop if needsSlider
         eventPrevBtn.disabled = !needsSlider;
         eventNextBtn.disabled = !needsSlider;
     };
@@ -449,7 +448,7 @@ updateCardsPerView();
                 setTimeout(() => {
                     eventCurrentIndex--;
                     updateEventSlider();
-                }, 10);
+                }, 20);
             }
             isTransitioning = true;
         }
@@ -464,14 +463,16 @@ updateCardsPerView();
         }
     });
 
-    // Autoplay logic
     let eventAutoplayInterval;
     const startAutoplay = () => {
         if (eventAutoplayInterval) clearInterval(eventAutoplayInterval);
         if (originalCardsCount > eventCardsPerView) {
             eventAutoplayInterval = setInterval(() => {
-                eventCurrentIndex++;
-                updateEventSlider();
+                if (!isTransitioning) {
+                    eventCurrentIndex++;
+                    updateEventSlider();
+                    isTransitioning = true;
+                }
             }, 6000);
         }
     };
@@ -481,7 +482,6 @@ updateCardsPerView();
 
     window.addEventListener("resize", onResize);
 
-    // Initial call
     updateEventSlider();
     onResize();
     startAutoplay();
@@ -509,11 +509,10 @@ updateCardsPerView();
     };
 
     let cardsPerView = getCardsPerView();
-    const isMobile = () => window.innerWidth <= 768;
 
-    // Cloning for infinite loop
+    // Cloning for infinite loop - 8 clones for better buffer
     if (originalCardsCount > cardsPerView) {
-        const clonesNeeded = 4;
+        const clonesNeeded = 8;
         for (let i = 0; i < clonesNeeded; i++) {
             const cardToClone = cards[i % originalCardsCount];
             if (cardToClone) {
@@ -534,10 +533,6 @@ updateCardsPerView();
             grid.style.justifyContent = "center";
             grid.style.transform = "translateX(0)";
             currentIndex = 0;
-        } else if (isMobile()) {
-            grid.style.justifyContent = "flex-start";
-            const cardWidth = grid.offsetWidth;
-            grid.scrollTo({ left: currentIndex * cardWidth, behavior: instant ? "auto" : "smooth" });
         } else {
             grid.style.justifyContent = "flex-start";
             const cardWidth = cards[0].offsetWidth;
@@ -569,10 +564,6 @@ updateCardsPerView();
 
     const onResize = () => {
         cardsPerView = getCardsPerView();
-        if (isMobile()) {
-            grid.style.transform = "none";
-            grid.style.transition = "none";
-        }
         update(true);
     };
 
@@ -588,9 +579,9 @@ updateCardsPerView();
                 setTimeout(() => {
                     currentIndex--;
                     update();
-                }, 10);
+                }, 20);
             }
-            if (!isMobile()) isTransitioning = true;
+            isTransitioning = true;
         }
     });
 
@@ -599,7 +590,7 @@ updateCardsPerView();
         if (originalCardsCount > cardsPerView) {
             currentIndex++;
             update();
-            if (!isMobile()) isTransitioning = true;
+            isTransitioning = true;
         }
     });
 
@@ -608,8 +599,11 @@ updateCardsPerView();
         if (autoplay) clearInterval(autoplay);
         if (originalCardsCount > cardsPerView) {
             autoplay = setInterval(() => {
-                currentIndex++;
-                update();
+                if (!isTransitioning) {
+                    currentIndex++;
+                    update();
+                    isTransitioning = true;
+                }
             }, 6000);
         }
     };
@@ -647,9 +641,9 @@ updateCardsPerView();
 
     let cardsPerView = getCardsPerView();
 
-    // Cloning for infinite loop
+    // Cloning for infinite loop - 8 clones for better buffer
     if (originalCardsCount > cardsPerView) {
-        const clonesNeeded = 4;
+        const clonesNeeded = 8;
         for (let i = 0; i < clonesNeeded; i++) {
             const cardToClone = cards[i % originalCardsCount];
             if (cardToClone) {
@@ -716,7 +710,7 @@ updateCardsPerView();
                 setTimeout(() => {
                     currentIndex--;
                     update();
-                }, 10);
+                }, 20);
             }
             isTransitioning = true;
         }
@@ -736,8 +730,11 @@ updateCardsPerView();
         if (autoplay) clearInterval(autoplay);
         if (originalCardsCount > cardsPerView) {
             autoplay = setInterval(() => {
-                currentIndex++;
-                update();
+                if (!isTransitioning) {
+                    currentIndex++;
+                    update();
+                    isTransitioning = true;
+                }
             }, 6000);
         }
     };
