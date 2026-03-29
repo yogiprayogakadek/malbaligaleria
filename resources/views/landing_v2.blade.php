@@ -274,7 +274,7 @@
         <div class="experience-container">
             <div class="experience-header">
                 <h2>What's On at MBG</h2>
-                <p class="experience-subtitle">From exciting promos to brand-new stores — there's always something
+                <p class="experience-subtitle">From exciting events to brand-new stores — there's always something
                     happening.</p>
                 <div class="header-divider"></div>
             </div>
