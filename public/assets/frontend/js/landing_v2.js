@@ -362,10 +362,12 @@ updateCardsPerView();
     const eventControls = document.getElementById("eventControls");
     if (!eventGrid || !eventPrevBtn || !eventNextBtn) return;
 
-    let eventCards = eventGrid.querySelectorAll(".event-card");
-    const originalCardsCount = eventCards.length;
-    let eventCurrentIndex = 0;
+    // Clean up any existing clones from previous version
+    const existingClones = eventGrid.querySelectorAll(".clone");
+    existingClones.forEach(c => c.remove());
+
     let isTransitioning = false;
+    const gap = 30;
 
     const getEventCardsPerView = () => {
         if (window.innerWidth <= 768) return 1;
@@ -373,121 +375,86 @@ updateCardsPerView();
         return 3;
     };
 
-    let eventCardsPerView = getEventCardsPerView();
-
-    // Cloning for infinite loop - Always clone if more than 1 item
-    if (originalCardsCount > 1) {
-        const clonesNeeded = 8;
-        for (let i = 0; i < clonesNeeded; i++) {
-            const cardToClone = eventCards[i % originalCardsCount];
-            if (cardToClone) {
-                const clone = cardToClone.cloneNode(true);
-                clone.classList.add("clone");
-                eventGrid.appendChild(clone);
-            }
-        }
-        eventCards = eventGrid.querySelectorAll(".event-card");
-    }
-
-    const updateEventSlider = (instant = false) => {
-        if (!eventCards.length) return;
-
-        const canSlide = originalCardsCount > 1;
-
-        if (!canSlide) {
-            eventGrid.style.justifyContent = "center";
-            eventGrid.style.transform = "translateX(0)";
-            eventCurrentIndex = 0;
-        } else {
-            eventGrid.style.justifyContent = "flex-start";
-            const cardWidth = eventCards[0].offsetWidth;
-            const gap = 30;
-            const offset = -(eventCurrentIndex * (cardWidth + gap));
-
-            if (instant) {
-                eventGrid.style.transition = "none";
-            } else {
-                eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
-            }
-            eventGrid.style.transform = `translateX(${offset}px)`;
-        }
-
-        eventPrevBtn.disabled = !canSlide;
-        eventNextBtn.disabled = !canSlide;
-        
+    const updateEventSliderStatus = () => {
+        const count = eventGrid.querySelectorAll(".event-card").length;
+        const canRotate = count > 1;
         if (eventControls) {
-            eventControls.classList.toggle("hidden", !canSlide);
+            eventControls.classList.toggle("hidden", !canRotate);
         }
+        eventGrid.style.justifyContent = canRotate ? "flex-start" : "center";
+        eventGrid.style.transform = "translateX(0)";
     };
 
-    const updateEventControlsVisibility = () => {
-        if (!eventControls) return;
-        const canSlide = originalCardsCount > 1;
-        eventControls.classList.toggle("hidden", !canSlide);
-    };
-
-    const onResize = () => {
-        eventCardsPerView = getEventCardsPerView();
-        updateEventSlider(true);
-        updateEventControlsVisibility();
-    };
-
-    eventGrid.addEventListener("transitionend", () => {
-        if (eventCurrentIndex >= originalCardsCount) {
-            eventCurrentIndex = 0;
-            updateEventSlider(true);
-        }
-        isTransitioning = false;
-    });
-
-    eventPrevBtn.addEventListener("click", () => {
+    const nextEvent = () => {
         if (isTransitioning) return;
-        if (originalCardsCount > 1) {
-            if (eventCurrentIndex > 0) {
-                eventCurrentIndex--;
-                updateEventSlider();
-            } else {
-                eventCurrentIndex = originalCardsCount;
-                updateEventSlider(true);
-                setTimeout(() => {
-                    eventCurrentIndex--;
-                    updateEventSlider();
-                }, 20);
-            }
-            isTransitioning = true;
-        }
-    });
+        const cards = eventGrid.querySelectorAll(".event-card");
+        if (cards.length <= 1) return;
 
-    eventNextBtn.addEventListener("click", () => {
+        isTransitioning = true;
+        const cardWidth = cards[0].offsetWidth;
+        const moveAmount = cardWidth + gap;
+
+        eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        eventGrid.style.transform = `translateX(-${moveAmount}px)`;
+
+        const onTransitionEnd = () => {
+            eventGrid.style.transition = "none";
+            eventGrid.appendChild(eventGrid.firstElementChild);
+            eventGrid.style.transform = "translateX(0)";
+            isTransitioning = false;
+            eventGrid.removeEventListener("transitionend", onTransitionEnd);
+        };
+        eventGrid.addEventListener("transitionend", onTransitionEnd);
+    };
+
+    const prevEvent = () => {
         if (isTransitioning) return;
-        if (originalCardsCount > 1) {
-            eventCurrentIndex++;
-            updateEventSlider();
-            isTransitioning = true;
-        }
-    });
+        const cards = eventGrid.querySelectorAll(".event-card");
+        if (cards.length <= 1) return;
 
-    let eventAutoplayInterval;
+        isTransitioning = true;
+        const cardWidth = cards[0].offsetWidth;
+        const moveAmount = cardWidth + gap;
+
+        // Move last to front instantly
+        eventGrid.style.transition = "none";
+        eventGrid.insertBefore(eventGrid.lastElementChild, eventGrid.firstElementChild);
+        eventGrid.style.transform = `translateX(-${moveAmount}px)`;
+
+        // Force reflow
+        void eventGrid.offsetWidth;
+
+        // Animate to 0
+        eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        eventGrid.style.transform = "translateX(0)";
+
+        const onTransitionEnd = () => {
+            isTransitioning = false;
+            eventGrid.removeEventListener("transitionend", onTransitionEnd);
+        };
+        eventGrid.addEventListener("transitionend", onTransitionEnd);
+    };
+
+    eventNextBtn.addEventListener("click", nextEvent);
+    eventPrevBtn.addEventListener("click", prevEvent);
+
+    let autoplayInterval;
     const startAutoplay = () => {
-        if (eventAutoplayInterval) clearInterval(eventAutoplayInterval);
-        if (originalCardsCount > 1) {
-            eventAutoplayInterval = setInterval(() => {
-                if (!isTransitioning) {
-                    eventCurrentIndex++;
-                    updateEventSlider();
-                    isTransitioning = true;
-                }
-            }, 6000);
+        if (autoplayInterval) clearInterval(autoplayInterval);
+        const count = eventGrid.querySelectorAll(".event-card").length;
+        if (count > 1) {
+            autoplayInterval = setInterval(nextEvent, 6000);
         }
     };
 
-    eventGrid.addEventListener("mouseenter", () => clearInterval(eventAutoplayInterval));
-    eventGrid.addEventListener("mouseleave", () => startAutoplay());
+    eventGrid.addEventListener("mouseenter", () => clearInterval(autoplayInterval));
+    eventGrid.addEventListener("mouseleave", startAutoplay);
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", () => {
+        updateEventSliderStatus();
+    });
 
-    updateEventSlider();
-    onResize();
+    updateEventSliderStatus();
     startAutoplay();
 })();
 
@@ -501,124 +468,87 @@ updateCardsPerView();
     const controls = document.getElementById("regularShowsControls");
     if (!grid || !prevBtn || !nextBtn) return;
 
-    let cards = grid.querySelectorAll(".regular-show-card");
-    const originalCardsCount = cards.length;
-    let currentIndex = 0;
+    // Clean up clones
+    const clones = grid.querySelectorAll(".clone");
+    clones.forEach(c => c.remove());
+
     let isTransitioning = false;
+    const gap = 30;
 
-    const getCardsPerView = () => {
-        if (window.innerWidth <= 768) return 1;
-        if (window.innerWidth <= 1100) return 2;
-        return 3;
-    };
-
-    let cardsPerView = getCardsPerView();
-
-    // Cloning for infinite loop - Always clone if more than 1 item
-    if (originalCardsCount > 1) {
-        const clonesNeeded = 8;
-        for (let i = 0; i < clonesNeeded; i++) {
-            const cardToClone = cards[i % originalCardsCount];
-            if (cardToClone) {
-                const clone = cardToClone.cloneNode(true);
-                clone.classList.add("clone");
-                grid.appendChild(clone);
-            }
-        }
-        cards = grid.querySelectorAll(".regular-show-card");
-    }
-
-    const update = (instant = false) => {
-        if (!cards.length) return;
-
-        const canSlide = originalCardsCount > 1;
-
-        if (!canSlide) {
-            grid.style.justifyContent = "center";
-            grid.style.transform = "translateX(0)";
-            currentIndex = 0;
-        } else {
-            grid.style.justifyContent = "flex-start";
-            const cardWidth = cards[0].offsetWidth;
-            const gap = 30;
-            const offset = -(currentIndex * (cardWidth + gap));
-
-            if (instant) {
-                grid.style.transition = "none";
-            } else {
-                grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
-            }
-            grid.style.transform = `translateX(${offset}px)`;
-        }
-
-        prevBtn.disabled = !canSlide;
-        nextBtn.disabled = !canSlide;
+    const updateStatus = () => {
+        const count = grid.querySelectorAll(".regular-show-card").length;
+        const canRotate = count > 1;
         if (controls) {
-            controls.classList.toggle("hidden", !canSlide);
+            controls.classList.toggle("hidden", !canRotate);
         }
+        grid.style.justifyContent = canRotate ? "flex-start" : "center";
+        grid.style.transform = "translateX(0)";
     };
 
-    grid.addEventListener("transitionend", () => {
-        if (currentIndex >= originalCardsCount) {
-            currentIndex = 0;
-            update(true);
-        }
-        isTransitioning = false;
-    });
+    const next = () => {
+        if (isTransitioning) return;
+        const cards = grid.querySelectorAll(".regular-show-card");
+        if (cards.length <= 1) return;
 
-    const onResize = () => {
-        cardsPerView = getCardsPerView();
-        update(true);
+        isTransitioning = true;
+        const cardWidth = cards[0].offsetWidth;
+        const moveAmount = cardWidth + gap;
+
+        grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        grid.style.transform = `translateX(-${moveAmount}px)`;
+
+        const onEnd = () => {
+            grid.style.transition = "none";
+            grid.appendChild(grid.firstElementChild);
+            grid.style.transform = "translateX(0)";
+            isTransitioning = false;
+            grid.removeEventListener("transitionend", onEnd);
+        };
+        grid.addEventListener("transitionend", onEnd);
     };
 
-    prevBtn.addEventListener("click", () => {
+    const prev = () => {
         if (isTransitioning) return;
-        if (originalCardsCount > 1) {
-            if (currentIndex > 0) {
-                currentIndex--;
-                update();
-            } else {
-                currentIndex = originalCardsCount;
-                update(true);
-                setTimeout(() => {
-                    currentIndex--;
-                    update();
-                }, 20);
-            }
-            isTransitioning = true;
-        }
-    });
+        const cards = grid.querySelectorAll(".regular-show-card");
+        if (cards.length <= 1) return;
 
-    nextBtn.addEventListener("click", () => {
-        if (isTransitioning) return;
-        if (originalCardsCount > 1) {
-            currentIndex++;
-            update();
-            isTransitioning = true;
-        }
-    });
+        isTransitioning = true;
+        const cardWidth = cards[0].offsetWidth;
+        const moveAmount = cardWidth + gap;
+
+        grid.style.transition = "none";
+        grid.insertBefore(grid.lastElementChild, grid.firstElementChild);
+        grid.style.transform = `translateX(-${moveAmount}px)`;
+        void grid.offsetWidth;
+
+        grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        grid.style.transform = "translateX(0)";
+
+        const onEnd = () => {
+            isTransitioning = false;
+            grid.removeEventListener("transitionend", onEnd);
+        };
+        grid.addEventListener("transitionend", onEnd);
+    };
+
+    nextBtn.addEventListener("click", next);
+    prevBtn.addEventListener("click", prev);
 
     let autoplay;
-    const startAutoplay = () => {
+    const startAuto = () => {
         if (autoplay) clearInterval(autoplay);
-        if (originalCardsCount > 1) {
-            autoplay = setInterval(() => {
-                if (!isTransitioning) {
-                    currentIndex++;
-                    update();
-                    isTransitioning = true;
-                }
-            }, 6000);
+        const count = grid.querySelectorAll(".regular-show-card").length;
+        if (count > 1) {
+            autoplay = setInterval(next, 6000);
         }
     };
 
     grid.addEventListener("mouseenter", () => clearInterval(autoplay));
-    grid.addEventListener("mouseleave", () => startAutoplay());
+    grid.addEventListener("mouseleave", startAuto);
 
-    window.addEventListener("resize", onResize);
-    update();
-    onResize();
-    startAutoplay();
+    window.addEventListener("resize", updateStatus);
+    updateStatus();
+    startAuto();
 })();
 
 
@@ -632,124 +562,87 @@ updateCardsPerView();
     const controls = document.getElementById("exhibitionControls");
     if (!grid || !prevBtn || !nextBtn) return;
 
-    let cards = grid.querySelectorAll(".event-card");
-    const originalCardsCount = cards.length;
-    let currentIndex = 0;
+    // Clean up clones
+    const clones = grid.querySelectorAll(".clone");
+    clones.forEach(c => c.remove());
+
     let isTransitioning = false;
+    const gap = 30;
 
-    const getCardsPerView = () => {
-        if (window.innerWidth <= 768) return 1;
-        if (window.innerWidth <= 1100) return 2;
-        return 3;
-    };
-
-    let cardsPerView = getCardsPerView();
-
-    // Cloning for infinite loop - Always clone if more than 1 item
-    if (originalCardsCount > 1) {
-        const clonesNeeded = 8;
-        for (let i = 0; i < clonesNeeded; i++) {
-            const cardToClone = cards[i % originalCardsCount];
-            if (cardToClone) {
-                const clone = cardToClone.cloneNode(true);
-                clone.classList.add("clone");
-                grid.appendChild(clone);
-            }
-        }
-        cards = grid.querySelectorAll(".event-card");
-    }
-
-    const update = (instant = false) => {
-        if (!cards.length) return;
-
-        const canSlide = originalCardsCount > 1;
-
-        if (!canSlide) {
-            grid.style.justifyContent = "center";
-            grid.style.transform = "translateX(0)";
-            currentIndex = 0;
-        } else {
-            grid.style.justifyContent = "flex-start";
-            const cardWidth = cards[0].offsetWidth;
-            const gap = 30;
-            const offset = -(currentIndex * (cardWidth + gap));
-
-            if (instant) {
-                grid.style.transition = "none";
-            } else {
-                grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
-            }
-            grid.style.transform = `translateX(${offset}px)`;
-        }
-
-        prevBtn.disabled = !canSlide;
-        nextBtn.disabled = !canSlide;
+    const updateStatus = () => {
+        const count = grid.querySelectorAll(".event-card").length;
+        const canRotate = count > 1;
         if (controls) {
-            controls.classList.toggle("hidden", !canSlide);
+            controls.classList.toggle("hidden", !canRotate);
         }
+        grid.style.justifyContent = canRotate ? "flex-start" : "center";
+        grid.style.transform = "translateX(0)";
     };
 
-    grid.addEventListener("transitionend", () => {
-        if (currentIndex >= originalCardsCount) {
-            currentIndex = 0;
-            update(true);
-        }
-        isTransitioning = false;
-    });
+    const next = () => {
+        if (isTransitioning) return;
+        const cards = grid.querySelectorAll(".event-card");
+        if (cards.length <= 1) return;
 
-    const onResize = () => {
-        cardsPerView = getCardsPerView();
-        update(true);
+        isTransitioning = true;
+        const cardWidth = cards[0].offsetWidth;
+        const moveAmount = cardWidth + gap;
+
+        grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        grid.style.transform = `translateX(-${moveAmount}px)`;
+
+        const onEnd = () => {
+            grid.style.transition = "none";
+            grid.appendChild(grid.firstElementChild);
+            grid.style.transform = "translateX(0)";
+            isTransitioning = false;
+            grid.removeEventListener("transitionend", onEnd);
+        };
+        grid.addEventListener("transitionend", onEnd);
     };
 
-    prevBtn.addEventListener("click", () => {
+    const prev = () => {
         if (isTransitioning) return;
-        if (originalCardsCount > 1) {
-            if (currentIndex > 0) {
-                currentIndex--;
-                update();
-            } else {
-                currentIndex = originalCardsCount;
-                update(true);
-                setTimeout(() => {
-                    currentIndex--;
-                    update();
-                }, 20);
-            }
-            isTransitioning = true;
-        }
-    });
+        const cards = grid.querySelectorAll(".event-card");
+        if (cards.length <= 1) return;
 
-    nextBtn.addEventListener("click", () => {
-        if (isTransitioning) return;
-        if (originalCardsCount > 1) {
-            currentIndex++;
-            update();
-            isTransitioning = true;
-        }
-    });
+        isTransitioning = true;
+        const cardWidth = cards[0].offsetWidth;
+        const moveAmount = cardWidth + gap;
+
+        grid.style.transition = "none";
+        grid.insertBefore(grid.lastElementChild, grid.firstElementChild);
+        grid.style.transform = `translateX(-${moveAmount}px)`;
+        void grid.offsetWidth;
+
+        grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        grid.style.transform = "translateX(0)";
+
+        const onEnd = () => {
+            isTransitioning = false;
+            grid.removeEventListener("transitionend", onEnd);
+        };
+        grid.addEventListener("transitionend", onEnd);
+    };
+
+    nextBtn.addEventListener("click", next);
+    prevBtn.addEventListener("click", prev);
 
     let autoplay;
-    const startAutoplay = () => {
+    const startAuto = () => {
         if (autoplay) clearInterval(autoplay);
-        if (originalCardsCount > 1) {
-            autoplay = setInterval(() => {
-                if (!isTransitioning) {
-                    currentIndex++;
-                    update();
-                    isTransitioning = true;
-                }
-            }, 6000);
+        const count = grid.querySelectorAll(".event-card").length;
+        if (count > 1) {
+            autoplay = setInterval(next, 6000);
         }
     };
 
     grid.addEventListener("mouseenter", () => clearInterval(autoplay));
-    grid.addEventListener("mouseleave", () => startAutoplay());
+    grid.addEventListener("mouseleave", startAuto);
 
-    window.addEventListener("resize", onResize);
-    update();
-    onResize();
-    startAutoplay();
+    window.addEventListener("resize", updateStatus);
+    updateStatus();
+    startAuto();
 })();
 
 
