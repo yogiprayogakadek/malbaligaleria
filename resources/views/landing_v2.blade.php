@@ -31,6 +31,30 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() + 1 }}">
+
+    <!-- Lenis Smooth Scroll CSS -->
+    <style>
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -839,7 +863,7 @@
                     </div>
                 </div>
 
-                <div class="event-modal-details">
+                <div class="event-modal-details" data-lenis-prevent>
                     <div class="event-modal-header">
                         <span class="event-modal-badge" id="eventModalTypeBadge"></span>
                         <h2 id="eventModalTitle"></h2>
@@ -965,6 +989,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
     <script>
         window.FLOOR_MAPS = {
             1: "{{ asset('assets/images/floors/1st_floor.png') }}",

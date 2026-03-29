@@ -1,6 +1,13 @@
 
 const pageLoader = document.getElementById("pageLoader");
 
+// Initialize Lenis Smooth Scroll 
+const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    autoRaf: true
+});
+
 
 let minLoadTime = 3500;
 let loadStartTime = Date.now();
