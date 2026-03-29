@@ -33,6 +33,30 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/new-store.css') }}?v={{ time() }}">
+
+    <!-- Lenis Smooth Scroll CSS -->
+    <style>
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body class="new-store-page">
@@ -249,7 +273,7 @@
                         <div class="carousel-indicators" id="modalCarouselIndicators"></div>
                     </div>
 
-                    <div class="modal-details">
+                    <div class="modal-details" data-lenis-prevent>
                         <!-- Detail View (Initially Shown) -->
                         <div id="modalInfoView">
                             <div class="modal-header">
@@ -393,6 +417,17 @@
 
         window.addEventListener('scroll', revealCards);
         document.addEventListener('DOMContentLoaded', revealCards);
+    </script>
+    {{-- Lenis Smooth Scroll --}}
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                autoRaf: true
+            });
+        });
     </script>
 </body>
 

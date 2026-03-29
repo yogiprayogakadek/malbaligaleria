@@ -28,6 +28,30 @@
         rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/promotion/promotion.css') }}?v={{ time() + 14 }}">
+
+    <!-- Lenis Smooth Scroll CSS -->
+    <style>
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -340,7 +364,7 @@
                 </svg>
             </button>
 
-            <div class="modal-content">
+            <div class="modal-content" data-lenis-prevent>
                 <div class="modal-carousel">
                     <div class="carousel-images" id="modalCarouselImages">
 
@@ -568,6 +592,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/frontend/js/promotion/promotion.js') }}?v={{ time() }}"></script>
 
+    {{-- Lenis Smooth Scroll --}}
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                autoRaf: true
+            });
+        });
+    </script>
 </body>
 
 </html>

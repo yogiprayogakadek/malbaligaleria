@@ -28,6 +28,30 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/directory/style.css') }}?v={{ time() }}_v3">
+
+    <!-- Lenis Smooth Scroll CSS -->
+    <style>
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -225,7 +249,7 @@
                                 </svg>
                                 <input type="text" placeholder="Type to search..." id="searchInput"
                                     value="{{ request('search') }}" autocomplete="off">
-                                <div class="search-suggestions" id="searchInputSuggestions"></div>
+                                <div class="search-suggestions" id="searchInputSuggestions" data-lenis-prevent></div>
                             </div>
                         </div>
 
@@ -372,7 +396,7 @@
                                 <button class="floor-btn" data-floor="floor2">2nd Floor</button>
                             </div>
 
-                            <div class="map-container" id="mapContainer">
+                            <div class="map-container" id="mapContainer" data-lenis-prevent>
                                 <div style="text-align: center; padding: 40px;">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="#5fcfda" stroke-width="2"
                                         style="width: 60px; height: 60px; margin: 0 auto 20px;">
@@ -443,7 +467,7 @@
                 </svg>
             </button>
 
-            <div class="modal-content">
+            <div class="modal-content" data-lenis-prevent>
 
                 <div class="modal-carousel">
                     <!-- Carousel Loading Indicator -->
@@ -785,6 +809,17 @@
             <span>Call</span>
         </a>
     </div>
+    {{-- Lenis Smooth Scroll --}}
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                autoRaf: true
+            });
+        });
+    </script>
 </body>
 
 </html>
