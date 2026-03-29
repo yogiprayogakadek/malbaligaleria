@@ -523,6 +523,7 @@ body.dark-mode header {
     border-radius: 50px;
     padding: 12px 20px;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 body.dark-mode .search-bar {
@@ -3849,15 +3850,17 @@ body.dark-mode .shortcuts-hint-btn {
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 8px;
     background: white;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .recent-searches-dropdown.show {
