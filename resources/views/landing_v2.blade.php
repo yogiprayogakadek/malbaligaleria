@@ -353,12 +353,15 @@
                             <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
                                 data-event-uuid="{{ optional($rEvent)->uuid }}" data-event-name="{{ optional($rEvent)->name }}"
                                 data-event-date="{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}"
+                                data-event-time="{{ optional($rEvent)->start_time && optional($rEvent)->end_time ? \Carbon\Carbon::parse($rEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($rEvent->end_time)->format('h:i A') : 'Check Schedule' }}"
                                 data-event-desc="{{ optional($rEvent)->description }}"
                                 data-event-location="{{ optional($rEvent)->location }}"
+                                data-event-highlight="{{ optional($rEvent)->highlights ?? '-' }}"
+                                data-event-monthyear="{{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                                 data-event-image="{{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                                 data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}">
                                 <div class="rsc-card-bg"
-                                    style="background-image: url({{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
+                                    style="background-image: url({{ optional($rEvent->primaryPhoto)->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="rsc-card-content">
                                     <span class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
@@ -390,7 +393,10 @@
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($event)->uuid }}" data-event-name="{{ optional($event)->name }}"
                             data-event-date="{{ date_format(date_create(optional($event)->start_date), 'd M Y') }}"
+                            data-event-time="{{ optional($event)->start_time && optional($event)->end_time ? \Carbon\Carbon::parse($event->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($event->end_time)->format('h:i A') : 'All Day' }}"
                             data-event-desc="{{ optional($event)->description }}" data-event-location="{{ optional($event)->location }}"
+                            data-event-highlight="{{ optional($event)->highlights ?? '-' }}"
+                            data-event-monthyear="{{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                             data-event-image="{{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="{{ $typeLabels[optional($event)->type] ?? 'Upcoming Event' }}">
                             <div class="event-card-bg"
@@ -462,11 +468,14 @@
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($exEvent)->uuid }}" data-event-name="{{ optional($exEvent)->name }}"
                             data-event-date="{{ $exDateStr }}" data-event-desc="{{ optional($exEvent)->description }}"
+                            data-event-time="{{ $exEvent && $exEvent->start_time && $exEvent->end_time ? \Carbon\Carbon::parse($exEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($exEvent->end_time)->format('h:i A') : 'All Day' }}"
                             data-event-location="{{ optional($exEvent)->location }}"
-                            data-event-image="{{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($exEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
+                            data-event-monthyear="{{ $exEvent && $exEvent->start_date ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                            data-event-image="{{ optional($exEvent->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="{{ $typeLabels[optional($exEvent)->type] ?? 'Exhibition' }}">
                             <div class="event-card-bg"
-                                style="background-image: url({{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($exEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ optional($exEvent->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
                                 @if (optional($exEvent)->start_date)
@@ -835,8 +844,19 @@
                                 <line x1="3" y1="10" x2="21" y2="10" />
                             </svg>
                             <div>
-                                <span class="info-label">Date & Time</span>
+                                <span class="info-label">Date</span>
                                 <span class="info-value" id="eventModalDate"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Time</span>
+                                <span class="info-value" id="eventModalTime"></span>
                             </div>
                         </div>
 
@@ -853,13 +873,25 @@
 
                         <div class="event-modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path
-                                    d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                <line x1="7" y1="7" x2="7.01" y2="7" />
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
                             <div>
-                                <span class="info-label">Type</span>
-                                <span class="info-value" id="eventModalType"></span>
+                                <span class="info-label">Highlight</span>
+                                <span class="info-value" id="eventModalHighlights"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Description</span>
+                                <span class="info-value" id="eventModalMonthYear" style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span>
                             </div>
                         </div>
                     </div>

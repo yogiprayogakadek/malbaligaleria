@@ -369,15 +369,10 @@ updateCardsPerView();
     let isTransitioning = false;
     const gap = 30;
 
-    const getEventCardsPerView = () => {
-        if (window.innerWidth <= 768) return 1;
-        if (window.innerWidth <= 1100) return 2;
-        return 3;
-    };
-
     const updateEventSliderStatus = () => {
         const count = eventGrid.querySelectorAll(".event-card").length;
-        const canRotate = count > 1;
+        // Activation threshold: 1-3 data points are static
+        const canRotate = count > 3;
         if (eventControls) {
             eventControls.classList.toggle("hidden", !canRotate);
         }
@@ -388,7 +383,7 @@ updateCardsPerView();
     const nextEvent = () => {
         if (isTransitioning) return;
         const cards = eventGrid.querySelectorAll(".event-card");
-        if (cards.length <= 1) return;
+        if (cards.length <= 3) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -410,7 +405,7 @@ updateCardsPerView();
     const prevEvent = () => {
         if (isTransitioning) return;
         const cards = eventGrid.querySelectorAll(".event-card");
-        if (cards.length <= 1) return;
+        if (cards.length <= 3) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -442,7 +437,7 @@ updateCardsPerView();
     const startAutoplay = () => {
         if (autoplayInterval) clearInterval(autoplayInterval);
         const count = eventGrid.querySelectorAll(".event-card").length;
-        if (count > 1) {
+        if (count > 3) {
             autoplayInterval = setInterval(nextEvent, 6000);
         }
     };
@@ -477,7 +472,7 @@ updateCardsPerView();
 
     const updateStatus = () => {
         const count = grid.querySelectorAll(".regular-show-card").length;
-        const canRotate = count > 1;
+        const canRotate = count > 3;
         if (controls) {
             controls.classList.toggle("hidden", !canRotate);
         }
@@ -488,7 +483,7 @@ updateCardsPerView();
     const next = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".regular-show-card");
-        if (cards.length <= 1) return;
+        if (cards.length <= 3) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -510,7 +505,7 @@ updateCardsPerView();
     const prev = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".regular-show-card");
-        if (cards.length <= 1) return;
+        if (cards.length <= 3) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -538,7 +533,7 @@ updateCardsPerView();
     const startAuto = () => {
         if (autoplay) clearInterval(autoplay);
         const count = grid.querySelectorAll(".regular-show-card").length;
-        if (count > 1) {
+        if (count > 3) {
             autoplay = setInterval(next, 6000);
         }
     };
@@ -571,7 +566,7 @@ updateCardsPerView();
 
     const updateStatus = () => {
         const count = grid.querySelectorAll(".event-card").length;
-        const canRotate = count > 1;
+        const canRotate = count > 3;
         if (controls) {
             controls.classList.toggle("hidden", !canRotate);
         }
@@ -582,7 +577,7 @@ updateCardsPerView();
     const next = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".event-card");
-        if (cards.length <= 1) return;
+        if (cards.length <= 3) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -604,7 +599,7 @@ updateCardsPerView();
     const prev = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".event-card");
-        if (cards.length <= 1) return;
+        if (cards.length <= 3) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -632,7 +627,7 @@ updateCardsPerView();
     const startAuto = () => {
         if (autoplay) clearInterval(autoplay);
         const count = grid.querySelectorAll(".event-card").length;
-        if (count > 1) {
+        if (count > 3) {
             autoplay = setInterval(next, 6000);
         }
     };
@@ -1979,10 +1974,19 @@ function renderModalMap(data) {
         // Show modal with skeleton or partial data first
         if (titleEl) titleEl.textContent = card.dataset.eventName || "Loading...";
         if (dateEl) dateEl.textContent = card.dataset.eventDate || "";
+        if (descEl) descEl.innerHTML = card.dataset.eventDesc ? `<p>${card.dataset.eventDesc}</p>` : "";
         if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
         if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
-        if (typeEl) typeEl.textContent = card.dataset.eventType || "Event";
         
+        // New Fields (Fast Load)
+        const timeEl = document.getElementById("eventModalTime");
+        const highlightEl = document.getElementById("eventModalHighlights");
+        const monthYearEl = document.getElementById("eventModalMonthYear");
+
+        if (timeEl) timeEl.textContent = card.dataset.eventTime || "All Day";
+        if (highlightEl) highlightEl.textContent = card.dataset.eventHighlight || "-";
+        if (monthYearEl) monthYearEl.textContent = card.dataset.eventMonthyear || "";
+
         // Use card image as placeholder in carousel
         const placeholderImg = card.dataset.eventImage || "/assets/images/no_image.jpg";
         renderCarousel([placeholderImg], card.dataset.eventName || "Event");
@@ -1997,9 +2001,21 @@ function renderModalMap(data) {
             if (dateEl) dateEl.textContent = data.date;
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
-            if (typeEl) typeEl.textContent = data.type;
             if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
             
+            // New Fields (Full Data Update)
+            if (timeEl) {
+                const startTime = data.start_time ? data.start_time.substring(0, 5) : "";
+                const endTime = data.end_time ? data.end_time.substring(0, 5) : "";
+                timeEl.textContent = startTime && endTime ? `${startTime} - ${endTime}` : "All Day";
+            }
+            if (highlightEl) highlightEl.textContent = data.highlights || "-";
+            if (monthYearEl && data.start_date) {
+                const dateObj = new Date(data.start_date);
+                const formatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
+                monthYearEl.textContent = formatter.format(dateObj).toUpperCase();
+            }
+
             renderCarousel(data.images, data.name);
         }
 
