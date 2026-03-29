@@ -375,8 +375,8 @@ updateCardsPerView();
 
     let eventCardsPerView = getEventCardsPerView();
 
-    // Cloning for infinite loop - use a larger buffer (8)
-    if (originalCardsCount > eventCardsPerView) {
+    // Cloning for infinite loop - Always clone if more than 1 item
+    if (originalCardsCount > 1) {
         const clonesNeeded = 8;
         for (let i = 0; i < clonesNeeded; i++) {
             const cardToClone = eventCards[i % originalCardsCount];
@@ -392,9 +392,9 @@ updateCardsPerView();
     const updateEventSlider = (instant = false) => {
         if (!eventCards.length) return;
 
-        const needsSlider = originalCardsCount > eventCardsPerView;
+        const canSlide = originalCardsCount > 1;
 
-        if (!needsSlider) {
+        if (!canSlide) {
             eventGrid.style.justifyContent = "center";
             eventGrid.style.transform = "translateX(0)";
             eventCurrentIndex = 0;
@@ -412,14 +412,18 @@ updateCardsPerView();
             eventGrid.style.transform = `translateX(${offset}px)`;
         }
 
-        eventPrevBtn.disabled = !needsSlider;
-        eventNextBtn.disabled = !needsSlider;
+        eventPrevBtn.disabled = !canSlide;
+        eventNextBtn.disabled = !canSlide;
+        
+        if (eventControls) {
+            eventControls.classList.toggle("hidden", !canSlide);
+        }
     };
 
     const updateEventControlsVisibility = () => {
         if (!eventControls) return;
-        const shouldHideControls = originalCardsCount <= eventCardsPerView;
-        eventControls.classList.toggle("hidden", shouldHideControls);
+        const canSlide = originalCardsCount > 1;
+        eventControls.classList.toggle("hidden", !canSlide);
     };
 
     const onResize = () => {
@@ -438,7 +442,7 @@ updateCardsPerView();
 
     eventPrevBtn.addEventListener("click", () => {
         if (isTransitioning) return;
-        if (originalCardsCount > eventCardsPerView) {
+        if (originalCardsCount > 1) {
             if (eventCurrentIndex > 0) {
                 eventCurrentIndex--;
                 updateEventSlider();
@@ -456,7 +460,7 @@ updateCardsPerView();
 
     eventNextBtn.addEventListener("click", () => {
         if (isTransitioning) return;
-        if (originalCardsCount > eventCardsPerView) {
+        if (originalCardsCount > 1) {
             eventCurrentIndex++;
             updateEventSlider();
             isTransitioning = true;
@@ -466,7 +470,7 @@ updateCardsPerView();
     let eventAutoplayInterval;
     const startAutoplay = () => {
         if (eventAutoplayInterval) clearInterval(eventAutoplayInterval);
-        if (originalCardsCount > eventCardsPerView) {
+        if (originalCardsCount > 1) {
             eventAutoplayInterval = setInterval(() => {
                 if (!isTransitioning) {
                     eventCurrentIndex++;
@@ -510,8 +514,8 @@ updateCardsPerView();
 
     let cardsPerView = getCardsPerView();
 
-    // Cloning for infinite loop - 8 clones for better buffer
-    if (originalCardsCount > cardsPerView) {
+    // Cloning for infinite loop - Always clone if more than 1 item
+    if (originalCardsCount > 1) {
         const clonesNeeded = 8;
         for (let i = 0; i < clonesNeeded; i++) {
             const cardToClone = cards[i % originalCardsCount];
@@ -527,9 +531,9 @@ updateCardsPerView();
     const update = (instant = false) => {
         if (!cards.length) return;
 
-        const needsSlider = originalCardsCount > cardsPerView;
+        const canSlide = originalCardsCount > 1;
 
-        if (!needsSlider) {
+        if (!canSlide) {
             grid.style.justifyContent = "center";
             grid.style.transform = "translateX(0)";
             currentIndex = 0;
@@ -547,10 +551,10 @@ updateCardsPerView();
             grid.style.transform = `translateX(${offset}px)`;
         }
 
-        prevBtn.disabled = !needsSlider;
-        nextBtn.disabled = !needsSlider;
+        prevBtn.disabled = !canSlide;
+        nextBtn.disabled = !canSlide;
         if (controls) {
-            controls.classList.toggle("hidden", !needsSlider);
+            controls.classList.toggle("hidden", !canSlide);
         }
     };
 
@@ -569,7 +573,7 @@ updateCardsPerView();
 
     prevBtn.addEventListener("click", () => {
         if (isTransitioning) return;
-        if (originalCardsCount > cardsPerView) {
+        if (originalCardsCount > 1) {
             if (currentIndex > 0) {
                 currentIndex--;
                 update();
@@ -587,7 +591,7 @@ updateCardsPerView();
 
     nextBtn.addEventListener("click", () => {
         if (isTransitioning) return;
-        if (originalCardsCount > cardsPerView) {
+        if (originalCardsCount > 1) {
             currentIndex++;
             update();
             isTransitioning = true;
@@ -597,7 +601,7 @@ updateCardsPerView();
     let autoplay;
     const startAutoplay = () => {
         if (autoplay) clearInterval(autoplay);
-        if (originalCardsCount > cardsPerView) {
+        if (originalCardsCount > 1) {
             autoplay = setInterval(() => {
                 if (!isTransitioning) {
                     currentIndex++;
@@ -641,8 +645,8 @@ updateCardsPerView();
 
     let cardsPerView = getCardsPerView();
 
-    // Cloning for infinite loop - 8 clones for better buffer
-    if (originalCardsCount > cardsPerView) {
+    // Cloning for infinite loop - Always clone if more than 1 item
+    if (originalCardsCount > 1) {
         const clonesNeeded = 8;
         for (let i = 0; i < clonesNeeded; i++) {
             const cardToClone = cards[i % originalCardsCount];
@@ -658,9 +662,9 @@ updateCardsPerView();
     const update = (instant = false) => {
         if (!cards.length) return;
 
-        const needsSlider = originalCardsCount > cardsPerView;
+        const canSlide = originalCardsCount > 1;
 
-        if (!needsSlider) {
+        if (!canSlide) {
             grid.style.justifyContent = "center";
             grid.style.transform = "translateX(0)";
             currentIndex = 0;
@@ -678,10 +682,10 @@ updateCardsPerView();
             grid.style.transform = `translateX(${offset}px)`;
         }
 
-        prevBtn.disabled = !needsSlider;
-        nextBtn.disabled = !needsSlider;
+        prevBtn.disabled = !canSlide;
+        nextBtn.disabled = !canSlide;
         if (controls) {
-            controls.classList.toggle("hidden", !needsSlider);
+            controls.classList.toggle("hidden", !canSlide);
         }
     };
 
@@ -700,7 +704,7 @@ updateCardsPerView();
 
     prevBtn.addEventListener("click", () => {
         if (isTransitioning) return;
-        if (originalCardsCount > cardsPerView) {
+        if (originalCardsCount > 1) {
             if (currentIndex > 0) {
                 currentIndex--;
                 update();
@@ -718,7 +722,7 @@ updateCardsPerView();
 
     nextBtn.addEventListener("click", () => {
         if (isTransitioning) return;
-        if (originalCardsCount > cardsPerView) {
+        if (originalCardsCount > 1) {
             currentIndex++;
             update();
             isTransitioning = true;
@@ -728,7 +732,7 @@ updateCardsPerView();
     let autoplay;
     const startAutoplay = () => {
         if (autoplay) clearInterval(autoplay);
-        if (originalCardsCount > cardsPerView) {
+        if (originalCardsCount > 1) {
             autoplay = setInterval(() => {
                 if (!isTransitioning) {
                     currentIndex++;
