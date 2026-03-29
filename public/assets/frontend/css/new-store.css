@@ -66,7 +66,7 @@ body.new-store-page {
     pointer-events: none;
 }
 
-.promo-hero-banner::after {
+/* .promo-hero-banner::after {
     content: "";
     position: absolute;
     bottom: -1px;
@@ -75,11 +75,11 @@ body.new-store-page {
     height: 40px;
     background: var(--bg-light);
     clip-path: ellipse(55% 100% at 50% 100%);
-}
+} */
 
-body.dark-mode .promo-hero-banner::after {
+/* body.dark-mode .promo-hero-banner::after {
     background: var(--bg-dark);
-}
+} */
 
 .promo-hero-content {
     position: relative;
