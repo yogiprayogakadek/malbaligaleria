@@ -788,6 +788,34 @@ function filterTenants() {
 
     // Update tenant count per floor
     updateFloorCounts();
+
+    // Auto-switch floor if search has 1 match on another floor and we are in map view
+    if (currentView === "map" && combinedSearch && combinedSearch.length > 2) {
+        const globalMatch = tenants.find(t => 
+            t.name.toLowerCase().includes(combinedSearch) || 
+            t.category.toLowerCase().includes(combinedSearch)
+        );
+        
+        if (globalMatch && globalMatch.floor !== selectedFloor) {
+            changeFloor(globalMatch.floor);
+        }
+    }
+}
+
+// Reusable floor switcher
+function changeFloor(floorName) {
+    const floorKey = floorName === "1st Floor" ? "floor1" : "floor2";
+    if (currentFloorMap === floorKey) return;
+
+    currentFloorMap = floorKey;
+    const floorFilter = document.getElementById("floorFilter");
+    if (floorFilter) floorFilter.value = floorName;
+
+    document.querySelectorAll(".floor-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.floor === floorKey);
+    });
+
+    updateMapView();
 }
 
 // Update floor counts for map view
@@ -854,6 +882,10 @@ function createSearchSuggestions(searchTerm, containerId) {
                 `;
 
         suggestionItem.addEventListener("click", () => {
+            const floorName = tenant.floor;
+            if (currentView === "map") {
+                changeFloor(floorName);
+            }
             document.getElementById(
                 containerId.replace("Suggestions", "")
             ).value = tenant.name;
@@ -2213,16 +2245,9 @@ listViewBtn.addEventListener("click", switchToListView);
 // ===== FLOOR BUTTONS =====
 document.querySelectorAll(".floor-btn").forEach((btn) => {
     btn.addEventListener("click", function () {
-        document
-            .querySelectorAll(".floor-btn")
-            .forEach((b) => b.classList.remove("active"));
-        this.classList.add("active");
-        currentFloorMap = this.dataset.floor;
-        const floorValue =
-            currentFloorMap === "floor1" ? "1st Floor" : "2nd Floor";
-        document.getElementById("floorFilter").value = floorValue;
+        const floorValue = this.dataset.floor === "floor1" ? "1st Floor" : "2nd Floor";
+        changeFloor(floorValue);
         showToast(`Showing ${floorValue}`, "info", 2000);
-        updateMapView();
         filterTenants();
     });
 });
