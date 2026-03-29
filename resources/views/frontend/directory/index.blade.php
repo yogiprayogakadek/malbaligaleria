@@ -83,8 +83,10 @@
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
-                style="height: 45px; width: auto; object-fit: contain;">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria"
+                    class="header-main-logo" style="height: 45px; width: auto; object-fit: contain;">
+            </a>
         </div>
 
         <button class="menu-btn" id="menuBtn">
