@@ -232,9 +232,14 @@
 
         // Swipe Hint
         const swipeHint = document.getElementById("carouselSwipeHint");
-        if (swipeHint && modalImages.length > 1) {
-            swipeHint.classList.remove("hidden");
-            setTimeout(() => swipeHint.classList.add("hidden"), 3000);
+        if (swipeHint) {
+            if (modalImages.length > 1) {
+                swipeHint.classList.remove("hidden");
+                // Auto hide after 3 seconds
+                setTimeout(() => swipeHint.classList.add("hidden"), 3000);
+            } else {
+                swipeHint.classList.add("hidden");
+            }
         }
     }
 

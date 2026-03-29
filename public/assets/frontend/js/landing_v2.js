@@ -1369,10 +1369,14 @@ function updateModalContent(data) {
     // Swipe hint
     const swipeHint = document.getElementById("carouselSwipeHint");
     if (swipeHint) {
-        swipeHint.classList.remove("hidden");
-        setTimeout(() => {
+        if (modalImages.length > 1) {
+            swipeHint.classList.remove("hidden");
+            setTimeout(() => {
+                swipeHint.classList.add("hidden");
+            }, 3000);
+        } else {
             swipeHint.classList.add("hidden");
-        }, 3000);
+        }
     }
 }
 
@@ -1970,8 +1974,12 @@ function renderModalMap(data) {
 
         // Swipe hint logic
         if (swipeHint) {
-            swipeHint.classList.remove("hidden");
-            setTimeout(() => swipeHint.classList.add("hidden"), 3000);
+            if (eventImages.length > 1) {
+                swipeHint.classList.remove("hidden");
+                setTimeout(() => swipeHint.classList.add("hidden"), 3000);
+            } else {
+                swipeHint.classList.add("hidden");
+            }
         }
     }
 
