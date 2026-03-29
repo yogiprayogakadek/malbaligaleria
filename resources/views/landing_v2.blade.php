@@ -84,8 +84,10 @@
         </div>
 
         <div class="logo">
-            <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
-                style="height: 45px; width: auto; object-fit: contain;">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria"
+                    class="header-main-logo" style="height: 45px; width: auto; object-fit: contain;">
+            </a>
         </div>
 
         <button class="menu-btn" id="menuBtn">
@@ -343,15 +345,16 @@
                     <div class="regular-shows-grid" id="regularShowsGrid">
                         @php
                             $typeLabels = [
-                                'regular'    => 'Regular Show',
-                                'special'    => 'Special Event',
+                                'regular' => 'Regular Show',
+                                'special' => 'Special Event',
                                 'exhibition' => 'Exhibition',
-                                'upcoming'   => 'Upcoming Event',
+                                'upcoming' => 'Upcoming Event',
                             ];
                         @endphp
                         @foreach ($regularEvents as $rEvent)
                             <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
-                                data-event-uuid="{{ optional($rEvent)->uuid }}" data-event-name="{{ optional($rEvent)->name }}"
+                                data-event-uuid="{{ optional($rEvent)->uuid }}"
+                                data-event-name="{{ optional($rEvent)->name }}"
                                 data-event-date="{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}"
                                 data-event-time="{{ optional($rEvent)->start_time && optional($rEvent)->end_time ? \Carbon\Carbon::parse($rEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($rEvent->end_time)->format('h:i A') : 'Check Schedule' }}"
                                 data-event-desc="{{ optional($rEvent)->description }}"
@@ -364,7 +367,8 @@
                                     style="background-image: url({{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="rsc-card-content">
-                                    <span class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
+                                    <span
+                                        class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
                                     <h3>{{ optional($rEvent)->name }}</h3>
                                     <p class="event-desc">{{ Str::limit(optional($rEvent)->description, 80) }}</p>
                                     <span class="event-link">Learn More →</span>
@@ -391,10 +395,12 @@
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ optional($event)->uuid }}" data-event-name="{{ optional($event)->name }}"
+                            data-event-uuid="{{ optional($event)->uuid }}"
+                            data-event-name="{{ optional($event)->name }}"
                             data-event-date="{{ date_format(date_create(optional($event)->start_date), 'd M Y') }}"
                             data-event-time="{{ optional($event)->start_time && optional($event)->end_time ? \Carbon\Carbon::parse($event->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($event->end_time)->format('h:i A') : 'All Day' }}"
-                            data-event-desc="{{ optional($event)->description }}" data-event-location="{{ optional($event)->location }}"
+                            data-event-desc="{{ optional($event)->description }}"
+                            data-event-location="{{ optional($event)->location }}"
                             data-event-highlight="{{ optional($event)->highlights ?? '-' }}"
                             data-event-monthyear="{{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                             data-event-image="{{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
@@ -458,7 +464,10 @@
                             $exDateStr = '';
                             if (optional($exEvent)->start_date) {
                                 $exDateStr = date('d M', strtotime(optional($exEvent)->start_date));
-                                if (optional($exEvent)->end_date && optional($exEvent)->start_date != optional($exEvent)->end_date) {
+                                if (
+                                    optional($exEvent)->end_date &&
+                                    optional($exEvent)->start_date != optional($exEvent)->end_date
+                                ) {
                                     $exDateStr .= ' – ' . date('d M Y', strtotime(optional($exEvent)->end_date));
                                 } else {
                                     $exDateStr .= ' ' . date('Y', strtotime(optional($exEvent)->start_date));
@@ -466,8 +475,9 @@
                             }
                         @endphp
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ optional($exEvent)->uuid }}" data-event-name="{{ optional($exEvent)->name }}"
-                            data-event-date="{{ $exDateStr }}" data-event-desc="{{ optional($exEvent)->description }}"
+                            data-event-uuid="{{ optional($exEvent)->uuid }}"
+                            data-event-name="{{ optional($exEvent)->name }}" data-event-date="{{ $exDateStr }}"
+                            data-event-desc="{{ optional($exEvent)->description }}"
                             data-event-time="{{ $exEvent && $exEvent->start_time && $exEvent->end_time ? \Carbon\Carbon::parse($exEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($exEvent->end_time)->format('h:i A') : 'All Day' }}"
                             data-event-location="{{ optional($exEvent)->location }}"
                             data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
@@ -873,7 +883,8 @@
 
                         <div class="event-modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
                             <div>
                                 <span class="info-label">Highlight</span>
@@ -891,7 +902,8 @@
                             </svg>
                             <div>
                                 <span class="info-label">Description</span>
-                                <span class="info-value" id="eventModalMonthYear" style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span>
+                                <span class="info-value" id="eventModalMonthYear"
+                                    style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span>
                             </div>
                         </div>
                     </div>
