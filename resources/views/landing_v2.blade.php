@@ -361,7 +361,7 @@
                                 data-event-image="{{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                                 data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}">
                                 <div class="rsc-card-bg"
-                                    style="background-image: url({{ optional($rEvent->primaryPhoto)->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                    style="background-image: url({{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
                                 <div class="rsc-card-content">
                                     <span class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
@@ -472,10 +472,10 @@
                             data-event-location="{{ optional($exEvent)->location }}"
                             data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
                             data-event-monthyear="{{ $exEvent && $exEvent->start_date ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
-                            data-event-image="{{ optional($exEvent->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-image="{{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="{{ $typeLabels[optional($exEvent)->type] ?? 'Exhibition' }}">
                             <div class="event-card-bg"
-                                style="background-image: url({{ optional($exEvent->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="event-card-content">
                                 @if (optional($exEvent)->start_date)

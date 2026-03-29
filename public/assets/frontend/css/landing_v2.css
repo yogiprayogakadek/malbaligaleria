@@ -6325,6 +6325,23 @@ body.dark-mode .event-modal-carousel {
  display: flex;
  flex-direction: column;
  gap: 25px;
+ overflow-y: auto;
+ max-height: 100%;
+ scrollbar-width: thin;
+ scrollbar-color: var(--gold) transparent;
+}
+
+.event-modal-details::-webkit-scrollbar {
+ width: 4px;
+}
+
+.event-modal-details::-webkit-scrollbar-track {
+ background: transparent;
+}
+
+.event-modal-details::-webkit-scrollbar-thumb {
+ background: var(--gold);
+ border-radius: 10px;
 }
 
 .event-modal-header {
