@@ -2001,7 +2001,7 @@ function renderModalMap(data) {
             if (dateEl) dateEl.textContent = data.date;
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
-            if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
+            // if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
             
             // New Fields (Full Data Update)
             if (timeEl) {

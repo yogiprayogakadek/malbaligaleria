@@ -896,7 +896,7 @@
                         </div>
                     </div>
 
-                    <div class="event-modal-description" id="eventModalDescription"></div>
+                    <!-- <div class="event-modal-description" id="eventModalDescription"></div> -->
 
                     <div class="event-modal-actions">
                         <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">
