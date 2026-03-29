@@ -1795,6 +1795,7 @@ body.dark-mode .event-subtitle {
 .event-slider-wrapper {
     position: relative;
     overflow: hidden;
+    width: 100%;
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
@@ -1873,6 +1874,7 @@ body.dark-mode .event-empty-state p {
 
 .event-grid {
     display: flex;
+    flex-wrap: nowrap;
     gap: 30px;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -2231,12 +2233,17 @@ body.dark-mode .regular-shows-subtitle {
     color: #b0b0b0;
 }
 
+.regular-shows-slider-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
 /* Grid */
 .regular-shows-grid {
     display: flex;
     gap: 30px;
     flex-wrap: nowrap;
-    overflow: hidden;
     opacity: 0;
     transform: translateY(30px);
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
@@ -5551,10 +5558,7 @@ body.dark-mode .rsc-desc {
         padding: 50px 20px;
     }
 
-    .regular-shows-slider-wrapper {
-        overflow: hidden;
-        position: relative;
-    }
+
 
     .regular-shows-grid {
         display: flex !important;
@@ -6162,7 +6166,7 @@ body.dark-mode .event-modal-share-btn:hover {
         text-align: center;
     }
 }
-@charset "UTF-8";
+
 
 /* ========================================
  EVENT DETAIL MODAL (NEW DESIGN)

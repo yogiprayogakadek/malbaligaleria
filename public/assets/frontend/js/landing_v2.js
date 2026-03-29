@@ -444,7 +444,7 @@ updateCardsPerView();
 
     // Initial call
     updateEventSlider();
-    updateEventControlsVisibility();
+    onResize(); // Force check controls visibility
 })();
 
 // ========================================
@@ -537,6 +537,7 @@ updateCardsPerView();
 
     window.addEventListener("resize", onResize);
     update();
+    onResize(); // Force check controls visibility
 })();
 
 
@@ -612,6 +613,7 @@ updateCardsPerView();
 
     window.addEventListener("resize", onResize);
     update();
+    onResize(); // Force check controls visibility
 })();
 
 
