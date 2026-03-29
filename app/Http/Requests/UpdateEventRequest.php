@@ -14,7 +14,7 @@ class UpdateEventRequest extends FormRequest
 
     public function rules(): array
     {
-        $isRegular = $this->boolean('is_regular');
+        $isRegular = $this->type === 'regular';
 
         return [
             'name' => [
@@ -34,11 +34,12 @@ class UpdateEventRequest extends FormRequest
             'price'            => 'nullable|numeric|min:0|required_if:is_paid,1',
             'target_audience'  => 'nullable|string|max:255',
             'highlights'       => 'nullable|string|max:255',
+            'type'             => 'required|in:regular,special,exhibition,upcoming',
             'is_active'        => 'required|numeric|between:0,1',
             'is_regular'       => 'boolean',
             'recurring_days'   => 'nullable|array',
             'recurring_days.*' => 'integer|between:0,6',
-            'recurring_label'  => 'nullable|string|max:100|required_if:is_regular,1',
+            'recurring_label'  => 'nullable|string|max:100|required_if:type,regular',
         ];
     }
 

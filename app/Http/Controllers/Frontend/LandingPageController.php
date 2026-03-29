@@ -31,21 +31,21 @@ class LandingPageController extends Controller
         )->sortBy('name');
 
         $events = $this->eventService->getEventsWithRelationship(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
         );
 
         $regularEvents = $this->eventService->getRegularEvents(
-            ['id', 'uuid', 'name', 'description', 'recurring_label', 'start_time', 'end_time', 'location'],
+            ['id', 'uuid', 'name', 'type', 'description', 'recurring_label', 'start_time', 'end_time', 'location'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
         );
 
         $exhibitionEvents = $this->eventService->getExhibitionEvents(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
@@ -81,10 +81,10 @@ class LandingPageController extends Controller
             'id',
             $tenant_id
         )->map(function ($data) {
-            $logoUrl = !empty($data['logo'])
-                ? (str_starts_with($data['logo'], 'assets')
-                    ? asset($data['logo'])
-                    : asset('storage/' . $data['logo'])
+            $logoUrl = !empty($data->logo)
+                ? (str_starts_with($data->logo, 'assets')
+                    ? asset($data->logo)
+                    : asset('storage/' . $data->logo)
                 )
                 : asset('assets/images/no_image.jpg');
 
@@ -104,18 +104,18 @@ class LandingPageController extends Controller
                 ->all();
 
             return [
-                'name' => $data['name'],
-                'category' => $data['category']['name'],
-                'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
-                'floor_id' => $data['map_coords']['floor'],
-                'unit' => $data['map_coords']['unit'] ?? '-',
-                'x' => $data['map_coords']['x'] ?? null,
-                'y' => $data['map_coords']['y'] ?? null,
-                'map_coords' => $data['map_coords'],
-                'map_original_size' => $data['map_original_size'],
+                'name' => $data->name,
+                'category' => $data->category->name,
+                'floor' => $data->map_coords['floor'] == 1 ? '1st Floor' : '2nd Floor',
+                'floor_id' => $data->map_coords['floor'],
+                'unit' => $data->map_coords['unit'] ?? '-',
+                'x' => $data->map_coords['x'] ?? null,
+                'y' => $data->map_coords['y'] ?? null,
+                'map_coords' => $data->map_coords,
+                'map_original_size' => $data->map_original_size,
                 'logo' => $logoUrl,
                 'hours' => "10:00 AM - 10:00 PM",
-                'description' => $data['description'],
+                'description' => $data->description,
                 'images' => !empty($photos) ? $photos : [$logoUrl],
                 'has_album' => !empty($photos),
             ];
@@ -127,7 +127,7 @@ class LandingPageController extends Controller
     public function findEventByUuid($uuid)
     {
         $event = $this->eventService->getEventsWithRelationshipAndCondition(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location', 'recurring_label'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'recurring_label'],
             [
                 'primaryPhoto:id,event_id,path',
                 'albumPhoto:id,event_id,path',
@@ -160,6 +160,13 @@ class LandingPageController extends Controller
                 $dateStr = $data->recurring_label;
             }
 
+            $typeLabels = [
+                'regular'    => 'Regular Show',
+                'special'    => 'Special Event',
+                'exhibition' => 'Exhibition',
+                'upcoming'   => 'Upcoming Event',
+            ];
+
             return [
                 'name' => $data->name,
                 'uuid' => $data->uuid,
@@ -167,7 +174,7 @@ class LandingPageController extends Controller
                 'location' => $data->location ?: 'Mal Bali Galeria',
                 'description' => $data->description,
                 'images' => !empty($photos) ? $photos : [asset('assets/images/no_image.jpg')],
-                'type' => $data->recurring_label ? 'Regular Show' : 'Event',
+                'type' => $typeLabels[$data->type] ?? 'Event',
             ];
         });
 

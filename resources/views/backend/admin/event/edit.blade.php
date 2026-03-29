@@ -49,79 +49,81 @@
                             </div>
                         </div>
 
-                        {{-- Regular Event Toggle --}}
-                        <div class="mb-4 row align-items-center">
+                        {{-- Event Category Selection --}}
+                        <div class="mb-4 row">
+                            <label class="form-label col-sm-12 fw-bold fs-4">Event Category</label>
                             <div class="col-sm-12">
-                                <div class="card border" style="background: #fffbf4; border-color: #f0ddb8 !important;">
-                                    <div class="card-body py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="form-check form-switch mb-0">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                    id="is_regular" name="is_regular" value="1"
-                                                    {{ $event->is_regular ? 'checked' : '' }}>
-                                                <label class="form-check-label fw-semibold" for="is_regular">
-                                                    <i class="ti ti-repeat me-1" style="color:#c9a96e;"></i>
-                                                    Event Reguler / Rutin
-                                                </label>
-                                            </div>
-                                            <small class="text-muted">Aktifkan jika event ini berlangsung secara rutin (contoh: Live Music setiap akhir pekan)</small>
-                                        </div>
-
-                                        {{-- Recurring Fields --}}
-                                        <div id="recurringSection" class="mt-3" style="display:none;">
-                                            <hr class="my-2">
-                                            <div class="mb-3">
-                                                <label class="form-label fw-semibold">Hari Pelaksanaan</label>
-                                                <div class="day-pills">
-                                                    @php
-                                                        $days = ['0' => 'Minggu', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu'];
-                                                        $activeDays = old('recurring_days', $event->recurring_days ?? []);
-                                                    @endphp
-                                                    @foreach($days as $val => $label)
-                                                        <input type="checkbox" class="day-pill" id="day_{{ $val }}"
-                                                            name="recurring_days[]" value="{{ $val }}"
-                                                            {{ in_array($val, $activeDays) ? 'checked' : '' }}>
-                                                        <label for="day_{{ $val }}">{{ $label }}</label>
-                                                    @endforeach
-                                                </div>
-                                                @error('recurring_days')
-                                                    <div class="text-danger small mt-1">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-1">
-                                                <label class="form-label fw-semibold" for="recurring_label">Label Jadwal <small class="text-muted fw-normal">(ditampilkan ke pengunjung)</small></label>
-                                                <input type="text" class="form-control @error('recurring_label') is-invalid @enderror"
-                                                    id="recurring_label" name="recurring_label"
-                                                    placeholder="Contoh: Setiap Jum'at, Sabtu & Minggu"
-                                                    value="{{ old('recurring_label', $event->recurring_label) }}">
-                                                @error('recurring_label')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
+                                <div class="row g-3">
+                                    {{-- Regular Event --}}
+                                    <div class="col-md-3">
+                                        <input type="radio" class="btn-check" name="type" id="type_regular" value="regular" {{ old('type', $event->type) == 'regular' ? 'checked' : '' }}>
+                                        <label class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2" for="type_regular">
+                                            <i class="ti ti-repeat fs-7"></i>
+                                            <span>Regular Event</span>
+                                        </label>
+                                    </div>
+                                    {{-- Special Event --}}
+                                    <div class="col-md-3">
+                                        <input type="radio" class="btn-check" name="type" id="type_special" value="special" {{ old('type', $event->type) == 'special' ? 'checked' : '' }}>
+                                        <label class="btn btn-outline-warning w-100 py-3 d-flex flex-column align-items-center gap-2" for="type_special">
+                                            <i class="ti ti-star fs-7"></i>
+                                            <span>Special Event</span>
+                                        </label>
+                                    </div>
+                                    {{-- Exhibition --}}
+                                    <div class="col-md-3">
+                                        <input type="radio" class="btn-check" name="type" id="type_exhibition" value="exhibition" {{ old('type', $event->type) == 'exhibition' ? 'checked' : '' }}>
+                                        <label class="btn btn-outline-info w-100 py-3 d-flex flex-column align-items-center gap-2" for="type_exhibition">
+                                            <i class="ti ti-building-store fs-7"></i>
+                                            <span>Exhibition</span>
+                                        </label>
+                                    </div>
+                                    {{-- Upcoming Event --}}
+                                    <div class="col-md-3">
+                                        <input type="radio" class="btn-check" name="type" id="type_upcoming" value="upcoming" {{ old('type', $event->type) == 'upcoming' ? 'checked' : '' }}>
+                                        <label class="btn btn-outline-secondary w-100 py-3 d-flex flex-column align-items-center gap-2" for="type_upcoming">
+                                            <i class="ti ti-calendar-event fs-7"></i>
+                                            <span>Upcoming Event</span>
+                                        </label>
                                     </div>
                                 </div>
+                                @error('type')
+                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
-                        {{-- Exhibition Toggle --}}
-                        <div class="mb-4 row align-items-center">
-                            <div class="col-sm-12">
-                                <div class="card border" style="background: #f4f7ff; border-color: #b8c8f0 !important;">
-                                    <div class="card-body py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="form-check form-switch mb-0">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                    id="is_exhibition" name="is_exhibition" value="1"
-                                                    {{ $event->is_exhibition ? 'checked' : '' }}>
-                                                <label class="form-check-label fw-semibold" for="is_exhibition">
-                                                    <i class="ti ti-building-store me-1" style="color:#5b8dee;"></i>
-                                                    Exhibition / Pameran
-                                                </label>
-                                            </div>
-                                            <small class="text-muted">Aktifkan jika event ini adalah pameran (exhibition) yang ditampilkan di bagian khusus halaman utama</small>
-                                        </div>
+                        {{-- Recurring Details (Only for Regular) --}}
+                        <div id="recurringSection" class="mb-4 card border" style="background: #fffbf4; border-color: #f0ddb8 !important; display: none;">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3" style="color:#c9a96e;"><i class="ti ti-repeat me-1"></i>Jadwal Rutin</h5>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Hari Pelaksanaan</label>
+                                    <div class="day-pills">
+                                        @php
+                                            $days = ['0' => 'Minggu', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabu', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu'];
+                                            $activeDays = old('recurring_days', $event->recurring_days ?? []);
+                                        @endphp
+                                        @foreach($days as $val => $label)
+                                            <input type="checkbox" class="day-pill" id="day_{{ $val }}"
+                                                name="recurring_days[]" value="{{ $val }}"
+                                                {{ in_array($val, $activeDays) ? 'checked' : '' }}>
+                                            <label for="day_{{ $val }}">{{ $label }}</label>
+                                        @endforeach
                                     </div>
+                                    @error('recurring_days')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label fw-semibold" for="recurring_label">Label Jadwal <small class="text-muted fw-normal">(ditampilkan ke pengunjung)</small></label>
+                                    <input type="text" class="form-control @error('recurring_label') is-invalid @enderror"
+                                        id="recurring_label" name="recurring_label"
+                                        placeholder="Contoh: Setiap Jum'at, Sabtu & Minggu"
+                                        value="{{ old('recurring_label', $event->recurring_label) }}">
+                                    @error('recurring_label')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -314,10 +316,10 @@
                 altFormat: "h:i K"
             });
 
-            // Toggle regular event section
-            function toggleRegular() {
-                const isRegular = $('#is_regular').is(':checked');
-                if (isRegular) {
+            // Toggle event sections based on type
+            function toggleType() {
+                const type = $('input[name="type"]:checked').val();
+                if (type === 'regular') {
                     $('#recurringSection').slideDown(250);
                     $('#dateSection').slideUp(250);
                 } else {
@@ -325,8 +327,8 @@
                     $('#dateSection').slideDown(250);
                 }
             }
-            $('#is_regular').on('change', toggleRegular);
-            toggleRegular();
+            $('input[name="type"]').on('change', toggleType);
+            toggleType();
 
             // Handle Entrance Fee Change
             $('#is_paid').change(function() {

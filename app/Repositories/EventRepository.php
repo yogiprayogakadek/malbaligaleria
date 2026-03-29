@@ -23,8 +23,7 @@ class EventRepository
         return $this->model::select($fields)
             ->with($relationship)
             ->where('is_active', true)
-            ->where('is_regular', false)
-            ->where('is_exhibition', false)
+            ->where('type', 'upcoming')
             ->where('end_date', '>=', today())
             ->get();
     }
@@ -34,7 +33,7 @@ class EventRepository
         return $this->model::select($fields)
             ->with($relationship)
             ->where('is_active', true)
-            ->where('is_regular', true)
+            ->whereIn('type', ['regular', 'special'])
             ->get();
     }
 
@@ -43,7 +42,7 @@ class EventRepository
         return $this->model::select($fields)
             ->with($relationship)
             ->where('is_active', true)
-            ->where('is_exhibition', true)
+            ->where('type', 'exhibition')
             ->where('end_date', '>=', today())
             ->get();
     }
@@ -59,8 +58,7 @@ class EventRepository
             ->with($relationship)
             ->where('uuid', '!=', $uuid)
             ->where('is_active', true)
-            ->where('is_regular', false)
-            ->where('is_exhibition', false)
+            ->where('type', 'upcoming')
             ->get();
     }
 

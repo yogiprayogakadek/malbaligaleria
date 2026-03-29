@@ -85,8 +85,8 @@
                         name: 'end_time',
                     },
                     {
-                        data: 'is_regular',
-                        name: 'is_regular',
+                        data: 'type',
+                        name: 'type',
                         orderable: false,
                         searchable: false
                     },

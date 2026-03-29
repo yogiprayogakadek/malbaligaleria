@@ -27,6 +27,7 @@ class Event extends Model
         'target_audience',
         'highlights',
         'is_active',
+        'type',
         'is_regular',
         'is_exhibition',
         'recurring_days',
@@ -34,6 +35,7 @@ class Event extends Model
     ];
 
     protected $casts = [
+        'type'           => 'string',
         'is_regular'     => 'boolean',
         'is_exhibition'  => 'boolean',
         'recurring_days' => 'array',

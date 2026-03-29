@@ -21,7 +21,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $events = $this->eventService->getAll(['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_label']);
+            $events = $this->eventService->getAll(['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_label']);
 
             return DataTables::of($events)
                 ->addIndexColumn()
@@ -30,13 +30,14 @@ class EventController extends Controller
                         ? '<span class="badge bg-primary">Active</span>'
                         : '<span class="badge bg-danger">Inactive</span>';
                 })
-                ->editColumn('is_regular', function ($row) {
-                    if ($row->is_exhibition) {
-                        return '<span class="badge" style="background:#4a6fa5;color:#fff;"><i class="ti ti-building-store me-1"></i>Exhibition</span>';
-                    }
-                    return $row->is_regular
-                        ? '<span class="badge" style="background:#c9a96e;color:#fff;"><i class="ti ti-repeat me-1"></i>Regular</span>'
-                        : '<span class="badge bg-secondary">One-time</span>';
+                ->editColumn('type', function ($row) {
+                    $badges = [
+                        'regular'    => '<span class="badge" style="background:#c9a96e;color:#fff;"><i class="ti ti-repeat me-1"></i>Regular</span>',
+                        'special'    => '<span class="badge" style="background:#e6b94d;color:#fff;"><i class="ti ti-star me-1"></i>Special</span>',
+                        'exhibition' => '<span class="badge" style="background:#4a6fa5;color:#fff;"><i class="ti ti-building-store me-1"></i>Exhibition</span>',
+                        'upcoming'   => '<span class="badge bg-secondary">Upcoming</span>',
+                    ];
+                    return $badges[$row->type] ?? $row->type;
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.event.edit', $row->uuid) . '">
@@ -47,7 +48,7 @@ class EventController extends Controller
                         </button>
                     </a>                    ';
                 })
-                ->rawColumns(['action', 'is_active', 'is_regular'])
+                ->rawColumns(['action', 'is_active', 'type'])
                 ->make(true);
         }
 
@@ -61,12 +62,13 @@ class EventController extends Controller
 
     public function store(StoreEventRequest $request)
     {
-        $isRegular = $request->boolean('is_regular');
+        $isRegular = $request->type === 'regular';
 
         $data = [
             'name'            => $request->name,
-            'start_date'      => $isRegular ? null : $request->start_date,
-            'end_date'        => $isRegular ? null : $request->end_date,
+            'type'            => $request->type,
+            'start_date'      => ($request->type === 'regular') ? null : $request->start_date,
+            'end_date'        => ($request->type === 'regular') ? null : $request->end_date,
             'start_time'      => $request->start_time,
             'end_time'        => $request->end_time,
             'description'     => $request->description,
@@ -76,8 +78,8 @@ class EventController extends Controller
             'price'           => $request->price,
             'target_audience' => $request->target_audience,
             'highlights'      => $request->highlights,
-            'is_regular'      => $isRegular,
-            'is_exhibition'   => $request->boolean('is_exhibition'),
+            'is_regular'      => ($request->type === 'regular'),
+            'is_exhibition'   => ($request->type === 'exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
             'recurring_label' => $isRegular ? $request->recurring_label : null,
         ];
@@ -89,19 +91,20 @@ class EventController extends Controller
 
     public function edit($uuid)
     {
-        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label']);
+        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label']);
 
         return view('backend.admin.event.edit', compact('event'));
     }
 
     public function update(UpdateEventRequest $request, $uuid)
     {
-        $isRegular = $request->boolean('is_regular');
+        $isRegular = $request->type === 'regular';
 
         $data = [
             'name'            => $request->name,
-            'start_date'      => $isRegular ? null : $request->start_date,
-            'end_date'        => $isRegular ? null : $request->end_date,
+            'type'            => $request->type,
+            'start_date'      => ($request->type === 'regular') ? null : $request->start_date,
+            'end_date'        => ($request->type === 'regular') ? null : $request->end_date,
             'start_time'      => $request->start_time,
             'end_time'        => $request->end_time,
             'description'     => $request->description,
@@ -112,8 +115,8 @@ class EventController extends Controller
             'target_audience' => $request->target_audience,
             'highlights'      => $request->highlights,
             'is_active'       => $request->is_active,
-            'is_regular'      => $isRegular,
-            'is_exhibition'   => $request->boolean('is_exhibition'),
+            'is_regular'      => ($request->type === 'regular'),
+            'is_exhibition'   => ($request->type === 'exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
             'recurring_label' => $isRegular ? $request->recurring_label : null,
         ];

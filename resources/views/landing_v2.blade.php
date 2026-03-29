@@ -341,6 +341,14 @@
 
                 <div class="regular-shows-slider-wrapper">
                     <div class="regular-shows-grid" id="regularShowsGrid">
+                        @php
+                            $typeLabels = [
+                                'regular'    => 'Regular Show',
+                                'special'    => 'Special Event',
+                                'exhibition' => 'Exhibition',
+                                'upcoming'   => 'Upcoming Event',
+                            ];
+                        @endphp
                         @foreach ($regularEvents as $rEvent)
                             <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
                                 data-event-uuid="{{ $rEvent->uuid }}" data-event-name="{{ $rEvent->name }}"
@@ -348,7 +356,7 @@
                                 data-event-desc="{{ $rEvent->description }}"
                                 data-event-location="{{ $rEvent->location }}"
                                 data-event-image="{{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                                data-event-type="Regular Show">
+                                data-event-type="{{ $typeLabels[$rEvent->type] ?? 'Event' }}">
                                 <div class="rsc-card-bg"
                                     style="background-image: url({{ $rEvent->primaryPhoto && $rEvent->primaryPhoto->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
@@ -384,7 +392,7 @@
                             data-event-date="{{ date_format(date_create($event->start_date), 'd M Y') }}"
                             data-event-desc="{{ $event->description }}" data-event-location="{{ $event->location }}"
                             data-event-image="{{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="Upcoming Event">
+                            data-event-type="{{ $typeLabels[$event->type] ?? 'Upcoming Event' }}">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $event->primaryPhoto && $event->primaryPhoto->path ? asset('storage/' . $event->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
@@ -456,7 +464,7 @@
                             data-event-date="{{ $exDateStr }}" data-event-desc="{{ $exEvent->description }}"
                             data-event-location="{{ $exEvent->location }}"
                             data-event-image="{{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="Exhibition">
+                            data-event-type="{{ $typeLabels[$exEvent->type] ?? 'Exhibition' }}">
                             <div class="event-card-bg"
                                 style="background-image: url({{ $exEvent->primaryPhoto && $exEvent->primaryPhoto->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
