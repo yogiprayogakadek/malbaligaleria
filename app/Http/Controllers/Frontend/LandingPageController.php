@@ -128,7 +128,7 @@ class LandingPageController extends Controller
     public function findEventByUuid($uuid)
     {
         $event = $this->eventService->getEventsWithRelationshipAndCondition(
-            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'recurring_label'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'recurring_label', 'highlights'],
             [
                 'primaryPhoto:id,event_id,path',
                 'photos:id,event_id,path',
@@ -178,6 +178,7 @@ class LandingPageController extends Controller
                 'date' => $dateStr,
                 'location' => $data->location ?: 'Mal Bali Galeria',
                 'description' => $data->description,
+                'highlights' => $data->highlights ?: '-',
                 'images' => !empty($photos) ? $photos : [asset('assets/images/no_image.jpg')],
                 'type' => $typeLabels[$data->type] ?? 'Event',
             ];
