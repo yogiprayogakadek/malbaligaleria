@@ -81,7 +81,7 @@ class DirectoryController extends Controller
         // });
 
         $tenants = $this->tenantService->getTenantsWithRelationshipAndCondition(
-            ['id', 'name', 'category_id', 'map_coords', 'logo', 'description'],
+            ['id', 'name', 'category_id', 'type', 'map_coords', 'logo', 'description'],
             [
                 'category:id,name',
                 'albumPhoto:id,tenant_id,path',
@@ -116,7 +116,8 @@ class DirectoryController extends Controller
             $tenantData = [
                 'id' => $data['id'],
                 'name' => $data['name'],
-                'category' => $data['category']['name'],
+                'type' => $data['type'],
+                'category' => $data['category']['name'] ?? 'Gate',
                 'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
                 'unit' => $data['map_coords']['unit'] ?? '-',
                 'logo' => $logoUrl,

@@ -18,7 +18,7 @@
                         @csrf
 
                         {{-- Tenant Category --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="category" class="form-label col-sm-3 col-form-label">Category</label>
                             <div class="col-sm-12">
                                 <select name="category_id" id="categoryId"
@@ -47,6 +47,9 @@
                                     </option>
                                     <option value="island" {{ $tenant->type == 'island' ? 'selected' : '' }}>
                                         Island
+                                    </option>
+                                    <option value="gate" {{ $tenant->type == 'gate' ? 'selected' : '' }}>
+                                        Gate
                                     </option>
                                 </select>
                                 @error('type')
@@ -82,7 +85,7 @@
                         </div>
 
                         {{-- Tenant Email --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="email" class="form-label col-sm-3 col-form-label">Email</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control @error('email') is-invalid @enderror"
@@ -191,7 +194,7 @@
                         </div>
 
                         {{-- Tenant Website --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="website" class="form-label col-sm-3 col-form-label">Website</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control @error('website') is-invalid @enderror"
@@ -204,7 +207,7 @@
                         </div>
 
                         {{-- Tenant Logo --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="logo" class="form-label col-sm-3 col-form-label">Logo</label>
                             <div class="col-sm-12">
                                 <input type="file" class="form-control @error('logo') is-invalid @enderror"
@@ -218,7 +221,7 @@
                         </div>
 
                         {{-- Launched at --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="launchedAt" class="form-label col-sm-3 col-form-label">Launched at</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control @error('launched_at') is-invalid @enderror"
@@ -232,7 +235,7 @@
                         </div>
 
                         {{-- Is new --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="isNew" class="form-label col-sm-3 col-form-label">New Store</label>
                             <div class="col-sm-12">
                                 <div class="col-sm-12">
@@ -371,5 +374,18 @@
 
             mapContainer.appendChild(marker);
         });
+
+        // Dynamic Field Hiding Logic
+        function toggleFields() {
+            const type = $('#type').val();
+            if (type === 'gate') {
+                $('.tenant-only-field').fadeOut();
+            } else {
+                $('.tenant-only-field').fadeIn();
+            }
+        }
+
+        $('#type').on('change', toggleFields);
+        toggleFields(); // Initial check
     </script>
 @endpush

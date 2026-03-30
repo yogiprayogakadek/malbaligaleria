@@ -23,11 +23,12 @@ class UpdateTenantRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type'              => 'required|string|in:tenant,island,gate',
+            'category_id'       => 'required_if:type,tenant,island|exists:categories,id',
             'name'              => [
                 'required',
                 'string',
                 'max:255',
-                // Rule::unique('tenants', 'name')->ignore($this->uuid, 'uuid')
             ],
             'phone'             => 'nullable|string|max:20',
             'email'             => 'nullable|email|max:255',

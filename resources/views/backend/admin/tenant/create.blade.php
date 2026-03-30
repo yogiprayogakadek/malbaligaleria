@@ -16,8 +16,24 @@
                         id="form">
                         @csrf
 
-                        {{-- Tenant Category --}}
+                        {{-- Tenant Type --}}
                         <div class="mb-4 row align-items-center">
+                            <label for="type" class="form-label col-sm-3 col-form-label">Type</label>
+                            <div class="col-sm-12">
+                                <select name="type" id="type"
+                                    class="form-control @error('type') is-invalid @enderror">
+                                    <option value="tenant" {{ old('type') == 'tenant' ? 'selected' : '' }}>Tenant</option>
+                                    <option value="island" {{ old('type') == 'island' ? 'selected' : '' }}>Island</option>
+                                    <option value="gate" {{ old('type') == 'gate' ? 'selected' : '' }}>Gate</option>
+                                </select>
+                                @error('type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Tenant Category --}}
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="category" class="form-label col-sm-3 col-form-label">Category</label>
                             <div class="col-sm-12">
                                 <select name="category_id" id="categoryId"
@@ -62,7 +78,7 @@
                         </div>
 
                         {{-- Tenant Email --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="email" class="form-label col-sm-3 col-form-label">Email</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control @error('email') is-invalid @enderror"
@@ -169,7 +185,7 @@
                         </div>
 
                         {{-- Tenant Website --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="website" class="form-label col-sm-3 col-form-label">Website</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control @error('website') is-invalid @enderror"
@@ -182,7 +198,7 @@
                         </div>
 
                         {{-- Tenant Logo --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="logo" class="form-label col-sm-3 col-form-label">Logo</label>
                             <div class="col-sm-12">
                                 <input type="file" class="form-control @error('logo') is-invalid @enderror"
@@ -195,7 +211,7 @@
                         </div>
 
                         {{-- Launched at --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="launchedAt" class="form-label col-sm-3 col-form-label">Launched at</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control @error('launched_at') is-invalid @enderror"
@@ -209,7 +225,7 @@
                         </div>
 
                         {{-- Is new --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="isNew" class="form-label col-sm-3 col-form-label">New Store</label>
                             <div class="col-sm-12">
                                 <div class="col-sm-12">
@@ -229,7 +245,7 @@
                         </div>
 
                         {{-- Tenant Description --}}
-                        <div class="mb-4 row align-items-center">
+                        <div class="mb-4 row align-items-center tenant-only-field">
                             <label for="description" class="form-label col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-12">
                                 <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
@@ -333,8 +349,17 @@
             mapContainer.appendChild(marker);
         });
 
-        // Also update floor input on button click (already handling visual switch, but let's be explicit about the form input)
-        // Note: The existing code for buttons didn't update the #floor input, which might be a good ID to check.
-        // Checking existing file: #floor input exists (lines 121-124).
+        // Dynamic Field Hiding Logic
+        function toggleFields() {
+            const type = $('#type').val();
+            if (type === 'gate') {
+                $('.tenant-only-field').fadeOut();
+            } else {
+                $('.tenant-only-field').fadeIn();
+            }
+        }
+
+        $('#type').on('change', toggleFields);
+        toggleFields(); // Initial check
     </script>
 @endpush

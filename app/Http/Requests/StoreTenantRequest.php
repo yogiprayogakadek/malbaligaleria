@@ -22,11 +22,13 @@ class StoreTenantRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type'              => 'required|string|in:tenant,island,gate',
+            'category_id'       => 'required_if:type,tenant,island|exists:categories,id',
             'name'              => 'required|string|max:255|unique:tenants,name',
             'phone'             => 'nullable|string|max:20',
             'email'             => 'nullable|email|max:255',
             'website'           => 'nullable|url|max:255',
-            'logo'              => 'required|image|mimes:png,jpg,jpeg,jfif|max:2048',
+            'logo'              => 'required_if:type,tenant,island|image|mimes:png,jpg,jpeg,jfif|max:2048',
             'description'       => 'nullable|string',
             'position_x'        => 'required|numeric',
             'position_y'        => 'required|numeric',

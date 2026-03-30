@@ -1201,93 +1201,6 @@ function updateMapView() {
             }
         });
 
-        // Create markers for each group
-        for (const key in positionGroups) {
-            const group = positionGroups[key];
-            const [groupX, groupY] = key.split(",").map(Number);
-
-            let pin;
-            if (group.length > 1) {
-                // Create cluster marker
-                pin = document.createElement("div");
-                pin.className = "map-pin cluster";
-                
-                // Use percentage for responsive positioning
-                // Use the first tenant in group for position reference
-                const firstTenant = group[0].tenant;
-                const leftPercent = (firstTenant.mapCoords.x / firstTenant.mapOriginalSize.width) * 100;
-                const topPercent = (firstTenant.mapCoords.y / firstTenant.mapOriginalSize.height) * 100;
-                
-                pin.style.left = leftPercent + "%";
-                pin.style.top = topPercent + "%";
-                pin.textContent = group.length;
-                pin.style.position = "absolute";
-                pin.style.background = "linear-gradient(135deg, #5fcfda, #4db8c3)";
-
-                // Store all tenants in this cluster
-                pin.dataset.tenants = JSON.stringify(
-                    group.map((item) => item.tenant)
-                );
-
-                pin.addEventListener("mouseenter", function () {
-                    // Show simple tooltip with tenant count
-                    showSimpleTooltip(`${group.length} Stores`, this);
-                });
-            } else {
-                // Create single marker
-                const tenant = group[0].tenant;
-                pin = document.createElement("div");
-                
-                // Calculate percentage position
-                // Note: We use original coordinates relative to original size for accuracy
-                const leftPercent = (tenant.mapCoords.x / tenant.mapOriginalSize.width) * 100;
-                const topPercent = (tenant.mapCoords.y / tenant.mapOriginalSize.height) * 100;
-
-                // Check if searching (active search term)
-                if (searchTerm && searchTerm.trim() !== '') {
-                    pin.className = "map-pin-logo";
-
-                    // If multiple tenants found, use smaller logo
-                    if (currentFloorTenants.length > 1) {
-                        pin.classList.add("small");
-                    }
-
-                    const img = document.createElement("img");
-                    img.src = tenant.logo;
-                    img.alt = tenant.name;
-                    img.onerror = function() { this.style.display = 'none'; }; // Fallback
-                    pin.appendChild(img);
-                } else {
-                    pin.className = "map-pin";
-                    // Check for Island category
-                    if (tenant.category && tenant.category.toLowerCase().includes('island')) {
-                        pin.classList.add('small-pin');
-                    }
-                    pin.style.background = getCategoryColor(tenant.category);
-
-                    const label = document.createElement("div");
-                    label.className = "map-pin-label";
-                    label.textContent = tenant.name;
-                    pin.appendChild(label);
-                }
-
-                pin.style.position = "absolute";
-                pin.style.left = leftPercent + "%";
-                pin.style.top = topPercent + "%";
-                pin.dataset.tenant = JSON.stringify(tenant);
-                pin.dataset.tenantUnit = tenant.unit; // Add unit for easy finding
-
-                // Add tooltips
-                if (searchTerm && searchTerm.trim() !== '') {
-                    pin.addEventListener("mouseenter", function () {
-                        const tenantData = JSON.parse(this.dataset.tenant);
-                        showSimpleTooltip(tenantData.name, this);
-                    });
-                }
-            }
-
-            pin.addEventListener("mouseleave", hideMapTooltip);
-
             // Robust handler for both click and touch
             const handlePinInteraction = function (e) {
                 // Prevent default if it's a touch event to stop double-firing and ghost clicks
@@ -1300,7 +1213,12 @@ function updateMapView() {
                 // Logic to close any open tooltips/popups if necessary
                 hideMapTooltip();
 
-                if (this.classList.contains("cluster")) {
+                if (this.dataset.isGate === "true") {
+                    // For gates, perhaps just show a toast or a different small modal?
+                    // User didn't specify interaction, so we follow tenant modal for now.
+                    const tenantData = JSON.parse(this.dataset.tenant);
+                    showTenantModal(tenantData);
+                } else if (this.classList.contains("cluster")) {
                     const tenantList = JSON.parse(this.dataset.tenants);
                     showClusterModal(tenantList);
                 } else {
@@ -1309,12 +1227,110 @@ function updateMapView() {
                 }
             };
 
-            // Add listeners for both click and touchend
-            pin.addEventListener("click", handlePinInteraction);
-            pin.addEventListener("touchend", handlePinInteraction);
+            if (group.length > 1) {
+                // Create cluster marker
+                pin = document.createElement("div");
+                pin.className = "map-pin cluster";
+                
+                // Use percentage for responsive positioning
+                const firstTenant = group[0].tenant;
+                const leftPercent = (firstTenant.mapCoords.x / firstTenant.mapOriginalSize.width) * 100;
+                const topPercent = (firstTenant.mapCoords.y / firstTenant.mapOriginalSize.height) * 100;
+                
+                pin.style.left = leftPercent + "%";
+                pin.style.top = topPercent + "%";
+                pin.textContent = group.length;
+                pin.style.position = "absolute";
+                pin.style.background = "linear-gradient(135deg, #5fcfda, #4db8c3)";
 
-            mapWrapper.appendChild(pin);
-        }
+                pin.dataset.tenants = JSON.stringify(group.map((item) => item.tenant));
+                pin.addEventListener("mouseenter", function () { showSimpleTooltip(`${group.length} Stores`, this); });
+                pin.addEventListener("click", handlePinInteraction);
+                pin.addEventListener("touchend", handlePinInteraction);
+                mapWrapper.appendChild(pin);
+
+            } else {
+                // Create single marker or Gate
+                const tenant = group[0].tenant;
+                const leftPercent = (tenant.mapCoords.x / tenant.mapOriginalSize.width) * 100;
+                const topPercent = (tenant.mapCoords.y / tenant.mapOriginalSize.height) * 100;
+
+                if (tenant.type === 'gate') {
+                    // GATE IMPLEMENTATION
+                    const gateWrapper = document.createElement("div");
+                    gateWrapper.className = "map-gate-wrapper";
+                    
+                    // Logic to stay inside map
+                    const isLeft = leftPercent > 50; 
+                    gateWrapper.classList.add(isLeft ? "label-left" : "label-right");
+                    
+                    gateWrapper.style.left = leftPercent + "%";
+                    gateWrapper.style.top = topPercent + "%";
+                    
+                    gateWrapper.innerHTML = `
+                        <div class="map-pin gate" data-is-gate="true"></div>
+                        <div class="map-gate-connector"></div>
+                        <div class="map-gate-label">${tenant.name}</div>
+                    `;
+
+                    // Add interaction to the label and pin
+                    const gatePin = gateWrapper.querySelector('.gate');
+                    const gateLabel = gateWrapper.querySelector('.map-gate-label');
+                    
+                    gatePin.dataset.tenant = JSON.stringify(tenant);
+                    gateLabel.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        showTenantModal(tenant);
+                    });
+                    
+                    gatePin.addEventListener("click", handlePinInteraction);
+                    gatePin.addEventListener("touchend", handlePinInteraction);
+                    
+                    mapWrapper.appendChild(gateWrapper);
+
+                } else {
+                    // REGULAR TENANT
+                    pin = document.createElement("div");
+                    
+                    if (searchTerm && searchTerm.trim() !== '') {
+                        pin.className = "map-pin-logo";
+                        if (currentFloorTenants.length > 1) pin.classList.add("small");
+                        const img = document.createElement("img");
+                        img.src = tenant.logo;
+                        img.alt = tenant.name;
+                        img.onerror = function() { this.style.display = 'none'; };
+                        pin.appendChild(img);
+                    } else {
+                        pin.className = "map-pin";
+                        if (tenant.category && tenant.category.toLowerCase().includes('island')) {
+                            pin.classList.add('small-pin');
+                        }
+                        pin.style.background = getCategoryColor(tenant.category);
+                        const label = document.createElement("div");
+                        label.className = "map-pin-label";
+                        label.textContent = tenant.name;
+                        pin.appendChild(label);
+                    }
+
+                    pin.style.position = "absolute";
+                    pin.style.left = leftPercent + "%";
+                    pin.style.top = topPercent + "%";
+                    pin.dataset.tenant = JSON.stringify(tenant);
+                    pin.dataset.tenantUnit = tenant.unit;
+
+                    if (searchTerm && searchTerm.trim() !== '') {
+                        pin.addEventListener("mouseenter", function () {
+                            const tenantData = JSON.parse(this.dataset.tenant);
+                            showSimpleTooltip(tenantData.name, this);
+                        });
+                    }
+                    
+                    pin.addEventListener("click", handlePinInteraction);
+                    pin.addEventListener("touchend", handlePinInteraction);
+                    pin.addEventListener("mouseleave", hideMapTooltip);
+                    mapWrapper.appendChild(pin);
+                }
+            }
 
         if (!document.getElementById("mapTooltip")) {
             const tooltip = document.createElement("div");

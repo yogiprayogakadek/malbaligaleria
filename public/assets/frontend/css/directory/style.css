@@ -2523,6 +2523,75 @@ body.dark-mode .map-container {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+ 
+/* Gate Styles */
+.map-pin.gate {
+    width: 10px !important;
+    height: 10px !important;
+    background: #FF0000 !important; /* Pure Red as per reference */
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4) !important;
+}
+
+.map-gate-wrapper {
+    position: absolute;
+    pointer-events: none;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    transform-origin: center;
+}
+
+.map-gate-connector {
+    height: 1.5px;
+    background-color: #FF0000;
+    width: 40px;
+    position: relative;
+}
+
+/* Arrowhead for the connector */
+.map-gate-connector::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.map-gate-wrapper.label-left {
+    flex-direction: row-reverse;
+}
+
+.map-gate-wrapper.label-left .map-gate-connector::after {
+    border-right: 6px solid #FF0000;
+    left: -4px;
+}
+
+.map-gate-wrapper.label-right .map-gate-connector::after {
+    border-left: 6px solid #FF0000;
+    right: -4px;
+}
+
+.map-gate-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+body.dark-mode .map-gate-label {
+    background: rgba(40, 40, 40, 0.9);
+    color: #f0f0f0;
+}
 
 /* Responsive Pin Sizes */
 @media (max-width: 768px) {
