@@ -420,10 +420,23 @@
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
+                        @php
+                            $eDateStr = '';
+                            if (optional($event)->start_date) {
+                                $eDateStr = date('d M', strtotime(optional($event)->start_date));
+                                if (optional($event)->end_date && optional($event)->start_date != optional($event)->end_date) {
+                                    $eDateStr .= ' – ' . date('d M Y', strtotime(optional($event)->end_date));
+                                } else {
+                                    $eDateStr .= ' ' . date('Y', strtotime(optional($event)->start_date));
+                                }
+                            } else {
+                                $eDateStr = optional($event)->recurring_label ?: 'Upcoming Event';
+                            }
+                        @endphp
                         <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($event)->uuid }}"
                             data-event-name="{{ optional($event)->name }}"
-                            data-event-date="{{ date_format(date_create(optional($event)->start_date), 'd M Y') }}"
+                            data-event-date="{{ $eDateStr }}"
                             data-event-time="{{ optional($event)->start_time && optional($event)->end_time ? \Carbon\Carbon::parse($event->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($event->end_time)->format('h:i A') : 'All Day' }}"
                             data-event-desc="{{ optional($event)->description }}"
                             data-event-location="{{ optional($event)->location }}"

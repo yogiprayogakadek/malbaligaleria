@@ -151,13 +151,17 @@ class LandingPageController extends Controller
                 ->all();
 
             $dateStr = '';
-            if ($data->start_date) {
-                $dateStr = date('d M Y', strtotime($data->start_date));
-                if ($data->end_date && $data->start_date != $data->end_date) {
-                    $dateStr = date('d M', strtotime($data->start_date)) . ' - ' . date('d M Y', strtotime($data->end_date));
+            if ($data->type === 'regular') {
+                $dateStr = $data->recurring_label ?: 'Every Weekend';
+            } else {
+                if ($data->start_date) {
+                    $dateStr = date('d M Y', strtotime($data->start_date));
+                    if ($data->end_date && $data->start_date != $data->end_date) {
+                        $dateStr = date('d M', strtotime($data->start_date)) . ' - ' . date('d M Y', strtotime($data->end_date));
+                    }
+                } else {
+                    $dateStr = $data->recurring_label ?: 'All Day';
                 }
-            } else if ($data->recurring_label) {
-                $dateStr = $data->recurring_label;
             }
 
             $typeLabels = [
