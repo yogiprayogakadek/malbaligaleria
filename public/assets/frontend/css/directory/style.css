@@ -2538,6 +2538,22 @@ body.dark-mode .map-container {
     z-index: 10;
 }
 
+/* Specific Gate Pin Style: Red & Non-interactive */
+.map-pin.gate {
+    width: 10px !important;
+    height: 10px !important;
+    background: #FF0000 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4) !important;
+    cursor: default !important;
+    pointer-events: none !important; /* No hover, no clicks, no tooltips */
+}
+
+/* Reset Scale/Shadow for Gate pins on hover just in case */
+.map-pin.gate:hover {
+    transform: translate(-50%, -50%) scale(1) !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4) !important;
+}
+
 .map-gate-path {
     fill: none;
     stroke: #FF0000;
