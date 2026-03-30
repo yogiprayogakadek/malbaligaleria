@@ -1126,10 +1126,10 @@ function updateMapView() {
     // Update tenant list in sidebar
     updateTenantList(currentFloorTenants);
 
+    const mapWrapper = document.getElementById("mapWrapper");
+    const mapImage = document.getElementById("floorMapImage");
+
     const addPins = () => {
-        const mapWrapper = document.getElementById("mapWrapper");
-        const mapImage = document.getElementById("floorMapImage");
-        
         if (!mapWrapper || !mapImage) return;
         
         // Clear pins, labels, and old SVG paths
