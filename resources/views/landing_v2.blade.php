@@ -384,7 +384,7 @@
                                 data-event-desc="{{ optional($rEvent)->description }}"
                                 data-event-location="{{ optional($rEvent)->location }}"
                                 data-event-highlight="{{ optional($rEvent)->highlights ?? '-' }}"
-                                data-event-monthyear="{{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                                data-event-monthyear="{{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                                 data-event-image="{{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                                 data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}">
                                 <div class="rsc-card-bg"
@@ -394,7 +394,7 @@
                                     <span
                                         class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
                                     <h3>{{ optional($rEvent)->name }}</h3>
-                                    <p class="event-desc">{{ Str::limit(optional($rEvent)->description, 80) }}</p>
+                                    <p class="event-desc">{{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}</p>
                                     <span class="event-link">Learn More →</span>
                                 </div>
                             </div>

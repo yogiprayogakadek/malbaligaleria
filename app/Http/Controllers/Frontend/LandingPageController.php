@@ -38,7 +38,7 @@ class LandingPageController extends Controller
         );
 
         $regularEvents = $this->eventService->getRegularEvents(
-            ['id', 'uuid', 'name', 'type', 'description', 'recurring_label', 'start_time', 'end_time', 'location', 'highlights'],
+            ['id', 'uuid', 'name', 'type', 'description', 'recurring_label', 'start_time', 'end_time', 'location', 'highlights', 'start_date', 'end_date'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
