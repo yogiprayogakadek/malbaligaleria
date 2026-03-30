@@ -1126,6 +1126,15 @@ function updateMapView() {
     // Update tenant list in sidebar
     updateTenantList(currentFloorTenants);
 
+    const calculateResponsivePosition = (mapCoords, mapOriginalSize, currentWidth, currentHeight) => {
+        const xRatio = currentWidth / mapOriginalSize.width;
+        const yRatio = currentHeight / mapOriginalSize.height;
+        return {
+            x: mapCoords.x * xRatio,
+            y: mapCoords.y * yRatio,
+        };
+    };
+
     const mapWrapper = document.getElementById("mapWrapper");
     const mapImage = document.getElementById("floorMapImage");
 
@@ -1148,6 +1157,25 @@ function updateMapView() {
         svgOverlay.setAttribute("viewBox", "0 0 100 100");
         svgOverlay.setAttribute("preserveAspectRatio", "none");
         svgOverlay.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;";
+        
+        // Add Marker definition for Arrowheads
+        const defs = document.createElementNS(svgNamespace, "defs");
+        const marker = document.createElementNS(svgNamespace, "marker");
+        marker.setAttribute("id", "arrowhead");
+        marker.setAttribute("markerWidth", "10");
+        marker.setAttribute("markerHeight", "7");
+        marker.setAttribute("refX", "9"); // Position tip at end of line
+        marker.setAttribute("refY", "3.5");
+        marker.setAttribute("orient", "auto");
+        
+        const polygon = document.createElementNS(svgNamespace, "polygon");
+        polygon.setAttribute("points", "0 0, 10 3.5, 0 7");
+        polygon.setAttribute("fill", "#FF0000"); // Red for Gate paths
+        
+        marker.appendChild(polygon);
+        defs.appendChild(marker);
+        svgOverlay.appendChild(defs);
+        
         mapWrapper.appendChild(svgOverlay);
 
         const currentWidth = mapImage.width;
@@ -1304,6 +1332,7 @@ function updateMapView() {
                         
                         if (pointsStr) {
                             polyline.setAttribute("points", pointsStr.trim());
+                            polyline.setAttribute("marker-end", "url(#arrowhead)");
                             svgOverlay.appendChild(polyline);
                         }
 
@@ -1311,9 +1340,26 @@ function updateMapView() {
                         const lastPt = pathCoords[pathCoords.length - 1];
                         const gateLabel = document.createElement("div");
                         gateLabel.className = "map-gate-label";
-                        // Displacement to shift label away from arrow tip
-                        gateLabel.style.left = (parseFloat(lastPt.px) + 0.5) + "%"; 
-                        gateLabel.style.top = (parseFloat(lastPt.py) - 0.5) + "%";
+                        // Offset label further away from the arrow tip to prevent overlap
+                        // We calculate the direction from second-to-last to last point for smart offset
+                        let offX = 1.5;
+                        let offY = -1.5;
+                        
+                        if (pathCoords.length >= 2) {
+                            const prevPt = pathCoords[pathCoords.length - 2];
+                            const dx = parseFloat(lastPt.px) - parseFloat(prevPt.px);
+                            const dy = parseFloat(lastPt.py) - parseFloat(prevPt.py);
+                            
+                            // Extend the offset in the same direction as the arrow
+                            const mag = Math.sqrt(dx*dx + dy*dy);
+                            if (mag > 0) {
+                                offX = (dx / mag) * 2;
+                                offY = (dy / mag) * 2;
+                            }
+                        }
+                        
+                        gateLabel.style.left = (parseFloat(lastPt.px) + offX) + "%"; 
+                        gateLabel.style.top = (parseFloat(lastPt.py) + offY) + "%";
                         gateLabel.textContent = tenant.name;
                         mapWrapper.appendChild(gateLabel);
                     } else {

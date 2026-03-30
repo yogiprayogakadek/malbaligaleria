@@ -2525,39 +2525,46 @@ body.dark-mode .map-container {
 }
  
 /* Gate Styles */
-.map-pin.gate {
-    width: 10px !important;
-    height: 10px !important;
-    background: #FF0000 !important;
+.map-pin {
+    width: 8px;
+    height: 8px;
+    background: #5fcfda;
+    border-radius: 50%;
+    position: absolute;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4) !important;
-    pointer-events: none !important; /* Disable interaction */
+    box-shadow: 0 0 15px rgba(95, 207, 218, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
 }
 
 .map-gate-path {
     fill: none;
     stroke: #FF0000;
-    stroke-width: 2;
+    stroke-width: 2.5;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 .map-gate-label {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: #2c3e50;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 8px;
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3px 10px;
+    border-radius: 6px;
     white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    pointer-events: none; /* Disable interaction */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1.5px solid rgba(255, 0, 0, 0.3);
+    pointer-events: none;
     position: absolute;
     transform: translate(-50%, -50%);
+    z-index: 12;
 }
 
 body.dark-mode .map-gate-label {
-    background: rgba(40, 40, 40, 0.9);
-    color: #f0f0f0;
+    background: rgba(30, 30, 30, 0.95);
+    color: #ffffff;
+    border-color: rgba(255, 0, 0, 0.5);
 }
 
 /* Responsive Pin Sizes */
