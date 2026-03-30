@@ -78,6 +78,48 @@ class UserController extends Controller
         return view('backend.admin.user.index');
     }
 
+    public function create()
+    {
+        $tenants = $this->tenantService->getAll(['uuid', 'id', 'name']);
+        return view('backend.admin.user.create', compact('tenants'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'nullable|string|max:20',
+            'tenant_id' => 'nullable|exists:tenants,id',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'tenant_id' => $request->tenant_id,
+                'password' => Hash::make($request->password),
+                'status' => 'approved',
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ];
+
+            $user = $this->userService->create($data);
+            
+            // Assign default admin role if no other logic
+            $user->assignRole('admin');
+
+            DB::commit();
+            return redirect()->route('admin.user.index')->with('success', 'User created successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error creating user: ' . $e->getMessage())->withInput();
+        }
+    }
+
     public function edit($id)
     {
         $user = $this->userService->findById($id);
@@ -93,7 +135,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'nullable|string|max:20',
             'tenant_id' => 'nullable|exists:tenants,id',
-            'password' => 'nullable|min:6|confirmed',
+            'password' => 'nullable|min:8|confirmed',
             'is_active' => 'nullable|in:0,1'
         ]);
 

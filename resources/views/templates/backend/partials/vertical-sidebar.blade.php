@@ -29,7 +29,7 @@
                         <span class="hide-menu">Menu</span>
                     </li>
 
-                    @role('admin')
+                    @role(['admin', 'superuser'])
                         <!-- ---------------------------------- -->
                         <!-- Dashboard -->
                         <!-- ---------------------------------- -->
@@ -40,31 +40,32 @@
                             </a>
                         </li>
 
-                        <!-- ---------------------------------- -->
-                        <!-- Users -->
-                        <!-- ---------------------------------- -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:user-circle-line-duotone"></iconify-icon>
-                                <span class="hide-menu">User</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.user.index') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">List</span>
-
-                                    </a>
-                                </li>
-                                {{-- <li class="sidebar-item">
-                                <a class="sidebar-link" href="{{ route('admin.user.create') }}">
-                                    <span class="icon-small"></span>
-                                    <span class="hide-menu">Create</span>
-
+                        @role('superuser')
+                            <!-- ---------------------------------- -->
+                            <!-- Users -->
+                            <!-- ---------------------------------- -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <iconify-icon icon="solar:user-circle-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">User</span>
                                 </a>
-                            </li> --}}
-                            </ul>
-                        </li>
+                                <ul aria-expanded="false" class="collapse first-level">
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('admin.user.index') }}">
+                                            <span class="icon-small"></span>
+                                            <span class="hide-menu">List</span>
+
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('admin.user.create') }}">
+                                            <span class="icon-small"></span>
+                                            <span class="hide-menu">Create</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endrole
 
                         <!-- ---------------------------------- -->
                         <!-- Category Tenants -->
@@ -149,8 +150,6 @@
                         <!-- ---------------------------------- -->
                         <!-- Events -->
                         <!-- ---------------------------------- -->
-                        <!-- Events -->
-                        <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
@@ -222,84 +221,47 @@
                             </ul>
                         </li>
 
-                        <!-- ---------------------------------- -->
-                        <!-- Activity Logs -->
-                        <!-- ---------------------------------- -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ route('admin.activity.index') }}" aria-expanded="false">
-                                <iconify-icon icon="solar:history-line-duotone"></iconify-icon>
-                                <span class="hide-menu">Activity Logs</span>
-                            </a>
-                        </li>
+                        @role('superuser')
+                            <!-- ---------------------------------- -->
+                            <!-- Activity Logs -->
+                            <!-- ---------------------------------- -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.activity.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:history-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Activity Logs</span>
+                                </a>
+                            </li>
 
-                        <li class="nav-small-cap">
-                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                            <span class="hide-menu">OTHER</span>
-                        </li>
-                        <!-- ---------------------------------- -->
-                        <!-- Settings -->
-                        <!-- ---------------------------------- -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:settings-linear"></iconify-icon>
-                                <span class="hide-menu">Settings</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.setting.index') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">List</span>
+                            <li class="nav-small-cap">
+                                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                <span class="hide-menu">OTHER</span>
+                            </li>
+                            <!-- ---------------------------------- -->
+                            <!-- Settings -->
+                            <!-- ---------------------------------- -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <iconify-icon icon="solar:settings-linear"></iconify-icon>
+                                    <span class="hide-menu">Settings</span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse first-level">
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('admin.setting.index') }}">
+                                            <span class="icon-small"></span>
+                                            <span class="hide-menu">List</span>
 
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.setting.create') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">Create</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('admin.setting.create') }}">
+                                            <span class="icon-small"></span>
+                                            <span class="hide-menu">Create</span>
 
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endrole
-
-                    @role('tenant')
-                        <!-- ---------------------------------- -->
-                        <!-- Dashboard -->
-                        <!-- ---------------------------------- -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ route('tenant.dashboard') }}" aria-expanded="false">
-                                <iconify-icon icon="solar:widget-add-line-duotone" class=""></iconify-icon>
-                                <span class="hide-menu">Dashboard</span>
-                            </a>
-                        </li>
-
-                        {{-- TENANT MENUS --}}
-                        <!-- ---------------------------------- -->
-                        <!-- Promo -->
-                        <!-- ---------------------------------- -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:tag-price-line-duotone"></iconify-icon>
-                                <span class="hide-menu">Promo</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('tenant.promo.index') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">List</span>
-
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('tenant.promo.create') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">Create</span>
-
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endrole
                     @endrole
                 </ul>
             </nav>
