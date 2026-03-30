@@ -394,7 +394,9 @@
                                     <span
                                         class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
                                     <h3>{{ optional($rEvent)->name }}</h3>
-                                    <p class="event-desc">{{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}</p>
+                                    <p class="event-desc">
+                                        {{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                    </p>
                                     <span class="event-link">Learn More →</span>
                                 </div>
                             </div>
@@ -932,7 +934,7 @@
                         </div>
                     </div>
 
-                    <!-- <div class="event-modal-description" id="eventModalDescription"></div> -->
+                    <div class="event-modal-description" id="eventModalDescription"></div>
 
                     <div class="event-modal-actions">
                         <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">

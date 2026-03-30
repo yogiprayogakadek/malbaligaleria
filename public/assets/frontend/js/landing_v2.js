@@ -1,7 +1,7 @@
 
 const pageLoader = document.getElementById("pageLoader");
 
-// Initialize Lenis Smooth Scroll 
+// Initialize Lenis Smooth Scroll
 const lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -833,13 +833,13 @@ let allTenantsCache = {
 
 async function fetchAllTenantsForSearch() {
     if (allTenantsCache.loaded) return;
-    
+
     try {
         const [floor1, floor2] = await Promise.all([
             loadTenantsOnDatabase("1st Floor", false),
             loadTenantsOnDatabase("2nd Floor", false)
         ]);
-        
+
         allTenantsCache["1st Floor"] = floor1 || [];
         allTenantsCache["2nd Floor"] = floor2 || [];
         allTenantsCache.loaded = true;
@@ -1043,7 +1043,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const h4 = activeFloorItem.querySelector("h4");
                 const currentFloorText = h4 ? h4.textContent.trim() : "";
-                
+
                 // Deterministic floor names for cache
                 let currentFloor = "";
                 if (currentFloorText.includes("1st") || currentFloorText.includes("Level 1")) currentFloor = "1st Floor";
@@ -1056,8 +1056,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // 1. Search in current floor first
                 if (currentFloor && allTenantsCache[currentFloor]) {
-                    const matchesOnCurrent = allTenantsCache[currentFloor].filter(t => 
-                        (t.name && t.name.toLowerCase().includes(query)) || 
+                    const matchesOnCurrent = allTenantsCache[currentFloor].filter(t =>
+                        (t.name && t.name.toLowerCase().includes(query)) ||
                         (t.category && t.category.toLowerCase().includes(query))
                     );
 
@@ -1069,8 +1069,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // 2. If no matches on current floor, look at the other floor (1st or 2nd only)
                 const otherFloor = currentFloor === "1st Floor" ? "2nd Floor" : "1st Floor";
-                const matchesOnOther = (allTenantsCache[otherFloor] || []).filter(t => 
-                    (t.name && t.name.toLowerCase().includes(query)) || 
+                const matchesOnOther = (allTenantsCache[otherFloor] || []).filter(t =>
+                    (t.name && t.name.toLowerCase().includes(query)) ||
                     (t.category && t.category.toLowerCase().includes(query))
                 );
 
@@ -1080,12 +1080,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     floorItems.forEach(item => {
                         const text = item.querySelector("h4")?.textContent.trim() || "";
                         const isTarget = otherFloor === "1st Floor" ? (text.includes("1st") || text.includes("Level 1")) : (text.includes("2nd") || text.includes("Level 2"));
-                        
+
                         if (isTarget) {
                             // Click the item, but we'll manually handle the restoration of search and rendering
                             item.classList.add("switching-via-search");
                             item.click();
-                            
+
                             // Restore query and filter (the click event usually clears it)
                             const input = document.getElementById("tenantSearchInput");
                             if (input) {
@@ -1353,7 +1353,7 @@ function updateModalContent(data) {
 
     // Map setup
     // renderModalMap(data); // Don't render map automatically anymore
-    
+
     // Ensure we start with Info View
     const infoView = document.getElementById("modalInfoView");
     const mapView = document.getElementById("modalMapView");
@@ -1383,7 +1383,7 @@ function updateModalContent(data) {
         modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
         newShareBtn.addEventListener("click", () => {
             const shareUrl = `${window.location.origin}${window.location.pathname}?id=${data.id || data.unit}`;
-            
+
             if (navigator.share) {
                 navigator.share({
                     title: data.name,
@@ -1637,7 +1637,7 @@ function copyToClipboard(text) {
 function showToast(message, type = "info") {
     const toast = document.createElement("div");
     toast.className = `toast-notification ${type}`;
-    
+
     let icon = "";
     if (type === "success") {
         icon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
@@ -1647,7 +1647,7 @@ function showToast(message, type = "info") {
 
     toast.innerHTML = `${icon}<span>${message}</span>`;
     document.body.appendChild(toast);
-    
+
     toast.offsetHeight; // force reflow
     toast.classList.add("active");
 
@@ -1675,25 +1675,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (loadMoreBtn) {
         const allItems = document.querySelectorAll(".instagram-item");
-        
+
         loadMoreBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            
+
             // Detect current column count (row size)
             const grid = document.querySelector(".instagram-grid");
             const columns = window.getComputedStyle(grid).getPropertyValue("grid-template-columns").split(" ").length;
             const increment = columns;
 
             const hiddenItems = document.querySelectorAll(".instagram-item.ig-hidden");
-            
+
             if (hiddenItems.length > 0) {
                 const itemsToReveal = Array.from(hiddenItems).slice(0, increment);
-                
+
                 itemsToReveal.forEach((item, index) => {
                     item.style.display = 'block';
                     item.style.opacity = '0';
                     item.classList.remove("ig-hidden");
-                    
+
                     setTimeout(() => {
                         item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                         item.style.opacity = '1';
@@ -1718,15 +1718,15 @@ if (showOnMapBtn) {
         if (tenantData) {
             // Instead of closing modal and scrolling, we swap view inside modal
             renderModalMap(tenantData);
-            
+
             const infoView = document.getElementById("modalInfoView");
             const mapView = document.getElementById("modalMapView");
             if (infoView) infoView.style.display = "none";
             if (mapView) mapView.style.display = "block";
             tenantModal.classList.add("map-active-mobile");
-            
+
             // Logically, we still want to keep the old pinpoint function for outside triggers
-            // pinpointOnMap(tenantData); 
+            // pinpointOnMap(tenantData);
         }
     });
 }
@@ -1772,17 +1772,17 @@ function pinpointOnMap(tenant) {
             const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
             visualMapImage.src = `${baseUrl}/${floorImg}`;
         }
-        
+
         // Position marker using percentages
         if (mapMarker) {
             let xPos, yPos;
-            
+
             const mapWidth = tenant.map_original_size?.width || visualMapImage.naturalWidth || 1400;
             const mapHeight = tenant.map_original_size?.height || visualMapImage.naturalHeight || 1000;
 
             xPos = (tenant.x / mapWidth) * 100;
             yPos = (tenant.y / mapHeight) * 100;
-            
+
             mapMarker.style.left = `${xPos}%`;
             mapMarker.style.top = `${yPos}%`;
             mapMarker.style.display = "block";
@@ -1810,7 +1810,7 @@ function pinpointOnMap(tenant) {
  */
 function renderModalMap(data) {
     console.log("renderModalMap called with data:", data);
-    
+
     const floorMapImg = document.getElementById("modalFloorMap");
     const markerLogo = document.getElementById("modalMapMarkerLogo");
     const logoImg = document.getElementById("markerLogoImg");
@@ -1820,15 +1820,15 @@ function renderModalMap(data) {
         const floorId = data.floor_id || (data.map_coords ? data.map_coords.floor : null);
         const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
         const floorText = floorId == 2 ? "2nd Floor" : "1st Floor";
-        
+
         console.log("Setting floor map image for floor:", floorId);
-        
+
         // Update floor badge
         const floorBadge = document.getElementById("modalMapFloorBadge");
         if (floorBadge) {
             floorBadge.textContent = floorText;
         }
-        
+
         // Set logo (only if elements exist)
         if (logoImg && data.logo) {
             logoImg.src = data.logo;
@@ -1891,7 +1891,7 @@ function renderModalMap(data) {
     const carouselPrev = document.getElementById("eventModalCarouselPrev");
     const carouselNext = document.getElementById("eventModalCarouselNext");
     const swipeHint = document.getElementById("eventModalCarouselSwipeHint");
-    
+
     const typeBadge = document.getElementById("eventModalTypeBadge");
     const dateEl = document.getElementById("eventModalDate");
     const titleEl = document.getElementById("eventModalTitle");
@@ -1922,7 +1922,7 @@ function renderModalMap(data) {
 
     function renderCarousel(images, name) {
         if (!carouselImages || !carouselIndicators) return;
-        
+
         eventImages = images;
         currentImageIndex = 0;
 
@@ -1984,7 +1984,7 @@ function renderModalMap(data) {
         if (descEl) descEl.innerHTML = card.dataset.eventDesc ? `<p>${card.dataset.eventDesc}</p>` : "";
         if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
         if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
-        
+
         // New Fields (Fast Load)
         const timeEl = document.getElementById("eventModalTime");
         const highlightEl = document.getElementById("eventModalHighlights");
@@ -2008,8 +2008,8 @@ function renderModalMap(data) {
             if (dateEl) dateEl.textContent = data.date;
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
-            // if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
-            
+            if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
+
             // New Fields (Full Data Update)
             if (timeEl) {
                 const startTime = data.start_time ? data.start_time.substring(0, 5) : "";
@@ -2067,7 +2067,7 @@ function renderModalMap(data) {
             const location = locationEl ? locationEl.textContent : "Mal Bali Galeria";
             const details = descEl ? descEl.textContent.trim() : "";
             const rawDate = dateEl ? dateEl.textContent : "";
-            
+
             // Basic date parsing (MBG usually uses DD MMM YYYY or similar)
             // If parsing fails, just use current time or simplified link
             const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`;
