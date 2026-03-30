@@ -108,50 +108,52 @@
                 ]
             });
 
-            // Delete functionality
-            $('#table').on('click', '.delete-btn', function() {
-                const uuid = $(this).data('uuid');
-                const name = $(this).data('name');
+            @role('superuser')
+                // Delete functionality
+                $('#table').on('click', '.delete-btn', function() {
+                    const uuid = $(this).data('uuid');
+                    const name = $(this).data('name');
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: `You are about to delete "${name}". This action cannot be undone and will also remove the store logo!`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel',
-                    showLoaderOnConfirm: true,
-                    preConfirm: () => {
-                        return $.ajax({
-                            url: `/dashboard/tenant/destroy/${uuid}`,
-                            type: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(response) {
-                                return response;
-                            },
-                            error: function(xhr) {
-                                Swal.showValidationMessage(
-                                    `Request failed: ${xhr.responseJSON ? xhr.responseJSON.message : xhr.statusText}`
-                                );
-                            }
-                        });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                    if (result.isConfirmed && result.value.success) {
-                        Swal.fire(
-                            'Deleted!',
-                            'The tenant has been deleted.',
-                            'success'
-                        );
-                        $('#table').DataTable().ajax.reload();
-                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: `You are about to delete "${name}". This action cannot be undone and will also remove the store logo!`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        showLoaderOnConfirm: true,
+                        preConfirm: () => {
+                            return $.ajax({
+                                url: `/dashboard/tenant/destroy/${uuid}`,
+                                type: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function(response) {
+                                    return response;
+                                },
+                                error: function(xhr) {
+                                    Swal.showValidationMessage(
+                                        `Request failed: ${xhr.responseJSON ? xhr.responseJSON.message : xhr.statusText}`
+                                    );
+                                }
+                            });
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value.success) {
+                            Swal.fire(
+                                'Deleted!',
+                                'The tenant has been deleted.',
+                                'success'
+                            );
+                            $('#table').DataTable().ajax.reload();
+                        }
+                    });
                 });
-            });
+            @endrole
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

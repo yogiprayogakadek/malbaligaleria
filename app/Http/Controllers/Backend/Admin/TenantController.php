@@ -65,9 +65,11 @@ class TenantController extends Controller
                     $btn = '<a href="' . route('admin.tenant.edit', $row->uuid) . '" class="btn btn-primary-subtle text-primary btn-sm me-1">
                                 <i class="ti ti-pencil fs-4"></i> Edit
                             </a>';
-                    $btn .= '<button type="button" class="btn btn-danger-subtle text-danger btn-sm delete-btn" data-uuid="' . $row->uuid . '" data-name="' . $row->name . '">
-                                <i class="ti ti-trash fs-4"></i> Delete
-                            </button>';
+                    if (auth()->user()->hasRole('superuser')) {
+                        $btn .= '<button type="button" class="btn btn-danger-subtle text-danger btn-sm delete-btn" data-uuid="' . $row->uuid . '" data-name="' . $row->name . '">
+                                    <i class="ti ti-trash fs-4"></i> Delete
+                                </button>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action', 'is_active', 'category'])
@@ -159,6 +161,13 @@ class TenantController extends Controller
 
     public function destroy($uuid)
     {
+        if (!auth()->user()->hasRole('superuser')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized. Only superusers can delete tenants.'
+            ], 403);
+        }
+
         try {
             $this->tenantService->deleteByUuid($uuid);
             return response()->json([
