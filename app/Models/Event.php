@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     protected $dates = ['deleted_at'];
 
@@ -29,10 +31,16 @@ class Event extends Model
         'is_active',
         'type',
         'is_regular',
-        'is_exhibition',
-        'recurring_days',
         'recurring_label',
     ];
+    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'start_date', 'end_date', 'location', 'type', 'is_active', 'is_regular', 'is_exhibition'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected $casts = [
         'type'           => 'string',
