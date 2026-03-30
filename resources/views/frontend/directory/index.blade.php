@@ -153,7 +153,7 @@
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
 
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
-                @role('admin')
+                @role(['admin', 'superuser'])
                     <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                     <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get
                             Coordinates</a></li>

@@ -1,112 +1,71 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Backend\Admin\ActivityController;
-use App\Http\Controllers\Backend\Admin\CategoryController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+// Import controllers
+use App\Http\Controllers\Frontend\LandingPageController;
+use App\Http\Controllers\Frontend\DirectoryController;
+use App\Http\Controllers\Frontend\PromotionPageController as PromotionController;
+use App\Http\Controllers\Frontend\NewStoreController;
 use App\Http\Controllers\Backend\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Backend\Admin\CategoryController;
 use App\Http\Controllers\Backend\Admin\TenantController;
 use App\Http\Controllers\Backend\Admin\TenantPhotoController;
 use App\Http\Controllers\Backend\Admin\EventController;
 use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
+use App\Http\Controllers\Backend\Admin\ActivityController;
 use App\Http\Controllers\Backend\Admin\SettingController;
-use App\Http\Controllers\Backend\StatusUserController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Backend\Tenant\PromoController as TenantPromoController;
-use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\Frontend\DiningController;
-use App\Http\Controllers\Frontend\DirectoryController;
-use App\Http\Controllers\Frontend\EventController as FrontendEventController;
-use App\Http\Controllers\Frontend\PromotionPageController;
-use App\Http\Controllers\Frontend\LandingPageController;
-use App\Http\Controllers\Frontend\NewStoreController;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-});
-
-// NOTIFICATIONS
-Route::controller(\App\Http\Controllers\Backend\NotificationController::class)
-    ->middleware(['auth', 'verified'])
-    ->prefix('/notifications')
-    ->name('notifications.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/latest', 'getLatest')->name('latest');
-        Route::post('/{id}/read', 'markAsRead')->name('read');
-        Route::post('/read-all', 'markAllAsRead')->name('readAll');
-    });
-
-Route::get('/maintenance', function () {
-    return view('maintenance.index');
-});
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Backend\NotificationController;
+use App\Http\Controllers\Backend\StatusUserController;
 
 // FRONTEND
-Route::name('frontend.')
-    ->group(function () {
-        Route::controller(LandingPageController::class)->group(function () {
-            Route::get('/', 'index')->name('landing');
-            Route::get('/tenants/{cat}/{isNew}', 'tenantData');
-            Route::get('/find/tenants/{tenant_id}', 'findTenantById');
-            Route::get('/find/events/{uuid}', 'findEventByUuid');
-        });
+Route::controller(LandingPageController::class)->group(function () {
+    Route::get('/', 'index')->name('landing');
+    Route::get('/tenant/{uuid}', 'getTenantDetail')->name('tenant.detail');
+    Route::get('/event/{uuid}', 'getEventDetail')->name('event.detail');
+});
 
-        Route::controller(PromotionPageController::class)
-            ->prefix('/promotion')
-            ->name('promotion.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/load-promotion', 'loadPromotion')->name('load.promotion');
-            });
+Route::prefix('/directory')->name('directory.')->group(function () {
+    Route::get('/', [DirectoryController::class, 'index'])->name('index');
+});
 
-        Route::controller(FrontendEventController::class)
-            ->prefix('/event')
-            ->name('event.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/{uuid}', 'detail')->name('detail');
-            });
+Route::prefix('/promotion')->name('promotion.')->group(function () {
+    Route::get('/', [PromotionController::class, 'index'])->name('index');
+});
 
-        Route::controller(DirectoryController::class)
-            ->prefix('/directory')
-            ->name('directory.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/category-tenant', 'getCategoryTenant')->name('get.category');
-                Route::get('/tenants', 'getTenants')->name('get.tenants');
-            });
+Route::prefix('/new-store')->name('new-store.')->group(function () {
+    Route::get('/', [NewStoreController::class, 'index'])->name('index');
+});
 
-
-        // EXAMPLES
-        Route::controller(DiningController::class)
-            ->prefix('/dining')
-            ->name('dining.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-            });
-        Route::controller(NewStoreController::class)
-            ->prefix('/new-store')
-            ->name('new-store.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-            });
-    });
-
-// ADMIN
+// ADMIN & SUPERUSER COMMON ROUTES
 Route::controller(AdminDashboardController::class)
-    ->middleware(['auth', 'verified', 'checkUserStatus', 'role:admin'])
-    ->prefix('/admin')
+    ->middleware(['auth', 'verified', 'checkUserStatus', 'role:admin,superuser'])
+    ->prefix('/dashboard')
     ->name('admin.')
     ->group(function () {
         // DASHBOARD
-        Route::prefix('/dashboard')->group(function () {
-            Route::get('/', 'index')->name('dashboard');
-        });
+        Route::get('/', 'index')->name('dashboard');
 
-        // User
-        Route::controller(UserController::class)->prefix('/user')
+        // User (RESTRICTED TO SUPERUSER)
+        Route::controller(UserController::class)
+            ->middleware('superuser')
+            ->prefix('/user')
             ->name('user.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
@@ -188,8 +147,10 @@ Route::controller(AdminDashboardController::class)
                 Route::put('/update/{uuid}', 'update')->name('update');
             });
 
-        // Activity
-        Route::controller(ActivityController::class)->prefix('/activity')
+        // Activity (RESTRICTED TO SUPERUSER)
+        Route::controller(ActivityController::class)
+            ->middleware('superuser')
+            ->prefix('/activity')
             ->name('activity.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
@@ -198,8 +159,10 @@ Route::controller(AdminDashboardController::class)
                 Route::delete('/{id}', 'destroy')->name('destroy');
             });
 
-        // Setting
-        Route::controller(SettingController::class)->prefix('/setting')
+        // Setting (RESTRICTED TO SUPERUSER)
+        Route::controller(SettingController::class)
+            ->middleware('superuser')
+            ->prefix('/setting')
             ->name('setting.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
@@ -234,8 +197,6 @@ Route::controller(TenantDashboardController::class)
             });
     });
 
-
-
 //LOGIN
 //Others default route are handled by Fortify
 Route::controller(AuthController::class)->group(function () {
@@ -247,29 +208,12 @@ Route::controller(AuthController::class)->group(function () {
     });
 });
 
+// Notifications
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/latest', [NotificationController::class, 'getLatest'])->name('notifications.latest');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+});
+
 // Route check status user
-Route::controller(StatusUserController::class)
-    ->name('status.')
-    ->prefix('/status')
-    ->group(function () {
-        Route::get('/pending', 'pending')->name('pending');
-        Route::get('/rejected', 'rejected')->name('rejected');
-    })->middleware('auth');
-
-
-Route::get('/test-email', function () {
-    Mail::raw('Email test OK', function ($message) {
-        $message->to('info@e-undanganku.my.id')->subject('Email tester');
-    });
-
-    return 'Sent!';
-});
-
-
-Route::get('/mod', function () {
-    return view('subdomain.mod.index');
-});
-
-
-// Use Route
-require __DIR__ . '/custom/mod.php';
+Route::get('/check-status-user', [StatusUserController::class, 'index'])->name('check-status-user');
