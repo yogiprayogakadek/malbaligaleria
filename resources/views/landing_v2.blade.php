@@ -450,7 +450,7 @@
                                 $eDateStr = optional($event)->recurring_label ?: 'Upcoming Event';
                             }
                         @endphp
-                        <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
+                        <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($event)->uuid }}"
                             data-event-name="{{ optional($event)->name }}"
                             data-event-date="{{ $eDateStr }}"
@@ -461,24 +461,15 @@
                             data-event-monthyear="{{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                             data-event-image="{{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="{{ $typeLabels[optional($event)->type] ?? 'Upcoming Event' }}">
-                            <div class="event-card-bg"
+                            <div class="rsc-card-bg"
                                 style="background-image: url({{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
-                            <div class="event-card-content">
-                                <span
-                                    class="event-date">{{ date_format(date_create(optional($event)->start_date), 'd M Y') }}</span>
+                            <div class="rsc-card-content">
+                                <span class="event-date">{{ $eDateStr }}</span>
                                 <h3>{{ optional($event)->name }}</h3>
-                                <p class="event-desc">{{ Str::limit(optional($event)->description, 80) }}</p>
-                                @if (optional($event)->location)
-                                    <span class="event-location" style="margin-bottom: 12px;">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                            <circle cx="12" cy="10" r="3" />
-                                        </svg>
-                                        {{ optional($event)->location }}
-                                    </span>
-                                @endif
+                                <p class="event-desc">
+                                    {{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                </p>
                                 <span class="event-link">Learn More →</span>
                             </div>
                         </div>
@@ -530,35 +521,26 @@
                                 }
                             }
                         @endphp
-                        <div class="event-card regular-show-card event-modal-trigger" style="cursor:pointer;"
+                        <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($exEvent)->uuid }}"
-                            data-event-name="{{ optional($exEvent)->name }}" data-event-date="{{ $exDateStr }}"
-                            data-event-desc="{{ optional($exEvent)->description }}"
+                            data-event-name="{{ optional($exEvent)->name }}"
+                            data-event-date="{{ $exDateStr }}"
                             data-event-time="{{ $exEvent && $exEvent->start_time && $exEvent->end_time ? \Carbon\Carbon::parse($exEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($exEvent->end_time)->format('h:i A') : 'All Day' }}"
+                            data-event-desc="{{ optional($exEvent)->description }}"
                             data-event-location="{{ optional($exEvent)->location }}"
                             data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
                             data-event-monthyear="{{ $exEvent && $exEvent->start_date ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                             data-event-image="{{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="{{ $typeLabels[optional($exEvent)->type] ?? 'Exhibition' }}">
-                            <div class="event-card-bg"
+                            <div class="rsc-card-bg"
                                 style="background-image: url({{ optional(optional($exEvent)->primaryPhoto)->path ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
-                            <div class="event-card-content">
-                                @if (optional($exEvent)->start_date)
-                                    <span class="event-date">{{ $exDateStr }}</span>
-                                @endif
+                            <div class="rsc-card-content">
+                                <span class="event-date">{{ $exDateStr }}</span>
                                 <h3>{{ optional($exEvent)->name }}</h3>
-                                <p class="event-desc">{{ Str::limit(optional($exEvent)->description, 80) }}</p>
-                                @if (optional($exEvent)->location)
-                                    <span class="event-location">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                            <circle cx="12" cy="10" r="3" />
-                                        </svg>
-                                        {{ optional($exEvent)->location }}
-                                    </span>
-                                @endif
+                                <p class="event-desc">
+                                    {{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                </p>
                                 <span class="event-link">Learn More →</span>
                             </div>
                         </div>
