@@ -25,9 +25,9 @@ class UpdateEventPhotoRequest extends FormRequest
             'path'              => 'nullable|image|mimes:png,jpg,jpeg,webp,jfif,heic',
             'caption'           => 'required|string',
 
-            'album' => 'required|array|min:1|max:5',
+            'album' => 'nullable|array|min:1|max:5',
             'album.*' => [
-                'required',
+                'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:2048',
