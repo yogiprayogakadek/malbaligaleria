@@ -1,7 +1,7 @@
 @extends('templates.backend.master')
 
 @section('page-title', 'User Profile')
-@section('page-link', route('profile.index'))
+@section('page-link', route('admin.profile.index'))
 
 @section('content')
     @if (session('success'))
