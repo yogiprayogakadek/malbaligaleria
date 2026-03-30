@@ -45,8 +45,7 @@ class LandingPageController extends Controller
         );
 
         $exhibitionEvents = $this->eventService->getExhibitionEvents(
-            ['*'],
-            // ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'highlights'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'highlights'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
