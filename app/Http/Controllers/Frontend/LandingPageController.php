@@ -50,6 +50,7 @@ class LandingPageController extends Controller
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
         );
+        dd($exhibitionEvents);
 
         return view('landing_v2', compact('tenants', 'events', 'regularEvents', 'exhibitionEvents'));
     }
