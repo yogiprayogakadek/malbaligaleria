@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\Admin\ActivityController;
 use App\Http\Controllers\Backend\Admin\SettingController;
+use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Backend\Tenant\PromoController as TenantPromoController;
@@ -61,6 +62,16 @@ Route::controller(AdminDashboardController::class)
     ->group(function () {
         // DASHBOARD
         Route::get('/', 'index')->name('dashboard');
+
+        // PROFILE
+        Route::controller(ProfileController::class)
+            ->prefix('/profile')
+            ->name('profile.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/update', 'update')->name('update');
+                Route::post('/change-password', 'updatePassword')->name('password.update');
+            });
 
         // User (RESTRICTED TO SUPERUSER)
         Route::controller(UserController::class)

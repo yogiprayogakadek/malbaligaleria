@@ -232,7 +232,7 @@
                                         </div>
                                     </div>
                                     <div class="message-body">
-                                        {{-- <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/page-user-profile.html"
+                                        <a href="{{ route('admin.profile.index') }}"
                                             class="py-8 px-7 mt-8 d-flex align-items-center">
                                             <span
                                                 class="d-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded round">
@@ -245,7 +245,7 @@
                                                     Settings</span>
                                             </div>
                                         </a>
-                                        <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-email.html"
+                                        {{-- <a href="https://bootstrapdemos.wrappixel.com/materialM/dist/default-sidebar/app-email.html"
                                             class="py-8 px-7 d-flex align-items-center">
                                             <span
                                                 class="d-flex align-items-center justify-content-center bg-success-subtle text-success rounded round">
