@@ -1341,7 +1341,6 @@ function updateMapView() {
                     mapWrapper.appendChild(pin);
                 }
             }
-        }
 
         if (!document.getElementById("mapTooltip")) {
             const tooltip = document.createElement("div");
