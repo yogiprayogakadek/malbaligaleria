@@ -137,6 +137,7 @@ Route::controller(AdminDashboardController::class)
                 Route::post('/store', 'store')->name('store');
                 Route::get('/edit/{uuid}', 'edit')->name('edit');
                 Route::put('/update/{uuid}', 'update')->name('update');
+                Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
             });
 
         // TENANT PHOTO

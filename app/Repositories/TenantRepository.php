@@ -60,4 +60,10 @@ class TenantRepository
         $tenant = $this->model::find($id);
         $tenant->delete();
     }
+
+    public function deleteByUuid(string $uuid)
+    {
+        $tenant = $this->model::where('uuid', $uuid)->firstOrFail();
+        return $tenant->delete();
+    }
 }

@@ -62,13 +62,13 @@ class TenantController extends Controller
                     return (file_exists(public_path($logo)) || Storage::disk('public')->exists($logo)) ? 'logo' : 'kosong';
                 })
                 ->addColumn('action', function ($row) {
-                    return '<a href="' . route('admin.tenant.edit', $row->uuid) . '">
-                        <button type="button"
-                            class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                            <i class="ti ti-pencil fs-4 me-2"></i>
-                            Edit
-                        </button>
-                    </a>';
+                    $btn = '<a href="' . route('admin.tenant.edit', $row->uuid) . '" class="btn btn-primary-subtle text-primary btn-sm me-1">
+                                <i class="ti ti-pencil fs-4"></i> Edit
+                            </a>';
+                    $btn .= '<button type="button" class="btn btn-danger-subtle text-danger btn-sm delete-btn" data-uuid="' . $row->uuid . '" data-name="' . $row->name . '">
+                                <i class="ti ti-trash fs-4"></i> Delete
+                            </button>';
+                    return $btn;
                 })
                 ->rawColumns(['action', 'is_active', 'category'])
                 ->make(true);
@@ -155,5 +155,21 @@ class TenantController extends Controller
         $this->tenantService->update($data, $uuid);
 
         return redirect()->route('admin.tenant.index')->with('success', 'Tenant updated successfully.');
+    }
+
+    public function destroy($uuid)
+    {
+        try {
+            $this->tenantService->deleteByUuid($uuid);
+            return response()->json([
+                'success' => true,
+                'message' => 'Tenant deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete tenant: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

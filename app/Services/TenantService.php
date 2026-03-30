@@ -79,6 +79,15 @@ class TenantService
         return $this->tenantRepository->delete($id);
     }
 
+    public function deleteByUuid(string $uuid)
+    {
+        $tenant = $this->tenantRepository->findByUuid($uuid, ['id', 'logo']);
+        if ($tenant && !empty($tenant->logo)) {
+            $this->deleteImage($tenant->logo);
+        }
+        return $this->tenantRepository->deleteByUuid($uuid);
+    }
+
     public function uploadImage(UploadedFile $file)
     {
         $path = $file->store('tenant_images', 'public');
@@ -159,26 +168,23 @@ class TenantService
 
         $tenants = $query->map(function ($tenant) {
             $data = [
-                'id' => $tenant['id'],
-                'name' => $tenant['name'],
-                'category' => $tenant['category']['name'],
-                'floor' => $tenant['isNew']
+                'id' => $tenant->id,
+                'name' => $tenant->name,
+                'category' => $tenant->category->name,
+                'floor' => $tenant->isNew
                     ? 'New Store'
                     : (
                         ($floor = data_get($tenant, 'map_coords.floor'))
                         ? ($floor == 1 ? '1st Floor' : '2nd Floor')
                         : '-'
                     ),
-                'unit' => $tenant['map_coords']['unit'] ?? '-',
-                'logo' => !empty($tenant['logo'])
-                    ? (str_starts_with($tenant['logo'], 'assets')
-                        ? asset($tenant['logo'])
-                        : asset('storage/' . $tenant['logo'])
+                'unit' => data_get($tenant, 'map_coords.unit') ?? '-',
+                'logo' => !empty($tenant->logo)
+                    ? (str_starts_with($tenant->logo, 'assets')
+                        ? asset($tenant->logo)
+                        : asset('storage/' . $tenant->logo)
                     )
                     : asset('assets/images/no_image.jpg'),
-                // 'logo' => !empty($tenant['logo'])
-                //     ? asset('storage/' . $tenant['logo'])
-                //     : asset('assets/images/no_image.jpg'),
                 'hours' => "10:00 AM - 10:00 PM",
                 'album' => optional($tenant->albumPhoto)->map(function ($photo) {
                     return [
