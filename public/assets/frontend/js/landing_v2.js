@@ -1936,6 +1936,11 @@ function renderModalMap(data) {
             <div class="carousel-indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}"></div>
         `).join("");
 
+        const hasMultipleImages = images.length > 1;
+        if (carouselPrev) carouselPrev.style.display = hasMultipleImages ? 'flex' : 'none';
+        if (carouselNext) carouselNext.style.display = hasMultipleImages ? 'flex' : 'none';
+        if (carouselIndicators) carouselIndicators.style.display = hasMultipleImages ? 'flex' : 'none';
+
         updateCarousel();
 
         // Re-attach indicator listeners
@@ -1956,6 +1961,11 @@ function renderModalMap(data) {
         indicators.forEach((indicator, idx) => {
             indicator.classList.toggle("active", idx === currentImageIndex);
         });
+
+        // Toggle swipe hint visibility
+        if (swipeHint) {
+            swipeHint.style.display = (eventImages.length > 1 && currentImageIndex === 0) ? 'flex' : 'none';
+        }
     }
 
     if (carouselPrev) {

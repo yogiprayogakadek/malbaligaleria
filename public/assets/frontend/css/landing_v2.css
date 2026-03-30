@@ -3848,7 +3848,8 @@ body.dark-mode .modal-carousel {
     opacity: 0;
 }
 
-.modal-carousel:hover .carousel-nav {
+.modal-carousel:hover .carousel-nav,
+.event-modal-carousel:hover .carousel-nav {
     opacity: 1;
 }
 
