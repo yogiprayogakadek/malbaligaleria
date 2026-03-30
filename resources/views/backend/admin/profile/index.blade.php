@@ -26,7 +26,7 @@
                     <p class="mb-0 text-muted">Update your personal details and avatar.</p>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="d-flex align-items-center mb-4 gap-3">
                             <div class="position-relative">
@@ -88,7 +88,7 @@
                     <p class="mb-0 text-muted">Keep your account secure.</p>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('profile.password.update') }}" method="POST">
+                    <form action="{{ route('admin.profile.password.update') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="current_password" class="form-label fw-semibold">Current Password</label>
