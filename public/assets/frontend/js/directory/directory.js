@@ -1145,6 +1145,8 @@ function updateMapView() {
         const svgNamespace = "http://www.w3.org/2000/svg";
         const svgOverlay = document.createElementNS(svgNamespace, "svg");
         svgOverlay.id = "mapGatePaths";
+        svgOverlay.setAttribute("viewBox", "0 0 100 100");
+        svgOverlay.setAttribute("preserveAspectRatio", "none");
         svgOverlay.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;";
         mapWrapper.appendChild(svgOverlay);
 
@@ -1269,6 +1271,7 @@ function updateMapView() {
                     if (tenant.path_coords && Array.isArray(tenant.path_coords) && tenant.path_coords.length > 1) {
                         const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
                         polyline.setAttribute("class", "map-gate-path");
+                        polyline.setAttribute("vector-effect", "non-scaling-stroke");
                         
                         let pointsStr = "";
                         tenant.path_coords.forEach(pt => {
@@ -1282,16 +1285,17 @@ function updateMapView() {
                         const lastPt = tenant.path_coords[tenant.path_coords.length - 1];
                         const gateLabel = document.createElement("div");
                         gateLabel.className = "map-gate-label";
-                        gateLabel.style.left = lastPt.px + "%";
-                        gateLabel.style.top = lastPt.py + "%";
+                        // Slightly shift the label up/right from the arrow tip to prevent overlap
+                        gateLabel.style.left = (lastPt.px + 1) + "%"; 
+                        gateLabel.style.top = (lastPt.py - 1) + "%";
                         gateLabel.textContent = tenant.name;
                         mapWrapper.appendChild(gateLabel);
                     } else {
                         // Fallback simple label if no path
                         const gateLabel = document.createElement("div");
                         gateLabel.className = "map-gate-label";
-                        gateLabel.style.left = (leftPercent + 2) + "%";
-                        gateLabel.style.top = topPercent + "%";
+                        gateLabel.style.left = (leftPercent + 1) + "%";
+                        gateLabel.style.top = (topPercent - 1) + "%";
                         gateLabel.textContent = tenant.name;
                         mapWrapper.appendChild(gateLabel);
                     }
