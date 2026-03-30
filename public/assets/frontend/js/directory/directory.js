@@ -1201,6 +1201,10 @@ function updateMapView() {
             }
         });
 
+        // Create markers for each group
+        for (const key in positionGroups) {
+            const group = positionGroups[key];
+
             // Robust handler for both click and touch
             const handlePinInteraction = function (e) {
                 // Prevent default if it's a touch event to stop double-firing and ghost clicks
@@ -1214,8 +1218,6 @@ function updateMapView() {
                 hideMapTooltip();
 
                 if (this.dataset.isGate === "true") {
-                    // For gates, perhaps just show a toast or a different small modal?
-                    // User didn't specify interaction, so we follow tenant modal for now.
                     const tenantData = JSON.parse(this.dataset.tenant);
                     showTenantModal(tenantData);
                 } else if (this.classList.contains("cluster")) {
@@ -1229,7 +1231,7 @@ function updateMapView() {
 
             if (group.length > 1) {
                 // Create cluster marker
-                pin = document.createElement("div");
+                let pin = document.createElement("div");
                 pin.className = "map-pin cluster";
                 
                 // Use percentage for responsive positioning
@@ -1290,7 +1292,7 @@ function updateMapView() {
 
                 } else {
                     // REGULAR TENANT
-                    pin = document.createElement("div");
+                    let pin = document.createElement("div");
                     
                     if (searchTerm && searchTerm.trim() !== '') {
                         pin.className = "map-pin-logo";
@@ -1331,6 +1333,7 @@ function updateMapView() {
                     mapWrapper.appendChild(pin);
                 }
             }
+        }
 
         if (!document.getElementById("mapTooltip")) {
             const tooltip = document.createElement("div");
