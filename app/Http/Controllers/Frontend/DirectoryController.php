@@ -81,7 +81,7 @@ class DirectoryController extends Controller
         // });
 
         $tenants = $this->tenantService->getTenantsWithRelationshipAndCondition(
-            ['id', 'name', 'category_id', 'type', 'map_coords', 'logo', 'description'],
+            ['id', 'name', 'category_id', 'type', 'map_coords', 'path_coords', 'logo', 'description'],
             [
                 'category:id,name',
                 'albumPhoto:id,tenant_id,path',
@@ -125,6 +125,7 @@ class DirectoryController extends Controller
                 'description' => $data['description'],
                 'images' => !empty($photos) ? $photos : [$logoUrl],
                 'has_album' => !empty($photos),
+                'path_coords' => $data['path_coords'],
             ];
 
             $hasValidCoords = isset($data['map_coords']['x']) && 

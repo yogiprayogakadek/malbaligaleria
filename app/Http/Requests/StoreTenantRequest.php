@@ -36,6 +36,7 @@ class StoreTenantRequest extends FormRequest
             'unit'              => 'required|string|max:20',
             'launched_at'       => 'nullable|date',
             'is_new'            => 'nullable|required_with:launched_at|boolean',
+            'path_coords'       => 'nullable|string', // JSON string from frontend
         ];
     }
 

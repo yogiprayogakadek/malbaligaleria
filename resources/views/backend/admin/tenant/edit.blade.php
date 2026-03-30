@@ -127,9 +127,13 @@
                                             <img src="{{ asset('assets/images/floors/1st_floor.png') }}" alt="1st floor"
                                                 srcset="{{ asset('assets/images/floors/1st_floor.png') }}" width="100%"
                                                 class="map-image" id="floorMapImage" style="cursor: crosshair;">
+                                            <svg id="pathOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+                                                <polyline points="" fill="none" stroke="#ff4757" stroke-width="3" stroke-dasharray="5,5" id="previewPath" />
+                                            </svg>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning me-auto" id="btnResetPath">Reset Path</button>
                                         <button type="button"
                                             class="btn bg-danger-subtle text-danger  waves-effect text-start"
                                             data-bs-dismiss="modal">
@@ -181,6 +185,8 @@
                                         value="{{ $tenant->map_original_size['width'] ?? '' }}">
                                     <input type="hidden" name="map_original_height" id="map_original_height"
                                         value="{{ $tenant->map_original_size['height'] ?? '' }}">
+                                    <input type="hidden" name="path_coords" id="path_coords"
+                                        value="{{ json_encode($tenant->path_coords) }}">
                                 </div>
                             </div>
                         </div>
@@ -325,54 +331,105 @@
         // Coordinate Picker Logic
         const mapImage = document.getElementById('floorMapImage');
         const mapContainer = document.getElementById('mapContainer');
+        const pathOverlay = document.getElementById('pathOverlay');
+        const previewPath = document.getElementById('previewPath');
+        let gatePath = [];
+
+        // Prepopulate gate path if exists
+        try {
+            const existingPath = $('#path_coords').val();
+            if (existingPath && existingPath !== 'null') {
+                gatePath = JSON.parse(existingPath);
+            }
+        } catch(e) {}
 
         mapImage.addEventListener('click', function(e) {
             const rect = this.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const clickY = e.clientY - rect.top;
-
-            // Calculate scale based on natural size vs displayed size
             const scaleX = this.naturalWidth / this.width;
             const scaleY = this.naturalHeight / this.height;
-
             const originalX = Math.round(clickX * scaleX);
             const originalY = Math.round(clickY * scaleY);
-
-            // Calculate percentage for responsive marker
             const percentX = (clickX / this.width) * 100;
             const percentY = (clickY / this.height) * 100;
 
-            // Update Input Fields
-            $('#positionX').val(originalX);
-            $('#positionY').val(originalY);
+            const type = $('#type').val();
 
-            // Update Original Size Fields
-            $('#map_original_width').val(this.naturalWidth);
-            $('#map_original_height').val(this.naturalHeight);
+            if (type === 'gate') {
+                gatePath.push({ x: originalX, y: originalY, px: percentX, py: percentY });
+                renderPath();
+                if (gatePath.length === 1) {
+                    $('#positionX').val(originalX);
+                    $('#positionY').val(originalY);
+                    $('#map_original_width').val(this.naturalWidth);
+                    $('#map_original_height').val(this.naturalHeight);
+                }
+                $('#path_coords').val(JSON.stringify(gatePath));
+            } else {
+                $('#positionX').val(originalX);
+                $('#positionY').val(originalY);
+                $('#map_original_width').val(this.naturalWidth);
+                $('#map_original_height').val(this.naturalHeight);
+                $('#path_coords').val('');
+                gatePath = [];
+                $('.map-marker').remove();
+                addMarker(percentX, percentY, '#ff4757');
+                previewPath.setAttribute('points', '');
+            }
+        });
 
-            // Visual Marker
-            // Remove existing marker
-            $('.map-marker').remove();
-
-            // Create new marker
+        function addMarker(px, py, color, isLabel = false) {
             const marker = document.createElement('div');
-            marker.className = 'map-marker';
+            marker.className = 'map-marker' + (isLabel ? ' label-marker' : '');
             marker.style.cssText = `
                 position: absolute;
-                left: ${percentX}%;
-                top: ${percentY}%;
-                width: 12px;
-                height: 12px;
-                background: #ff4757;
-                border: 3px solid white;
+                left: ${px}%;
+                top: ${py}%;
+                width: ${isLabel ? '8px' : '12px'};
+                height: ${isLabel ? '8px' : '12px'};
+                background: ${color};
+                border: 2px solid white;
                 border-radius: 50%;
                 transform: translate(-50%, -50%);
                 pointer-events: none;
                 z-index: 10;
-                box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.3);
+                box-shadow: 0 0 0 3px ${color}44;
             `;
-
             mapContainer.appendChild(marker);
+        }
+
+        function renderPath() {
+            $('.map-marker').remove();
+            let pointsStr = "";
+            
+            // Recalculate percentages based on current image size if needed
+            const scaleX = mapImage.width / mapImage.naturalWidth;
+            const scaleY = mapImage.height / mapImage.naturalHeight;
+
+            gatePath.forEach((pt, index) => {
+                // If stored data doesn't have px/py, calculate them
+                const px = pt.px || (pt.x * scaleX / mapImage.width * 100);
+                const py = pt.py || (pt.y * scaleY / mapImage.height * 100);
+                
+                const color = index === 0 ? '#ff0000' : (index === gatePath.length - 1 ? '#2c3e50' : '#ff4757');
+                addMarker(px, py, color, index > 0);
+                pointsStr += `${px},${py} `;
+            });
+            previewPath.setAttribute('points', pointsStr.trim());
+        }
+
+        $('#btnResetPath').on('click', function() {
+            gatePath = [];
+            $('.map-marker').remove();
+            previewPath.setAttribute('points', '');
+            $('#path_coords').val('');
+            $('#positionX').val('');
+            $('#positionY').val('');
+        });
+
+        $('.btn-map').on('click', function() {
+            setTimeout(renderPath, 500); // Allow modal animation
         });
 
         // Dynamic Field Hiding Logic
@@ -380,8 +437,14 @@
             const type = $('#type').val();
             if (type === 'gate') {
                 $('.tenant-only-field').fadeOut();
+                $('#pathOverlay').show();
+                $('#btnResetPath').show();
             } else {
                 $('.tenant-only-field').fadeIn();
+                $('#pathOverlay').hide();
+                $('#btnResetPath').hide();
+                gatePath = [];
+                previewPath.setAttribute('points', '');
             }
         }
 

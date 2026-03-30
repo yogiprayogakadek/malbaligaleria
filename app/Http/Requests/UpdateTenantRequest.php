@@ -41,7 +41,8 @@ class UpdateTenantRequest extends FormRequest
             'unit'              => 'required|string|max:20',
             'launched_at'       => 'nullable|date',
             'is_new'            => 'nullable|required_with:launched_at|boolean',
-            'is_active'         => 'required|numeric|between:0,1'
+            'is_active'         => 'required|numeric|between:0,1',
+            'path_coords'       => 'nullable|string',
         ];
     }
 

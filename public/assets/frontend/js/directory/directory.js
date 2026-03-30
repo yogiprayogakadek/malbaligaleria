@@ -1126,27 +1126,27 @@ function updateMapView() {
     // Update tenant list in sidebar
     updateTenantList(currentFloorTenants);
 
-    // Trigger mobile layout adjustment after new elements are added
-    if (typeof adjustMobileLayout === 'function') {
-        adjustMobileLayout();
-    } else {
-        // Fallback or wait for function definition (it hangs off window/scope if defined later, but here it's inside same scope)
-        // Since function is defined at bottom of scope, we need to hoist or call it after definition.
-        // JS functions declarations are hoisted.
-        setTimeout(adjustMobileLayout, 0); 
-    }
-
-    const mapImage = document.getElementById("floorMapImage");
-    const mapWrapper = document.getElementById("mapWrapper");
-
     const addPins = () => {
-        mapContainer
-            .querySelectorAll(".map-pin, .map-pin-logo, .cluster")
-            .forEach((pin) => pin.remove());
-        if (!mapImage.width || !mapImage.height) {
+        const mapWrapper = document.getElementById("mapWrapper");
+        const mapImage = document.getElementById("floorMapImage");
+        
+        if (!mapWrapper || !mapImage) return;
+        
+        // Clear pins, labels, and old SVG paths
+        mapWrapper.querySelectorAll(".map-pin, .map-pin-logo, .cluster, .map-gate-label, #mapGatePaths")
+            .forEach(el => el.remove());
+        
+        if (!mapImage.width || !mapImage.naturalWidth) {
             setTimeout(addPins, 100);
             return;
         }
+
+        // Add SVG Overlay for Gate Paths
+        const svgNamespace = "http://www.w3.org/2000/svg";
+        const svgOverlay = document.createElementNS(svgNamespace, "svg");
+        svgOverlay.id = "mapGatePaths";
+        svgOverlay.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;";
+        mapWrapper.appendChild(svgOverlay);
 
         const currentWidth = mapImage.width;
         const currentHeight = mapImage.height;
@@ -1218,8 +1218,8 @@ function updateMapView() {
                 hideMapTooltip();
 
                 if (this.dataset.isGate === "true") {
-                    const tenantData = JSON.parse(this.dataset.tenant);
-                    showTenantModal(tenantData);
+                    // Gates now have no interaction as requested
+                    return;
                 } else if (this.classList.contains("cluster")) {
                     const tenantList = JSON.parse(this.dataset.tenants);
                     showClusterModal(tenantList);
@@ -1258,39 +1258,47 @@ function updateMapView() {
                 const topPercent = (tenant.mapCoords.y / tenant.mapOriginalSize.height) * 100;
 
                 if (tenant.type === 'gate') {
-                    // GATE IMPLEMENTATION
-                    const gateWrapper = document.createElement("div");
-                    gateWrapper.className = "map-gate-wrapper";
-                    
-                    // Logic to stay inside map
-                    const isLeft = leftPercent > 50; 
-                    gateWrapper.classList.add(isLeft ? "label-left" : "label-right");
-                    
-                    gateWrapper.style.left = leftPercent + "%";
-                    gateWrapper.style.top = topPercent + "%";
-                    
-                    gateWrapper.innerHTML = `
-                        <div class="map-pin gate" data-is-gate="true"></div>
-                        <div class="map-gate-connector"></div>
-                        <div class="map-gate-label">${tenant.name}</div>
-                    `;
+                    // GATE IMPLEMENTATION WITH SVG PATH
+                    const gatePin = document.createElement("div");
+                    gatePin.className = "map-pin gate";
+                    gatePin.style.left = leftPercent + "%";
+                    gatePin.style.top = topPercent + "%";
+                    gatePin.style.position = "absolute";
+                    mapWrapper.appendChild(gatePin);
 
-                    // Add interaction to the label and pin
-                    const gatePin = gateWrapper.querySelector('.gate');
-                    const gateLabel = gateWrapper.querySelector('.map-gate-label');
-                    
-                    gatePin.dataset.tenant = JSON.stringify(tenant);
-                    gateLabel.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        showTenantModal(tenant);
-                    });
-                    
-                    gatePin.addEventListener("click", handlePinInteraction);
-                    gatePin.addEventListener("touchend", handlePinInteraction);
-                    
-                    mapWrapper.appendChild(gateWrapper);
+                    if (tenant.path_coords && Array.isArray(tenant.path_coords) && tenant.path_coords.length > 1) {
+                        const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+                        polyline.setAttribute("class", "map-gate-path");
+                        
+                        let pointsStr = "";
+                        tenant.path_coords.forEach(pt => {
+                            // Points are stored in percentages in my admin logic now (px/py)
+                            pointsStr += `${pt.px},${pt.py} `;
+                        });
+                        polyline.setAttribute("points", pointsStr.trim());
+                        svgOverlay.appendChild(polyline);
 
-                } else {
+                        // Place label at the last point
+                        const lastPt = tenant.path_coords[tenant.path_coords.length - 1];
+                        const gateLabel = document.createElement("div");
+                        gateLabel.className = "map-gate-label";
+                        gateLabel.style.left = lastPt.px + "%";
+                        gateLabel.style.top = lastPt.py + "%";
+                        gateLabel.textContent = tenant.name;
+                        mapWrapper.appendChild(gateLabel);
+                    } else {
+                        // Fallback simple label if no path
+                        const gateLabel = document.createElement("div");
+                        gateLabel.className = "map-gate-label";
+                        gateLabel.style.left = (leftPercent + 2) + "%";
+                        gateLabel.style.top = topPercent + "%";
+                        gateLabel.textContent = tenant.name;
+                        mapWrapper.appendChild(gateLabel);
+                    }
+
+                    // No interaction for Gates
+                    return; 
+                }
                     // REGULAR TENANT
                     let pin = document.createElement("div");
                     
@@ -1510,15 +1518,7 @@ function updateMapView() {
     });
 
     // Also call after map update
-    const originalAddPins = addPins;
-    // We can't easily hook into addPins causing rewrite, so we ensure 
-    // we run layout check after DOM updates if needed.
-    // However, mapStats is recreated in innerHTML, so we must re-run adjustMobileLayout
-    // whenever mapContainer.innerHTML is updated.
-    
-    // Let's modify the mapContainer update logic to preserve stats element or move it immediately
-    // For now, simply calling adjustMobileLayout() at the end of the main injection block (around line 1030) is best.
-
+    adjustMobileLayout();
 }
 
 // ===== UPDATE TENANT LIST IN SIDEBAR =====

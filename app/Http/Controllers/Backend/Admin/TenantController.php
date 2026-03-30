@@ -142,6 +142,7 @@ class TenantController extends Controller
                 'width' => $request->map_original_width,
                 'height' => $request->map_original_height,
             ],
+            'path_coords' => $request->path_coords ? json_decode($request->path_coords, true) : null,
             'is_active' => $request->is_active,
         ];
 
