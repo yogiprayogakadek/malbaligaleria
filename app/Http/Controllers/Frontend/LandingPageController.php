@@ -31,7 +31,7 @@ class LandingPageController extends Controller
         )->sortBy('name');
 
         $events = $this->eventService->getEventsWithRelationship(
-            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'highlights'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
