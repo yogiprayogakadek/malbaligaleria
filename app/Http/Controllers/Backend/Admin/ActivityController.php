@@ -56,9 +56,33 @@ class ActivityController extends Controller
                 ->addColumn('properties', function ($row) {
                     $props = '';
                     if (!empty($row->properties)) {
-                        foreach ($row->properties as $key => $value) {
-                            if (is_string($value) || is_numeric($value)) {
-                                $props .= '<strong>' . ucfirst($key) . ':</strong> ' . $value . '<br>';
+                        $attributes = $row->properties['attributes'] ?? null;
+                        $old = $row->properties['old'] ?? null;
+
+                        if ($attributes) {
+                            $props .= '<div class="mb-1 text-primary"><strong>New Values:</strong></div>';
+                            foreach ($attributes as $key => $value) {
+                                if (is_scalar($value)) {
+                                    $props .= '&bull; ' . ucfirst($key) . ': ' . $value . '<br>';
+                                }
+                            }
+                        }
+
+                        if ($old) {
+                            $props .= '<div class="mt-2 text-danger"><strong>Previous Values:</strong></div>';
+                            foreach ($old as $key => $value) {
+                                if (is_scalar($value)) {
+                                    $props .= '&bull; ' . ucfirst($key) . ': ' . $value . '<br>';
+                                }
+                            }
+                        }
+
+                        // Fallback for non-CRUD logs or different structure
+                        if (!$attributes && !$old) {
+                            foreach ($row->properties as $key => $value) {
+                                if (is_scalar($value)) {
+                                    $props .= '<strong>' . ucfirst($key) . ':</strong> ' . $value . '<br>';
+                                }
                             }
                         }
                     }
