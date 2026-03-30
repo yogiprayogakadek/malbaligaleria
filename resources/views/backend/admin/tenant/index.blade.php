@@ -125,7 +125,7 @@
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
                         return $.ajax({
-                            url: `/admin/tenant/destroy/${uuid}`,
+                            url: `/dashboard/tenant/destroy/${uuid}`,
                             type: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
