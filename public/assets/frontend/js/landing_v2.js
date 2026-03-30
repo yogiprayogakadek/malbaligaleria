@@ -1937,6 +1937,10 @@ function renderModalMap(data) {
         `).join("");
 
         const hasMultipleImages = images.length > 1;
+        const carouselContainer = carouselImages.parentElement;
+        if (carouselContainer) {
+            carouselContainer.classList.toggle("has-multiple-images", hasMultipleImages);
+        }
         if (carouselPrev) carouselPrev.style.display = hasMultipleImages ? 'flex' : 'none';
         if (carouselNext) carouselNext.style.display = hasMultipleImages ? 'flex' : 'none';
         if (carouselIndicators) carouselIndicators.style.display = hasMultipleImages ? 'flex' : 'none';

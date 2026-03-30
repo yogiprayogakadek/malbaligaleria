@@ -3846,10 +3846,12 @@ body.dark-mode .modal-carousel {
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     opacity: 0;
+    z-index: 20;
 }
 
 .modal-carousel:hover .carousel-nav,
-.event-modal-carousel:hover .carousel-nav {
+.event-modal-carousel:hover .carousel-nav,
+.event-modal-carousel.has-multiple-images .carousel-nav {
     opacity: 1;
 }
 
