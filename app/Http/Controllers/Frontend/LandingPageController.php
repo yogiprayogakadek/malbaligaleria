@@ -130,7 +130,7 @@ class LandingPageController extends Controller
             ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'recurring_label'],
             [
                 'primaryPhoto:id,event_id,path',
-                'albumPhoto:id,event_id,path',
+                'photos:id,event_id,path',
             ],
             'uuid',
             $uuid
@@ -141,7 +141,7 @@ class LandingPageController extends Controller
                     fn($c) => $c->push(\Illuminate\Support\Facades\Storage::url($data->primaryPhoto->path))
                 )
                 ->concat(
-                    collect($data->albumPhoto ?? [])
+                    collect($data->photos ?? [])
                         ->filter(fn($photo) => filled($photo->path))
                         ->map(fn($photo) => \Illuminate\Support\Facades\Storage::url($photo->path))
                 )
