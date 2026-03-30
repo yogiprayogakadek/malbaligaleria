@@ -998,29 +998,36 @@ function updateMapView() {
     });
 
     // Filter tenants based on search, floor, and category
+    // Ensure we have a default floor for the map if none is selected
+    const mapFloor = selectedFloor || "1st Floor";
+
+    // Filter tenants based on search, floor, and category
     let floorTenants = tenants.filter((t) => {
-        const matchesFloor = !selectedFloor || t.floor === selectedFloor;
+        // Floor matching is case-insensitive and handles "1" or "1st Floor"
+        const matchesFloor = !selectedFloor || 
+                            t.floor.toLowerCase().includes(selectedFloor.toLowerCase()) ||
+                            (selectedFloor === "" && t.floor === "1st Floor"); // Default to 1st floor in display if empty
+
         const matchesSearch =
             !searchTerm ||
             t.name.toLowerCase().includes(searchTerm) ||
             t.category.toLowerCase().includes(searchTerm);
+            
         const matchesCategory =
             !selectedCategory || t.category === selectedCategory;
+            
         return matchesFloor && matchesSearch && matchesCategory;
     });
 
-    // Filter tenants for the current floor only
-    let currentFloorTenants = floorTenants.filter((t) => {
-        const matchesFloor = !selectedFloor || t.floor === selectedFloor;
-        return matchesFloor;
+    // For map display, we MUST filter strictly by the visible floor
+    let currentFloorTenants = tenants.filter((t) => {
+        const matchesFloor = t.floor === mapFloor;
+        const matchesSearch = !searchTerm || t.name.toLowerCase().includes(searchTerm);
+        const matchesCategory = !selectedCategory || t.category === selectedCategory;
+        return matchesFloor && matchesSearch && matchesCategory;
     });
 
-    const floorKey =
-        selectedFloor === "1st Floor"
-            ? "floor1"
-            : selectedFloor === "2nd Floor"
-            ? "floor2"
-            : currentFloorMap;
+    const floorKey = mapFloor === "1st Floor" ? "floor1" : "floor2";
 
     // Format tenant counts per floor for display
     const total1stFloor = floorCounts["1st Floor"] || 0;

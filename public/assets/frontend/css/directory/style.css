@@ -2526,15 +2526,16 @@ body.dark-mode .map-container {
  
 /* Gate Styles */
 .map-pin {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     background: #5fcfda;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 15px rgba(95, 207, 218, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 20px rgba(95, 207, 218, 0.6);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 10;
 }
 
