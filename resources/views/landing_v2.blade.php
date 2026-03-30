@@ -376,10 +376,27 @@
                             ];
                         @endphp
                         @foreach ($regularEvents as $rEvent)
+                            @php
+                                $rDateStr = '';
+                                if ($rEvent->type === 'regular') {
+                                    $rDateStr = $rEvent->recurring_label ?: 'Every Weekend';
+                                } else {
+                                    if ($rEvent->start_date) {
+                                        $rDateStr = date('d M', strtotime($rEvent->start_date));
+                                        if ($rEvent->end_date && $rEvent->start_date != $rEvent->end_date) {
+                                            $rDateStr .= ' – ' . date('d M Y', strtotime($rEvent->end_date));
+                                        } else {
+                                            $rDateStr .= ' ' . date('Y', strtotime($rEvent->start_date));
+                                        }
+                                    } else {
+                                        $rDateStr = $rEvent->recurring_label ?: 'Event';
+                                    }
+                                }
+                            @endphp
                             <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
                                 data-event-uuid="{{ optional($rEvent)->uuid }}"
                                 data-event-name="{{ optional($rEvent)->name }}"
-                                data-event-date="{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}"
+                                data-event-date="{{ $rDateStr }}"
                                 data-event-time="{{ optional($rEvent)->start_time && optional($rEvent)->end_time ? \Carbon\Carbon::parse($rEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($rEvent->end_time)->format('h:i A') : 'Check Schedule' }}"
                                 data-event-desc="{{ optional($rEvent)->description }}"
                                 data-event-location="{{ optional($rEvent)->location }}"
@@ -392,7 +409,7 @@
                                 </div>
                                 <div class="rsc-card-content">
                                     <span
-                                        class="event-date">{{ optional($rEvent)->recurring_label ?: 'Every Weekend' }}</span>
+                                        class="event-date">{{ $rDateStr }}</span>
                                     <h3>{{ optional($rEvent)->name }}</h3>
                                     <p class="event-desc">
                                         {{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
