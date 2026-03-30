@@ -64,7 +64,7 @@ class Event extends Model
 
     public function photos()
     {
-        return $this->hasMany(EventPhoto::class)->where('is_primary', false)->orderBy('sort_order');
+        return $this->hasMany(EventPhoto::class)->orderBy('sort_order');
     }
 
     public function primaryPhoto()

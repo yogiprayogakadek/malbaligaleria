@@ -74,19 +74,19 @@ class EventRepository
 
     public function findEmptyPhotoEvents(array $fields)
     {
-        return $this->model::select($fields)->whereDoesntHave('photos')->get();
+        return $this->model::select($fields)->whereDoesntHave('primaryPhoto')->get();
     }
 
     public function create(array $data)
     {
-        $tenant = $this->model::create($data);
-        return $tenant;
+        $event = $this->model::create($data);
+        return $event;
     }
 
     public function update(array $data, string $uuid)
     {
-        $tenant = $this->model::where('uuid', $uuid);
-        return $tenant->update($data);
+        $event = $this->model::where('uuid', $uuid);
+        return $event->update($data);
     }
 
     public function delete(int $id)

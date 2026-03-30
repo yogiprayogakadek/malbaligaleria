@@ -10,7 +10,11 @@ class EventPhoto extends Model
 {
     use LogsActivity;
     protected $fillable = [
-        'sort_order'
+        'event_id',
+        'path',
+        'caption',
+        'is_primary',
+        'sort_order',
     ];
     
     public function getActivitylogOptions(): LogOptions
