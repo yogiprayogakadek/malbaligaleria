@@ -732,6 +732,9 @@ function filterTenants() {
     const combinedSearch = searchTerm || headerSearchTerm || sidebarSearchTerm;
 
     const filtered = tenants.filter((tenant) => {
+        // Exclude Gates from the searchable list view
+        if (tenant.type === 'gate') return false;
+
         const matchesSearch =
             !combinedSearch ||
             tenant.name.toLowerCase().includes(combinedSearch) ||
@@ -1022,9 +1025,14 @@ function updateMapView() {
     // For map display, we MUST filter strictly by the visible floor
     let currentFloorTenants = tenants.filter((t) => {
         const matchesFloor = t.floor === mapFloor;
+        if (!matchesFloor) return false;
+
+        // Gates are permanent landmarks - they stay on the map even during search
+        if (t.type === 'gate') return true;
+
         const matchesSearch = !searchTerm || t.name.toLowerCase().includes(searchTerm);
         const matchesCategory = !selectedCategory || t.category === selectedCategory;
-        return matchesFloor && matchesSearch && matchesCategory;
+        return matchesSearch && matchesCategory;
     });
 
     const floorKey = mapFloor === "1st Floor" ? "floor1" : "floor2";
@@ -1380,7 +1388,7 @@ function updateMapView() {
                     }
 
                     // No interaction for Gates
-                    return; 
+                    continue; 
                 }
                     // REGULAR TENANT
                     let pin = document.createElement("div");
