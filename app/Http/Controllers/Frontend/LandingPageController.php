@@ -31,7 +31,7 @@ class LandingPageController extends Controller
         )->sortBy('name');
 
         $events = $this->eventService->getEventsWithRelationship(
-            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'highlights'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'highlights', 'start_time', 'end_time'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
@@ -45,7 +45,7 @@ class LandingPageController extends Controller
         );
 
         $exhibitionEvents = $this->eventService->getExhibitionEvents(
-            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'highlights'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'highlights', 'start_time', 'end_time'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
             ]
@@ -128,7 +128,7 @@ class LandingPageController extends Controller
     public function findEventByUuid($uuid)
     {
         $event = $this->eventService->getEventsWithRelationshipAndCondition(
-            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'location', 'recurring_label', 'highlights'],
+            ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'recurring_label', 'highlights'],
             [
                 'primaryPhoto:id,event_id,path',
                 'photos:id,event_id,path',
@@ -179,6 +179,8 @@ class LandingPageController extends Controller
                 'location' => $data->location ?: 'Mal Bali Galeria',
                 'description' => $data->description,
                 'highlights' => $data->highlights ?: '-',
+                'start_time' => $data->start_time,
+                'end_time' => $data->end_time,
                 'images' => !empty($photos) ? $photos : [asset('assets/images/no_image.jpg')],
                 'type' => $typeLabels[$data->type] ?? 'Event',
             ];
