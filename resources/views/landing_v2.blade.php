@@ -928,13 +928,15 @@
                             </svg>
                             <div>
                                 <span class="info-label">Description</span>
-                                <span class="info-value" id="eventModalMonthYear"
+                                <span class="info-value" id="eventModalDescription"
                                     style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span>
+                                {{-- <span class="info-value" id="eventModalMonthYear"
+                                    style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span> --}}
                             </div>
                         </div>
                     </div>
 
-                    <div class="event-modal-description" id="eventModalDescription"></div>
+                    {{-- <div class="event-modal-description" id="eventModalDescription"></div> --}}
 
                     <div class="event-modal-actions">
                         <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">
