@@ -15,10 +15,12 @@ class Tenant extends Model
     protected $fillable = [
         'uuid',
         'category_id',
+        'type',
         'name',
         'phone',
         'email',
         'map_coords',
+        'path_coords',
         'map_original_size',
         'logo',
         'description',
@@ -28,6 +30,7 @@ class Tenant extends Model
 
     protected $casts = [
         'map_coords' => 'array',
+        'path_coords' => 'array',
         'map_original_size' => 'array',
         'launched_at' => 'datetime',
     ];

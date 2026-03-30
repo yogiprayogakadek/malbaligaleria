@@ -1156,16 +1156,23 @@ function updateMapView() {
         // Process tenants for potential clustering
         const allPositions = currentFloorTenants
             .map((tenant) => {
-                // Check if tenant has valid coordinates (not '-' or null/undefined)
-                if (tenant.mapCoords && 
-                    tenant.mapOriginalSize && 
-                    typeof tenant.mapCoords.x === 'number' && 
-                    typeof tenant.mapCoords.y === 'number' &&
-                    tenant.mapCoords.x !== '-' &&
-                    tenant.mapCoords.y !== '-') {
+                // Check if tenant has valid coordinates
+                const hasCoords = tenant.mapCoords && 
+                                 typeof tenant.mapCoords.x !== 'undefined' && 
+                                 typeof tenant.mapCoords.y !== 'undefined' &&
+                                 tenant.mapCoords.x !== '-' &&
+                                 tenant.mapCoords.y !== '-';
+                
+                if (hasCoords) {
+                    // Use fallback original size if missing
+                    const originalSize = tenant.mapOriginalSize || { 
+                        width: (tenant.floor === '1st Floor' ? 2084 : 2130), 
+                        height: (tenant.floor === '1st Floor' ? 4788 : 4728) 
+                    };
+
                     const position = calculateResponsivePosition(
                         tenant.mapCoords,
-                        tenant.mapOriginalSize,
+                        originalSize,
                         currentWidth,
                         currentHeight
                     );
@@ -1186,19 +1193,25 @@ function updateMapView() {
 
         allPositions.forEach((pos) => {
             let foundGroup = false;
-            for (const key in positionGroups) {
-                const [groupX, groupY] = key.split(",").map(Number);
-                const distance = Math.sqrt(
-                    Math.pow(pos.x - groupX, 2) + Math.pow(pos.y - groupY, 2)
-                );
-                if (distance < clusteringDistance) {
-                    positionGroups[key].push(pos);
-                    foundGroup = true;
-                    break;
+            if (clusteringDistance > 0) {
+                for (const key in positionGroups) {
+                    const [groupX, groupY] = key.split(",").map(Number);
+                    const distance = Math.sqrt(
+                        Math.pow(pos.x - groupX, 2) + Math.pow(pos.y - groupY, 2)
+                    );
+                    if (distance < clusteringDistance) {
+                        positionGroups[key].push(pos);
+                        foundGroup = true;
+                        break;
+                    }
                 }
             }
+            
             if (!foundGroup) {
-                const key = `${pos.x},${pos.y}`;
+                // To avoid exact overlaps hiding pins, use a unique key if clustering is disabled
+                const key = clusteringDistance === 0 
+                            ? `group_${pos.tenant.id}_${pos.x}_${pos.y}` 
+                            : `${pos.x},${pos.y}`;
                 positionGroups[key] = [pos];
             }
         });
@@ -1268,26 +1281,39 @@ function updateMapView() {
                     gatePin.style.position = "absolute";
                     mapWrapper.appendChild(gatePin);
 
-                    if (tenant.path_coords && Array.isArray(tenant.path_coords) && tenant.path_coords.length > 1) {
+                    // Parse path_coords if they arrived as a string
+                    let pathCoords = tenant.path_coords;
+                    if (typeof pathCoords === 'string') {
+                        try { pathCoords = JSON.parse(pathCoords); } catch(e) { pathCoords = null; }
+                    }
+
+                    if (pathCoords && Array.isArray(pathCoords) && pathCoords.length > 1) {
                         const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
                         polyline.setAttribute("class", "map-gate-path");
                         polyline.setAttribute("vector-effect", "non-scaling-stroke");
                         
                         let pointsStr = "";
-                        tenant.path_coords.forEach(pt => {
-                            // Points are stored in percentages in my admin logic now (px/py)
-                            pointsStr += `${pt.px},${pt.py} `;
+                        pathCoords.forEach(pt => {
+                            // Ensure we have numeric px/py (percentages 0-100)
+                            const px = parseFloat(pt.px);
+                            const py = parseFloat(pt.py);
+                            if (!isNaN(px) && !isNaN(py)) {
+                                pointsStr += `${px},${py} `;
+                            }
                         });
-                        polyline.setAttribute("points", pointsStr.trim());
-                        svgOverlay.appendChild(polyline);
+                        
+                        if (pointsStr) {
+                            polyline.setAttribute("points", pointsStr.trim());
+                            svgOverlay.appendChild(polyline);
+                        }
 
                         // Place label at the last point
-                        const lastPt = tenant.path_coords[tenant.path_coords.length - 1];
+                        const lastPt = pathCoords[pathCoords.length - 1];
                         const gateLabel = document.createElement("div");
                         gateLabel.className = "map-gate-label";
-                        // Slightly shift the label up/right from the arrow tip to prevent overlap
-                        gateLabel.style.left = (lastPt.px + 1) + "%"; 
-                        gateLabel.style.top = (lastPt.py - 1) + "%";
+                        // Displacement to shift label away from arrow tip
+                        gateLabel.style.left = (parseFloat(lastPt.px) + 0.5) + "%"; 
+                        gateLabel.style.top = (parseFloat(lastPt.py) - 0.5) + "%";
                         gateLabel.textContent = tenant.name;
                         mapWrapper.appendChild(gateLabel);
                     } else {
