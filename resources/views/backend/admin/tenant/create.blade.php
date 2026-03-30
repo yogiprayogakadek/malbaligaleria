@@ -160,7 +160,7 @@
                                 <div class="col-sm-3">
                                     <label for="positionX" class="form-label col-sm-3 col-form-label">Pos. X</label>
                                     <input type="number" class="form-control @error('position_x') is-invalid @enderror"
-                                        name="position_x" id="positionX" value="{{ old('position-x') }}"
+                                        name="position_x" id="positionX" value="{{ old('position_x') }}"
                                         placeholder="The field will be automatically filled (in)">
                                     @error('position_x')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -169,7 +169,7 @@
                                 <div class="col-sm-3">
                                     <label for="positionY" class="form-label col-sm-3 col-form-label">Pos. Y</label>
                                     <input type="number" class="form-control @error('position_y') is-invalid @enderror"
-                                        name="position_y" id="positionY" value="{{ old('position-y') }}"
+                                        name="position_y" id="positionY" value="{{ old('position_y') }}"
                                         placeholder="The field will be automatically filled (in)">
                                     @error('position_y')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -239,7 +239,7 @@
                                     <select name="is_new" id="isNew"
                                         class="form-control @error('is_new') is-invalid @enderror">
                                         <option value="">Choose if this is new store...</option>
-                                        <option value="1" {{ old('is_new') }}>
+                                        <option value="1" {{ old('is_new') == '1' ? 'selected' : '' }}>
                                             Yes, it is new
                                         </option>
                                     </select>
