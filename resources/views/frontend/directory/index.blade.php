@@ -97,6 +97,13 @@
                 height: 16px !important;
             }
         }
+
+        /* Prevent browser gestures while using custom pinch zoom */
+        #mapContainer {
+            touch-action: none;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 

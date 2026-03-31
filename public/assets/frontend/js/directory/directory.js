@@ -1571,19 +1571,81 @@ function updateMapView() {
     
     // Wheel Zoom
     mapContainer.addEventListener('wheel', (e) => {
-        if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            
-            const delta = -Math.sign(e.deltaY) * zoomStep;
-            const newScale = Math.min(Math.max(state.scale + delta, minScale), maxScale);
-            
-            if (newScale !== state.scale) {
-                state.scale = newScale;
-                updateZoom();
             }
         }
         // If no modifier key, do NOTHING (allow native scroll)
     }, { passive: false });
+
+    // ===== PINCH TO ZOOM & PAN GESTURES =====
+    let touchState = {
+        lastPinchDist: 0,
+        isPinching: false,
+        lastX: 0,
+        lastY: 0
+    };
+
+    mapContainer.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            touchState.isPinching = true;
+            touchState.lastPinchDist = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+        } else if (e.touches.length === 1) {
+            touchState.isPinching = false;
+            touchState.lastX = e.touches[0].pageX;
+            touchState.lastY = e.touches[0].pageY;
+        }
+    }, { passive: false });
+
+    mapContainer.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2 && touchState.isPinching) {
+            e.preventDefault();
+            const currentDist = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+            
+            const delta = (currentDist - touchState.lastPinchDist) * 0.01;
+            const newScale = Math.min(Math.max(state.scale + delta, minScale), maxScale);
+            
+            if (newScale !== state.scale) {
+                // Calculate pinch center relative to mapContainer
+                const rect = mapContainer.getBoundingClientRect();
+                const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+                const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+                
+                // Adjust scroll to zoom into the pinch center
+                const scrollX = mapContainer.scrollLeft;
+                const scrollY = mapContainer.scrollTop;
+                const ratio = newScale / state.scale;
+                
+                state.scale = newScale;
+                updateZoom();
+                
+                mapContainer.scrollLeft = (scrollX + centerX) * ratio - centerX;
+                mapContainer.scrollTop = (scrollY + centerY) * ratio - centerY;
+                
+                touchState.lastPinchDist = currentDist;
+            }
+        } else if (e.touches.length === 1 && !touchState.isPinching && state.scale > 1) {
+            // Manual panning when zoomed in
+            e.preventDefault();
+            const deltaX = touchState.lastX - e.touches[0].pageX;
+            const deltaY = touchState.lastY - e.touches[0].pageY;
+            
+            mapContainer.scrollLeft += deltaX;
+            mapContainer.scrollTop += deltaY;
+            
+            touchState.lastX = e.touches[0].pageX;
+            touchState.lastY = e.touches[0].pageY;
+        }
+    }, { passive: false });
+
+    mapContainer.addEventListener('touchend', () => {
+        touchState.isPinching = false;
+        touchState.lastPinchDist = 0;
+    });
 
     // Remove drag handlers (don't add them back)
     // ===== MOBILE LAYOUT ADJUSTMENTS =====
