@@ -2645,6 +2645,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 filterTenants();
             };
 
+            const searchInput = document.getElementById("searchInput");
+            const headerSearch = document.getElementById("headerSearch");
+            const sidebarSearch = document.getElementById("sidebarSearch");
+
             if (searchInput) {
                 searchInput.addEventListener("input", handleSearchChange);
             }
