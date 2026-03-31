@@ -278,13 +278,13 @@
                         data-date="{{ $event->start_date }}" 
                         data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
-                            <div class="event-card-logo-badge">
+                            <!-- <div class="event-card-logo-badge">
                                 <img src="{{ asset('assets/images/logo.png') }}" alt="MBG">
                                 <div class="logo-text">
                                     <span class="main">Mal Bali Galeria</span>
                                     <span class="sub">Enjoy, Play, Eat, Shop</span>
                                 </div>
-                            </div>
+                            </div> -->
                             <img src="{{ $imgUrl }}" alt="{{ $event->name }}"
                                 loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
