@@ -809,6 +809,11 @@ function filterTenants() {
 
     // Update tenant count per floor
     updateFloorCounts();
+
+    // Cleanup: If search is cleared, ensure no stale modal is left open
+    if (!combinedSearch && !selectedFloor && !selectedCategory) {
+        closeTenantModal();
+    }
 }
 
 // Reusable floor switcher
@@ -819,6 +824,9 @@ function changeFloor(floorName) {
     currentFloorMap = floorKey;
     const floorFilter = document.getElementById("floorFilter");
     if (floorFilter) floorFilter.value = floorName;
+
+    // Close any open modal when changing floors to prevent context confusion
+    closeTenantModal();
 
     document.querySelectorAll(".floor-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.floor === floorKey);
@@ -2005,6 +2013,7 @@ function updateModalContent(data) {
         const newShowBtn = showOnMapBtn.cloneNode(true);
         showOnMapBtn.parentNode.replaceChild(newShowBtn, showOnMapBtn);
         newShowBtn.addEventListener("click", () => {
+            closeTenantModal(); // Close modal before focusing on map
             locateTenantOnMap(data);
         });
     }
