@@ -543,7 +543,7 @@
                             </svg>
                             Add to Calendar
                         </button>
-                        <button class="event-modal-share-btn" style="display: none" id="eventModalShareBtn">
+                        <button class="event-modal-share-btn" id="eventModalShareBtn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="18" cy="5" r="3" />
                                 <circle cx="6" cy="12" r="3" />
@@ -733,6 +733,29 @@
                 originalApplyFilters();
                 setTimeout(updateNavButtons, 300);
             };
+        }
+
+        // ===== EVENT MODAL SHARE =====
+        const eventShareBtn = document.getElementById('eventModalShareBtn');
+        if (eventShareBtn) {
+            eventShareBtn.addEventListener('click', () => {
+                if (typeof window.currentEventUuid !== 'undefined' && window.currentEventUuid) {
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?id=${window.currentEventUuid}`;
+                    const eventTitle = document.getElementById('eventModalTitle')?.textContent || 'Event at Mal Bali Galeria';
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: eventTitle,
+                            text: `Check out this event at Mal Bali Galeria!`,
+                            url: shareUrl
+                        }).catch(() => {
+                            if (typeof copyToClipboard === 'function') copyToClipboard(shareUrl);
+                        });
+                    } else {
+                        if (typeof copyToClipboard === 'function') copyToClipboard(shareUrl);
+                    }
+                }
+            });
         }
 
         }); // End DOMContentLoaded
