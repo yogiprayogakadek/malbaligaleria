@@ -2627,19 +2627,32 @@ document.addEventListener("DOMContentLoaded", async () => {
             initPullToRefresh(); // Initialize pull to refresh
             initSwipeGestures(); // Initialize swipe gestures
 
-            // Add event listeners for search inputs
-            const searchInput = document.getElementById("searchInput");
-            const headerSearch = document.getElementById("headerSearch");
-            const sidebarSearch = document.getElementById("sidebarSearch");
+            // Helper for search input synchronization
+            const syncSearchInputs = (val) => {
+                const ids = ["searchInput", "headerSearch", "sidebarSearch"];
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.value !== val) el.value = val;
+                });
+            };
+
+            const handleSearchChange = function(e) {
+                if (autoShowModalTimer) {
+                    clearTimeout(autoShowModalTimer);
+                    autoShowModalTimer = null;
+                }
+                syncSearchInputs(this.value);
+                filterTenants();
+            };
 
             if (searchInput) {
-                searchInput.addEventListener("input", filterTenants);
+                searchInput.addEventListener("input", handleSearchChange);
             }
             if (headerSearch) {
-                headerSearch.addEventListener("input", filterTenants);
+                headerSearch.addEventListener("input", handleSearchChange);
             }
             if (sidebarSearch) {
-                sidebarSearch.addEventListener("input", filterTenants);
+                sidebarSearch.addEventListener("input", handleSearchChange);
             }
 
             // Add event listeners for filters
