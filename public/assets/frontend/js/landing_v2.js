@@ -1935,29 +1935,20 @@ async function drawGates(floorId) {
     const mapWrapper = document.querySelector(".modal-map-wrapper");
     if (!mapWrapper) return;
 
-    console.log("drawGates - Starting for floorId:", floorId);
-
     // Remove existing gate elements
     const existingSvg = document.getElementById("modalMapGatePaths");
     if (existingSvg) existingSvg.remove();
     mapWrapper.querySelectorAll(".map-gate-label").forEach(l => l.remove());
 
     const floorName = floorId == 2 ? "2nd Floor" : "1st Floor";
-    console.log("drawGates - floorName:", floorName);
 
     // Ensure cache is loaded
     if (!allTenantsCache.loaded) {
-        console.log("drawGates - cache not loaded, fetching...");
         await fetchAllTenantsForSearch();
     }
 
     const gates = allTenantsCache[floorName]?.filter(t => t.type === 'gate') || [];
-    console.log(`drawGates - Found ${gates.length} gates for ${floorName}`);
-    
-    if (gates.length === 0) {
-        console.log("drawGates - No gates to draw.");
-        return;
-    }
+    if (gates.length === 0) return;
 
     // Create SVG overlay
     const svgNamespace = "http://www.w3.org/2000/svg";
@@ -1969,14 +1960,12 @@ async function drawGates(floorId) {
     mapWrapper.appendChild(svgOverlay);
 
     gates.forEach(gate => {
-        console.log(`drawGates - Processing gate: ${gate.name}`, gate);
         let pathCoords = gate.path_coords;
         if (typeof pathCoords === 'string') {
             try { pathCoords = JSON.parse(pathCoords); } catch (e) { pathCoords = null; }
         }
 
         if (pathCoords && Array.isArray(pathCoords) && pathCoords.length > 1) {
-            console.log(`drawGates - Drawing path for ${gate.name} with ${pathCoords.length} points`);
             // Draw Path
             const polyline = document.createElementNS(svgNamespace, "polyline");
             polyline.setAttribute("class", "map-gate-path");
@@ -2004,8 +1993,6 @@ async function drawGates(floorId) {
             gateLabel.style.top = lastPt.py + "%";
             gateLabel.textContent = gate.name;
             mapWrapper.appendChild(gateLabel);
-        } else {
-            console.warn(`drawGates - Gate ${gate.name} has invalid path_coords:`, pathCoords);
         }
     });
 }

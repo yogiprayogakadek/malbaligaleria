@@ -185,6 +185,8 @@ class TenantService
                         : asset('storage/' . $tenant->logo)
                     )
                     : asset('assets/images/no_image.jpg'),
+                'type' => $tenant->type,
+                'path_coords' => $tenant->path_coords,
                 'hours' => "10:00 AM - 10:00 PM",
                 'album' => optional($tenant->albumPhoto)->map(function ($photo) {
                     return [

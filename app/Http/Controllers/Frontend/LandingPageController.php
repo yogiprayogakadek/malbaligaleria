@@ -67,7 +67,7 @@ class LandingPageController extends Controller
     public function tenantData($cat = "new store", $isNew)
     {
         $tenants = $this->tenantService->getDataByFloor(
-            ['id', 'name', 'map_coords', 'category_id', 'logo', 'isNew'],
+            ['id', 'name', 'map_coords', 'category_id', 'logo', 'isNew', 'type', 'path_coords'],
             [
                 'category:id,name',
                 'primaryPhoto:id,path,caption,tenant_id'
