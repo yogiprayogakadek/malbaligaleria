@@ -24,7 +24,34 @@ class StoreTenantRequest extends FormRequest
         return [
             'type'              => 'required|string|in:tenant,island,gate',
             'category_id'       => 'required_if:type,tenant,island|exists:categories,id',
-            'name'              => 'required|string|max:255|unique:tenants,name',
+            'name'              => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    $type = $this->input('type');
+                    $floor = $this->input('floor');
+
+                    $exists = \App\Models\Tenant::where('name', $value)
+                        ->where(function ($query) use ($type, $floor) {
+                            if ($type === 'gate') {
+                                // For gates, only fail if it's the SAME floor
+                                $query->where('type', 'gate')->where('floor', $floor);
+                            } else {
+                                // For others, fail if name exists as tenant/island anywhere
+                                $query->whereIn('type', ['tenant', 'island']);
+                            }
+                        })->exists();
+
+                    if ($exists) {
+                        if ($type === 'gate') {
+                            $fail("The gate name '{$value}' already exists on Floor {$floor}.");
+                        } else {
+                            $fail("The tenant name '{$value}' already exists.");
+                        }
+                    }
+                }
+            ],
             'phone'             => 'nullable|string|max:20',
             'email'             => 'nullable|email|max:255',
             'website'           => 'nullable|url|max:255',

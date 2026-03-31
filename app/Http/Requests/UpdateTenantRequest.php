@@ -29,6 +29,29 @@ class UpdateTenantRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                function ($attribute, $value, $fail) {
+                    $type = $this->input('type');
+                    $floor = $this->input('floor');
+                    $tenantId = $this->route('tenant'); // Get current tenant ID from route
+
+                    $exists = \App\Models\Tenant::where('name', $value)
+                        ->where('id', '!=', $tenantId) // Exclude current record
+                        ->where(function ($query) use ($type, $floor) {
+                            if ($type === 'gate') {
+                                $query->where('type', 'gate')->where('floor', $floor);
+                            } else {
+                                $query->whereIn('type', ['tenant', 'island']);
+                            }
+                        })->exists();
+
+                    if ($exists) {
+                        if ($type === 'gate') {
+                            $fail("The gate name '{$value}' already exists on Floor {$floor}.");
+                        } else {
+                            $fail("The tenant name '{$value}' already exists.");
+                        }
+                    }
+                }
             ],
             'phone'             => 'nullable|string|max:20',
             'email'             => 'nullable|email|max:255',
