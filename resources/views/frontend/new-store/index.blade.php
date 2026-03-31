@@ -151,7 +151,7 @@
             <div class="promo-hero-banner">
                 <div class="promo-hero-content">
                     <span class="promo-hero-eyebrow">Mal Bali Galeria</span>
-                    <h1 class="promo-hero-title">Latest Additions</h1>
+                    <h1 class="promo-hero-title">New Stores</h1>
                     <p class="promo-hero-subtitle">Welcome our newest brands and stores</p>
                     <a href="{{ route('frontend.landing') }}" class="promo-hero-back">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
