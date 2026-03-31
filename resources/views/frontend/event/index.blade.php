@@ -180,7 +180,12 @@
                     </div>
                 </div>
                 <div class="events-filter-right">
-                    <div style="display: flex; gap: 10px;">
+                        {{-- Category filter --}}
+                        <select class="events-sort-select" id="eventsCategory">
+                            <option value="all">All Types</option>
+                            <option value="regular">Regular Shows</option>
+                            <option value="special">Special Events</option>
+                        </select>
                         {{-- Month filter --}}
                         <select class="events-sort-select" id="eventsMonth">
                             <option value="all">All Months</option>
@@ -212,7 +217,7 @@
             </div>
 
             <div class="events-grid" id="eventsGrid">
-                @foreach ($events as $index => $event)
+                @foreach ($events->whereIn('type', ['regular', 'special']) as $index => $event)
                     @php
                         $startDate = $event->start_date;
                         $day = $startDate ? date_format(date_create($startDate), 'd') : '—';
@@ -682,6 +687,7 @@
         let activeStatus = 'all';
         let activeMonth = 'all';
         let activeYear = 'all';
+        let activeCategory = 'all';
         let activeSort = 'newest';
 
         // Collect all event cards (including hidden initially)
@@ -738,13 +744,20 @@
             });
         }
 
-        function applyFilters() {
-            const grid = document.getElementById('eventsGrid');
+        const catSelect = document.getElementById('eventsCategory');
+        if (catSelect) {
+            catSelect.addEventListener('change', () => {
+                activeCategory = catSelect.value;
+                applyFilters();
+            });
+        }
+
             let visible = allCards.filter(card => {
                 const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
                 const monthMatch = activeMonth === 'all' || card.dataset.month === activeMonth;
                 const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
-                return statusMatch && monthMatch && yearMatch;
+                const catMatch = activeCategory === 'all' || card.dataset.eventType.toLowerCase() === activeCategory;
+                return statusMatch && monthMatch && yearMatch && catMatch;
             });
 
             // Sort
