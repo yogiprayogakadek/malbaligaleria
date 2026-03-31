@@ -1,5 +1,7 @@
 
-const pageLoader = document.getElementById("pageLoader");
+(function() {
+    const pageLoader = document.getElementById("pageLoader");
+    if (!pageLoader) return;
 
 // Initialize Lenis Smooth Scroll
 window.lenis = new Lenis({
@@ -2110,4 +2112,5 @@ function renderModalMap(data) {
             }
         });
     }
-})();
+})(); // Closing event modal scope
+})(); // Closing pageLoader/global scope
