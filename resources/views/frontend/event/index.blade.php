@@ -744,13 +744,15 @@
             });
         }
 
-        const catSelect = document.getElementById('eventsCategory');
         if (catSelect) {
             catSelect.addEventListener('change', () => {
                 activeCategory = catSelect.value;
                 applyFilters();
             });
         }
+
+        // Initial apply
+        applyFilters();
 
         function applyFilters() {
             const grid = document.getElementById('eventsGrid');
@@ -760,8 +762,13 @@
                 const monthMatch = activeMonth === 'all' || card.dataset.month === activeMonth;
                 const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
                 const targetCat = activeCategory.toLowerCase();
-                const cardCat = (card.dataset.eventType || '').toLowerCase();
-                const catMatch = activeCategory === 'all' || cardCat === targetCat;
+                const cardCatFull = (card.dataset.eventType || '').toLowerCase();
+                // Match "regular" to "Regular" and "special" to "Special" or "Special Events"
+                let catMatch = activeCategory === 'all';
+                if (!catMatch) {
+                    if (targetCat === 'regular') catMatch = cardCatFull.includes('regular');
+                    else if (targetCat === 'special') catMatch = cardCatFull.includes('special');
+                }
                 return statusMatch && monthMatch && yearMatch && catMatch;
             });
 
