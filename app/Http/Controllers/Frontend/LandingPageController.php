@@ -66,9 +66,6 @@ class LandingPageController extends Controller
 
     public function tenantData($cat = "new store", $isNew)
     {
-        // Debugging gate data
-        \Illuminate\Support\Facades\Log::info("LandingPageController::tenantData - Requested: $cat, isNew: $isNew");
-
         $tenants = $this->tenantService->getDataByFloor(
             ['id', 'name', 'map_coords', 'category_id', 'logo', 'isNew', 'type', 'path_coords'],
             [
@@ -80,13 +77,6 @@ class LandingPageController extends Controller
         );
 
         $tenants = $tenants->sortBy('name')->values();
-
-        // Log gate count
-        $gateCount = $tenants->where('type', 'gate')->count();
-        \Illuminate\Support\Facades\Log::info("LandingPageController::tenantData - Returning " . $tenants->count() . " tenants, Gates found: " . $gateCount);
-        if ($gateCount > 0) {
-            \Illuminate\Support\Facades\Log::info("LandingPageController::tenantData - Gates detail: " . json_encode($tenants->where('type', 'gate')->all()));
-        }
 
         return response()->json($tenants);
     }
@@ -127,7 +117,7 @@ class LandingPageController extends Controller
 
             return [
                 'name' => $data->name,
-                'category' => $data->category->name,
+                'category' => $data->category->name ?? 'Gate',
                 'floor' => $data->map_coords['floor'] == 1 ? '1st Floor' : '2nd Floor',
                 'floor_id' => $data->map_coords['floor'],
                 'unit' => $data->map_coords['unit'] ?? '-',
@@ -172,44 +162,20 @@ class LandingPageController extends Controller
                 ->values()
                 ->all();
 
-            $dateStr = '';
-            if ($data->type === 'regular') {
-                $dateStr = $data->recurring_label ?: 'Every Weekend';
-            } else {
-                if ($data->start_date) {
-                    $dateStr = date('d M Y', strtotime($data->start_date));
-                    if ($data->end_date && $data->start_date != $data->end_date) {
-                        $dateStr = date('d M', strtotime($data->start_date)) . ' - ' . date('d M Y', strtotime($data->end_date));
-                    }
-                } else {
-                    $dateStr = $data->recurring_label ?: 'All Day';
-                }
-            }
-
-            $typeLabels = [
-                'regular'    => 'Regular Show',
-                'special'    => 'Special Event',
-                'exhibition' => 'Exhibition',
-                'upcoming'   => 'Upcoming Event',
-            ];
-
             return [
                 'name' => $data->name,
-                'uuid' => $data->uuid,
-                'date' => $dateStr,
-                'location' => $data->location ?: 'Mal Bali Galeria',
-                'description' => $data->description,
-                'highlights' => $data->highlights ?: '-',
+                'type' => $data->type,
+                'date' => $data->start_date == $data->end_date ? date('d M Y', strtotime($data->start_date)) : date('d M', strtotime($data->start_date)) . ' - ' . date('d M Y', strtotime($data->end_date)),
+                'start_date' => $data->start_date,
                 'start_time' => $data->start_time,
                 'end_time' => $data->end_time,
+                'description' => $data->description,
+                'location' => $data->location,
+                'recurring_label' => $data->recurring_label,
+                'highlights' => $data->highlights,
                 'images' => !empty($photos) ? $photos : [asset('assets/images/no_image.jpg')],
-                'type' => $typeLabels[$data->type] ?? 'Event',
             ];
         });
-
-        if ($event->isEmpty()) {
-            return response()->json(['error' => 'Event not found'], 404);
-        }
 
         return response()->json($event[0]);
     }

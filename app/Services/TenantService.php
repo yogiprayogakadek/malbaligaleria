@@ -170,7 +170,7 @@ class TenantService
             $data = [
                 'id' => $tenant->id,
                 'name' => $tenant->name,
-                'category' => $tenant->category->name,
+                'category' => $tenant->category->name ?? 'Gate',
                 'floor' => $tenant->isNew
                     ? 'New Store'
                     : (
