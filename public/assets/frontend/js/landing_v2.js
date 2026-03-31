@@ -975,9 +975,20 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
                             </div>
                             <div class="meta-item">
                                 <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <polyline points="12 6 12 12 16 14"/>
+                                    <circle cx="12" cy="12" r="10">
+                                    </circle>
                                 </svg>
+                                <div class="modal-map-wrapper">
+                            <img src="" id="modalFloorMap" alt="Floor Map">
+                            
+                            <!-- Path Overlay (Dynamic ViewBox) -->
+                            <svg id="modalMapPathOverlay" preserveAspectRatio="none" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index: 5;">
+                                <defs>
+                                    <marker id="modal-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#FF0000" />
+                                    </marker>
+                                </defs>
+                            </svg>
                                 <span>${tenant.hours}</span>
                             </div>
                         </div>
@@ -1871,6 +1882,15 @@ function renderModalMap(data) {
             const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
             const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
 
+            // Sync SVG ViewBox with Map Image size
+            const pathOverlay = document.getElementById("modalMapPathOverlay");
+            if (pathOverlay) {
+                pathOverlay.setAttribute("viewBox", `0 0 ${mapWidth} ${mapHeight}`);
+                // Clear old paths
+                const oldPaths = pathOverlay.querySelectorAll(".modal-map-path");
+                oldPaths.forEach(p => p.remove());
+            }
+
             const xPos = (data.x / mapWidth) * 100;
             const yPos = (data.y / mapHeight) * 100;
 
@@ -1883,15 +1903,9 @@ function renderModalMap(data) {
             // --- MINIMALIST MULTI-GATE RENDERING & PATH ---
             const gatesContainer = document.getElementById("modalMapGatesContainer");
             const gateTemplate = document.getElementById("modalMapGateMarkerTemplate");
-            const pathOverlay = document.getElementById("modalMapPathOverlay");
             
             if (gatesContainer && gateTemplate) {
                 gatesContainer.innerHTML = ""; 
-                if (pathOverlay) {
-                    // Clear old paths
-                    const oldPaths = pathOverlay.querySelectorAll(".modal-map-path");
-                    oldPaths.forEach(p => p.remove());
-                }
 
                 // Get gates & paths
                 let gatesData = data.gate_coords || (data.map_coords ? data.map_coords.gate_coords : null);
@@ -1909,13 +1923,13 @@ function renderModalMap(data) {
 
                 if (Array.isArray(gatesData)) {
                     gatesData.forEach(gate => {
-                        const x = gate.x || gate.px;
-                        const y = gate.y || gate.py;
-                        if (x && y && x !== '-') {
+                        const gx = gate.x || gate.px;
+                        const gy = gate.y || gate.py;
+                        if (gx && gy && gx !== '-') {
                             const gatePin = gateTemplate.cloneNode(true);
                             gatePin.id = ""; gatePin.style.display = "block";
-                            gatePin.style.left = `${(x / mapWidth) * 100}%`;
-                            gatePin.style.top = `${(y / mapHeight) * 100}%`;
+                            gatePin.style.left = `${(gx / mapWidth) * 100}%`;
+                            gatePin.style.top = `${(gy / mapHeight) * 100}%`;
                             const label = gatePin.querySelector(".gate-label");
                             if (label) label.textContent = gate.name || "Entrance";
                             gatesContainer.appendChild(gatePin);
@@ -1931,9 +1945,9 @@ function renderModalMap(data) {
                     
                     let points = "";
                     pathData.forEach(pt => {
-                        const px = (parseFloat(pt.px || pt.x) / mapWidth) * 100;
-                        const py = (parseFloat(pt.py || pt.y) / mapHeight) * 100;
-                        points += `${px},${py} `;
+                        const px = parseFloat(pt.px || pt.x);
+                        const py = parseFloat(pt.py || pt.y);
+                        if (!isNaN(px) && !isNaN(py)) points += `${px},${py} `;
                     });
                     
                     polyline.setAttribute("points", points.trim());
