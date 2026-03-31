@@ -2600,8 +2600,8 @@ body.dark-mode .map-gate-label {
     }
 
     .map-pin-logo {
-        width: 14px !important; /* Mobile size requested 14px */
-        height: 14px !important;
+        width: 30px !important; /* Mobile size requested 30px */
+        height: 30px !important;
         border-radius: 50% 50% 50% 0 !important; /* Force Teardrop shape on mobile */
         border-width: 1.5px !important;
         transform: rotate(-45deg) translate(0, -50%) !important;
