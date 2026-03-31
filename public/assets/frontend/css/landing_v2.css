@@ -2430,6 +2430,7 @@ body.dark-mode .regular-show-card {
         flex-wrap: nowrap !important;
         gap: 0 !important;
         overflow-x: hidden !important;
+        touch-action: pan-y !important;
     }
 
     .regular-shows-grid .regular-show-card {
