@@ -280,7 +280,7 @@
             </div>
 
             <div class="experience-cards">
-                <a href="{{ route('frontend.event.index') }}" class="experience-card events">
+                <a href="#regular-shows" class="experience-card events">
                     <div class="experience-card-content">
                         <div class="experience-card-title">
                             <h4>Events</h4>
