@@ -739,7 +739,11 @@ function filterTenants() {
             !combinedSearch ||
             tenant.name.toLowerCase().includes(combinedSearch) ||
             tenant.category.toLowerCase().includes(combinedSearch);
-        const matchesFloor = !selectedFloor || tenant.floor === selectedFloor;
+        
+        // In Map View with a search term, we ignore the floor filter to allow finding stores on other floors
+        const isMapSearch = currentView === 'map' && combinedSearch.length > 0;
+        const matchesFloor = (isMapSearch || !selectedFloor) || tenant.floor === selectedFloor;
+        
         const matchesCategory =
             !selectedCategory || tenant.category === selectedCategory;
 
@@ -775,7 +779,7 @@ function filterTenants() {
 
     renderTenants(filtered);
 
-    // Clear previous timer
+    // Clear previous timer if count changed or search cleared
     if (autoShowModalTimer) {
         clearTimeout(autoShowModalTimer);
         autoShowModalTimer = null;
@@ -783,10 +787,24 @@ function filterTenants() {
 
     // Auto-show modal if only 1 result AND search term is not empty
     if (filtered.length === 1 && combinedSearch && combinedSearch.length > 0) {
+        const targetTenant = filtered[0];
+        const capturedSearch = combinedSearch; // Closure for comparison
+
         autoShowModalTimer = setTimeout(() => {
-            showTenantModal(filtered[0]);
+            // Re-verify search term hasn't changed or cleared in the 1.5s delay
+            const currentSearch = (document.getElementById("searchInput")?.value || 
+                                 document.getElementById("headerSearch")?.value || 
+                                 document.getElementById("sidebarSearch")?.value || "").toLowerCase();
+            
+            if (currentSearch === capturedSearch) {
+                // If on different floor in Map View, auto-switch
+                if (currentView === 'map' && targetTenant.floor !== (currentFloorMap === 'floor1' ? '1st Floor' : '2nd Floor')) {
+                    changeFloor(targetTenant.floor);
+                }
+                showTenantModal(targetTenant);
+            }
             autoShowModalTimer = null;
-        }, 1500); // Wait 1.5 seconds after last keystroke
+        }, 1500); 
     }
 
     // Update tenant count per floor
