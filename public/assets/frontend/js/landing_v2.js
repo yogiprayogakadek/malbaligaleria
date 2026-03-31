@@ -865,12 +865,14 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
     let tenantData = [];
     
     if (floor === "Favorites") {
-        const favoriteUnits = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
+        const favoriteUnits = JSON.parse(localStorage.getItem('mall_favorites') || '[]')
+                                  .map(u => u.trim());
         // We need all tenants to filter by unit. If cache is not loaded, we have to fetch or wait.
         if (!allTenantsCache.loaded) {
             await fetchAllTenantsForSearch();
         }
-        tenantData = [...allTenantsCache["1st Floor"], ...allTenantsCache["2nd Floor"]].filter(t => favoriteUnits.includes(t.unit));
+        tenantData = [...allTenantsCache["1st Floor"], ...allTenantsCache["2nd Floor"]]
+                        .filter(t => favoriteUnits.includes(t.unit.trim()));
     } else if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
         tenantData = allTenantsCache[floor];
     } else {
@@ -1309,6 +1311,12 @@ function updateModalContent(data) {
     const hoursEl = document.getElementById("modalHours");
     if (hoursEl) hoursEl.textContent = data.hours;
 
+    // Set data-unit for favorite button synchronization
+    const modalFavBtn = document.getElementById("modalFavoriteBtn");
+    if (modalFavBtn) {
+        modalFavBtn.setAttribute("data-unit", data.unit || "");
+    }
+
     // Set logo in modal header ONLY if tenant has album photos
     const modalLogo = document.getElementById("modalLogo");
     if (modalLogo) {
@@ -1353,7 +1361,10 @@ function updateModalContent(data) {
     if (modalFavBtn) {
         // Load favorites from localStorage (using mall_favorites key and units for parity)
         let favorites = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
-        const isFavorited = favorites.includes(data.unit);
+        
+        // Ensure accurate comparison (trimmed, consistent casing)
+        const currentUnit = (data.unit || "").trim();
+        const isFavorited = favorites.some(fav => fav.trim() === currentUnit);
         
         if (isFavorited) {
             modalFavBtn.classList.add("active");
@@ -1367,16 +1378,17 @@ function updateModalContent(data) {
         newFavBtn.addEventListener("click", () => {
             const isActive = newFavBtn.classList.toggle("active");
             let favs = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
+            const currentUnit = (data.unit || "").trim();
             
             if (isActive) {
                 // Add to favorites (store only unit for parity)
-                if (!favs.includes(data.unit)) {
-                    favs.push(data.unit);
+                if (!favs.some(fav => fav.trim() === currentUnit)) {
+                    favs.push(currentUnit);
                 }
                 showToast("Added to favorites ❤️", "success");
             } else {
                 // Remove from favorites
-                favs = favs.filter(unit => unit != data.unit);
+                favs = favs.filter(unit => unit.trim() !== currentUnit);
                 showToast("Removed from favorites", "success");
                 
                 // If we are currently on the Favorites floor, refresh the grid
