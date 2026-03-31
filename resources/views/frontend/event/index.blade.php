@@ -735,28 +735,6 @@
             };
         }
 
-        // ===== EVENT MODAL SHARE =====
-        const eventShareBtn = document.getElementById('eventModalShareBtn');
-        if (eventShareBtn) {
-            eventShareBtn.addEventListener('click', () => {
-                if (typeof window.currentEventUuid !== 'undefined' && window.currentEventUuid) {
-                    const shareUrl = `${window.location.origin}${window.location.pathname}?id=${window.currentEventUuid}`;
-                    const eventTitle = document.getElementById('eventModalTitle')?.textContent || 'Event at Mal Bali Galeria';
-                    
-                    if (navigator.share) {
-                        navigator.share({
-                            title: eventTitle,
-                            text: `Check out this event at Mal Bali Galeria!`,
-                            url: shareUrl
-                        }).catch(() => {
-                            if (typeof copyToClipboard === 'function') copyToClipboard(shareUrl);
-                        });
-                    } else {
-                        if (typeof copyToClipboard === 'function') copyToClipboard(shareUrl);
-                    }
-                }
-            });
-        }
 
         }); // End DOMContentLoaded
 
@@ -804,6 +782,37 @@
         }
     </script>
     <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
+    <script>
+        // Event Modal Share - Defined after landing_v2.js to ensure dependencies exist
+        document.addEventListener('DOMContentLoaded', () => {
+            const eventShareBtn = document.getElementById('eventModalShareBtn');
+            if (eventShareBtn) {
+                eventShareBtn.addEventListener('click', () => {
+                    // Use the global currentEventUuid from landing_v2.js
+                    if (typeof window.currentEventUuid !== 'undefined' && window.currentEventUuid) {
+                        const shareUrl = `${window.location.origin}${window.location.pathname}?id=${window.currentEventUuid}`;
+                        const eventTitle = document.getElementById('eventModalTitle')?.textContent || 'Event at Mal Bali Galeria';
+                        
+                        if (navigator.share) {
+                            navigator.share({
+                                title: eventTitle,
+                                text: `Check out this event at Mal Bali Galeria!`,
+                                url: shareUrl
+                            }).catch(() => {
+                                if (typeof window.copyToClipboard === 'function') {
+                                    window.copyToClipboard(shareUrl);
+                                }
+                            });
+                        } else {
+                            if (typeof window.copyToClipboard === 'function') {
+                                window.copyToClipboard(shareUrl);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
     {{-- Sticky Mobile CTA Bar --}}
     <div class="dir-mobile-sticky-cta" id="eventMobileStickyBar">
         <a href="{{ route('frontend.landing') }}" class="dir-mobile-cta-btn">
