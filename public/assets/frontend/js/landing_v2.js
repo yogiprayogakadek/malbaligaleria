@@ -1266,6 +1266,7 @@ async function openTenantModal(tenant_id) {
         if (gridLogo) {
             // Show modal immediately with fallback data
             const fallbackData = {
+                id: tenant_id,
                 name: gridCard.querySelector('h3')?.textContent || "Loading...",
                 logo: gridLogo,
                 floor: gridCard.querySelector('.floor-badge')?.textContent || "-",
@@ -1284,8 +1285,10 @@ async function openTenantModal(tenant_id) {
         if (loadingIndicator) loadingIndicator.classList.add("active");
 
         // Fetch full data
-        tenantData = await getDataByTenantId(tenant_id);
-        if (tenantData) {
+        const fetchedData = await getDataByTenantId(tenant_id);
+        if (fetchedData) {
+            // Ensure ID is present in fetched data for sharing
+            tenantData = { ...fetchedData, id: tenant_id };
             tenantCache[tenant_id] = tenantData;
             updateModalContent(tenantData);
         }
