@@ -1311,12 +1311,6 @@ function updateModalContent(data) {
     const hoursEl = document.getElementById("modalHours");
     if (hoursEl) hoursEl.textContent = data.hours;
 
-    // Set data-unit for favorite button synchronization
-    const modalFavBtn = document.getElementById("modalFavoriteBtn");
-    if (modalFavBtn) {
-        modalFavBtn.setAttribute("data-unit", data.unit || "");
-    }
-
     // Set logo in modal header ONLY if tenant has album photos
     const modalLogo = document.getElementById("modalLogo");
     if (modalLogo) {
@@ -1359,6 +1353,8 @@ function updateModalContent(data) {
     // Action button listeners
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
     if (modalFavBtn) {
+        modalFavBtn.setAttribute("data-unit", data.unit || "");
+        
         // Load favorites from localStorage (using mall_favorites key and units for parity)
         let favorites = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
         
