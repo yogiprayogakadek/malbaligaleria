@@ -1,10 +1,4 @@
 
-// Helper to safely get nested data (replicates PHP data_get)
-function data_get(obj, path, defaultVal = null) {
-    if (!obj || !path) return defaultVal;
-    return path.split('.').reduce((o, i) => (o && o[i] !== undefined ? o[i] : defaultVal), obj);
-}
-
 (function() {
     const pageLoader = document.getElementById("pageLoader");
     if (!pageLoader) return;
@@ -894,19 +888,8 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
 
     grid.innerHTML = "";
 
-    // Filter by floor or search
+    // Data is already filtered by floor from backend/cache
     let filtered = tenantData;
-
-    // Filter by floor if not Favorites
-    if (floor !== "Favorites") {
-        const floorNumber = floor.includes("1st") ? "1" : (floor.includes("2nd") ? "2" : null);
-        if (floorNumber && !isNew) {
-            filtered = filtered.filter(t => 
-                data_get(t, 'map_coords.floor') == floorNumber || 
-                (t.type === 'gate' && data_get(t, 'map_coords.floor') == floorNumber)
-            );
-        }
-    }
 
     if (searchQuery) {
         const query = searchQuery.toLowerCase();

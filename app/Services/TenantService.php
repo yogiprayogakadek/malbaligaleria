@@ -156,7 +156,17 @@ class TenantService
     {
         $query = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew);
 
-        // No longer filtering by floor in PHP to allow all tenants to be available for map gates
+        // Filter by floor and include gates for map rendering
+        if (!$isNew) {
+            $floorNumber = str_contains($cat, '1st') ? '1' : (str_contains($cat, '2nd') ? '2' : null);
+            if ($floorNumber) {
+                $query = $query->filter(function ($tenant) use ($floorNumber) {
+                    $tenantFloor = data_get($tenant, 'map_coords.floor');
+                    // Return if matches floor OR if it's a gate on this floor
+                    return $tenantFloor == $floorNumber;
+                });
+            }
+        }
 
         $tenants = $query->map(function ($tenant) {
             $data = [
