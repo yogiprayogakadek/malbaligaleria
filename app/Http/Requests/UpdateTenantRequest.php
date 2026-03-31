@@ -38,7 +38,7 @@ class UpdateTenantRequest extends FormRequest
                         ->where('id', '!=', $tenantId) // Exclude current record
                         ->where(function ($query) use ($type, $floor) {
                             if ($type === 'gate') {
-                                $query->where('type', 'gate')->where('floor', $floor);
+                                $query->where('type', 'gate')->where('map_coords->floor', $floor);
                             } else {
                                 $query->whereIn('type', ['tenant', 'island']);
                             }

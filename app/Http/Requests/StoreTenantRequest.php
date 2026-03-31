@@ -35,8 +35,8 @@ class StoreTenantRequest extends FormRequest
                     $exists = \App\Models\Tenant::where('name', $value)
                         ->where(function ($query) use ($type, $floor) {
                             if ($type === 'gate') {
-                                // For gates, only fail if it's the SAME floor
-                                $query->where('type', 'gate')->where('floor', $floor);
+                                // For gates, only fail if it's the SAME floor (stored in map_coords JSON)
+                                $query->where('type', 'gate')->where('map_coords->floor', $floor);
                             } else {
                                 // For others, fail if name exists as tenant/island anywhere
                                 $query->whereIn('type', ['tenant', 'island']);
