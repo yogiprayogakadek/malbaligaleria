@@ -608,13 +608,20 @@ body.dark-mode .events-count-badge {
 
 .events-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
+    grid-template-columns: repeat(4, 100%);
+    gap: 20px;
     min-width: 0;
     width: 100%;
     max-width: 100%;
     justify-content: start !important;
     box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 1201px) {
+    .events-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 /* ===== EVENT CARD ===== */
@@ -1136,7 +1143,21 @@ body.dark-mode .mobile-cta-btn svg {
 }
 @media (max-width: 576px) {
     .events-grid {
-        grid-template-columns: 1fr;
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 0 !important;
+        padding-bottom: 20px;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    .events-grid::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+    .event-card-v2 {
+        flex: 0 0 100% !important;
+        scroll-snap-align: start !important;
+        padding: 0 5px;
     }
     .events-main {
         padding: 30px 16px 80px;
@@ -1211,6 +1232,37 @@ body.dark-mode .mobile-cta-btn svg {
         width: 46px;
         height: 46px;
     }
+
+    /* Carousel Nav Buttons for mobile */
+    .events-carousel-container {
+        position: relative;
+    }
+    .events-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        cursor: pointer;
+        opacity: 0.8;
+        transition: all 0.3s ease;
+    }
+    body.dark-mode .events-nav-btn {
+        background: rgba(26, 31, 30, 0.9);
+        color: white;
+    }
+    .events-nav-btn.prev { left: -10px; }
+    .events-nav-btn.next { right: -10px; }
+    .events-nav-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+    .events-nav-btn svg { width: 20px; height: 20px; }
 }
 
 /* ============================================================

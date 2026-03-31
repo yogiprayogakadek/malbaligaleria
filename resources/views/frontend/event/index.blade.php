@@ -160,6 +160,10 @@
 
         <!-- Events Grid -->
         <div class="events-main">
+            <div class="events-section-label">
+                <h2>All Events</h2>
+                <div class="divider"></div>
+                <span class="events-count-badge" id="eventsShownCount">{{ count($events) }} Events</span>
             </div>
             
             {{-- Status/Category filter --}}
@@ -181,7 +185,18 @@
             </div>
 
 
-            <div class="events-grid" id="eventsGrid">
+            <div class="events-carousel-container">
+                <button class="events-nav-btn prev" id="eventsPrevBtn" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                </button>
+                <button class="events-nav-btn next" id="eventsNextBtn" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </button>
+                <div class="events-grid" id="eventsGrid">
                 @foreach ($events->whereIn('type', ['regular', 'special']) as $index => $event)
                     @php
                         $startDate = $event->start_date;
@@ -295,6 +310,7 @@
                     </a>
                 @endforeach
             </div>
+        </div>
 
         </div>
     </main>
@@ -642,6 +658,49 @@
 
         // Initial run
         applyFilters();
+
+        // ===== CAROUSEL NAVIGATION =====
+        const eventsGrid = document.getElementById('eventsGrid');
+        const prevBtn = document.getElementById('eventsPrevBtn');
+        const nextBtn = document.getElementById('eventsNextBtn');
+
+        if (eventsGrid && prevBtn && nextBtn) {
+            const updateNavButtons = () => {
+                const isMobile = window.innerWidth <= 768;
+                if (!isMobile) {
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    return;
+                }
+
+                const scrollLeft = eventsGrid.scrollLeft;
+                const maxScroll = eventsGrid.scrollWidth - eventsGrid.clientWidth;
+                
+                prevBtn.style.display = scrollLeft > 10 ? 'flex' : 'none';
+                nextBtn.style.display = scrollLeft < maxScroll - 10 ? 'flex' : 'none';
+            };
+
+            eventsGrid.addEventListener('scroll', updateNavButtons);
+            window.addEventListener('resize', updateNavButtons);
+            
+            // Check after a short delay since cards might be revealed via animation
+            setTimeout(updateNavButtons, 500);
+
+            prevBtn.addEventListener('click', () => {
+                eventsGrid.scrollBy({ left: -eventsGrid.clientWidth, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                eventsGrid.scrollBy({ left: eventsGrid.clientWidth, behavior: 'smooth' });
+            });
+            
+            // Re-check buttons after any filter application
+            const originalApplyFilters = window.applyFilters;
+            window.applyFilters = function() {
+                originalApplyFilters();
+                setTimeout(updateNavButtons, 300);
+            };
+        }
 
         }); // End DOMContentLoaded
 
