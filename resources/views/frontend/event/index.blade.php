@@ -31,7 +31,8 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <style>
         .events-filter-toolbar {
-            display: none !important;
+            justify-content: flex-end;
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -159,10 +160,24 @@
 
         <!-- Events Grid -->
         <div class="events-main">
-            <div class="events-section-label">
-                <h2>What's Happening</h2>
-                <div class="divider"></div>
-                <span class="events-count-badge" id="eventsShownCount">{{ count($events) }} Events</span>
+            </div>
+            
+            {{-- Status/Category filter --}}
+            <div class="events-filter-toolbar">
+                <div class="events-filter-right">
+                    <div style="display: flex; gap: 10px;">
+                        <select class="events-sort-select" id="eventsCategory">
+                            <option value="all">All Types</option>
+                            <option value="regular">Regular Shows</option>
+                            <option value="special">Special Events</option>
+                        </select>
+                        <select class="events-sort-select" id="eventsSort">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="name_asc">A–Z</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
 
@@ -588,36 +603,90 @@
             }
         }
 
-        // Run menu init
+        // Init
         initMenu();
-        document.addEventListener('DOMContentLoaded', initMenu);
 
-        // ===== DARK MODE =====
+        // Dark mode
         const darkModeToggle = document.getElementById("darkModeToggle");
         if (localStorage.getItem("darkMode") === "enabled") document.body.classList.add("dark-mode");
         darkModeToggle.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
             document.body.classList.toggle("dark-mode");
-            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" :
-                "disabled");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
         });
 
-        // ===== #10: SCROLL TO TOP =====
+        // Scroll top
         const scrollTopBtn = document.getElementById("scrollToTop");
         window.addEventListener("scroll", () => {
-            const stBtn = document.getElementById("scrollToTop");
-            if (stBtn) {
-                stBtn.classList.toggle("visible", window.scrollY > 400);
-            }
+            if (scrollTopBtn) scrollTopBtn.classList.toggle("visible", window.scrollY > 400);
         });
-        if (scrollTopBtn) {
-            scrollTopBtn.addEventListener("click", () => window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            }));
+
+        // Filter engine
+        window.activeCategory = 'all';
+        window.activeSort = 'newest';
+
+        const catSelect = document.getElementById('eventsCategory');
+        if (catSelect) {
+            catSelect.addEventListener('change', () => {
+                window.activeCategory = catSelect.value;
+                applyFilters();
+            });
         }
 
+        const sortSelect = document.getElementById('eventsSort');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', () => {
+                window.activeSort = sortSelect.value;
+                applyFilters();
+            });
+        }
+
+        // Initial run
+        applyFilters();
+
+        }); // End DOMContentLoaded
+
+        function applyFilters() {
+            const grid = document.getElementById('eventsGrid');
+            const allCards = [...document.querySelectorAll('.event-card-v2')];
+            
+            let visible = allCards.filter(card => {
+                const targetCat = (window.activeCategory || 'all').toLowerCase();
+                const cardTypeAttr = (card.dataset.eventType || '').toLowerCase();
+                
+                let catMatch = targetCat === 'all' || cardTypeAttr.includes(targetCat);
+                return catMatch;
+            });
+
+            // Sort
+            visible.sort((a, b) => {
+                const sortVal = window.activeSort || 'newest';
+                const dateA = a.dataset.date || '';
+                const dateB = b.dataset.date || '';
+                const nameA = a.dataset.name || '';
+                const nameB = b.dataset.name || '';
+                if (sortVal === 'newest') return dateB.localeCompare(dateA);
+                if (sortVal === 'oldest') return dateA.localeCompare(dateB);
+                if (sortVal === 'name_asc') return nameA.localeCompare(nameB);
+                return 0;
+            });
+
+            // Hide all
+            allCards.forEach(c => {
+                c.style.display = 'none';
+                c.classList.remove('event-reveal');
+            });
+
+            // Show visible
+            visible.forEach((card, i) => {
+                card.style.display = '';
+                card.style.animationDelay = (i * 0.05) + 's';
+                card.classList.add('event-reveal');
+            });
+
+            // Update count
+            const countEl = document.getElementById('eventsShownCount');
+            if (countEl) countEl.textContent = `${visible.length} Events`;
+        }
     </script>
     <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
     {{-- Sticky Mobile CTA Bar --}}
