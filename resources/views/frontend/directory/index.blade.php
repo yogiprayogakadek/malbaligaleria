@@ -4,21 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tenant Directory | Mal Bali Galeria</title>
+    <title>Tenant List | Mal Bali Galeria</title>
     <meta name="description"
         content="Explore our collection of premium brands and stores at Mal Bali Galeria. Find your favorite shops across all levels.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="Tenant Directory | Mal Bali Galeria">
+    <meta property="og:title" content="Tenant List | Mal Bali Galeria">
     <meta property="og:description" content="Explore our collection of premium brands and stores at Mal Bali Galeria.">
     <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="Tenant Directory | Mal Bali Galeria">
+    <meta property="twitter:title" content="Tenant List | Mal Bali Galeria">
     <meta property="twitter:description"
         content="Explore our collection of premium brands and stores at Mal Bali Galeria.">
     <meta property="twitter:image" content="{{ asset('assets/images/logo.png') }}">
@@ -63,6 +63,8 @@
                     <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image"
                         onerror="this.style.display='none'">
                 </div>
+                <h1>Mal Bali Galeria</h1>
+                <span>Enjoy, Play, Eat, Shop</span>
             </div>
             <div class="loader-spinner">
                 <div class="spinner-ring"></div>
@@ -179,7 +181,7 @@
         <div class="directory-hero-banner">
             <div class="directory-hero-content">
                 <span class="directory-hero-eyebrow">Mal Bali Galeria</span>
-                <h1 class="directory-hero-title">Tenant Directory</h1>
+                <h1 class="directory-hero-title">Tenant List</h1>
                 <p class="directory-hero-subtitle">Discover our collection of premium brands and stores across all
                     levels</p>
                 <a href="{{ route('frontend.landing') }}" class="directory-hero-back">
