@@ -447,8 +447,12 @@
 
 
     {{-- #10: Scroll to top --}}
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to Top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="19" x2="12" y2="5" />
+            <polyline points="5 12 12 5 19 12" />
+        </svg>
     </button>
-    
     {{-- ===== EVENT DETAIL MODAL ===== --}}
     <div class="event-detail-modal" id="eventDetailModal">
         <div class="event-modal-overlay" id="eventModalOverlay" onclick="closeEventModal()"></div>
@@ -603,39 +607,32 @@
         window.addEventListener("load", () => {
             let remaining = Math.max(0, 2500 - (Date.now() - loadStartTime));
             setTimeout(() => {
-                pageLoader.classList.add("hidden");
-                document.body.classList.add("loaded");
-                setTimeout(() => pageLoader.style.display = "none", 500);
+                if (pageLoader) {
+                    pageLoader.classList.add("hidden");
+                    document.body.classList.add("loaded");
+                    setTimeout(() => pageLoader.style.display = "none", 500);
+                }
             }, remaining);
         });
-        setTimeout(() => {
-            if (!document.body.classList.contains("loaded")) {
-                pageLoader.classList.add("hidden");
-                document.body.classList.add("loaded");
-                setTimeout(() => pageLoader.style.display = "none", 500);
-            }
-        }, 5000);
 
-        // ===== HEADER SCROLL (minimal - just for future use) =====
-        const header = document.getElementById("mainHeader");
-
-        // Ensure everything is ready
+        // ===== SIDEBAR / MENU =====
         const menuBtn = document.getElementById("menuBtn");
         const sidebar = document.getElementById("sidebar");
         const sidebarClose = document.getElementById("sidebarClose");
 
         if (menuBtn && sidebar && sidebarClose) {
-            // ===== SIDEBAR =====
             menuBtn.addEventListener("click", () => {
                 menuBtn.classList.toggle("active");
                 sidebar.classList.toggle("active");
                 document.body.classList.toggle("menu-open");
             });
+
             sidebarClose.addEventListener("click", () => {
                 menuBtn.classList.remove("active");
                 sidebar.classList.remove("active");
                 document.body.classList.remove("menu-open");
             });
+
             sidebar.querySelectorAll("a").forEach(link => {
                 link.addEventListener("click", () => {
                     menuBtn.classList.remove("active");
