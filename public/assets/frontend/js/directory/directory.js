@@ -433,8 +433,8 @@ function shareStore(platform) {
     const url =
         window.location.origin +
         window.location.pathname +
-        "?store=" +
-        encodeURIComponent(currentShareData.unit);
+        "?id=" +
+        encodeURIComponent(currentShareData.id || currentShareData.unit);
     const text = `Check out ${currentShareData.name} at Mall Bali Galeria!`;
 
     switch (platform) {
@@ -2882,6 +2882,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // Show subtle toast so user knows search was applied
                     showToast(`Showing results for "${urlSearch.trim()}"`, 'info', 2500);
                 }
+            }
+
+            // ===== DEEP LINKING: Auto-open tenant modal from URL =====
+            const targetStoreId = urlParams.get('id') || urlParams.get('store');
+            if (targetStoreId) {
+                setTimeout(() => {
+                    const targetTenant = tenants.find(t => 
+                        String(t.id) === String(targetStoreId) || 
+                        String(t.unit) === String(targetStoreId)
+                    );
+                    if (targetTenant) {
+                        showTenantModal(targetTenant);
+                    }
+                }, 1000);
             }
 
             // Default view: start with list view (not map) to avoid placeholder

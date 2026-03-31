@@ -104,6 +104,11 @@
             overflow: auto;
             -webkit-overflow-scrolling: touch;
         }
+
+        /* Fixed Mobile CTA Bar Z-Index and Links */
+        .dir-mobile-sticky-cta {
+            z-index: 9999 !important;
+        }
     </style>
 </head>
 
@@ -510,7 +515,7 @@
             </button>
 
 
-            <button class="share-btn" style="display: none" id="modalShareBtn" title="Share Store">
+            <button class="share-btn" id="modalShareBtn" title="Share Store">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="18" cy="5" r="3" />
                     <circle cx="6" cy="12" r="3" />
@@ -853,6 +858,15 @@
                 <line x1="7" y1="7" x2="7.01" y2="7" />
             </svg>
             <span>Promo</span>
+        </a>
+        <a href="{{ route('frontend.directory.index') }}" class="dir-mobile-cta-btn admin-theme">
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Store</span>
         </a>
         <a href="tel:+62361755277" class="dir-mobile-cta-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
