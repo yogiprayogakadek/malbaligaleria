@@ -1934,20 +1934,33 @@ async function drawGates(floorId) {
     const mapWrapper = document.querySelector(".modal-map-wrapper");
     if (!mapWrapper) return;
 
+    console.log("drawGates - Starting for floorId:", floorId);
+
     // Remove existing gate elements
     const existingSvg = document.getElementById("modalMapGatePaths");
     if (existingSvg) existingSvg.remove();
     mapWrapper.querySelectorAll(".map-gate-label").forEach(l => l.remove());
 
     const floorName = floorId == 2 ? "2nd Floor" : "1st Floor";
+    console.log("drawGates - floorName target:", floorName);
 
     // Ensure cache is loaded
     if (!allTenantsCache.loaded) {
+        console.log("drawGates - Cache not loaded, fetching...");
         await fetchAllTenantsForSearch();
     }
 
-    const gates = allTenantsCache[floorName]?.filter(t => t.type === 'gate') || [];
-    if (gates.length === 0) return;
+    const floorData = allTenantsCache[floorName] || [];
+    const gates = floorData.filter(t => t.type === 'gate');
+    
+    console.log(`drawGates - Found ${gates.length} gates in ${floorData.length} total tenants for ${floorName}`);
+    
+    if (gates.length === 0) {
+        if (floorData.length > 0) {
+            console.log("drawGates - Sample tenant data types:", floorData.slice(0, 3).map(t => ({name: t.name, type: t.type})));
+        }
+        return;
+    }
 
     // Create SVG overlay
     const svgNamespace = "http://www.w3.org/2000/svg";
