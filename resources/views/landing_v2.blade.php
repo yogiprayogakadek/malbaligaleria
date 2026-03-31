@@ -433,7 +433,7 @@
             <p class="event-subtitle">Don't miss out — explore what's coming up at Mal Bali Galeria</p>
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
-                    @forelse ($events->where('type', 'upcoming') as $event)
+                    @forelse ($events as $event)
                         @php
                             $eDateStr = '';
                             if (optional($event)->start_date) {

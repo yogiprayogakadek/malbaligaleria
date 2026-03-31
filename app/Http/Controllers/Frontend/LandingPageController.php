@@ -30,11 +30,20 @@ class LandingPageController extends Controller
             ]
         )->sortBy('name');
 
-        $events = $this->eventService->getEventsWithRelationship(
+        // $events = $this->eventService->getEventsWithRelationship(
+        //     ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'highlights', 'start_time', 'end_time'],
+        //     [
+        //         'primaryPhoto:id,path,caption,event_id,is_primary'
+        //     ]
+        // );
+
+        $events = $this->eventService->getEventsWithRelationshipAndCondition(
             ['id', 'uuid', 'name', 'type', 'start_date', 'end_date', 'description', 'highlights', 'start_time', 'end_time'],
             [
                 'primaryPhoto:id,path,caption,event_id,is_primary'
-            ]
+            ],
+            'type',
+            'upcoming'
         );
 
         $regularEvents = $this->eventService->getRegularEvents(
