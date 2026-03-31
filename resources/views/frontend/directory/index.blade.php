@@ -63,6 +63,40 @@
                 height: 6px !important;
             }
         }
+
+        /* Map Zoom Controls positioning and size adjustment */
+        .map-zoom-controls {
+            right: auto !important;
+            left: 20px !important;
+            gap: 5px !important;
+        }
+
+        .zoom-btn {
+            width: 32px !important;
+            height: 32px !important;
+            padding: 6px !important;
+        }
+
+        .zoom-btn svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+
+        @media (max-width: 768px) {
+            .map-zoom-controls {
+                left: 10px !important;
+                bottom: 20px !important;
+            }
+            .zoom-btn {
+                width: 28px !important;
+                height: 28px !important;
+                padding: 5px !important;
+            }
+            .zoom-btn svg {
+                width: 16px !important;
+                height: 16px !important;
+            }
+        }
     </style>
 </head>
 
