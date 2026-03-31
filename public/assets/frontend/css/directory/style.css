@@ -4258,25 +4258,29 @@ body.dark-mode .share-btn:hover {
     /* Mobile Layout Refactor */
     .filter-row-mobile {
         display: flex;
-        gap: 12px;
-        align-items: center;
+        flex-direction: column;
+        gap: 20px;
         width: 100%;
+        margin-bottom: 25px;
     }
 
     .filter-row-mobile .filter-group {
+        width: 100% !important;
         margin-bottom: 0;
     }
 
-    .filter-row-mobile .filter-group:first-child {
-        width: 35%; /* Shorter for Floor */
-    }
-
+    .filter-row-mobile .filter-group:first-child,
     .filter-row-mobile .filter-group:last-child {
-        width: 65%; /* Longer for Category */
+        width: 100% !important;
     }
 
     .filter-row-mobile label {
-        display: none; /* Hide labels on mobile */
+        display: block; /* Show labels to differentiate stacked inputs */
+        margin-bottom: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #999;
     }
 
     .filter-divider.mobile-hidden {
