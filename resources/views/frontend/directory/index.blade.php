@@ -438,7 +438,7 @@
 
 
     <div class="tenant-modal" id="tenantModal">
-        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-overlay" id="modalOverlay" onclick="closeTenantModal()"></div>
         <div class="modal-container">
 
             <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">

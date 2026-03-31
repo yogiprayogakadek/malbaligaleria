@@ -675,7 +675,7 @@
     </section>
 
     <div class="tenant-modal" id="tenantModal">
-        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-overlay" id="modalOverlay" onclick="closeTenantModal()"></div>
         <div class="modal-container">
 
             <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
@@ -705,7 +705,7 @@
             </button>
 
 
-            <div class="modal-content">
+            <div class="modal-content" data-lenis-prevent>
 
                 <div class="modal-carousel">
 
@@ -835,7 +835,7 @@
 
     {{-- ===== EVENT DETAIL MODAL ===== --}}
     <div class="event-detail-modal" id="eventDetailModal">
-        <div class="event-modal-overlay" id="eventModalOverlay"></div>
+        <div class="event-modal-overlay" id="eventModalOverlay" onclick="closeEventModal()"></div>
         <div class="event-modal-container">
 
             <button class="event-modal-close" id="eventModalCloseBtn" aria-label="Close">
