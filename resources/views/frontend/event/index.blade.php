@@ -220,13 +220,22 @@
                                 ? asset('storage/' . $event->primaryPhoto->path)
                                 : asset('assets/images/no_image.jpg');
 
-                        // Date range if multi-day
+                        // Date range logic
+                        $startDate = $event->start_date;
                         $endDate = $event->end_date ?? null;
-                        $dateRange = $fullDate;
-                        if ($endDate && $endDate !== $startDate) {
-                            $endFmt = date_format(date_create($endDate), 'd M Y');
-                            $dateRange = $fullDate . ' – ' . $endFmt;
+                        
+                        if ($event->type === 'regular') {
+                            // For regular shows, use label
+                            $dateRange = $event->recurring_label ?: 'Regular Event';
+                        } else {
+                            // For special/other events, use date range
+                            $dateRange = $startDate ? date_format(date_create($startDate), 'd M Y') : 'Event';
+                            if ($endDate && $endDate !== $startDate) {
+                                $endFmt = date_format(date_create($endDate), 'd M Y');
+                                $dateRange = date_format(date_create($startDate), 'd M') . ' – ' . $endFmt;
+                            }
                         }
+                        $fullDate = $dateRange;
 
                         // Event status — handle nullable date
                         $today = now()->toDateString();
