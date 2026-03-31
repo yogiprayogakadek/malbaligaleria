@@ -54,6 +54,40 @@
         .lenis.lenis-scrolling iframe {
             pointer-events: none;
         }
+
+        /* Gate Path and Label Styles */
+        .map-gate-path {
+            fill: none;
+            stroke: #FF0000;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.4));
+        }
+
+        .map-gate-label {
+            position: absolute;
+            background: rgba(255, 0, 0, 0.85);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 10;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 768px) {
+            .map-gate-label {
+                font-size: 7px;
+                padding: 1px 4px;
+            }
+        }
     </style>
 </head>
 

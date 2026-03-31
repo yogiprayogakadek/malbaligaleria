@@ -1910,8 +1910,12 @@ function renderModalMap(data) {
         // Otherwise set onload so it fires once the image finishes loading.
         if (floorMapImg.complete && floorMapImg.naturalWidth > 0) {
             positionMarker();
+            drawGates(floorId);
         } else {
-            floorMapImg.onload = positionMarker;
+            floorMapImg.onload = () => {
+                positionMarker();
+                drawGates(floorId);
+            };
         }
     } else {
         console.warn("Missing coordinates:", {
@@ -1922,6 +1926,75 @@ function renderModalMap(data) {
             markerLogo.style.display = "none";
         }
     }
+}
+
+/**
+ * Draws Gate paths and labels on the modal map
+ */
+async function drawGates(floorId) {
+    const mapWrapper = document.querySelector(".modal-map-wrapper");
+    if (!mapWrapper) return;
+
+    // Remove existing gate elements
+    const existingSvg = document.getElementById("modalMapGatePaths");
+    if (existingSvg) existingSvg.remove();
+    mapWrapper.querySelectorAll(".map-gate-label").forEach(l => l.remove());
+
+    const floorName = floorId == 2 ? "2nd Floor" : "1st Floor";
+
+    // Ensure cache is loaded
+    if (!allTenantsCache.loaded) {
+        await fetchAllTenantsForSearch();
+    }
+
+    const gates = allTenantsCache[floorName]?.filter(t => t.type === 'gate') || [];
+    if (gates.length === 0) return;
+
+    // Create SVG overlay
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const svgOverlay = document.createElementNS(svgNamespace, "svg");
+    svgOverlay.id = "modalMapGatePaths";
+    svgOverlay.setAttribute("viewBox", "0 0 100 100");
+    svgOverlay.setAttribute("preserveAspectRatio", "none");
+    svgOverlay.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;";
+    mapWrapper.appendChild(svgOverlay);
+
+    gates.forEach(gate => {
+        let pathCoords = gate.path_coords;
+        if (typeof pathCoords === 'string') {
+            try { pathCoords = JSON.parse(pathCoords); } catch (e) { pathCoords = null; }
+        }
+
+        if (pathCoords && Array.isArray(pathCoords) && pathCoords.length > 1) {
+            // Draw Path
+            const polyline = document.createElementNS(svgNamespace, "polyline");
+            polyline.setAttribute("class", "map-gate-path");
+            polyline.setAttribute("vector-effect", "non-scaling-stroke");
+
+            let pointsStr = "";
+            pathCoords.forEach(pt => {
+                const px = parseFloat(pt.px);
+                const py = parseFloat(pt.py);
+                if (!isNaN(px) && !isNaN(py)) {
+                    pointsStr += `${px},${py} `;
+                }
+            });
+
+            if (pointsStr) {
+                polyline.setAttribute("points", pointsStr.trim());
+                svgOverlay.appendChild(polyline);
+            }
+
+            // Draw Label at last point
+            const lastPt = pathCoords[pathCoords.length - 1];
+            const gateLabel = document.createElement("div");
+            gateLabel.className = "map-gate-label";
+            gateLabel.style.left = lastPt.px + "%";
+            gateLabel.style.top = lastPt.py + "%";
+            gateLabel.textContent = gate.name;
+            mapWrapper.appendChild(gateLabel);
+        }
+    });
 }
 
 // ========================================
