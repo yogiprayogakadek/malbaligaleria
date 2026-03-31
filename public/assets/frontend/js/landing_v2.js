@@ -863,7 +863,10 @@ async function loadTenantsOnDatabase(floor, isNew = false) {
 async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
     // Try to get from cache first for performance
     let tenantData = [];
-    if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
+    
+    if (floor === "Favorites") {
+        tenantData = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+    } else if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
         tenantData = allTenantsCache[floor];
     } else {
         tenantData = await loadTenantsOnDatabase(floor, isNew);
@@ -979,6 +982,9 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (floorText.includes("New Store")) {
                 targetFloor = "New Store";
                 isNew = true;
+            } else if (floorText.includes("Favorites")) {
+                renderLandingTenants("Favorites");
+                return;
             } else if (floorText.includes("All Floor")){
                 window.location.href = "/directory";
             }
@@ -1340,12 +1346,50 @@ function updateModalContent(data) {
     // Action button listeners
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
     if (modalFavBtn) {
-        modalFavBtn.classList.remove("active");
+        // Load favorites from localStorage
+        let favorites = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+        const isFavorited = favorites.some(f => f.id == data.id);
+        
+        if (isFavorited) {
+            modalFavBtn.classList.add("active");
+        } else {
+            modalFavBtn.classList.remove("active");
+        }
+
         const newFavBtn = modalFavBtn.cloneNode(true);
         modalFavBtn.parentNode.replaceChild(newFavBtn, modalFavBtn);
+        
         newFavBtn.addEventListener("click", () => {
-            newFavBtn.classList.toggle("active");
-            showToast(newFavBtn.classList.contains("active") ? "Added to favorites" : "Removed from favorites", "success");
+            const isActive = newFavBtn.classList.toggle("active");
+            let favs = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+            
+            if (isActive) {
+                // Add to favorites
+                if (!favs.some(f => f.id == data.id)) {
+                    favs.push({
+                        id: data.id,
+                        name: data.name,
+                        logo: data.logo,
+                        floor: data.floor,
+                        category: data.category,
+                        unit: data.unit,
+                        hours: data.hours
+                    });
+                }
+                showToast("Added to favorites", "success");
+            } else {
+                // Remove from favorites
+                favs = favs.filter(f => f.id != data.id);
+                showToast("Removed from favorites", "success");
+                
+                // If we are currently on the Favorites floor, refresh the grid
+                const activeFloor = document.querySelector(".map-floors .floor-item.active h4")?.textContent;
+                if (activeFloor === "Favorites") {
+                    renderLandingTenants("Favorites");
+                }
+            }
+            
+            localStorage.setItem('mbg_favorites', JSON.stringify(favs));
         });
     }
 

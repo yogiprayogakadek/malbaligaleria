@@ -636,6 +636,10 @@
                             <p>Fresh arrivals — fashion, food & island vibes</p>
                         </div>
                         <div class="floor-item">
+                            <h4>Favorites</h4>
+                            <p>Quick access to your saved and most-loved stores</p>
+                        </div>
+                        <div class="floor-item">
                             <h4>All Floor</h4>
                             <p>Explore every tenant across all levels</p>
                         </div>
