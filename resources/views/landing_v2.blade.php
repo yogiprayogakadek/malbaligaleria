@@ -448,7 +448,7 @@
                                 $eDateStr = optional($event)->recurring_label ?: 'Upcoming Event';
                             }
                         @endphp
-                        <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
+                        <div class="event-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($event)->uuid }}"
                             data-event-name="{{ optional($event)->name }}"
                             data-event-date="{{ $eDateStr }}"
@@ -519,7 +519,7 @@
                                 }
                             }
                         @endphp
-                        <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
+                        <div class="event-card event-modal-trigger" style="cursor:pointer;"
                             data-event-uuid="{{ optional($exEvent)->uuid }}"
                             data-event-name="{{ optional($exEvent)->name }}"
                             data-event-date="{{ $exDateStr }}"
