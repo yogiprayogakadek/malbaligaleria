@@ -54,68 +54,6 @@
         .lenis.lenis-scrolling iframe {
             pointer-events: none;
         }
-
-        /* Gate Marker Styles for Modal Map */
-        .map-gate-marker {
-            position: absolute;
-            transform: translate(-50%, -100%);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .gate-pin {
-            width: 12px;
-            height: 12px;
-            background: #FF0000;
-            border: 2px solid #FFF;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-            position: relative;
-        }
-
-        .gate-pin::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-top: 5px solid #FF0000;
-        }
-
-        .gate-label {
-            background: rgba(0, 0, 0, 0.8);
-            color: #FFF;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            text-transform: uppercase;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* Modal Map Path Styles */
-        .modal-map-path {
-            fill: none;
-            stroke: #FF0000;
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 8;
-            animation: dash-modal 20s linear infinite;
-        }
-
-        @keyframes dash-modal {
-            to {
-                stroke-dashoffset: -1000;
-            }
-        }
     </style>
 </head>
 
@@ -587,21 +525,21 @@
                             data-event-uuid="{{ optional($exEvent)->uuid }}"
                             data-event-name="{{ optional($exEvent)->name }}"
                             data-event-date="{{ $exDateStr }}"
-                            data-event-time="{{ (optional($exEvent)->start_time && optional($exEvent)->end_time) ? \Carbon\Carbon::parse(optional($exEvent)->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse(optional($exEvent)->end_time)->format('h:i A') : 'All Day' }}"
-                            data-event-desc="{{ optional($exEvent)->description ?? '' }}"
-                            data-event-location="{{ optional($exEvent)->location ?? '' }}"
-                            data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
-                            data-event-monthyear="{{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
-                            data-event-image="{{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ ($exEvent && optional($exEvent)->type && isset($typeLabels[$exEvent->type])) ? $typeLabels[$exEvent->type] : 'Exhibition' }}">
+                            data-event-time="{{ ($exEvent && property_exists($exEvent, 'start_time') && $exEvent->start_time && property_exists($exEvent, 'end_time') && $exEvent->end_time) ? \Carbon\Carbon::parse($exEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($exEvent->end_time)->format('h:i A') : 'All Day' }}"
+                            data-event-desc="{{ isset($exEvent->description) ? $exEvent->description : '' }}"
+                            data-event-location="{{ isset($exEvent->location) ? $exEvent->location : '' }}"
+                            data-event-highlight="{{ isset($exEvent->highlights) ? $exEvent->highlights : '-' }}"
+                            data-event-monthyear="{{ ($exEvent && isset($exEvent->start_date)) ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                            data-event-image="{{ ($exEvent && isset($exEvent->primaryPhoto) && isset($exEvent->primaryPhoto->path)) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="{{ ($exEvent && isset($exEvent->type) && isset($typeLabels[$exEvent->type])) ? $typeLabels[$exEvent->type] : 'Exhibition' }}">
                             <div class="rsc-card-bg"
-                                style="background-image: url({{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ ($exEvent && isset($exEvent->primaryPhoto) && isset($exEvent->primaryPhoto->path)) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="rsc-card-content">
                                 <span class="event-date">{{ $exDateStr }}</span>
-                                <h3>{{ optional($exEvent)->name ?? '' }}</h3>
+                                <h3>{{ isset($exEvent->name) ? $exEvent->name : '' }}</h3>
                                 <p class="event-desc">
-                                    {{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                    {{ ($exEvent && isset($exEvent->start_date)) ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
                                 <span class="event-link">Learn More →</span>
                             </div>
@@ -649,19 +587,10 @@
             <div class="map-wrapper">
                 <div class="map-display">
                     <div class="visual-map-container" id="visualMapContainer" style="display: none;">
-                        <div class="map-scroll-wrapper" id="mapScrollWrapper" data-lenis-prevent>
-                            <img id="visualMapImage" src="" alt="Mall Map">
-                            <svg id="mapGatePathsOverlay" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
-                                <defs>
-                                    <marker id="arrowhead-landing" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="#FF0000" />
-                                    </marker>
-                                </defs>
-                            </svg>
-                            <div id="mapMarker" class="map-marker" style="display: none;">
-                                <div class="marker-pin"></div>
-                                <div class="marker-pulse"></div>
-                            </div>
+                        <img id="visualMapImage" src="" alt="Mall Map">
+                        <div id="mapMarker" class="map-marker" style="display: none;">
+                            <div class="marker-pin"></div>
+                            <div class="marker-pulse"></div>
                         </div>
                         <button class="back-to-grid-btn" id="btnBackToGrid">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -891,27 +820,11 @@
                         </div>
                         <div class="modal-map-wrapper">
                             <img src="" id="modalFloorMap" alt="Floor Map">
-                            
-                            <!-- Path Overlay for Modal -->
-                            <svg id="modalMapPathOverlay" preserveAspectRatio="none" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index: 5;">
-                                <defs>
-                                    <marker id="modal-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="#FF0000" />
-                                    </marker>
-                                </defs>
-                            </svg>
-
                             <div class="map-marker-logo" id="modalMapMarkerLogo">
                                 <div class="logo-pin">
                                     <img src="" id="markerLogoImg" alt="">
                                 </div>
                                 <div class="marker-pulse"></div>
-                            </div>
-                            <!-- Gates Container -->
-                            <div id="modalMapGatesContainer"></div>
-                            <div class="map-gate-marker" id="modalMapGateMarkerTemplate" style="display: none; position: absolute;">
-                                <div class="gate-pin"></div>
-                                <div class="gate-label"></div>
                             </div>
                         </div>
                     </div>
@@ -1023,6 +936,87 @@
                                 <polyline points="14 2 14 8 20 8" />
                                 <line x1="16" y1="13" x2="8" y2="13" />
                                 <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Description</span>
+                                <span class="info-value" id="eventModalDescription"
+                                    style="color: var(--gold);"></span>
+                                {{-- <span class="info-value" id="eventModalMonthYear"
+                                    style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span> --}}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- <div class="event-modal-description" id="eventModalDescription"></div> --}}
+
+                    <div class="event-modal-actions">
+                        <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            Add to Calendar
+                        </button>
+                        <button class="event-modal-share-btn" id="eventModalShareBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3" />
+                                <circle cx="6" cy="12" r="3" />
+                                <circle cx="18" cy="19" r="3" />
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                            </svg>
+                            Share Event
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @include('frontend.partials.footer_v2')
+
+    {{-- #7 Sticky Mobile CTA Bar --}}
+    <div class="mobile-sticky-cta" id="mobileStickyBar">
+        <a href="https://maps.app.goo.gl/z1C9ELFzaXps7dNi6" target="_blank" rel="noopener noreferrer"
+            class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>Location</span>
+        </a>
+        <a href="{{ route('frontend.promotion.index') }}" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            <span>Promo</span>
+        </a>
+        <a href="tel:+62361755277" class="mobile-cta-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                    d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Call</span>
+        </a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script>
+        window.FLOOR_MAPS = {
+            1: "{{ asset('assets/images/floors/1st_floor.png') }}",
+            2: "{{ asset('assets/images/floors/2nd_floor.png') }}"
+        };
+    </script>
+    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
+
+</body>
+
+</html>
                                 <polyline points="10 9 9 9 8 9" />
                             </svg>
                             <div>
