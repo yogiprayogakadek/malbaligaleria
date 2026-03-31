@@ -799,6 +799,7 @@ if (footer) {
 let allTenantsCache = {
     "1st Floor": [],
     "2nd Floor": [],
+    "New Store": [],
     "loaded": false
 };
 
@@ -806,13 +807,15 @@ async function fetchAllTenantsForSearch() {
     if (allTenantsCache.loaded) return;
 
     try {
-        const [floor1, floor2] = await Promise.all([
+        const [floor1, floor2, newStore] = await Promise.all([
             loadTenantsOnDatabase("1st Floor", false),
-            loadTenantsOnDatabase("2nd Floor", false)
+            loadTenantsOnDatabase("2nd Floor", false),
+            loadTenantsOnDatabase("New Store", true)
         ]);
 
         allTenantsCache["1st Floor"] = floor1 || [];
         allTenantsCache["2nd Floor"] = floor2 || [];
+        allTenantsCache["New Store"] = newStore || [];
         allTenantsCache.loaded = true;
     } catch (error) {
         console.error("Failed to fetch all tenants for search", error);
@@ -871,8 +874,8 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
         if (!allTenantsCache.loaded) {
             await fetchAllTenantsForSearch();
         }
-        tenantData = [...allTenantsCache["1st Floor"], ...allTenantsCache["2nd Floor"]]
-                        .filter(t => favoriteUnits.includes(t.unit.trim()));
+        tenantData = [...allTenantsCache["1st Floor"], ...allTenantsCache["2nd Floor"], ...allTenantsCache["New Store"]]
+                        .filter(t => t && t.unit && favoriteUnits.includes(t.unit.trim()));
     } else if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
         tenantData = allTenantsCache[floor];
     } else {
