@@ -45,6 +45,8 @@ Route::controller(LandingPageController::class)->name('frontend.')->group(functi
 Route::name('frontend.')->group(function () {
     Route::prefix('/directory')->name('directory.')->group(function () {
         Route::get('/', [DirectoryController::class, 'index'])->name('index');
+        Route::get('/category-tenant', [DirectoryController::class, 'getCategoryTenant'])->name('category-tenant');
+        Route::get('/tenants', [DirectoryController::class, 'getTenants'])->name('tenants');
     });
 
     Route::prefix('/promotion')->name('promotion.')->group(function () {

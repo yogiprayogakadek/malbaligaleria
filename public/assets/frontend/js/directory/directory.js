@@ -97,7 +97,7 @@ function hideToast(toastId) {
 async function loadCategories()
 {
     try {
-        const categories = await $.get("/directory/category-tenant");
+        const categories = await $.get(window.location.origin + "/directory/category-tenant");
         return categories || [];
     } catch (error) {
         console.error("Failed to fetch the data", error);
@@ -543,7 +543,7 @@ function addStatusBadge(hoursElement, hoursString) {
 // ===== TENANT DATA DENGAN KOORDINAT PIXEL =====
 async function getTenantsData() {
     try {
-        const tenants = await $.get("/directory/tenants");
+        const tenants = await $.get(window.location.origin + "/directory/tenants");
         return tenants || [];
     } catch (error) {
         console.error('Failed to fetch the data', error);
