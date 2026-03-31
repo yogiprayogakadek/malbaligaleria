@@ -133,29 +133,6 @@
                         <span class="hero-stat-number">{{ count($events) }}</span>
                         <span class="hero-stat-label">Events</span>
                     </div>
-                    <div class="hero-stat-divider"></div>
-                    <div class="hero-stat-item">
-                        @php
-                            $today = now()->toDateString();
-                            $upcomingCount = $events
-                                ->filter(fn($e) => $e->start_date && $e->start_date > $today)
-                                ->count();
-                            $ongoingCount = $events
-                                ->filter(
-                                    fn($e) => $e->start_date &&
-                                        $e->start_date <= $today &&
-                                        ($e->end_date ?? $e->start_date) >= $today,
-                                )
-                                ->count();
-                        @endphp
-                        <span class="hero-stat-number">{{ $upcomingCount }}</span>
-                        <span class="hero-stat-label">Upcoming</span>
-                    </div>
-                    <div class="hero-stat-divider"></div>
-                    <div class="hero-stat-item">
-                        <span class="hero-stat-number">{{ $ongoingCount }}</span>
-                        <span class="hero-stat-label">Ongoing</span>
-                    </div>
                 </div>
                 <a href="{{ route('frontend.landing') }}" class="events-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
