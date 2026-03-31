@@ -43,6 +43,7 @@ Route::controller(LandingPageController::class)->name('frontend.')->group(functi
     Route::get('/event/{uuid}', 'getEventDetail')->name('event.detail');
     Route::get('/find/tenants/{id}', 'findTenantById')->name('find.tenant');
     Route::get('/find/events/{uuid}', 'findEventByUuid')->name('find.event');
+    Route::get('/tenants/{floor}/{isNew}', 'tenantData')->name('tenants.data');
 });
 
 Route::name('frontend.')->group(function () {

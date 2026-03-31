@@ -881,7 +881,7 @@ window.addEventListener("load", () => {
 
 async function loadTenantsOnDatabase(floor, isNew = false) {
     try {
-        const data = await $.get("/tenants/" + floor + '/' + isNew);
+        const data = await $.get(window.location.origin + "/tenants/" + floor + '/' + isNew);
         return data;
     } catch (error) {
         console.error("Failed to load data", error);
