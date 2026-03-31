@@ -619,20 +619,6 @@
                             </svg>
                             <h3>No tenants found</h3>
                         </div>
-
-                        <div class="tenant-scroll-indicator left hidden" id="tenantScrollBack">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M15 19l-7-7 7-7" />
-                            </svg>
-                            SWIPE BACK
-                        </div>
-
-                        <div class="tenant-scroll-indicator right" id="tenantScrollIndicator">
-                            SWIPE FOR MORE
-                            <svg viewBox="0 0 24 24">
-                                <path d="M9 5l7 7-7 7" />
-                            </svg>
-                        </div>
                     </div>
                 </div>
                 <div class="map-floors" id="mapFloors">
