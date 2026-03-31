@@ -888,8 +888,19 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
 
     grid.innerHTML = "";
 
-    // Data is already filtered by floor from backend/cache
+    // Filter by floor or search
     let filtered = tenantData;
+
+    // Filter by floor if not Favorites
+    if (floor !== "Favorites") {
+        const floorNumber = floor.includes("1st") ? "1" : (floor.includes("2nd") ? "2" : null);
+        if (floorNumber && !isNew) {
+            filtered = filtered.filter(t => 
+                data_get(t, 'map_coords.floor') == floorNumber || 
+                (t.type === 'gate' && data_get(t, 'map_coords.floor') == floorNumber)
+            );
+        }
+    }
 
     if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -1404,7 +1415,13 @@ function updateModalContent(data) {
         });
     }
 
-    const modalShareBtn = document.getElementById("modalShareBtn");
+// Helper to safely get nested data (replicates PHP data_get)
+function data_get(obj, path, defaultVal = null) {
+    if (!obj || !path) return defaultVal;
+    return path.split('.').reduce((o, i) => (o && o[i] !== undefined ? o[i] : defaultVal), obj);
+}
+
+const modalShareBtn = document.getElementById("modalShareBtn");
     if (modalShareBtn) {
         const newShareBtn = modalShareBtn.cloneNode(true);
         modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
@@ -1881,7 +1898,6 @@ function renderModalMap(data) {
 
         // Define positionMarker closure (captures current tenant's data)
         const positionMarker = () => {
-            console.log("positionMarker - Positioning pin for:", data.name);
             const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
             const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
 
@@ -1896,7 +1912,6 @@ function renderModalMap(data) {
         };
 
         // Trigger drawGates regardless of image load status
-        console.log("renderModalMap - Triggering drawGates for floor:", floorId);
         drawGates(floorId);
 
         // Always clear previous onload FIRST
@@ -1934,33 +1949,22 @@ async function drawGates(floorId) {
     const mapWrapper = document.querySelector(".modal-map-wrapper");
     if (!mapWrapper) return;
 
-    console.log("drawGates - Starting for floorId:", floorId);
-
     // Remove existing gate elements
     const existingSvg = document.getElementById("modalMapGatePaths");
     if (existingSvg) existingSvg.remove();
     mapWrapper.querySelectorAll(".map-gate-label").forEach(l => l.remove());
 
     const floorName = floorId == 2 ? "2nd Floor" : "1st Floor";
-    console.log("drawGates - floorName target:", floorName);
 
     // Ensure cache is loaded
     if (!allTenantsCache.loaded) {
-        console.log("drawGates - Cache not loaded, fetching...");
         await fetchAllTenantsForSearch();
     }
 
     const floorData = allTenantsCache[floorName] || [];
     const gates = floorData.filter(t => t.type === 'gate');
     
-    console.log(`drawGates - Found ${gates.length} gates in ${floorData.length} total tenants for ${floorName}`);
-    
-    if (gates.length === 0) {
-        if (floorData.length > 0) {
-            console.log("drawGates - Sample tenant data types:", floorData.slice(0, 3).map(t => ({name: t.name, type: t.type})));
-        }
-        return;
-    }
+    if (gates.length === 0) return;
 
     // Create SVG overlay
     const svgNamespace = "http://www.w3.org/2000/svg";
