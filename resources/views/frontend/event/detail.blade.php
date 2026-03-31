@@ -115,7 +115,7 @@
                 <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
 
-                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
 
                 <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
@@ -439,7 +439,7 @@
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
 
 
-                        <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                        <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
                         <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
                         <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                         <li><a href="#contact">Contact</a></li>

@@ -44,7 +44,7 @@
                     <li><a href="#regular-shows">Events</a></li>
                     <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                     <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
-                    <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+                    <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>

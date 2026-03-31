@@ -33,7 +33,7 @@ class SettingSeeder extends Seeder
                 'pages' => 'mal directory',
                 'name' => 'default',
                 'payload' => json_encode([
-                    'site_title' => 'Mal Bali Galeria | Tenants Directory',
+                    'site_title' => 'Mal Bali Galeria | Tenant List',
                     'page_title' => 'Tenant Directory',
                     'page_subtitle' => 'Discover our collection of premium brands and stores'
                 ]),
@@ -61,7 +61,7 @@ class SettingSeeder extends Seeder
                 'pages' => 'promo',
                 'name' => 'default',
                 'payload' => json_encode([
-                    'site_title' => 'Mal Bali Galeria | Tenants Directory',
+                    'site_title' => 'Mal Bali Galeria | Tenant List',
                     'page_title' => 'Current Promotions',
                     'page_subtitle' => 'Discover amazing deals and offers from our tenants'
                 ]),
