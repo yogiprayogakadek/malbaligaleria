@@ -1416,6 +1416,7 @@ function updateModalContent(data) {
 
 
 function closeTenantModal() {
+    if (tenantModal) tenantModal.classList.remove("active");
     if (window.lenis) window.lenis.start();
     
     // Restore body scroll
