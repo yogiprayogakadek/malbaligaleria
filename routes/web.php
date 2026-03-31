@@ -18,6 +18,7 @@ use App\Http\Controllers\Frontend\LandingPageController;
 use App\Http\Controllers\Frontend\DirectoryController;
 use App\Http\Controllers\Frontend\PromotionPageController as PromotionController;
 use App\Http\Controllers\Frontend\NewStoreController;
+use App\Http\Controllers\Frontend\EventController as FrontendEventController;
 use App\Http\Controllers\Backend\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Backend\Admin\CategoryController;
 use App\Http\Controllers\Backend\Admin\TenantController;
@@ -57,6 +58,10 @@ Route::name('frontend.')->group(function () {
 
     Route::prefix('/new-store')->name('new-store.')->group(function () {
         Route::get('/', [NewStoreController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('/events')->name('event.')->group(function () {
+        Route::get('/', [FrontendEventController::class, 'index'])->name('index');
     });
 });
 
