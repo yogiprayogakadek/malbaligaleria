@@ -732,16 +732,25 @@ body.dark-mode .event-date-badge {
 }
 .event-title-v2 {
     font-family: "Playfair Display", serif;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 600;
     color: white !important;
-    line-height: 1.3;
+    line-height: 1.2;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin: 0;
+    letter-spacing: -0.01em;
+}
+.event-month-year-v2 {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9) !important;
+    letter-spacing: 1px;
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
 }
 .event-desc-v2 {
     font-size: 12px;
@@ -788,6 +797,51 @@ body.dark-mode .event-date-badge {
 }
 .event-card-v2.event-hidden {
     display: none;
+}
+
+/* Redesigned Logo Badge */
+.event-card-logo-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    min-width: 140px;
+}
+.event-card-logo-badge img {
+    height: 35px !important;
+    width: auto !important;
+    object-fit: contain;
+}
+.event-card-logo-badge .logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.event-card-logo-badge .logo-text .main {
+    font-size: 10px;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+.event-card-logo-badge .logo-text .sub {
+    font-size: 7px;
+    font-weight: 500;
+    color: #666;
+    letter-spacing: 0.2px;
+}
+body.dark-mode .event-card-logo-badge {
+    background: rgba(255, 255, 255, 0.9);
 }
 
 /* ===== LOAD MORE ===== */

@@ -278,29 +278,24 @@
                         data-date="{{ $event->start_date }}" 
                         data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
+                            <div class="event-card-logo-badge">
+                                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG">
+                                <div class="logo-text">
+                                    <span class="main">Mal Bali Galeria</span>
+                                    <span class="sub">Enjoy, Play, Eat, Shop</span>
+                                </div>
+                            </div>
                             <img src="{{ $imgUrl }}" alt="{{ $event->name }}"
                                 loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
 
-                            {{-- Content overlay at bottom (event-card style from landing_v2) --}}
+                            {{-- Content overlay at bottom --}}
                             <div class="event-card-info">
                                 <span class="event-date-pill">{{ $fullDate }}</span>
                                 <h3 class="event-title-v2">{{ $event->name }}</h3>
-                                @if ($event->description)
-                                    <p class="event-desc-v2">{{ Str::limit($event->description, 80) }}</p>
-                                @endif
+                                <p class="event-month-year-v2">{{ strtoupper(date('F Y', strtotime($event->start_date ?? now()))) }}</p>
                                 <div class="event-card-footer">
-                                    @if ($event->location)
-                                        <span class="event-location-v2">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                <circle cx="12" cy="10" r="3" />
-                                            </svg>
-                                            {{ $event->location }}
-                                        </span>
-                                    @endif
-                                    <span class="event-learn-more-btn">Learn More →</span>
+                                    <span class="event-learn-more-btn">LEARN MORE →</span>
                                 </div>
                             </div>
                         </div>
@@ -593,31 +588,46 @@
         });
 
         // ===== SIDEBAR / MENU =====
-        const menuBtn = document.getElementById("menuBtn");
-        const sidebar = document.getElementById("sidebar");
-        const sidebarClose = document.getElementById("sidebarClose");
+        function initMenu() {
+            const menuBtn = document.getElementById("menuBtn");
+            const sidebar = document.getElementById("sidebar");
+            const sidebarClose = document.getElementById("sidebarClose");
 
-        if (menuBtn && sidebar && sidebarClose) {
-            menuBtn.addEventListener("click", () => {
-                menuBtn.classList.toggle("active");
-                sidebar.classList.toggle("active");
-                document.body.classList.toggle("menu-open");
-            });
+            if (menuBtn && sidebar && sidebarClose) {
+                // Remove existing for clean init
+                menuBtn.replaceWith(menuBtn.cloneNode(true));
+                sidebarClose.replaceWith(sidebarClose.cloneNode(true));
 
-            sidebarClose.addEventListener("click", () => {
-                menuBtn.classList.remove("active");
-                sidebar.classList.remove("active");
-                document.body.classList.remove("menu-open");
-            });
+                const newMenuBtn = document.getElementById("menuBtn");
+                const newSidebarClose = document.getElementById("sidebarClose");
 
-            sidebar.querySelectorAll("a").forEach(link => {
-                link.addEventListener("click", () => {
-                    menuBtn.classList.remove("active");
+                newMenuBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    newMenuBtn.classList.toggle("active");
+                    sidebar.classList.toggle("active");
+                    document.body.classList.toggle("menu-open");
+                });
+
+                newSidebarClose.addEventListener("click", () => {
+                    newMenuBtn.classList.remove("active");
                     sidebar.classList.remove("active");
                     document.body.classList.remove("menu-open");
                 });
-            });
+
+                sidebar.querySelectorAll("a").forEach(link => {
+                    link.addEventListener("click", () => {
+                        newMenuBtn.classList.remove("active");
+                        sidebar.classList.remove("active");
+                        document.body.classList.remove("menu-open");
+                    });
+                });
+            }
         }
+
+        // Run menu init
+        initMenu();
+        document.addEventListener('DOMContentLoaded', initMenu);
 
         // ===== DARK MODE =====
         const darkModeToggle = document.getElementById("darkModeToggle");
