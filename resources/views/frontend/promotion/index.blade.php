@@ -157,7 +157,7 @@
         <div class="promo-hero-banner">
             <div class="promo-hero-content">
                 <span class="promo-hero-eyebrow">Mal Bali Galeria</span>
-                <h1 class="promo-hero-title">{{ $setting->payload['page_title'] ?? 'Current Promotions' }}</h1>
+                <h1 class="promo-hero-title">{{ $setting->payload['page_title'] ?? 'Promotions' }}</h1>
                 <p class="promo-hero-subtitle">
                     {{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}
                 </p>
