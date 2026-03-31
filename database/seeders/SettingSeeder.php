@@ -20,7 +20,7 @@ class SettingSeeder extends Seeder
                 'payload' => json_encode([
                     'site_title' => 'Mal Bali Galeria',
                     'hero_background' => 'assets/images/default/background.webp',
-                    'hero_title' => 'The FIRST Premium Shopping Mall & Life Style Destination in Bali',
+                    'hero_title' => 'The Pioneer Shopping Center in Bali',
                     'hero_subtitle' => 'The Best Way to Predict The Future is to Create It and That Future is here...',
                 ]),
                 'description' => 'default setting for home page',

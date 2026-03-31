@@ -3,7 +3,7 @@
         <div class="footer-content">
             <div class="footer-column footer-about">
                 <h3>Mal Bali Galeria</h3>
-                <p>The FIRST Premium Shopping Mall & Life Style Destination in Bali.</p>
+                <p>The Pioneer Shopping Center in Bali.</p>
                 <div class="footer-social">
                     <a href="https://www.instagram.com/malbaligaleria/" class="footer-social-link"
                         aria-label="Instagram">
