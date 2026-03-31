@@ -2026,10 +2026,14 @@ function updateModalContent(data) {
 
 function closeTenantModal() {
     const modal = document.getElementById("tenantModal");
-    if (!modal) return;
+    if (modal) modal.classList.remove("active");
 
-    modal.classList.remove("active");
+    // Restore body scroll
     document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+
+    // Clear state
+    currentTenantData = null;
 
     // Reset swipe hint
     const hint = document.getElementById("carouselSwipeHint");

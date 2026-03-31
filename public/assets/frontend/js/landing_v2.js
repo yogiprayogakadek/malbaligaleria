@@ -1416,7 +1416,10 @@ function updateModalContent(data) {
 
 function closeTenantModal() {
     if (tenantModal) tenantModal.classList.remove("active");
+    
+    // Restore body scroll
     document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
 
 
     setTimeout(() => {
