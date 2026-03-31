@@ -335,7 +335,7 @@ revealOnScroll();
         existingClones.forEach(c => c.remove());
 
         let isTransitioning = false;
-        const gap = 30;
+        const getGap = () => window.innerWidth <= 768 ? 0 : 30;
 
         const updateEventSliderStatus = () => {
             const cards = eventGrid.querySelectorAll(".event-card");
@@ -357,7 +357,7 @@ revealOnScroll();
 
             isTransitioning = true;
             const cardWidth = cards[0].offsetWidth;
-            const moveAmount = cardWidth + gap;
+            const moveAmount = cardWidth + getGap();
 
             eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
             eventGrid.style.transform = `translateX(-${moveAmount}px)`;
@@ -380,7 +380,7 @@ revealOnScroll();
 
             isTransitioning = true;
             const cardWidth = cards[0].offsetWidth;
-            const moveAmount = cardWidth + gap;
+            const moveAmount = cardWidth + getGap();
 
             eventGrid.style.transition = "none";
             eventGrid.insertBefore(eventGrid.lastElementChild, eventGrid.firstElementChild);
@@ -557,7 +557,7 @@ revealOnScroll();
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
-        const moveAmount = cardWidth + gap;
+        const moveAmount = cardWidth + getGap();
 
         grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
         grid.style.transform = `translateX(-${moveAmount}px)`;
@@ -580,7 +580,7 @@ revealOnScroll();
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
-        const moveAmount = cardWidth + gap;
+        const moveAmount = cardWidth + getGap();
 
         grid.style.transition = "none";
         grid.insertBefore(grid.lastElementChild, grid.firstElementChild);

@@ -1897,11 +1897,19 @@ body.dark-mode .event-empty-state p {
     .event-card {
         flex: 0 0 100% !important;
         min-width: 100% !important;
+        max-width: 100% !important;
         height: 460px !important;
     }
-    
+
     .event-grid {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 0 !important;
         overflow: visible !important;
+    }
+
+    .event-grid .event-card {
+        margin-right: 0 !important;
     }
 }
 
