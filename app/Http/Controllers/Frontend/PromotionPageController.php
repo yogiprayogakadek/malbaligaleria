@@ -43,7 +43,7 @@ class PromotionPageController extends Controller
                 'tenant' => $data->tenant->name,
                 'tenantLogo' => (Storage::disk('public')->exists($data->tenant->logo)) ? asset('storage/' . $data->tenant->logo) : asset($data->tenant->logo),
                 'category' => $data->tenant->category->name,
-                'floor' => $data->tenant['map_coords']['floor'] == 1 ? $data->tenant['map_coords']['floor'] . 'st Floor' : $data->tenant['map_coords']['floor'] . 'nd Floor',
+                'floor' => ($data->tenant->map_coords['floor'] == 1 || $data->tenant->map_coords['floor'] == 'floor1') ? '1st Floor' : '2nd Floor',
                 'unit' => $data->tenant->map_coords['unit'] ?? '-',
                 'validFrom' => $data->start_date,
                 'validUntil' => $data->end_date,

@@ -55,6 +55,7 @@ Route::name('frontend.')->group(function () {
 
     Route::prefix('/promotion')->name('promotion.')->group(function () {
         Route::get('/', [PromotionController::class, 'index'])->name('index');
+        Route::get('/load-promotion', [PromotionController::class, 'loadPromotion'])->name('load-promotion');
     });
 
     Route::prefix('/new-store')->name('new-store.')->group(function () {

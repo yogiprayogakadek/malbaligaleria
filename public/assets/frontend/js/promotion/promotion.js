@@ -1,10 +1,12 @@
 async function loadPromotions()
 {
     try {
-        promotionData = await $.get("/promotion/load-promotion");
-        return promotionData;
+        const url = window.location.origin + "/promotion/load-promotion";
+        promotionData = await $.get(url);
+        return promotionData || [];
     } catch (error) {
         console.error("Failed to load data", error);
+        return [];
     }
 }
 
@@ -254,8 +256,11 @@ async function populateTenantFilter() {
 
 async function refreshTenantFilter(categoryFilter) {
     const tenantList = document.getElementById('tenantFilterList');
-    const promoData = await loadPromotions();
+    let promoData = await loadPromotions();
     if (!tenantList) return;
+    
+    // Ensure promoData is an array to prevent crash
+    if (!Array.isArray(promoData)) promoData = [];
 
     // Filter promo berdasarkan category yang aktif
     const relevantPromos = (categoryFilter && categoryFilter !== 'all')
@@ -309,7 +314,10 @@ async function refreshTenantFilter(categoryFilter) {
 // ===== RENDER PROMOTIONS =====
 async function renderPromotions(filter = 'all', category = 'all') {
     // If selecting favorites, force reset tenant filter to 'all' for logic
-    const promoData = await loadPromotions();
+    let promoData = await loadPromotions();
+    
+    // Ensure promoData is an array to prevent sort/filter crash
+    if (!Array.isArray(promoData)) promoData = [];
 
     const prevCategory = currentCategoryFilter;
 
@@ -686,6 +694,7 @@ function showPromotionModal(promo) {
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (window.lenis) window.lenis.stop();
 
     // ===== #9 Share WA button in modal =====
     const modalShareWA = document.getElementById('modalShareWA');
@@ -716,6 +725,7 @@ function closePromotionModal() {
 
     modal.classList.remove('active');
     document.body.style.overflow = '';
+    if (window.lenis) window.lenis.start();
 
     // Reset swipe hint for next time
     const hint = document.getElementById('carouselSwipeHint');
