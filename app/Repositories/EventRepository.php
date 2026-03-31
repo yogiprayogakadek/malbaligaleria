@@ -50,7 +50,7 @@ class EventRepository
 
     public function getEventsWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
     {
-        return $this->model::select($fields)->with($relationship)->where($column, $condition)->get();
+        return $this->model::select($fields)->with($relationship)->where($column, $condition)->where('is_active',true)->get();
     }
 
     public function getUpcomingEvents(array $fields, array $relationship, string $uuid)
