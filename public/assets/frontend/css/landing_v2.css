@@ -1897,6 +1897,7 @@ body.dark-mode .event-empty-state p {
     .event-card {
         flex: 0 0 100% !important;
         min-width: 100% !important;
+        height: 460px !important;
     }
     
     .event-grid {

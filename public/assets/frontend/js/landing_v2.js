@@ -338,8 +338,10 @@ revealOnScroll();
         const gap = 30;
 
         const updateEventSliderStatus = () => {
-            const count = eventGrid.querySelectorAll(".event-card").length;
-            const canRotate = count > 3;
+            const cards = eventGrid.querySelectorAll(".event-card");
+            const count = cards.length;
+            const threshold = window.innerWidth <= 768 ? 1 : 3;
+            const canRotate = count > threshold;
             if (eventControls) {
                 eventControls.classList.toggle("hidden", !canRotate);
             }
@@ -350,7 +352,8 @@ revealOnScroll();
         const nextEvent = () => {
             if (isTransitioning) return;
             const cards = eventGrid.querySelectorAll(".event-card");
-            if (cards.length <= 3) return;
+            const threshold = window.innerWidth <= 768 ? 1 : 3;
+            if (cards.length <= threshold) return;
 
             isTransitioning = true;
             const cardWidth = cards[0].offsetWidth;
@@ -372,7 +375,8 @@ revealOnScroll();
         const prevEvent = () => {
             if (isTransitioning) return;
             const cards = eventGrid.querySelectorAll(".event-card");
-            if (cards.length <= 3) return;
+            const threshold = window.innerWidth <= 768 ? 1 : 3;
+            if (cards.length <= threshold) return;
 
             isTransitioning = true;
             const cardWidth = cards[0].offsetWidth;
@@ -401,7 +405,8 @@ revealOnScroll();
         const startAutoplay = () => {
             if (autoplayInterval) clearInterval(autoplayInterval);
             const count = eventGrid.querySelectorAll(".event-card").length;
-            if (count > 3) {
+            const threshold = window.innerWidth <= 768 ? 1 : 3;
+            if (count > threshold) {
                 autoplayInterval = setInterval(nextEvent, 6000);
             }
         };
@@ -535,7 +540,8 @@ revealOnScroll();
 
     const updateStatus = () => {
         const count = grid.querySelectorAll(".event-card").length;
-        const canRotate = count > 3;
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        const canRotate = count > threshold;
         if (controls) {
             controls.classList.toggle("hidden", !canRotate);
         }
@@ -546,7 +552,8 @@ revealOnScroll();
     const next = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".event-card");
-        if (cards.length <= 3) return;
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        if (cards.length <= threshold) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -568,7 +575,8 @@ revealOnScroll();
     const prev = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".event-card");
-        if (cards.length <= 3) return;
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        if (cards.length <= threshold) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
@@ -596,7 +604,8 @@ revealOnScroll();
     const startAuto = () => {
         if (autoplay) clearInterval(autoplay);
         const count = grid.querySelectorAll(".event-card").length;
-        if (count > 3) {
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        if (count > threshold) {
             autoplay = setInterval(next, 6000);
         }
     };
