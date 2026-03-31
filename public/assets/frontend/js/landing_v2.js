@@ -2,7 +2,7 @@
 const pageLoader = document.getElementById("pageLoader");
 
 // Initialize Lenis Smooth Scroll
-const lenis = new Lenis({
+window.lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     autoRaf: true
@@ -1361,9 +1361,10 @@ function updateModalContent(data) {
     if (mapView) mapView.style.display = "none";
     tenantModal.classList.remove("map-active-mobile");
 
-    // Show modal
+    // Show modal and prevent body scroll
     document.body.style.overflow = "hidden";
-    tenantModal.classList.add("active");
+    if (window.lenis) window.lenis.stop();
+    if (tenantModal) tenantModal.classList.add("active");
 
     // Action button listeners
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
@@ -1415,7 +1416,7 @@ function updateModalContent(data) {
 
 
 function closeTenantModal() {
-    if (tenantModal) tenantModal.classList.remove("active");
+    if (window.lenis) window.lenis.start();
     
     // Restore body scroll
     document.body.style.overflow = "";
@@ -2016,6 +2017,7 @@ function renderModalMap(data) {
         renderCarousel([placeholderImg], card.dataset.eventName || "Event");
 
         document.body.style.overflow = "hidden";
+        if (window.lenis) window.lenis.stop();
         modal.classList.add("active");
 
         // Fetch full data
@@ -2057,6 +2059,7 @@ function renderModalMap(data) {
     function closeEventModal() {
         modal.classList.remove("active");
         document.body.style.overflow = "";
+        if (window.lenis) window.lenis.start();
         currentEventUuid = null;
     }
 

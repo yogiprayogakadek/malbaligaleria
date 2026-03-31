@@ -813,7 +813,7 @@
     <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const lenis = new Lenis({
+            window.lenis = new Lenis({
                 duration: 1.2,
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 autoRaf: true

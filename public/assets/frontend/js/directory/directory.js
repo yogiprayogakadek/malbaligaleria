@@ -1911,6 +1911,7 @@ async function showTenantModal(tenant) {
     // Show modal and prevent body scroll
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
+    if (window.lenis) window.lenis.stop();
 
     // Hide swipe hint after 3 seconds
     setTimeout(() => {
@@ -2031,6 +2032,7 @@ function closeTenantModal() {
     // Restore body scroll
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
+    if (window.lenis) window.lenis.start();
 
     // Clear state
     currentTenantData = null;
