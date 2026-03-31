@@ -1721,17 +1721,8 @@ document.addEventListener("DOMContentLoaded", () => {
 if (showOnMapBtn) {
     showOnMapBtn.addEventListener("click", () => {
         if (tenantData) {
-            // Instead of closing modal and scrolling, we swap view inside modal
-            renderModalMap(tenantData);
-
-            const infoView = document.getElementById("modalInfoView");
-            const mapView = document.getElementById("modalMapView");
-            if (infoView) infoView.style.display = "none";
-            if (mapView) mapView.style.display = "block";
-            tenantModal.classList.add("map-active-mobile");
-
-            // Logically, we still want to keep the old pinpoint function for outside triggers
-            // pinpointOnMap(tenantData);
+            // Updated pinpointOnMap now handles floor switching, Gate paths, and scrolling
+            pinpointOnMap(tenantData);
         }
     });
 }
@@ -1755,58 +1746,124 @@ if (btnBackToGrid) {
 }
 
 function pinpointOnMap(tenant) {
-    if (!tenant || !tenant.x || !tenant.y) {
-        console.warn("No coordinates for tenant:", tenant?.name);
-        alert("Lokasi tenant ini belum tersedia di peta.");
-        return;
-    }
+    if (!tenant) return;
 
-    // Determine floor image
-    const floorId = tenant.floor_id || (tenant.map_coords ? tenant.map_coords.floor : null);
-    const floorImg = floorId == 2 ? "2nd_floor.png" : "1st_floor.png";
+    // Determine floor image and ID
+    const coords = tenant.map_coords || {};
+    const floorId = tenant.floor_id || coords.floor;
+    const floorText = floorId == 2 ? "Level 2" : "Level 1";
+
+    // 1. Update Floor Selection in UI
+    const floorItems = document.querySelectorAll(".map-floors .floor-item");
+    floorItems.forEach(item => {
+        const h4 = item.querySelector("h4");
+        if (h4 && h4.textContent.includes(floorText)) {
+            // Trigger click to sync state and load correct map/tenants
+            item.click();
+        }
+    });
+
+    // 2. Clear Search to show all landmarks clearly
+    const searchInput = document.getElementById("tenantSearchInput");
+    if (searchInput) searchInput.value = "";
 
     // Switch view to map
     if (tenantContentGrid) tenantContentGrid.style.display = "none";
     if (visualMapContainer) visualMapContainer.style.display = "block";
 
-    // Set map image
+    // Re-render map content to ensure we are on the right floor or fresh state
+    const isNew = tenant.floor === 'New Store';
+    const targetFloor = floorId == 2 ? "2nd Floor" : "1st Floor";
+    renderLandingTenants(targetFloor, isNew);
+
+    // 3. Set map image and pin
     if (visualMapImage) {
-        if (window.FLOOR_MAPS && window.FLOOR_MAPS[floorId]) {
-            visualMapImage.src = window.FLOOR_MAPS[floorId];
-        } else {
-            const baseUrl = window.FLOOR_MAP_BASE_URL || '/assets/images/floors';
-            visualMapImage.src = `${baseUrl}/${floorImg}`;
-        }
+        // Robust coordinate check
+        const xCoord = tenant.x || (coords ? coords.map_x : null);
+        const yCoord = tenant.y || (coords ? coords.map_y : null);
 
-        // Position marker using percentages
-        if (mapMarker) {
-            let xPos, yPos;
+        if (xCoord && yCoord && xCoord !== '-' && yCoord !== '-') {
+            const positionMarker = () => {
+                const mapWidth = tenant.map_original_size?.width || visualMapImage.naturalWidth || 1400;
+                const mapHeight = tenant.map_original_size?.height || visualMapImage.naturalHeight || 1000;
 
-            const mapWidth = tenant.map_original_size?.width || visualMapImage.naturalWidth || 1400;
-            const mapHeight = tenant.map_original_size?.height || visualMapImage.naturalHeight || 1000;
+                const xPos = (xCoord / mapWidth) * 100;
+                const yPos = (yCoord / mapHeight) * 100;
 
-            xPos = (tenant.x / mapWidth) * 100;
-            yPos = (tenant.y / mapHeight) * 100;
+                if (mapMarker) {
+                    mapMarker.style.left = `${xPos}%`;
+                    mapMarker.style.top = `${yPos}%`;
+                    mapMarker.style.display = "block";
+                    mapMarker.classList.add('pin-highlight');
+                    setTimeout(() => mapMarker.classList.remove('pin-highlight'), 3000);
 
-            mapMarker.style.left = `${xPos}%`;
-            mapMarker.style.top = `${yPos}%`;
-            mapMarker.style.display = "block";
+                    // Scroll map wrapper to center pin
+                    const wrapper = document.getElementById("mapScrollWrapper");
+                    if (wrapper) {
+                        const scrollX = (xPos / 100) * wrapper.scrollWidth - (wrapper.clientWidth / 2);
+                        const scrollY = (yPos / 100) * wrapper.scrollHeight - (wrapper.clientHeight / 2);
+                        wrapper.scrollTo({ left: scrollX, top: scrollY, behavior: 'smooth' });
+                    }
+                }
+
+                // 4. Render Gate Path
+                renderGatePathOnLanding(tenant);
+            };
+
+            if (visualMapImage.complete) {
+                positionMarker();
+            } else {
+                visualMapImage.onload = positionMarker;
+            }
         }
     }
 
     // Close modal
-    if (typeof closeTenantModal === 'function') {
-        closeTenantModal();
-    } else {
-        const modal = document.getElementById("tenantModal");
-        if (modal) modal.classList.remove("active");
-        document.body.style.overflow = "";
-    }
+    closeTenantModal();
 
-    // Scroll to section
-    const mapSection = document.getElementById("map-section") || document.querySelector(".map-display");
+    // Scroll to map section
+    const mapSection = document.getElementById("interactive-map") || document.querySelector(".mall-map-section");
     if (mapSection) {
         mapSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+/**
+ * Renders the red path from the closest gate to the tenant on the landing page map
+ */
+function renderGatePathOnLanding(tenant) {
+    const svgOverlay = document.getElementById("mapGatePathsOverlay");
+    if (!svgOverlay) return;
+
+    // Clear old paths
+    const oldPath = svgOverlay.querySelector(".map-gate-path");
+    if (oldPath) oldPath.remove();
+
+    // Get path coords (handles both object and string JSON)
+    let pathCoords = tenant.path_coords;
+    if (typeof pathCoords === 'string') {
+        try { pathCoords = JSON.parse(pathCoords); } catch(e) { pathCoords = null; }
+    }
+
+    if (pathCoords && Array.isArray(pathCoords) && pathCoords.length > 1) {
+        const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+        polyline.setAttribute("class", "map-gate-path");
+        polyline.setAttribute("vector-effect", "non-scaling-stroke");
+        polyline.setAttribute("marker-end", "url(#arrowhead-landing)");
+        
+        let pointsStr = "";
+        pathCoords.forEach(pt => {
+            const px = parseFloat(pt.px);
+            const py = parseFloat(pt.py);
+            if (!isNaN(px) && !isNaN(py)) {
+                pointsStr += `${px},${py} `;
+            }
+        });
+        
+        if (pointsStr) {
+            polyline.setAttribute("points", pointsStr.trim());
+            svgOverlay.appendChild(polyline);
+        }
     }
 }
 
