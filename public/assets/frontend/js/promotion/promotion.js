@@ -234,6 +234,19 @@ if (darkModeToggle) {
 document.addEventListener('DOMContentLoaded', () => {
     initializePage();
     setupEventListeners();
+
+    // Check for deep-link parameter on load (Promotions)
+    const urlParams = new URLSearchParams(window.location.search);
+    const promoId = urlParams.get("id") || urlParams.get("promo");
+    if (promoId) {
+        setTimeout(async () => {
+            const promoData = await loadPromotions();
+            if (Array.isArray(promoData)) {
+                const targetPromo = promoData.find(p => String(p.id) === String(promoId));
+                if (targetPromo) showPromotionModal(targetPromo);
+            }
+        }, 1200);
+    }
 });
 
 function initializePage() {
@@ -583,7 +596,7 @@ function setupScrollToTop() {
 
 // ===== SHARE FUNCTION =====
 function sharePromotion(promoId, promoTitle) {
-    const url = `${window.location.origin}${window.location.pathname}?promo=${promoId}`;
+    const url = `${window.location.origin}${window.location.pathname}?id=${promoId}`;
 
     if (navigator.share) {
         navigator.share({
@@ -699,7 +712,7 @@ function showPromotionModal(promo) {
     // ===== #9 Share WA button in modal =====
     const modalShareWA = document.getElementById('modalShareWA');
     if (modalShareWA) {
-        const waText = encodeURIComponent(`Cek promo menarik dari ${promo.tenant} di Mal Bali Galeria: *${promo.title}*\nBerlaku hingga ${formatDate(promo.validUntil)}\n${window.location.origin}${window.location.pathname}?promo=${promo.id}`);
+        const waText = encodeURIComponent(`Cek promo menarik dari ${promo.tenant} di Mal Bali Galeria: *${promo.title}*\nBerlaku hingga ${formatDate(promo.validUntil)}\n${window.location.origin}${window.location.pathname}?id=${promo.id}`);
         modalShareWA.href = `https://wa.me/?text=${waText}`;
     }
 
