@@ -36,7 +36,7 @@ use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\StatusUserController;
 
 // FRONTEND
-Route::controller(LandingPageController::class)->group(function () {
+Route::controller(LandingPageController::class)->name('frontend.')->group(function () {
     Route::get('/', 'index')->name('landing');
     Route::get('/tenant/{uuid}', 'getTenantDetail')->name('tenant.detail');
     Route::get('/event/{uuid}', 'getEventDetail')->name('event.detail');
