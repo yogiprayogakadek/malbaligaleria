@@ -530,10 +530,10 @@
                             data-event-location="{{ optional($exEvent)->location ?? '' }}"
                             data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
                             data-event-monthyear="{{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
-                            data-event-image="{{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ ($exEvent && optional($exEvent)->type && isset($typeLabels[$exEvent->type])) ? $typeLabels[$exEvent->type] : 'Exhibition' }}">
+                            data-event-image="{{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="{{ ($exEvent && optional($exEvent)->type && isset($typeLabels[optional($exEvent)->type])) ? $typeLabels[optional($exEvent)->type] : 'Exhibition' }}">
                             <div class="rsc-card-bg"
-                                style="background-image: url({{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="rsc-card-content">
                                 <span class="event-date">{{ $exDateStr }}</span>
@@ -587,19 +587,10 @@
             <div class="map-wrapper">
                 <div class="map-display">
                     <div class="visual-map-container" id="visualMapContainer" style="display: none;">
-                        <div class="map-scroll-wrapper" id="mapScrollWrapper" data-lenis-prevent>
-                            <img id="visualMapImage" src="" alt="Mall Map">
-                            <svg id="mapGatePathsOverlay" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
-                                <defs>
-                                    <marker id="arrowhead-landing" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="#FF0000" />
-                                    </marker>
-                                </defs>
-                            </svg>
-                            <div id="mapMarker" class="map-marker" style="display: none;">
-                                <div class="marker-pin"></div>
-                                <div class="marker-pulse"></div>
-                            </div>
+                        <img id="visualMapImage" src="" alt="Mall Map">
+                        <div id="mapMarker" class="map-marker" style="display: none;">
+                            <div class="marker-pin"></div>
+                            <div class="marker-pulse"></div>
                         </div>
                         <button class="back-to-grid-btn" id="btnBackToGrid">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -834,6 +825,14 @@
                                     <img src="" id="markerLogoImg" alt="">
                                 </div>
                                 <div class="marker-pulse"></div>
+                            </div>
+                            <!-- Gates Container for Modal Map -->
+                            <div id="modalMapGatesContainer"></div>
+                            
+                            <!-- Gate Marker Template -->
+                            <div class="map-gate-marker" id="modalMapGateMarkerTemplate" style="display: none; position: absolute;">
+                                <div class="gate-pin"></div>
+                                <div class="gate-label"></div>
                             </div>
                         </div>
                     </div>
