@@ -1827,7 +1827,7 @@ let currentTenantData = null; // Store current tenant in modal
 
 async function getDataByTenantId(tenant_id) {
     try {
-        return await $.get("/find/tenants/" + tenant_id);
+        return await $.get(window.location.origin + "/find/tenants/" + tenant_id);
     } catch (error) {
         console.log("Failed to load data", error);
     }

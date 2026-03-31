@@ -40,6 +40,8 @@ Route::controller(LandingPageController::class)->name('frontend.')->group(functi
     Route::get('/', 'index')->name('landing');
     Route::get('/tenant/{uuid}', 'getTenantDetail')->name('tenant.detail');
     Route::get('/event/{uuid}', 'getEventDetail')->name('event.detail');
+    Route::get('/find/tenants/{id}', 'findTenantById')->name('find.tenant');
+    Route::get('/find/events/{uuid}', 'findEventByUuid')->name('find.event');
 });
 
 Route::name('frontend.')->group(function () {
