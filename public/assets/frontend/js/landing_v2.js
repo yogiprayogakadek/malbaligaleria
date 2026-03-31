@@ -536,7 +536,7 @@ revealOnScroll();
     clones.forEach(c => c.remove());
 
     let isTransitioning = false;
-    const gap = 30;
+    const getGap = () => window.innerWidth <= 768 ? 0 : 30;
 
     const updateStatus = () => {
         const count = grid.querySelectorAll(".event-card").length;
