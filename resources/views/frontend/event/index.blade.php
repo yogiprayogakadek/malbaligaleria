@@ -185,17 +185,6 @@
             </div>
 
 
-            <div class="events-carousel-container">
-                <button class="events-nav-btn prev" id="eventsPrevBtn" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                        <polyline points="15 18 9 12 15 6" />
-                    </svg>
-                </button>
-                <button class="events-nav-btn next" id="eventsNextBtn" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                        <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                </button>
                 <div class="events-grid" id="eventsGrid">
                 @foreach ($events->whereIn('type', ['regular', 'special']) as $index => $event)
                     @php
@@ -309,6 +298,20 @@
                         </div>
                     </a>
                 @endforeach
+            </div>
+            
+            {{-- New Carousel Nav below cards --}}
+            <div class="events-carousel-nav" id="eventsCarouselNav">
+                <button class="events-nav-btn prev" id="eventsPrevBtn" aria-label="Previous">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button class="events-nav-btn next" id="eventsNextBtn" aria-label="Next">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14m-7-7l7 7-7 7"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -667,17 +670,35 @@
         if (eventsGrid && prevBtn && nextBtn) {
             const updateNavButtons = () => {
                 const isMobile = window.innerWidth <= 768;
+                const carouselNav = document.getElementById('eventsCarouselNav');
+                
                 if (!isMobile) {
-                    prevBtn.style.display = 'none';
-                    nextBtn.style.display = 'none';
+                    if (carouselNav) carouselNav.style.display = 'none';
                     return;
                 }
+
+                if (carouselNav) carouselNav.style.display = 'flex';
 
                 const scrollLeft = eventsGrid.scrollLeft;
                 const maxScroll = eventsGrid.scrollWidth - eventsGrid.clientWidth;
                 
-                prevBtn.style.display = scrollLeft > 10 ? 'flex' : 'none';
-                nextBtn.style.display = scrollLeft < maxScroll - 10 ? 'flex' : 'none';
+                // Use class instead of display:none for better UI
+                if (scrollLeft <= 5) {
+                    prevBtn.classList.add('disabled');
+                } else {
+                    prevBtn.classList.remove('disabled');
+                }
+
+                if (scrollLeft >= maxScroll - 5) {
+                    nextBtn.classList.add('disabled');
+                } else {
+                    nextBtn.classList.remove('disabled');
+                }
+                
+                // Hide nav entirely if only 1 card or no scroll possible
+                if (maxScroll <= 0 && carouselNav) {
+                    carouselNav.style.display = 'none';
+                }
             };
 
             eventsGrid.addEventListener('scroll', updateNavButtons);

@@ -1233,36 +1233,70 @@ body.dark-mode .mobile-cta-btn svg {
         height: 46px;
     }
 
-    /* Carousel Nav Buttons for mobile */
+    /* Carousel Nav Buttons for mobile - Positioned Below Cards */
     .events-carousel-container {
         position: relative;
+        padding-bottom: 20px; /* Space for buttons */
     }
+    
+    .events-carousel-nav {
+        display: none; /* Desktop hidden */
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+        .events-carousel-nav {
+            display: flex; /* Show only on mobile */
+        }
+    }
+
     .events-nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 255, 255, 0.9);
+        width: 48px;
+        height: 48px;
+        background: #2c5f5d;
         border: none;
         border-radius: 50%;
-        display: flex !important;
+        display: flex;
         align-items: center;
         justify-content: center;
         z-index: 10;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         cursor: pointer;
-        opacity: 0.8;
-        transition: all 0.3s ease;
-    }
-    body.dark-mode .events-nav-btn {
-        background: rgba(26, 31, 30, 0.9);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         color: white;
+        padding: 0;
     }
-    .events-nav-btn.prev { left: -10px; }
-    .events-nav-btn.next { right: -10px; }
-    .events-nav-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
-    .events-nav-btn svg { width: 20px; height: 20px; }
+
+    body.dark-mode .events-nav-btn {
+        background: #1a3a38;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .events-nav-btn:hover {
+        transform: translateY(-2px);
+        background: #1a3a38;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    
+    .events-nav-btn:active {
+        transform: translateY(0) scale(0.95);
+    }
+
+    .events-nav-btn svg {
+        width: 24px;
+        height: 24px;
+        stroke: white;
+        stroke-width: 2.5;
+    }
+
+    .events-nav-btn.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+        box-shadow: none;
+    }
 }
 
 /* ============================================================
