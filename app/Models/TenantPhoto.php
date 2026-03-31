@@ -10,6 +10,9 @@ class TenantPhoto extends Model
 {
     use LogsActivity;
     protected $fillable = [
+        'tenant_id',
+        'path',
+        'caption',
         'is_primary'
     ];
     
