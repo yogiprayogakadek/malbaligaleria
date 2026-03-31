@@ -54,6 +54,51 @@
         .lenis.lenis-scrolling iframe {
             pointer-events: none;
         }
+
+        /* Gate Marker Styles for Modal Map */
+        .map-gate-marker {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .gate-pin {
+            width: 12px;
+            height: 12px;
+            background: #FF0000;
+            border: 2px solid #FFF;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .gate-pin::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid #FF0000;
+        }
+
+        .gate-label {
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFF;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 
