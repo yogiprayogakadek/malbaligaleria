@@ -201,264 +201,226 @@ const revealOnScroll = () => {
 
 window.addEventListener("scroll", revealOnScroll);
 revealOnScroll();
+    const carouselContainer = document.getElementById("carouselContainer");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-
-const carouselContainer = document.getElementById("carouselContainer");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-
-if (carouselContainer && prevBtn && nextBtn) {
-
-
-let cards = [];
-if (carouselContainer) {
-    cards = carouselContainer.querySelectorAll(".tenant-card");
-}
-
-
-if (cards.length === 0) {
-    cards = document.querySelectorAll(".tenant-card");
-}
-
-const originalCardsCount = cards.length;
-
-let currentIndex = 0;
-let cardsPerView = 4;
-let isTransitioning = false;
-
-
-if (originalCardsCount > 0 && carouselContainer) {
-    const clonesNeeded = 4;
-    for (let i = 0; i < clonesNeeded; i++) {
-
-        const cardToClone = cards[i % originalCardsCount];
-        if (cardToClone) {
-            const clone = cardToClone.cloneNode(true);
-            clone.classList.add("clone");
-            carouselContainer.appendChild(clone);
-        }
-    }
-
-
-    if (
-        carouselContainer.querySelectorAll(".tenant-card").length >
-        originalCardsCount
-    ) {
+    if (carouselContainer && prevBtn && nextBtn) {
+        let cards = [];
         cards = carouselContainer.querySelectorAll(".tenant-card");
-    } else {
-        cards = document.querySelectorAll(".tenant-card");
-    }
-}
 
-
-const updateCardsPerView = () => {
-    if (window.innerWidth <= 480) {
-        cardsPerView = 1;
-    } else if (window.innerWidth <= 768) {
-        cardsPerView = 2;
-    } else if (window.innerWidth <= 1024) {
-        cardsPerView = 3;
-    } else {
-        cardsPerView = 4;
-    }
-updateCarousel(true);
-
-
-    if (typeof startAutoplay === "function") startAutoplay();
-};
-
-const updateCarousel = (instant = false) => {
-    if (cards.length === 0) return;
-
-    const cardWidth = cards[0].offsetWidth;
-    const gap = 30;
-    const offset = -(currentIndex * (cardWidth + gap));
-
-    if (instant) {
-        carouselContainer.style.transition = "none";
-    } else {
-        carouselContainer.style.transition = "transform 0.5s ease-in-out";
-    }
-
-    carouselContainer.style.transform = `translateX(${offset}px)`;
-
-    // Buttons always enabled for infinite loop if content exists
-    if (originalCardsCount > 0) {
-        prevBtn.disabled = false;
-        nextBtn.disabled = false;
-    } else {
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
-    }
-};
-
-
-carouselContainer.addEventListener("transitionend", () => {
-
-    if (currentIndex >= originalCardsCount) {
-        currentIndex = currentIndex % originalCardsCount;
-        updateCarousel(true);
-    }
-    isTransitioning = false;
-});
-
-    prevBtn.addEventListener("click", () => {
-        if (isTransitioning) return;
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-        } else {
-            currentIndex = originalCardsCount - 1;
-            updateCarousel(true);
+        if (cards.length === 0) {
+            cards = document.querySelectorAll(".tenant-card");
         }
-    });
 
-    nextBtn.addEventListener("click", () => {
-        if (isTransitioning) return;
-        currentIndex++;
-        updateCarousel();
-    });
-}
+        const originalCardsCount = cards.length;
+        let currentIndex = 0;
+        let cardsPerView = 4;
+        let isTransitioning = false;
 
+        if (originalCardsCount > 0) {
+            const clonesNeeded = 4;
+            for (let i = 0; i < clonesNeeded; i++) {
+                const cardToClone = cards[i % originalCardsCount];
+                if (cardToClone) {
+                    const clone = cardToClone.cloneNode(true);
+                    clone.classList.add("clone");
+                    carouselContainer.appendChild(clone);
+                }
+            }
+            cards = carouselContainer.querySelectorAll(".tenant-card");
+        }
 
-let autoplayInterval;
+        const updateCardsPerView = () => {
+            if (window.innerWidth <= 480) {
+                cardsPerView = 1;
+            } else if (window.innerWidth <= 768) {
+                cardsPerView = 2;
+            } else if (window.innerWidth <= 1024) {
+                cardsPerView = 3;
+            } else {
+                cardsPerView = 4;
+            }
+            updateCarousel(true);
+        };
 
-const startAutoplay = () => {
-    if (autoplayInterval) clearInterval(autoplayInterval);
+        const updateCarousel = (instant = false) => {
+            if (cards.length === 0) return;
+            const cardWidth = cards[0].offsetWidth;
+            const gap = 30;
+            const offset = -(currentIndex * (cardWidth + gap));
 
+            if (instant) {
+                carouselContainer.style.transition = "none";
+            } else {
+                carouselContainer.style.transition = "transform 0.5s ease-in-out";
+            }
 
-    if (originalCardsCount > 0) {
-        autoplayInterval = setInterval(() => {
+            carouselContainer.style.transform = `translateX(${offset}px)`;
+
+            if (originalCardsCount > 0) {
+                prevBtn.disabled = false;
+                nextBtn.disabled = false;
+            } else {
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+            }
+        };
+
+        carouselContainer.addEventListener("transitionend", () => {
+            if (currentIndex >= originalCardsCount) {
+                currentIndex = currentIndex % originalCardsCount;
+                updateCarousel(true);
+            }
+            isTransitioning = false;
+        });
+
+        prevBtn.addEventListener("click", () => {
+            if (isTransitioning) return;
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            } else {
+                currentIndex = originalCardsCount - 1;
+                updateCarousel(true);
+            }
+        });
+
+        nextBtn.addEventListener("click", () => {
+            if (isTransitioning) return;
             currentIndex++;
             updateCarousel();
+        });
 
-        }, 4000);
-    }
-};
+        let autoplayInterval;
+        const startAutoplay = () => {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+            if (originalCardsCount > 0) {
+                autoplayInterval = setInterval(() => {
+                    currentIndex++;
+                    updateCarousel();
+                }, 4000);
+            }
+        };
 
+        carouselContainer.addEventListener("mouseenter", () => {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+        });
 
-if (carouselContainer) {
-    carouselContainer.addEventListener("mouseenter", () => {
-        if (autoplayInterval) clearInterval(autoplayInterval);
-    });
+        carouselContainer.addEventListener("mouseleave", () => {
+            startAutoplay();
+        });
 
-    carouselContainer.addEventListener("mouseleave", () => {
         startAutoplay();
-    });
-}
 
+        window.addEventListener("resize", () => {
+            updateCardsPerView();
+        });
 
-startAutoplay();
+        updateCardsPerView();
+    }
 
+    // ========================================
+    // UPCOMING EVENTS SLIDER
+    // ========================================
+    (function initUpcomingEventsSlider() {
+        const eventGrid = document.getElementById("eventGrid");
+        const eventPrevBtn = document.getElementById("eventPrevBtn");
+        const eventNextBtn = document.getElementById("eventNextBtn");
+        const eventControls = document.getElementById("eventControls");
+        if (!eventGrid || !eventPrevBtn || !eventNextBtn) return;
 
-window.addEventListener("resize", () => {
-    updateCardsPerView();
-});
+        // Clean up any existing clones from previous version
+        const existingClones = eventGrid.querySelectorAll(".clone");
+        existingClones.forEach(c => c.remove());
 
+        let isTransitioning = false;
+        const gap = 30;
 
-updateCardsPerView();
-
-
-// ========================================
-// UPCOMING EVENTS SLIDER
-// ========================================
-(function initUpcomingEventsSlider() {
-    const eventGrid = document.getElementById("eventGrid");
-    const eventPrevBtn = document.getElementById("eventPrevBtn");
-    const eventNextBtn = document.getElementById("eventNextBtn");
-    const eventControls = document.getElementById("eventControls");
-    if (!eventGrid || !eventPrevBtn || !eventNextBtn) return;
-
-    // Clean up any existing clones from previous version
-    const existingClones = eventGrid.querySelectorAll(".clone");
-    existingClones.forEach(c => c.remove());
-
-    let isTransitioning = false;
-    const gap = 30;
-
-    const updateEventSliderStatus = () => {
-        const count = eventGrid.querySelectorAll(".event-card").length;
-        // Activation threshold: 1-3 data points are static
-        const canRotate = count > 3;
-        if (eventControls) {
-            eventControls.classList.toggle("hidden", !canRotate);
-        }
-        eventGrid.style.justifyContent = canRotate ? "flex-start" : "center";
-        eventGrid.style.transform = "translateX(0)";
-    };
-
-    const nextEvent = () => {
-        if (isTransitioning) return;
-        const cards = eventGrid.querySelectorAll(".event-card");
-        if (cards.length <= 3) return;
-
-        isTransitioning = true;
-        const cardWidth = cards[0].offsetWidth;
-        const moveAmount = cardWidth + gap;
-
-        eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
-        eventGrid.style.transform = `translateX(-${moveAmount}px)`;
-
-        const onTransitionEnd = () => {
-            eventGrid.style.transition = "none";
-            eventGrid.appendChild(eventGrid.firstElementChild);
+        const updateEventSliderStatus = () => {
+            const count = eventGrid.querySelectorAll(".event-card").length;
+            const canRotate = count > 3;
+            if (eventControls) {
+                eventControls.classList.toggle("hidden", !canRotate);
+            }
+            eventGrid.style.justifyContent = canRotate ? "flex-start" : "center";
             eventGrid.style.transform = "translateX(0)";
-            isTransitioning = false;
-            eventGrid.removeEventListener("transitionend", onTransitionEnd);
         };
-        eventGrid.addEventListener("transitionend", onTransitionEnd);
-    };
 
-    const prevEvent = () => {
-        if (isTransitioning) return;
-        const cards = eventGrid.querySelectorAll(".event-card");
-        if (cards.length <= 3) return;
+        const nextEvent = () => {
+            if (isTransitioning) return;
+            const cards = eventGrid.querySelectorAll(".event-card");
+            if (cards.length <= 3) return;
 
-        isTransitioning = true;
-        const cardWidth = cards[0].offsetWidth;
-        const moveAmount = cardWidth + gap;
+            isTransitioning = true;
+            const cardWidth = cards[0].offsetWidth;
+            const moveAmount = cardWidth + gap;
 
-        // Move last to front instantly
-        eventGrid.style.transition = "none";
-        eventGrid.insertBefore(eventGrid.lastElementChild, eventGrid.firstElementChild);
-        eventGrid.style.transform = `translateX(-${moveAmount}px)`;
+            eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+            eventGrid.style.transform = `translateX(-${moveAmount}px)`;
 
-        // Force reflow
-        void eventGrid.offsetWidth;
-
-        // Animate to 0
-        eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
-        eventGrid.style.transform = "translateX(0)";
-
-        const onTransitionEnd = () => {
-            isTransitioning = false;
-            eventGrid.removeEventListener("transitionend", onTransitionEnd);
+            const onTransitionEnd = () => {
+                eventGrid.style.transition = "none";
+                eventGrid.appendChild(eventGrid.firstElementChild);
+                eventGrid.style.transform = "translateX(0)";
+                isTransitioning = false;
+                eventGrid.removeEventListener("transitionend", onTransitionEnd);
+            };
+            eventGrid.addEventListener("transitionend", onTransitionEnd);
         };
-        eventGrid.addEventListener("transitionend", onTransitionEnd);
-    };
 
-    eventNextBtn.addEventListener("click", nextEvent);
-    eventPrevBtn.addEventListener("click", prevEvent);
+        const prevEvent = () => {
+            if (isTransitioning) return;
+            const cards = eventGrid.querySelectorAll(".event-card");
+            if (cards.length <= 3) return;
 
-    let autoplayInterval;
-    const startAutoplay = () => {
-        if (autoplayInterval) clearInterval(autoplayInterval);
-        const count = eventGrid.querySelectorAll(".event-card").length;
-        if (count > 3) {
-            autoplayInterval = setInterval(nextEvent, 6000);
-        }
-    };
+            isTransitioning = true;
+            const cardWidth = cards[0].offsetWidth;
+            const moveAmount = cardWidth + gap;
 
-    eventGrid.addEventListener("mouseenter", () => clearInterval(autoplayInterval));
-    eventGrid.addEventListener("mouseleave", startAutoplay);
+            eventGrid.style.transition = "none";
+            eventGrid.insertBefore(eventGrid.lastElementChild, eventGrid.firstElementChild);
+            eventGrid.style.transform = `translateX(-${moveAmount}px)`;
 
-    window.addEventListener("resize", () => {
+            void eventGrid.offsetWidth; // Force reflow
+
+            eventGrid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+            eventGrid.style.transform = "translateX(0)";
+
+            const onTransitionEnd = () => {
+                isTransitioning = false;
+                eventGrid.removeEventListener("transitionend", onTransitionEnd);
+            };
+            eventGrid.addEventListener("transitionend", onTransitionEnd);
+        };
+
+        eventNextBtn.addEventListener("click", nextEvent);
+        eventPrevBtn.addEventListener("click", prevEvent);
+
+        let autoplayInterval;
+        const startAutoplay = () => {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+            const count = eventGrid.querySelectorAll(".event-card").length;
+            if (count > 3) {
+                autoplayInterval = setInterval(nextEvent, 6000);
+            }
+        };
+
+        eventGrid.addEventListener("mouseenter", () => {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+        });
+        eventGrid.addEventListener("mouseleave", () => {
+            startAutoplay();
+        });
+
+        window.addEventListener("resize", () => {
+            updateEventSliderStatus();
+        });
+
         updateEventSliderStatus();
-    });
-
-    updateEventSliderStatus();
-    startAutoplay();
-})();
+        startAutoplay();
+    })();
+;
 
 // ========================================
 // REGULAR SHOWS SLIDER
