@@ -1115,7 +1115,7 @@ function updateMapView() {
                     </button>
                 </div>
 
-                <div class="map-stats">
+                <div class="map-stats" style="display: none;">
                     <div class="map-stats-number" id="mapStatsNumber">${currentFloorTenants.length}</div>
                     <div class="map-stats-label">Stores on this floor</div>
                     <div style="margin-top: 10px; font-size: 12px; color: #666; display: flex; justify-content: space-between;">

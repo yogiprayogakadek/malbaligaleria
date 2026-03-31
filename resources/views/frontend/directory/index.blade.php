@@ -286,7 +286,7 @@
                         </div>
 
 
-                        <div class="filter-stats" style="display: none;">
+                        <div class="filter-stats">
                             <div class="filter-stats-number" id="tenantCount">0</div>
                             <div class="filter-stats-label">Tenants Found</div>
                         </div>
