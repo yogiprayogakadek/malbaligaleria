@@ -1881,6 +1881,7 @@ function renderModalMap(data) {
 
         // Define positionMarker closure (captures current tenant's data)
         const positionMarker = () => {
+            console.log("positionMarker - Positioning pin for:", data.name);
             const mapWidth = data.map_original_size?.width || floorMapImg.naturalWidth || 1400;
             const mapHeight = data.map_original_size?.height || floorMapImg.naturalHeight || 1000;
 
@@ -1894,8 +1895,11 @@ function renderModalMap(data) {
             }
         };
 
-        // Always clear previous onload FIRST to prevent stale handler from
-        // re-positioning pin to a previous tenant's coordinates.
+        // Trigger drawGates regardless of image load status
+        console.log("renderModalMap - Triggering drawGates for floor:", floorId);
+        drawGates(floorId);
+
+        // Always clear previous onload FIRST
         floorMapImg.onload = null;
 
         // Set the floor map src
@@ -1907,15 +1911,10 @@ function renderModalMap(data) {
         }
 
         // If image is already cached (complete), call positionMarker directly.
-        // Otherwise set onload so it fires once the image finishes loading.
         if (floorMapImg.complete && floorMapImg.naturalWidth > 0) {
             positionMarker();
-            drawGates(floorId);
         } else {
-            floorMapImg.onload = () => {
-                positionMarker();
-                drawGates(floorId);
-            };
+            floorMapImg.onload = positionMarker;
         }
     } else {
         console.warn("Missing coordinates:", {
