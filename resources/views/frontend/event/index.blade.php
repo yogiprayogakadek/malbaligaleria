@@ -85,10 +85,10 @@
             </a>
         </div>
 
-        <div class="logo">
+        <a href="{{ route('frontend.landing') }}" class="logo">
             <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo"
                 style="height: 45px; width: auto; object-fit: contain;" loading="lazy">
-        </div>
+        </a>
 
         <button class="menu-btn" id="menuBtn">
             <span></span>
@@ -619,27 +619,31 @@
         // ===== HEADER SCROLL (minimal - just for future use) =====
         const header = document.getElementById("mainHeader");
 
-        // ===== SIDEBAR =====
+        // Ensure everything is ready
         const menuBtn = document.getElementById("menuBtn");
         const sidebar = document.getElementById("sidebar");
         const sidebarClose = document.getElementById("sidebarClose");
-        menuBtn.addEventListener("click", () => {
-            menuBtn.classList.toggle("active");
-            sidebar.classList.toggle("active");
-            document.body.classList.toggle("menu-open");
-        });
-        sidebarClose.addEventListener("click", () => {
-            menuBtn.classList.remove("active");
-            sidebar.classList.remove("active");
-            document.body.classList.remove("menu-open");
-        });
-        sidebar.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", () => {
+
+        if (menuBtn && sidebar && sidebarClose) {
+            // ===== SIDEBAR =====
+            menuBtn.addEventListener("click", () => {
+                menuBtn.classList.toggle("active");
+                sidebar.classList.toggle("active");
+                document.body.classList.toggle("menu-open");
+            });
+            sidebarClose.addEventListener("click", () => {
                 menuBtn.classList.remove("active");
                 sidebar.classList.remove("active");
                 document.body.classList.remove("menu-open");
             });
-        });
+            sidebar.querySelectorAll("a").forEach(link => {
+                link.addEventListener("click", () => {
+                    menuBtn.classList.remove("active");
+                    sidebar.classList.remove("active");
+                    document.body.classList.remove("menu-open");
+                });
+            });
+        }
 
         // ===== DARK MODE =====
         const darkModeToggle = document.getElementById("darkModeToggle");
