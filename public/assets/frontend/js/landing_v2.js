@@ -1688,15 +1688,26 @@ function showToast(message, type = "info") {
     }, 3000);
 }
 
-// Check for deep-link parameter on load
+// Check for deep-link parameter on load (Tenant prioritized by 'store' or fallback 'id')
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const tenantId = urlParams.get("id") || urlParams.get("store");
-    if (tenantId) {
-        // Wait for page to be ready and and open if ID is valid
+    const storeId = urlParams.get("store");
+    const id = urlParams.get("id");
+    
+    // If 'store' is present, it's definitely a tenant
+    if (storeId) {
         setTimeout(() => {
-            if (typeof openTenantModal === "function") {
-                openTenantModal(tenantId);
+            if (typeof openTenantModal === "function") openTenantModal(storeId);
+        }, 1200);
+        return;
+    }
+
+    // If only 'id' is present, check if it's NOT an event before opening tenant modal
+    if (id) {
+        setTimeout(() => {
+            const isEvent = document.querySelector(`.event-modal-trigger[data-event-uuid="${id}"]`);
+            if (!isEvent && typeof openTenantModal === "function") {
+                openTenantModal(id);
             }
         }, 1200);
     }
@@ -2110,10 +2121,10 @@ function renderModalMap(data) {
         }
     });
 
-    // Check for deep-link parameter on load (Events)
+    // Check for deep-link parameter on load (Events prioritized by 'event' or fallback 'id')
     document.addEventListener("DOMContentLoaded", () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const eventUuid = urlParams.get("id") || urlParams.get("event");
+        const eventUuid = urlParams.get("event") || urlParams.get("id");
         if (eventUuid) {
             setTimeout(() => {
                 const card = document.querySelector(`.event-modal-trigger[data-event-uuid="${eventUuid}"]`);
