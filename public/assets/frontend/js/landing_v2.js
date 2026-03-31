@@ -1407,6 +1407,14 @@ function updateModalContent(data) {
         }
     }
 
+    // Map setup - NEW: Update map if we have coordinates and are currently in Map View
+    if (data.x && data.y) {
+        const mapView = document.getElementById("modalMapView");
+        if (mapView && mapView.style.display !== "none") {
+            renderModalMap(data);
+        }
+    }
+
     // Swipe hint
     const swipeHint = document.getElementById("carouselSwipeHint");
     if (swipeHint) {
@@ -1915,6 +1923,70 @@ function renderModalMap(data) {
                 markerLogo.style.left = `${xPos}%`;
                 markerLogo.style.top = `${yPos}%`;
                 markerLogo.style.display = "block";
+            }
+
+            // --- MULTI-GATE RENDERING & PATH ---
+            const gatesContainer = document.getElementById("modalMapGatesContainer");
+            const gateTemplate = document.getElementById("modalMapGateMarkerTemplate");
+            const pathOverlay = document.getElementById("modalMapPathOverlay");
+            
+            if (gatesContainer && gateTemplate) {
+                gatesContainer.innerHTML = ""; 
+                
+                // Sync SVG ViewBox with Map Image size
+                if (pathOverlay) {
+                    pathOverlay.setAttribute("viewBox", `0 0 ${mapWidth} ${mapHeight}`);
+                    const oldPaths = pathOverlay.querySelectorAll(".modal-map-path");
+                    oldPaths.forEach(p => p.remove());
+                }
+
+                // Get gates & paths
+                let gatesData = data.gate_coords || (data.map_coords ? data.map_coords.gate_coords : null);
+                let pathData = data.path_coords || (data.map_coords ? data.map_coords.path_coords : null);
+                
+                if (typeof gatesData === 'string') { try { gatesData = JSON.parse(gatesData); } catch(e) {} }
+                if (typeof pathData === 'string') { try { pathData = JSON.parse(pathData); } catch(e) {} }
+
+                // Fallback single gate
+                if (!gatesData || (Array.isArray(gatesData) && gatesData.length === 0)) {
+                    const gx = data.gate_x || (data.map_coords ? data.map_coords.gate_x : null);
+                    const gy = data.gate_y || (data.map_coords ? data.map_coords.gate_y : null);
+                    if (gx && gy && gx !== '-' ) gatesData = [{ x: gx, y: gy, name: data.gate_name || "Entrance" }];
+                }
+
+                if (Array.isArray(gatesData)) {
+                    gatesData.forEach(gate => {
+                        const gx = gate.x || gate.px;
+                        const gy = gate.y || gate.py;
+                        if (gx && gy && gx !== '-') {
+                            const gatePin = gateTemplate.cloneNode(true);
+                            gatePin.id = ""; gatePin.style.display = "block";
+                            gatePin.style.left = `${(gx / mapWidth) * 100}%`;
+                            gatePin.style.top = `${(gy / mapHeight) * 100}%`;
+                            gatePin.style.zIndex = "11";
+                            const label = gatePin.querySelector(".gate-label");
+                            if (label) label.textContent = gate.name || "Entrance";
+                            gatesContainer.appendChild(gatePin);
+                        }
+                    });
+                }
+
+                // Render Path if available
+                if (pathOverlay && Array.isArray(pathData) && pathData.length > 1) {
+                    const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+                    polyline.setAttribute("class", "modal-map-path");
+                    polyline.setAttribute("marker-end", "url(#modal-arrowhead)");
+                    
+                    let points = "";
+                    pathData.forEach(pt => {
+                        const px = parseFloat(pt.px || pt.x);
+                        const py = parseFloat(pt.py || pt.y);
+                        if (!isNaN(px) && !isNaN(py)) points += `${px},${py} `;
+                    });
+                    
+                    polyline.setAttribute("points", points.trim());
+                    pathOverlay.appendChild(polyline);
+                }
             }
         };
 
