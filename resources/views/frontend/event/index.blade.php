@@ -602,6 +602,8 @@
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             autoRaf: true
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
         // ===== PAGE LOADER =====
         const pageLoader = document.getElementById("pageLoader");
         let loadStartTime = Date.now();
@@ -755,6 +757,7 @@
 
         // Initial apply
         applyFilters();
+    });
 
         function applyFilters() {
             const grid = document.getElementById('eventsGrid');
@@ -769,8 +772,7 @@
                 
                 let catMatch = activeCategory === 'all';
                 if (!catMatch) {
-                    // Match "regular" from select to "Regular" in card attribute
-                    // Match "special" from select to "Special" in card attribute
+                    // Simpler contains check to be safe
                     catMatch = cardTypeAttr.includes(targetCat);
                 }
                 
