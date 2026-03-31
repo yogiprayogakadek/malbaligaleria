@@ -712,6 +712,13 @@ function renderTenants(tenantsToRender) {
 
 // ===== FILTER FUNCTION =====
 function filterTenants() {
+    // 1. GLOBAL TIMER CLEARANCE: Kill any pending auto-modal timers immediately 
+    // to prevent "ghost" popups from previous search states.
+    if (autoShowModalTimer) {
+        clearTimeout(autoShowModalTimer);
+        autoShowModalTimer = null;
+    }
+
     const searchInput = document.getElementById("searchInput");
     const headerSearch = document.getElementById("headerSearch");
     const sidebarSearch = document.getElementById("sidebarSearch");
@@ -779,30 +786,28 @@ function filterTenants() {
 
     renderTenants(filtered);
 
-    // Clear previous timer if count changed or search cleared
-    if (autoShowModalTimer) {
-        clearTimeout(autoShowModalTimer);
-        autoShowModalTimer = null;
-    }
-
-    // Auto-show modal if only 1 result AND search term is not empty
+    // 2. AUTO-SHOW MODAL: Only if exactly 1 result and search is ACTIVE
     if (filtered.length === 1 && combinedSearch && combinedSearch.length > 0) {
         const targetTenant = filtered[0];
-        const capturedSearch = combinedSearch; // Closure for comparison
+        const capturedSearch = combinedSearch; 
 
         autoShowModalTimer = setTimeout(() => {
-            // Re-verify search term hasn't changed or cleared in the 1.5s delay
+            // 3. FINAL VERIFICATION GUARD: Double-check state before opening modal
             const currentSearch = (document.getElementById("searchInput")?.value || 
                                  document.getElementById("headerSearch")?.value || 
                                  document.getElementById("sidebarSearch")?.value || "").toLowerCase();
             
-            if (currentSearch === capturedSearch) {
-                // If on different floor in Map View, auto-switch
-                if (currentView === 'map' && targetTenant.floor !== (currentFloorMap === 'floor1' ? '1st Floor' : '2nd Floor')) {
-                    changeFloor(targetTenant.floor);
-                }
-                showTenantModal(targetTenant);
+            // Abort if search changed, was cleared, or if results no longer match exactly 1
+            if (currentSearch !== capturedSearch || currentSearch === "" || filtered.length !== 1) {
+                autoShowModalTimer = null;
+                return;
             }
+
+            // If on different floor in Map View, auto-switch
+            if (currentView === 'map' && targetTenant.floor !== (currentFloorMap === 'floor1' ? '1st Floor' : '2nd Floor')) {
+                changeFloor(targetTenant.floor);
+            }
+            showTenantModal(targetTenant);
             autoShowModalTimer = null;
         }, 1500); 
     }
