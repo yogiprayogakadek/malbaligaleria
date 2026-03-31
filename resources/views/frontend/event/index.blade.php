@@ -180,6 +180,7 @@
                     </div>
                 </div>
                 <div class="events-filter-right">
+                    <div style="display: flex; gap: 10px;">
                         {{-- Category filter --}}
                         <select class="events-sort-select" id="eventsCategory">
                             <option value="all">All Types</option>
@@ -762,14 +763,17 @@
                 const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
                 const monthMatch = activeMonth === 'all' || card.dataset.month === activeMonth;
                 const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
+                
                 const targetCat = activeCategory.toLowerCase();
-                const cardCatFull = (card.dataset.eventType || '').toLowerCase();
-                // Match "regular" to "Regular" and "special" to "Special" or "Special Events"
+                const cardTypeAttr = (card.dataset.eventType || '').toLowerCase();
+                
                 let catMatch = activeCategory === 'all';
                 if (!catMatch) {
-                    if (targetCat === 'regular') catMatch = cardCatFull.includes('regular');
-                    else if (targetCat === 'special') catMatch = cardCatFull.includes('special');
+                    // Match "regular" from select to "Regular" in card attribute
+                    // Match "special" from select to "Special" in card attribute
+                    catMatch = cardTypeAttr.includes(targetCat);
                 }
+                
                 return statusMatch && monthMatch && yearMatch && catMatch;
             });
 
