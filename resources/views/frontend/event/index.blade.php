@@ -28,6 +28,11 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/index.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
+    <style>
+        .event-status-pills { display: none !important; }
+        .events-filter-toolbar { justify-content: flex-end; }
+    </style>
 </head>
 
 <body>
@@ -278,28 +283,27 @@
                         );
                         $waHref = 'https://wa.me/?text=' . $waText;
                     @endphp
-                    <a href="{{ route('frontend.event.detail', $event->uuid) }}"
-                        class="event-card-v2 {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
-                        data-month="{{ $monthValue }}" data-month-label="{{ $monthLabel }}"
-                        data-year="{{ $yearValue }}" data-status="{{ strtolower($statusLabel) }}"
-                        data-date="{{ $event->start_date }}" data-name="{{ e($event->name) }}">
+                    <a href="javascript:void(0)"
+                        class="event-card-v2 event-modal-trigger {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
+                        data-event-uuid="{{ $event->uuid }}" 
+                        data-event-name="{{ e($event->name) }}"
+                        data-event-image="{{ $imgUrl }}" 
+                        data-event-date="{{ $dateRange }}"
+                        data-event-time="{{ $event->start_time && $event->end_time ? date('H:i', strtotime($event->start_time)) . ' - ' . date('H:i', strtotime($event->end_time)) : 'All Day' }}"
+                        data-event-location="{{ $event->location ?? 'Mal Bali Galeria' }}"
+                        data-event-type="{{ ucfirst($event->type) }}"
+                        data-event-description="{{ e($event->description) }}"
+                        data-event-highlights="{{ e($event->highlights) }}"
+                        data-month="{{ $monthValue }}" 
+                        data-month-label="{{ $monthLabel }}"
+                        data-year="{{ $yearValue }}" 
+                        data-status="{{ strtolower($statusLabel) }}"
+                        data-date="{{ $event->start_date }}" 
+                        data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
                             <img src="{{ $imgUrl }}" alt="{{ $event->name }}"
                                 loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
-
-                            {{-- Status badge hidden per request --}}
-                            {{-- <span class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span> --}}
-
-                            {{-- WA Share button hidden per request --}}
-                            {{-- <div class="event-wa-share"
-                               title="Share via WhatsApp"
-                               onclick="event.stopPropagation(); event.preventDefault(); window.open('{{ $waHref }}', '_blank');">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.557 4.121 1.532 5.854L0 24l6.336-1.51A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 0 1-5.003-1.373l-.36-.213-3.727.888.944-3.637-.234-.374A9.786 9.786 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
-                                </svg>
-                            </div> --}}
 
                             {{-- Content overlay at bottom (event-card style from landing_v2) --}}
                             <div class="event-card-info">
@@ -308,17 +312,19 @@
                                 @if ($event->description)
                                     <p class="event-desc-v2">{{ Str::limit($event->description, 80) }}</p>
                                 @endif
-                                @if ($event->location)
-                                    <span class="event-location-v2">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
-                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                            <circle cx="12" cy="10" r="3" />
-                                        </svg>
-                                        {{ $event->location }}
-                                    </span>
-                                @endif
-                                <span class="event-learn-more-btn">Learn More →</span>
+                                <div class="event-card-footer">
+                                    @if ($event->location)
+                                        <span class="event-location-v2">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" style="width:13px;height:13px;flex-shrink:0;">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                                <circle cx="12" cy="10" r="3" />
+                                            </svg>
+                                            {{ $event->location }}
+                                        </span>
+                                    @endif
+                                    <span class="event-learn-more-btn">Learn More →</span>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -441,14 +447,156 @@
 
 
     {{-- #10: Scroll to top --}}
-    <button class="event-scroll-top" id="scrollToTop" aria-label="Scroll to top">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19V5M5 12l7-7 7 7" />
-        </svg>
     </button>
+    
+    {{-- ===== EVENT DETAIL MODAL ===== --}}
+    <div class="event-detail-modal" id="eventDetailModal">
+        <div class="event-modal-overlay" id="eventModalOverlay" onclick="closeEventModal()"></div>
+        <div class="event-modal-container">
+
+            <button class="event-modal-close" id="eventModalCloseBtn" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <div class="event-modal-content">
+                <div class="event-modal-carousel">
+                    <div class="carousel-swipe-hint" id="eventModalCarouselSwipeHint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                        Swipe to browse
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </div>
+
+                    <div class="carousel-images" id="eventModalCarouselImages">
+                        <!-- Dynamic images -->
+                    </div>
+
+                    <button class="carousel-nav prev" id="eventModalCarouselPrev">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <button class="carousel-nav next" id="eventModalCarouselNext">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+
+                    <div class="carousel-indicators" id="eventModalCarouselIndicators">
+                        <!-- Dynamic indicators -->
+                    </div>
+                </div>
+
+                <div class="event-modal-details" data-lenis-prevent>
+                    <div class="event-modal-header">
+                        <span class="event-modal-badge" id="eventModalTypeBadge"></span>
+                        <h2 id="eventModalTitle"></h2>
+                    </div>
+
+                    <div class="event-modal-info">
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Date</span>
+                                <span class="info-value" id="eventModalDate"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Time</span>
+                                <span class="info-value" id="eventModalTime"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Location</span>
+                                <span class="info-value" id="eventModalLocation"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Highlight</span>
+                                <span class="info-value" id="eventModalHighlights"></span>
+                            </div>
+                        </div>
+
+                        <div class="event-modal-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Description</span>
+                                <span class="info-value" id="eventModalDescription"
+                                    style="color: var(--gold);"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-modal-actions">
+                        <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            Add to Calendar
+                        </button>
+                        <button class="event-modal-share-btn" id="eventModalShareBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3" />
+                                <circle cx="6" cy="12" r="3" />
+                                <circle cx="18" cy="19" r="3" />
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                            </svg>
+                            Share Event
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
     <script>
+        // Initialize Lenis Smooth Scroll
+        window.lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            autoRaf: true
+        });
         // ===== PAGE LOADER =====
         const pageLoader = document.getElementById("pageLoader");
         let loadStartTime = Date.now();
@@ -649,6 +797,7 @@
             });
         });
     </script>
+    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
     {{-- Sticky Mobile CTA Bar --}}
     <div class="dir-mobile-sticky-cta" id="eventMobileStickyBar">
         <a href="{{ route('frontend.landing') }}" class="dir-mobile-cta-btn">
