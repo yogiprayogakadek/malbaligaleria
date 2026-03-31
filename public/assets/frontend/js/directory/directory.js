@@ -1571,6 +1571,28 @@ function updateMapView() {
     
     // Wheel Zoom
     mapContainer.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            
+            const delta = -Math.sign(e.deltaY) * zoomStep;
+            const newScale = Math.min(Math.max(state.scale + delta, minScale), maxScale);
+            
+            if (newScale !== state.scale) {
+                // Calculate zoom center relative to mapContainer
+                const rect = mapContainer.getBoundingClientRect();
+                const centerX = e.clientX - rect.left;
+                const centerY = e.clientY - rect.top;
+                
+                // Adjust scroll to zoom into the mouse position
+                const scrollX = mapContainer.scrollLeft;
+                const scrollY = mapContainer.scrollTop;
+                const ratio = newScale / state.scale;
+                
+                state.scale = newScale;
+                updateZoom();
+                
+                mapContainer.scrollLeft = (scrollX + centerX) * ratio - centerX;
+                mapContainer.scrollTop = (scrollY + centerY) * ratio - centerY;
             }
         }
         // If no modifier key, do NOTHING (allow native scroll)
