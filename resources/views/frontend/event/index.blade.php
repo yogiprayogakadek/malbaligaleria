@@ -752,19 +752,28 @@
             });
         }
 
+        function applyFilters() {
+            const grid = document.getElementById('eventsGrid');
+            const allCards = [...document.querySelectorAll('.event-card-v2')];
             let visible = allCards.filter(card => {
                 const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
                 const monthMatch = activeMonth === 'all' || card.dataset.month === activeMonth;
                 const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
-                const catMatch = activeCategory === 'all' || card.dataset.eventType.toLowerCase() === activeCategory;
+                const targetCat = activeCategory.toLowerCase();
+                const cardCat = (card.dataset.eventType || '').toLowerCase();
+                const catMatch = activeCategory === 'all' || cardCat === targetCat;
                 return statusMatch && monthMatch && yearMatch && catMatch;
             });
 
             // Sort
             visible.sort((a, b) => {
-                if (activeSort === 'newest') return b.dataset.date.localeCompare(a.dataset.date);
-                if (activeSort === 'oldest') return a.dataset.date.localeCompare(b.dataset.date);
-                if (activeSort === 'name_asc') return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+                const dateA = a.dataset.date || '';
+                const dateB = b.dataset.date || '';
+                const nameA = a.dataset.name || '';
+                const nameB = b.dataset.name || '';
+                if (activeSort === 'newest') return dateB.localeCompare(dateA);
+                if (activeSort === 'oldest') return dateA.localeCompare(dateB);
+                if (activeSort === 'name_asc') return nameA.localeCompare(nameB);
                 return 0;
             });
 
