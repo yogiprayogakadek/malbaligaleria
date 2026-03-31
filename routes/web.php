@@ -42,15 +42,15 @@ Route::controller(LandingPageController::class)->name('frontend.')->group(functi
     Route::get('/event/{uuid}', 'getEventDetail')->name('event.detail');
 });
 
-Route::prefix('/directory')->name('directory.')->name('frontend.directory.')->group(function () {
+Route::prefix('/directory')->name('directory.')->group(function () {
     Route::get('/', [DirectoryController::class, 'index'])->name('index');
 });
 
-Route::prefix('/promotion')->name('promotion.')->name('frontend.promotion.')->group(function () {
+Route::prefix('/promotion')->name('promotion.')->group(function () {
     Route::get('/', [PromotionController::class, 'index'])->name('index');
 });
 
-Route::prefix('/new-store')->name('new-store.')->name('frontend.new-store.')->group(function () {
+Route::prefix('/new-store')->name('new-store.')->group(function () {
     Route::get('/', [NewStoreController::class, 'index'])->name('index');
 });
 
