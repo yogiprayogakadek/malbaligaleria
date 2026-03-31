@@ -865,7 +865,12 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
     let tenantData = [];
     
     if (floor === "Favorites") {
-        tenantData = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+        const favoriteUnits = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
+        // We need all tenants to filter by unit. If cache is not loaded, we have to fetch or wait.
+        if (!allTenantsCache.loaded) {
+            await fetchAllTenantsForSearch();
+        }
+        tenantData = [...allTenantsCache["1st Floor"], ...allTenantsCache["2nd Floor"]].filter(t => favoriteUnits.includes(t.unit));
     } else if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
         tenantData = allTenantsCache[floor];
     } else {
@@ -1346,9 +1351,9 @@ function updateModalContent(data) {
     // Action button listeners
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
     if (modalFavBtn) {
-        // Load favorites from localStorage
-        let favorites = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
-        const isFavorited = favorites.some(f => f.id == data.id);
+        // Load favorites from localStorage (using mall_favorites key and units for parity)
+        let favorites = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
+        const isFavorited = favorites.includes(data.unit);
         
         if (isFavorited) {
             modalFavBtn.classList.add("active");
@@ -1361,25 +1366,17 @@ function updateModalContent(data) {
         
         newFavBtn.addEventListener("click", () => {
             const isActive = newFavBtn.classList.toggle("active");
-            let favs = JSON.parse(localStorage.getItem('mbg_favorites') || '[]');
+            let favs = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
             
             if (isActive) {
-                // Add to favorites
-                if (!favs.some(f => f.id == data.id)) {
-                    favs.push({
-                        id: data.id,
-                        name: data.name,
-                        logo: data.logo,
-                        floor: data.floor,
-                        category: data.category,
-                        unit: data.unit,
-                        hours: data.hours
-                    });
+                // Add to favorites (store only unit for parity)
+                if (!favs.includes(data.unit)) {
+                    favs.push(data.unit);
                 }
-                showToast("Added to favorites", "success");
+                showToast("Added to favorites ❤️", "success");
             } else {
                 // Remove from favorites
-                favs = favs.filter(f => f.id != data.id);
+                favs = favs.filter(unit => unit != data.unit);
                 showToast("Removed from favorites", "success");
                 
                 // If we are currently on the Favorites floor, refresh the grid
@@ -1389,7 +1386,7 @@ function updateModalContent(data) {
                 }
             }
             
-            localStorage.setItem('mbg_favorites', JSON.stringify(favs));
+            localStorage.setItem('mall_favorites', JSON.stringify(favs));
         });
     }
 
