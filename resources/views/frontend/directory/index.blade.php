@@ -55,7 +55,7 @@
         /* Mobile specific font size for map gate labels */
         @media (max-width: 768px) {
             .map-gate-label {
-                font-size: 8px !important;
+                font-size: 7px !important;
                 padding: 1px 3px !important;
             }
             .map-pin.gate {
