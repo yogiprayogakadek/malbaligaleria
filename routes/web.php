@@ -42,16 +42,18 @@ Route::controller(LandingPageController::class)->name('frontend.')->group(functi
     Route::get('/event/{uuid}', 'getEventDetail')->name('event.detail');
 });
 
-Route::prefix('/directory')->name('directory.')->group(function () {
-    Route::get('/', [DirectoryController::class, 'index'])->name('index');
-});
+Route::name('frontend.')->group(function () {
+    Route::prefix('/directory')->name('directory.')->group(function () {
+        Route::get('/', [DirectoryController::class, 'index'])->name('index');
+    });
 
-Route::prefix('/promotion')->name('promotion.')->group(function () {
-    Route::get('/', [PromotionController::class, 'index'])->name('index');
-});
+    Route::prefix('/promotion')->name('promotion.')->group(function () {
+        Route::get('/', [PromotionController::class, 'index'])->name('index');
+    });
 
-Route::prefix('/new-store')->name('new-store.')->group(function () {
-    Route::get('/', [NewStoreController::class, 'index'])->name('index');
+    Route::prefix('/new-store')->name('new-store.')->group(function () {
+        Route::get('/', [NewStoreController::class, 'index'])->name('index');
+    });
 });
 
 // ADMIN & SUPERUSER COMMON ROUTES
