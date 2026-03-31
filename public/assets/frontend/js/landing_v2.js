@@ -1,4 +1,10 @@
 
+// Helper to safely get nested data (replicates PHP data_get)
+function data_get(obj, path, defaultVal = null) {
+    if (!obj || !path) return defaultVal;
+    return path.split('.').reduce((o, i) => (o && o[i] !== undefined ? o[i] : defaultVal), obj);
+}
+
 (function() {
     const pageLoader = document.getElementById("pageLoader");
     if (!pageLoader) return;
@@ -935,7 +941,7 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
                             <svg viewBox="0 0 24 24">
                                 <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
                             </svg>
-                            ${tenant.category}
+                            ${tenant.category || 'General'}
                         </p>
                         <div class="tenant-meta">
                             <div class="meta-item">
@@ -1320,7 +1326,7 @@ function updateModalContent(data) {
     if (floorBadge) floorBadge.textContent = data.floor;
 
     const categoryText = document.getElementById("modalCategoryText");
-    if (categoryText) categoryText.textContent = data.category;
+    if (categoryText) categoryText.textContent = data.category || 'General';
 
     const locationEl = document.getElementById("modalLocation");
     if (locationEl) locationEl.textContent = data.floor;
@@ -1414,12 +1420,6 @@ function updateModalContent(data) {
             localStorage.setItem('mall_favorites', JSON.stringify(favs));
         });
     }
-
-// Helper to safely get nested data (replicates PHP data_get)
-function data_get(obj, path, defaultVal = null) {
-    if (!obj || !path) return defaultVal;
-    return path.split('.').reduce((o, i) => (o && o[i] !== undefined ? o[i] : defaultVal), obj);
-}
 
 const modalShareBtn = document.getElementById("modalShareBtn");
     if (modalShareBtn) {
