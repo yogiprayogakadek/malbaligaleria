@@ -51,6 +51,18 @@
         .lenis.lenis-scrolling iframe {
             pointer-events: none;
         }
+
+        /* Mobile specific font size for map gate labels */
+        @media (max-width: 768px) {
+            .map-gate-label {
+                font-size: 8px !important;
+                padding: 1px 3px !important;
+            }
+            .map-pin.gate {
+                width: 6px !important;
+                height: 6px !important;
+            }
+        }
     </style>
 </head>
 
