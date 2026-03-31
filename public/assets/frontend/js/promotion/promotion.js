@@ -598,13 +598,11 @@ function setupScrollToTop() {
 function sharePromotion(promoId, promoTitle) {
     const url = `${window.location.origin}${window.location.pathname}?id=${promoId}`;
 
-    if (navigator.share) {
-        navigator.share({
-            title: promoTitle,
-            text: `Check out this promotion: ${promoTitle}`,
-            url: url
-        }).catch(() => {
-            copyToClipboard(url);
+    if (typeof openShareMenu === 'function') {
+        openShareMenu({
+            name: promoTitle,
+            url: url,
+            type: 'Promotion'
         });
     } else {
         copyToClipboard(url);
@@ -709,7 +707,14 @@ function showPromotionModal(promo) {
     document.body.style.overflow = 'hidden';
     if (window.lenis) window.lenis.stop();
 
-    // ===== #9 Share WA button in modal =====
+    // ===== #9 Share button in modal (CONSISTENT WITH DIRECTORY) =====
+    const modalShareBtn = document.getElementById('eventModalShareBtn'); // Reusing ID for consistency if template uses it
+    if (modalShareBtn) {
+        modalShareBtn.onclick = () => {
+            sharePromotion(promo.id, promo.title);
+        };
+    }
+
     const modalShareWA = document.getElementById('modalShareWA');
     if (modalShareWA) {
         const waText = encodeURIComponent(`Cek promo menarik dari ${promo.tenant} di Mal Bali Galeria: *${promo.title}*\nBerlaku hingga ${formatDate(promo.validUntil)}\n${window.location.origin}${window.location.pathname}?id=${promo.id}`);
@@ -849,6 +854,17 @@ function setupEventListeners() {
             renderPromotions(currentFilter, currentCategoryFilter);
         });
     }
+
+    // Consistency: Re-attach share menu handlers
+    const copyBtn = document.getElementById('shareCopyLink');
+    const waBtn = document.getElementById('shareWhatsApp');
+    const fbBtn = document.getElementById('shareFacebook');
+    const twBtn = document.getElementById('shareTwitter');
+
+    if (copyBtn) copyBtn.onclick = () => shareContent('copy');
+    if (waBtn) waBtn.onclick = () => shareContent('whatsapp');
+    if (fbBtn) fbBtn.onclick = () => shareContent('facebook');
+    if (twBtn) twBtn.onclick = () => shareContent('twitter');
 
     // View Toggle
     document.querySelectorAll('.view-btn').forEach(btn => {

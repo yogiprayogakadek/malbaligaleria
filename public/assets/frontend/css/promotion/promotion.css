@@ -3120,3 +3120,155 @@ body.dark-mode .active-filter-pill {
     padding: 8px 0;
     text-align: center;
 }
+
+/* ===== SHARE MENU (SHARED) ===== */
+.share-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 11000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.share-menu.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.share-menu-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.share-menu-container {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    transform: translateY(30px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.share-menu.active .share-menu-container {
+    transform: translateY(0);
+}
+
+body.dark-mode .share-menu-container {
+    background: #2a2a2a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.share-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.share-menu-header h4 {
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    color: #2c3e50;
+    margin: 0;
+}
+
+body.dark-mode .share-menu-header h4 {
+    color: #e0e0e0;
+}
+
+.share-menu-close {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.share-menu-close:hover {
+    color: #ff4757;
+}
+
+.share-menu-body {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .share-option {
+    background: #1a1a1a;
+    border-color: #3a3a3a;
+}
+
+.share-option:hover {
+    transform: translateY(-5px);
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-color, #2c5f5d);
+}
+
+body.dark-mode .share-option:hover {
+    background: #333;
+    border-color: #5fcfda;
+}
+
+.share-option svg {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease;
+}
+
+.share-option:hover svg {
+    transform: scale(1.1);
+}
+
+.share-option span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+}
+
+body.dark-mode .share-option span {
+    color: #b0b0b0;
+}
+
+#shareCopyLink svg { stroke: #2c3e50; }
+#shareWhatsApp svg { fill: #25D366; }
+#shareFacebook svg { fill: #1877F2; }
+#shareTwitter svg { fill: #1DA1F2; }
+
+body.dark-mode #shareCopyLink svg { stroke: #e0e0e0; }
+
+@media (max-width: 480px) {
+    .share-menu-container {
+        padding: 20px;
+    }
+    .share-option {
+        padding: 15px;
+    }
+}

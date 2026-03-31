@@ -1411,18 +1411,12 @@ const modalShareBtn = document.getElementById("modalShareBtn");
         newShareBtn.addEventListener("click", () => {
             const shareUrl = `${window.location.origin}${window.location.pathname}?id=${data.id}`;
 
-            if (navigator.share) {
-                navigator.share({
-                    title: data.name,
-                    text: `Check out ${data.name} at Mal Bali Galeria!`,
-                    url: shareUrl
-                }).catch(err => {
-                    console.log("Share failed, falling back to clipboard", err);
-                    copyToClipboard(shareUrl);
-                });
-            } else {
-                copyToClipboard(shareUrl);
-            }
+            // NEW: Open consistent share menu instead of native share
+            openShareMenu({
+                name: data.name,
+                url: shareUrl,
+                type: 'Event'
+            });
         });
     }
 
@@ -1678,15 +1672,86 @@ function showToast(message, type = "info") {
 
     toast.innerHTML = `${icon}<span>${message}</span>`;
     document.body.appendChild(toast);
-
-    toast.offsetHeight; // force reflow
-    toast.classList.add("active");
-
+    
+    // Auto-remove after 3 seconds
     setTimeout(() => {
-        toast.classList.remove("active");
-        setTimeout(() => toast.remove(), 300);
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 400);
     }, 3000);
+    
+    // Force reflow and add active class for animation
+    toast.offsetHeight; 
+    toast.classList.add("active");
 }
+
+// ===== SHARE MENU LOGIC (CONSISTENT WITH DIRECTORY) =====
+let currentShareData = null;
+
+function openShareMenu(data) {
+    currentShareData = data;
+    const shareMenu = document.getElementById("shareMenu");
+    const shareMenuTitle = document.getElementById("shareMenuTitle");
+    
+    if (shareMenu) {
+        if (shareMenuTitle) {
+            shareMenuTitle.textContent = `Share ${data.type || 'Content'}`;
+        }
+        shareMenu.classList.add("active");
+    }
+}
+
+function shareContent(platform) {
+    if (!currentShareData) return;
+
+    const url = currentShareData.url;
+    const text = `Check out ${currentShareData.name} at Mal Bali Galeria!`;
+
+    switch (platform) {
+        case "copy":
+            copyToClipboard(url);
+            document.getElementById("shareMenu").classList.remove("active");
+            break;
+
+        case "whatsapp":
+            window.open(
+                `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+                "_blank"
+            );
+            break;
+
+        case "facebook":
+            window.open(
+                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    url
+                )}`,
+                "_blank"
+            );
+            break;
+
+        case "twitter":
+            window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                    text
+                )}&url=${encodeURIComponent(url)}`,
+                "_blank"
+            );
+            break;
+    }
+}
+
+// Initialization for Share Menu buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const copyBtn = document.getElementById('shareCopyLink');
+    const waBtn = document.getElementById('shareWhatsApp');
+    const fbBtn = document.getElementById('shareFacebook');
+    const twBtn = document.getElementById('shareTwitter');
+
+    if (copyBtn) copyBtn.onclick = () => shareContent('copy');
+    if (waBtn) waBtn.onclick = () => shareContent('whatsapp');
+    if (fbBtn) fbBtn.onclick = () => shareContent('facebook');
+    if (twBtn) twBtn.onclick = () => shareContent('twitter');
+});
 
 // Check for deep-link parameter on load (Tenant prioritized by 'store' or fallback 'id')
 document.addEventListener("DOMContentLoaded", () => {
