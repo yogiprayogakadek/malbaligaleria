@@ -17,9 +17,9 @@ class EventController extends Controller
 
     public function index()
     {
-        // Hanya tampilkan event NON-regular (is_regular = false) yang aktif
+        // Tampilkan event yang aktif dengan tipe upcoming, regular, atau special
         $events = $this->eventService->getEventsWithRelationship(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location', 'is_paid'],
+            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location', 'is_paid', 'type'],
             [
                 'primaryPhoto:id,event_id,path',
             ]
