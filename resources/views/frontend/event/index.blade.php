@@ -30,12 +30,8 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/index.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <style>
-        .event-status-pills {
-            display: none !important;
-        }
-
         .events-filter-toolbar {
-            justify-content: flex-end;
+            display: none !important;
         }
     </style>
 </head>
@@ -169,53 +165,6 @@
                 <span class="events-count-badge" id="eventsShownCount">{{ count($events) }} Events</span>
             </div>
 
-            {{-- #1 & #8: Filter toolbar + month pills --}}
-            <div class="events-filter-toolbar">
-                <div class="events-filter-left">
-                    {{-- Status filter --}}
-                    <div class="event-status-pills">
-                        <button class="event-status-pill active" data-status="all">All</button>
-                        <button class="event-status-pill" data-status="upcoming">Upcoming</button>
-                        <button class="event-status-pill" data-status="ongoing">Ongoing</button>
-                    </div>
-                </div>
-                <div class="events-filter-right">
-                    <div style="display: flex; gap: 10px;">
-                        {{-- Category filter --}}
-                        <select class="events-sort-select" id="eventsCategory">
-                            <option value="all">All Types</option>
-                            <option value="regular">Regular Shows</option>
-                            <option value="special">Special Events</option>
-                        </select>
-                        {{-- Month filter --}}
-                        <select class="events-sort-select" id="eventsMonth">
-                            <option value="all">All Months</option>
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                        {{-- Year filter --}}
-                        <select class="events-sort-select" id="eventsYear">
-                            <option value="all">All Years</option>
-                        </select>
-                        {{-- Sort --}}
-                        <select class="events-sort-select" id="eventsSort">
-                            <option value="newest">Newest First</option>
-                            <option value="oldest">Oldest First</option>
-                            <option value="name_asc">A–Z</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
 
             <div class="events-grid" id="eventsGrid">
                 @foreach ($events->whereIn('type', ['regular', 'special']) as $index => $event)
@@ -294,7 +243,7 @@
                         $waHref = 'https://wa.me/?text=' . $waText;
                     @endphp
                     <a href="javascript:void(0)"
-                        class="event-card-v2 event-modal-trigger {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
+                        class="event-card-v2 event-modal-trigger {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
                         data-event-uuid="{{ $event->uuid }}" data-event-name="{{ e($event->name) }}"
                         data-event-image="{{ $imgUrl }}" data-event-date="{{ $dateRange }}"
                         data-event-time="{{ $event->start_time && $event->end_time ? date('H:i', strtotime($event->start_time)) . ' - ' . date('H:i', strtotime($event->end_time)) : 'All Day' }}"
@@ -332,23 +281,6 @@
                 @endforeach
             </div>
 
-            {{-- JS Empty State Filter (Di luar events-grid) --}}
-            <div class="no-events-improved" id="noEventsState"
-                style="display: {{ count($events) == 0 ? 'flex' : 'none' }}; margin: 60px auto; max-width: 600px; padding: 40px;">
-                <div class="no-events-emoji">🎪</div>
-                <h3>No Events Found</h3>
-                <p>Please adjust your month, year, or sort filters to find what you're looking for.</p>
-                <button type="button" class="no-events-cta" style="border:none; cursor:pointer;"
-                    onclick="document.getElementById('eventsMonth').value='all'; document.getElementById('eventsYear').value='all'; document.querySelector('.event-status-pill[data-status=&quot;all&quot;]').click();">Show
-                    All Events</button>
-            </div>
-
-            @if (count($events) > 8)
-                <div class="load-more-container">
-                    <button id="loadMoreBtn" class="btn-load-more">Load More Events</button>
-                    <p class="load-more-hint" id="loadMoreHint"></p>
-                </div>
-            @endif
         </div>
     </main>
 
@@ -686,168 +618,6 @@
             }));
         }
 
-        // ===== #1 & #8: FILTER / SORT ENGINE =====
-        let activeStatus = 'all';
-        let activeMonth = 'all';
-        let activeYear = 'all';
-        let activeCategory = 'all';
-        let activeSort = 'newest';
-
-        // Collect all event cards (including hidden initially)
-        const allCards = [...document.querySelectorAll('.event-card-v2')];
-
-        // Build month & year dropdown from unique data
-        const yearMap = new Map();
-        allCards.forEach(card => {
-            const y = card.dataset.year;
-            if (y && y !== 'regular' && !yearMap.has(y)) yearMap.set(y, y);
-        });
-
-        const monthSelectEl = document.getElementById('eventsMonth');
-        if (monthSelectEl) {
-            monthSelectEl.addEventListener('change', () => {
-                activeMonth = monthSelectEl.value;
-                applyFilters();
-            });
-        }
-
-        const yearSelectEl = document.getElementById('eventsYear');
-        if (yearSelectEl && yearMap.size > 0) {
-            const sortedYears = Array.from(yearMap.entries()).sort((a, b) => b[0].localeCompare(a[0]));
-            sortedYears.forEach(([key, label]) => {
-                const opt = document.createElement('option');
-                opt.value = key;
-                opt.textContent = label;
-                yearSelectEl.appendChild(opt);
-            });
-            yearSelectEl.addEventListener('change', () => {
-                activeYear = yearSelectEl.value;
-                applyFilters();
-            });
-        } else if (yearSelectEl) {
-            yearSelectEl.style.display = 'none';
-        }
-
-        // Status pill clicks
-        document.querySelectorAll('.event-status-pill').forEach(pill => {
-            pill.addEventListener('click', () => {
-                activeStatus = pill.dataset.status;
-                document.querySelectorAll('.event-status-pill').forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                applyFilters();
-            });
-        });
-
-        // Sort change
-        const sortSelect = document.getElementById('eventsSort');
-        if (sortSelect) {
-            sortSelect.addEventListener('change', () => {
-                activeSort = sortSelect.value;
-                applyFilters();
-            });
-        }
-
-        const catSelect = document.getElementById('eventsCategory');
-        if (catSelect) {
-            catSelect.addEventListener('change', () => {
-                activeCategory = catSelect.value;
-                applyFilters();
-            });
-        }
-
-        // Initial apply
-        applyFilters();
-    });
-
-        function applyFilters() {
-            const grid = document.getElementById('eventsGrid');
-            const allCards = [...document.querySelectorAll('.event-card-v2')];
-            let visible = allCards.filter(card => {
-                const statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
-                const monthMatch = activeMonth === 'all' || card.dataset.month === activeMonth;
-                const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
-                
-                const targetCat = activeCategory.toLowerCase();
-                const cardTypeAttr = (card.dataset.eventType || '').toLowerCase();
-                
-                let catMatch = activeCategory === 'all';
-                if (!catMatch) {
-                    // Simpler contains check to be safe
-                    catMatch = cardTypeAttr.includes(targetCat);
-                }
-                
-                return statusMatch && monthMatch && yearMatch && catMatch;
-            });
-
-            // Sort
-            visible.sort((a, b) => {
-                const dateA = a.dataset.date || '';
-                const dateB = b.dataset.date || '';
-                const nameA = a.dataset.name || '';
-                const nameB = b.dataset.name || '';
-                if (activeSort === 'newest') return dateB.localeCompare(dateA);
-                if (activeSort === 'oldest') return dateA.localeCompare(dateB);
-                if (activeSort === 'name_asc') return nameA.localeCompare(nameB);
-                return 0;
-            });
-
-            // Hide all first
-            allCards.forEach(c => {
-                c.style.display = 'none';
-                c.classList.remove('event-reveal');
-            });
-
-            // Show filtered with animation (#6)
-            visible.forEach((card, i) => {
-                card.style.display = '';
-                card.style.animationDelay = (i * 0.06) + 's';
-                card.classList.add('event-reveal');
-            });
-
-            // Update counter
-            const countEl = document.getElementById('eventsShownCount');
-            if (countEl) countEl.textContent = `${visible.length} Event${visible.length !== 1 ? 's' : ''}`;
-
-            // Show empty state if needed
-            const emptyState = document.getElementById('noEventsState');
-            if (emptyState) {
-                emptyState.style.display = visible.length === 0 ? 'flex' : 'none';
-            }
-
-            // Hide load more when filtering (show all filtered results)
-            const lmContainer = document.querySelector('.load-more-container');
-            if (lmContainer) lmContainer.style.display = (visible.length === 0 || activeStatus !== 'all' || activeMonth !==
-                'all' || activeYear !== 'all') ? 'none' : '';
-        }
-
-        // ===== #6: LOAD MORE with animation =====
-        $(document).ready(function() {
-            $('#loadMoreBtn').on('click', function() {
-                const hidden = $('.event-card-v2.event-hidden:not([style*="display: none"])');
-                const toShow = hidden.slice(0, 8);
-                toShow.each(function(i) {
-                    const card = $(this);
-                    setTimeout(() => {
-                        card.removeClass('event-hidden')
-                            .css({
-                                opacity: 0,
-                                transform: 'translateY(20px)'
-                            })
-                            .animate({
-                                opacity: 1
-                            }, 300);
-                        card[0].style.transform = 'translateY(0)';
-                        card[0].style.transition = 'transform 0.4s ease';
-                    }, i * 80);
-                });
-                const remaining = hidden.length - toShow.length;
-                const hintEl = document.getElementById('loadMoreHint');
-                if (hintEl) hintEl.textContent = remaining > 0 ? `${remaining} events more to load` : '';
-                if ($('.event-card-v2.event-hidden').length === 0) {
-                    $('.load-more-container').fadeOut();
-                }
-            });
-        });
     </script>
     <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
     {{-- Sticky Mobile CTA Bar --}}
