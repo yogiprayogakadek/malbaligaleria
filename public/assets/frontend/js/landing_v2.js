@@ -1715,18 +1715,19 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- INTERACTIVE MAP FUNCTIONS ---
 if (showOnMapBtn) {
     showOnMapBtn.addEventListener("click", () => {
-        if (tenantData) {
-            // Instead of closing modal and scrolling, we swap view inside modal
-            renderModalMap(tenantData);
-
+        // Use either the shared tenantData or the specific data passed to the modal
+        const dataToRender = tenantData || window.currentModalTenantData;
+        
+        if (dataToRender) {
+            // Ensure views swap
             const infoView = document.getElementById("modalInfoView");
             const mapView = document.getElementById("modalMapView");
             if (infoView) infoView.style.display = "none";
             if (mapView) mapView.style.display = "block";
             tenantModal.classList.add("map-active-mobile");
 
-            // Logically, we still want to keep the old pinpoint function for outside triggers
-            // pinpointOnMap(tenantData);
+            // Render the map and pins
+            renderModalMap(dataToRender);
         }
     });
 }
