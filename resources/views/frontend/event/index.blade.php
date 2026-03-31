@@ -662,6 +662,18 @@
         // Initial run
         applyFilters();
 
+        // Check for deep-link parameter on load
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventUuid = urlParams.get("id") || urlParams.get("uuid");
+        if (eventUuid) {
+            setTimeout(() => {
+                const card = document.querySelector(`.event-modal-trigger[data-event-uuid="${eventUuid}"]`);
+                if (card && typeof openEventModal === "function") {
+                    openEventModal(card);
+                }
+            }, 600);
+        }
+
         // ===== CAROUSEL NAVIGATION =====
         const eventsGrid = document.getElementById('eventsGrid');
         const prevBtn = document.getElementById('eventsPrevBtn');

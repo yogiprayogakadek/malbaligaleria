@@ -1406,7 +1406,7 @@ function updateModalContent(data) {
         const newShareBtn = modalShareBtn.cloneNode(true);
         modalShareBtn.parentNode.replaceChild(newShareBtn, modalShareBtn);
         newShareBtn.addEventListener("click", () => {
-            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${data.id || data.unit}`;
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${data.id}`;
 
             if (navigator.share) {
                 navigator.share({
@@ -1690,9 +1690,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const tenantId = urlParams.get("id") || urlParams.get("store");
     if (tenantId) {
+        // Wait for page to be ready and and open if ID is valid
         setTimeout(() => {
-            openTenantModal(tenantId);
-        }, 1000);
+            if (typeof openTenantModal === "function") {
+                openTenantModal(tenantId);
+            }
+        }, 1200);
     }
 });
 
