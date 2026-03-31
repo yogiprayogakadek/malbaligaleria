@@ -66,6 +66,9 @@ class LandingPageController extends Controller
 
     public function tenantData($cat = "new store", $isNew)
     {
+        // Debugging gate data
+        \Illuminate\Support\Facades\Log::info("LandingPageController::tenantData - Requested: $cat, isNew: $isNew");
+
         $tenants = $this->tenantService->getDataByFloor(
             ['id', 'name', 'map_coords', 'category_id', 'logo', 'isNew', 'type', 'path_coords'],
             [
@@ -76,7 +79,16 @@ class LandingPageController extends Controller
             filter_var($isNew, FILTER_VALIDATE_BOOLEAN)
         );
 
-        return response()->json($tenants->sortBy('name')->values());
+        $tenants = $tenants->sortBy('name')->values();
+
+        // Log gate count
+        $gateCount = $tenants->where('type', 'gate')->count();
+        \Illuminate\Support\Facades\Log::info("LandingPageController::tenantData - Returning " . $tenants->count() . " tenants, Gates found: " . $gateCount);
+        if ($gateCount > 0) {
+            \Illuminate\Support\Facades\Log::info("LandingPageController::tenantData - Gates detail: " . json_encode($tenants->where('type', 'gate')->all()));
+        }
+
+        return response()->json($tenants);
     }
 
     public function findTenantById($tenant_id)
