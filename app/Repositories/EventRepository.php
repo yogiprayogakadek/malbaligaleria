@@ -23,7 +23,7 @@ class EventRepository
         return $this->model::select($fields)
             ->with($relationship)
             ->where('is_active', true)
-            ->where('type', 'upcoming')
+            ->whereIn('type', ['regular', 'special'])
             ->orderBy('id', 'desc')
             ->limit(100)
             ->get();
