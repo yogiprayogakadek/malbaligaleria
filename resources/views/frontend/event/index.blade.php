@@ -744,6 +744,7 @@
             });
         }
 
+        const catSelect = document.getElementById('eventsCategory');
         if (catSelect) {
             catSelect.addEventListener('change', () => {
                 activeCategory = catSelect.value;
