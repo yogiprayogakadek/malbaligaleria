@@ -2,7 +2,7 @@
 const pageLoader = document.getElementById("pageLoader");
 
 // Initialize Lenis Smooth Scroll
-window.lenis = new Lenis({
+const lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     autoRaf: true
@@ -881,7 +881,7 @@ window.addEventListener("load", () => {
 
 async function loadTenantsOnDatabase(floor, isNew = false) {
     try {
-        const data = await $.get(window.location.origin + "/tenants/" + floor + '/' + isNew);
+        const data = await $.get("/tenants/" + floor + '/' + isNew);
         return data;
     } catch (error) {
         console.error("Failed to load data", error);
@@ -936,29 +936,6 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
                     <div class="tenant-info">
                         <span class="floor-badge">${tenant.floor}</span>
                         <h3>${tenant.name}</h3>
-                        <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
-                            data-event-uuid="{{ optional($exEvent)->uuid }}"
-                            data-event-name="{{ optional($exEvent)->name }}"
-                            data-event-date="{{ $exDateStr }}"
-                            data-event-time="{{ (optional($exEvent)->start_time && optional($exEvent)->end_time) ? \Carbon\Carbon::parse(optional($exEvent)->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse(optional($exEvent)->end_time)->format('h:i A') : 'All Day' }}"
-                            data-event-desc="{{ optional($exEvent)->description ?? '' }}"
-                            data-event-location="{{ optional($exEvent)->location ?? '' }}"
-                            data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
-                            data-event-monthyear="{{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
-                            data-event-image="{{ (optional($exEvent)->primaryPhoto && optional(optional($exEvent)->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ ($exEvent && optional($exEvent)->type && isset($typeLabels[optional($exEvent)->type])) ? $typeLabels[optional($exEvent)->type] : 'Exhibition' }}">
-                            <div class="rsc-card-bg"
-                                style="background-image: url({{ (optional($exEvent)->primaryPhoto && optional(optional($exEvent)->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
-                            </div>
-                            <div class="rsc-card-content">
-                                <span class="event-date">{{ $exDateStr }}</span>
-                                <h3>{{ optional($exEvent)->name ?? '' }}</h3>
-                                <p class="event-desc">
-                                    {{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
-                                </p>
-                                <span class="event-link">Learn More →</span>
-                            </div>
-                        </div>
                         <p class="tenant-category">
                             <svg viewBox="0 0 24 24">
                                 <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 15H4V9h16v10z"/>
@@ -1384,10 +1361,9 @@ function updateModalContent(data) {
     if (mapView) mapView.style.display = "none";
     tenantModal.classList.remove("map-active-mobile");
 
-    // Show modal and prevent body scroll
+    // Show modal
     document.body.style.overflow = "hidden";
-    if (window.lenis) window.lenis.stop();
-    if (tenantModal) tenantModal.classList.add("active");
+    tenantModal.classList.add("active");
 
     // Action button listeners
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
@@ -1440,11 +1416,7 @@ function updateModalContent(data) {
 
 function closeTenantModal() {
     if (tenantModal) tenantModal.classList.remove("active");
-    if (window.lenis) window.lenis.start();
-    
-    // Restore body scroll
     document.body.style.overflow = "";
-    document.body.style.paddingRight = "";
 
 
     setTimeout(() => {
@@ -1870,46 +1842,38 @@ function renderModalMap(data) {
             const xPos = (data.x / mapWidth) * 100;
             const yPos = (data.y / mapHeight) * 100;
 
-            // --- ADD GATES TO MODAL MAP ---
+            if (markerLogo) {
+                markerLogo.style.left = `${xPos}%`;
+                markerLogo.style.top = `${yPos}%`;
+                markerLogo.style.display = "block";
+            }
+
+            // --- MINIMALIST MULTI-GATE RENDERING ---
             const gatesContainer = document.getElementById("modalMapGatesContainer");
             const gateTemplate = document.getElementById("modalMapGateMarkerTemplate");
             
             if (gatesContainer && gateTemplate) {
-                // Clear old gates
-                gatesContainer.innerHTML = "";
+                gatesContainer.innerHTML = ""; // Always clear old pins
 
-                // Get gates data
                 let gatesData = data.gate_coords;
                 if (typeof gatesData === 'string') {
                     try { gatesData = JSON.parse(gatesData); } catch(e) { gatesData = null; }
                 }
 
-                // If single gate object wrap in array
-                if (gatesData && !Array.isArray(gatesData)) {
-                    gatesData = [gatesData];
-                }
-
-                // If no array data but we have gate_x/y
+                // Normalizer to array
+                if (gatesData && !Array.isArray(gatesData)) gatesData = [gatesData];
                 if (!gatesData && data.gate_x && data.gate_y) {
-                    gatesData = [{
-                        x: data.gate_x,
-                        y: data.gate_y,
-                        name: data.gate_name || "Entrance"
-                    }];
+                    gatesData = [{ x: data.gate_x, y: data.gate_y, name: data.gate_name || "Entrance" }];
                 }
 
                 if (gatesData && Array.isArray(gatesData)) {
                     gatesData.forEach(gate => {
                         if (gate.x && gate.y && gate.x !== '-' && gate.y !== '-') {
                             const gatePin = gateTemplate.cloneNode(true);
-                            gatePin.id = ""; // Remove ID
+                            gatePin.id = ""; 
                             gatePin.style.display = "block";
-                            
-                            const gxPos = (gate.x / mapWidth) * 100;
-                            const gyPos = (gate.y / mapHeight) * 100;
-                            
-                            gatePin.style.left = `${gxPos}%`;
-                            gatePin.style.top = `${gyPos}%`;
+                            gatePin.style.left = `${(gate.x / mapWidth) * 100}%`;
+                            gatePin.style.top = `${(gate.y / mapHeight) * 100}%`;
                             
                             const label = gatePin.querySelector(".gate-label");
                             if (label) label.textContent = gate.name || "Entrance";
@@ -2085,7 +2049,6 @@ function renderModalMap(data) {
         renderCarousel([placeholderImg], card.dataset.eventName || "Event");
 
         document.body.style.overflow = "hidden";
-        if (window.lenis) window.lenis.stop();
         modal.classList.add("active");
 
         // Fetch full data
@@ -2127,7 +2090,6 @@ function renderModalMap(data) {
     function closeEventModal() {
         modal.classList.remove("active");
         document.body.style.overflow = "";
-        if (window.lenis) window.lenis.start();
         currentEventUuid = null;
     }
 

@@ -525,21 +525,21 @@
                             data-event-uuid="{{ optional($exEvent)->uuid }}"
                             data-event-name="{{ optional($exEvent)->name }}"
                             data-event-date="{{ $exDateStr }}"
-                            data-event-time="{{ (optional($exEvent)->start_time && optional($exEvent)->end_time) ? \Carbon\Carbon::parse(optional($exEvent)->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse(optional($exEvent)->end_time)->format('h:i A') : 'All Day' }}"
-                            data-event-desc="{{ optional($exEvent)->description ?? '' }}"
-                            data-event-location="{{ optional($exEvent)->location ?? '' }}"
-                            data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
-                            data-event-monthyear="{{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
-                            data-event-image="{{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ ($exEvent && optional($exEvent)->type && isset($typeLabels[optional($exEvent)->type])) ? $typeLabels[optional($exEvent)->type] : 'Exhibition' }}">
+                            data-event-time="{{ ($exEvent && property_exists($exEvent, 'start_time') && $exEvent->start_time && property_exists($exEvent, 'end_time') && $exEvent->end_time) ? \Carbon\Carbon::parse($exEvent->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($exEvent->end_time)->format('h:i A') : 'All Day' }}"
+                            data-event-desc="{{ isset($exEvent->description) ? $exEvent->description : '' }}"
+                            data-event-location="{{ isset($exEvent->location) ? $exEvent->location : '' }}"
+                            data-event-highlight="{{ isset($exEvent->highlights) ? $exEvent->highlights : '-' }}"
+                            data-event-monthyear="{{ ($exEvent && isset($exEvent->start_date)) ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                            data-event-image="{{ ($exEvent && isset($exEvent->primaryPhoto) && isset($exEvent->primaryPhoto->path)) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="{{ ($exEvent && isset($exEvent->type) && isset($typeLabels[$exEvent->type])) ? $typeLabels[$exEvent->type] : 'Exhibition' }}">
                             <div class="rsc-card-bg"
-                                style="background-image: url({{ (optional($exEvent)->primaryPhoto && optional($exEvent->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
+                                style="background-image: url({{ ($exEvent && isset($exEvent->primaryPhoto) && isset($exEvent->primaryPhoto->path)) ? asset('storage/' . $exEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
                             <div class="rsc-card-content">
                                 <span class="event-date">{{ $exDateStr }}</span>
-                                <h3>{{ optional($exEvent)->name ?? '' }}</h3>
+                                <h3>{{ isset($exEvent->name) ? $exEvent->name : '' }}</h3>
                                 <p class="event-desc">
-                                    {{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                    {{ ($exEvent && isset($exEvent->start_date)) ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
                                 <span class="event-link">Learn More →</span>
                             </div>
@@ -675,7 +675,7 @@
     </section>
 
     <div class="tenant-modal" id="tenantModal">
-        <div class="modal-overlay" id="modalOverlay" onclick="closeTenantModal()"></div>
+        <div class="modal-overlay" id="modalOverlay"></div>
         <div class="modal-container">
 
             <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
@@ -705,7 +705,7 @@
             </button>
 
 
-            <div class="modal-content" data-lenis-prevent>
+            <div class="modal-content">
 
                 <div class="modal-carousel">
 
@@ -826,10 +826,8 @@
                                 </div>
                                 <div class="marker-pulse"></div>
                             </div>
-                            <!-- Gates Container for Modal Map -->
+                            <!-- Minimalist Gates Container -->
                             <div id="modalMapGatesContainer"></div>
-                            
-                            <!-- Gate Marker Template -->
                             <div class="map-gate-marker" id="modalMapGateMarkerTemplate" style="display: none; position: absolute;">
                                 <div class="gate-pin"></div>
                                 <div class="gate-label"></div>
@@ -843,7 +841,7 @@
 
     {{-- ===== EVENT DETAIL MODAL ===== --}}
     <div class="event-detail-modal" id="eventDetailModal">
-        <div class="event-modal-overlay" id="eventModalOverlay" onclick="closeEventModal()"></div>
+        <div class="event-modal-overlay" id="eventModalOverlay"></div>
         <div class="event-modal-container">
 
             <button class="event-modal-close" id="eventModalCloseBtn" aria-label="Close">
