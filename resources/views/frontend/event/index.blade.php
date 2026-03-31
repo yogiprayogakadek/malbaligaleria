@@ -655,12 +655,17 @@
         // ===== #10: SCROLL TO TOP =====
         const scrollTopBtn = document.getElementById("scrollToTop");
         window.addEventListener("scroll", () => {
-            scrollTopBtn.classList.toggle("visible", window.pageYOffset > 400);
+            const stBtn = document.getElementById("scrollToTop");
+            if (stBtn) {
+                stBtn.classList.toggle("visible", window.scrollY > 400);
+            }
         });
-        scrollTopBtn.addEventListener("click", () => window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        }));
+        if (scrollTopBtn) {
+            scrollTopBtn.addEventListener("click", () => window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            }));
+        }
 
         // ===== #1 & #8: FILTER / SORT ENGINE =====
         let activeStatus = 'all';

@@ -207,6 +207,8 @@ const carouselContainer = document.getElementById("carouselContainer");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
+if (carouselContainer && prevBtn && nextBtn) {
+
 
 let cards = [];
 if (carouselContainer) {
@@ -300,27 +302,23 @@ carouselContainer.addEventListener("transitionend", () => {
     isTransitioning = false;
 });
 
-prevBtn.addEventListener("click", () => {
-    if (isTransitioning) return;
-    if (currentIndex > 0) {
-        currentIndex--;
-        updateCarousel();
-    } else {
+    prevBtn.addEventListener("click", () => {
+        if (isTransitioning) return;
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+        } else {
+            currentIndex = originalCardsCount - 1;
+            updateCarousel(true);
+        }
+    });
 
-
-        currentIndex = originalCardsCount - 1;
-        updateCarousel(true);
-
-    }
-});
-
-nextBtn.addEventListener("click", () => {
-    // Allow clicking into clone territory
-    if (originalCardsCount > 0) {
+    nextBtn.addEventListener("click", () => {
+        if (isTransitioning) return;
         currentIndex++;
         updateCarousel();
-    }
-});
+    });
+}
 
 
 let autoplayInterval;
