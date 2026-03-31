@@ -99,6 +99,23 @@
             text-transform: uppercase;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+
+        /* Modal Map Path Styles */
+        .modal-map-path {
+            fill: none;
+            stroke: #FF0000;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 8;
+            animation: dash-modal 20s linear infinite;
+        }
+
+        @keyframes dash-modal {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
     </style>
 </head>
 
@@ -865,6 +882,16 @@
                         </div>
                         <div class="modal-map-wrapper">
                             <img src="" id="modalFloorMap" alt="Floor Map">
+                            
+                            <!-- Path Overlay for Modal -->
+                            <svg id="modalMapPathOverlay" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index: 5;">
+                                <defs>
+                                    <marker id="modal-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#FF0000" />
+                                    </marker>
+                                </defs>
+                            </svg>
+
                             <div class="map-marker-logo" id="modalMapMarkerLogo">
                                 <div class="logo-pin">
                                     <img src="" id="markerLogoImg" alt="">

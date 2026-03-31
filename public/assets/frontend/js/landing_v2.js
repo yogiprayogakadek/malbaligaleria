@@ -934,6 +934,29 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
                         <img src="${tenant.logo}" alt="${tenant.name}" loading="lazy" onerror="this.src='/assets/images/no_image.jpg'">
                     </div>
                     <div class="tenant-info">
+                        <div class="regular-show-card event-modal-trigger" style="cursor:pointer;"
+                            data-event-uuid="{{ optional($exEvent)->uuid }}"
+                            data-event-name="{{ optional($exEvent)->name }}"
+                            data-event-date="{{ $exDateStr }}"
+                            data-event-time="{{ (optional($exEvent)->start_time && optional($exEvent)->end_time) ? \Carbon\Carbon::parse(optional($exEvent)->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse(optional($exEvent)->end_time)->format('h:i A') : 'All Day' }}"
+                            data-event-desc="{{ optional($exEvent)->description ?? '' }}"
+                            data-event-location="{{ optional($exEvent)->location ?? '' }}"
+                            data-event-highlight="{{ optional($exEvent)->highlights ?? '-' }}"
+                            data-event-monthyear="{{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                            data-event-image="{{ (optional($exEvent)->primaryPhoto && optional(optional($exEvent)->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
+                            data-event-type="{{ ($exEvent && optional($exEvent)->type && isset($typeLabels[optional($exEvent)->type])) ? $typeLabels[optional($exEvent)->type] : 'Exhibition' }}">
+                            <div class="rsc-card-bg"
+                                style="background-image: url({{ (optional($exEvent)->primaryPhoto && optional(optional($exEvent)->primaryPhoto)->path) ? asset('storage/' . optional($exEvent->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
+                            </div>
+                            <div class="rsc-card-content">
+                                <span class="event-date">{{ $exDateStr }}</span>
+                                <h3>{{ optional($exEvent)->name ?? '' }}</h3>
+                                <p class="event-desc">
+                                    {{ optional($exEvent)->start_date ? strtoupper(\Carbon\Carbon::parse(optional($exEvent)->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                </p>
+                                <span class="event-link">Learn More →</span>
+                            </div>
+                        </div>
                         <span class="floor-badge">${tenant.floor}</span>
                         <h3>${tenant.name}</h3>
                         <p class="tenant-category">
@@ -1857,55 +1880,64 @@ function renderModalMap(data) {
                 markerLogo.style.display = "block";
             }
 
-            // --- MINIMALIST MULTI-GATE RENDERING ---
+            // --- MINIMALIST MULTI-GATE RENDERING & PATH ---
             const gatesContainer = document.getElementById("modalMapGatesContainer");
             const gateTemplate = document.getElementById("modalMapGateMarkerTemplate");
+            const pathOverlay = document.getElementById("modalMapPathOverlay");
             
             if (gatesContainer && gateTemplate) {
-                gatesContainer.innerHTML = ""; // Always clear old pins
-
-                // 1. Try to find gates in gate_coords (array or string)
-                let gatesData = data.gate_coords || (data.map_coords ? data.map_coords.gate_coords : null);
-                
-                if (typeof gatesData === 'string') {
-                    try { gatesData = JSON.parse(gatesData); } catch(e) { gatesData = null; }
+                gatesContainer.innerHTML = ""; 
+                if (pathOverlay) {
+                    // Clear old paths
+                    const oldPaths = pathOverlay.querySelectorAll(".modal-map-path");
+                    oldPaths.forEach(p => p.remove());
                 }
 
-                // 2. Fallback to single gate_x / gate_y if array is empty
+                // Get gates & paths
+                let gatesData = data.gate_coords || (data.map_coords ? data.map_coords.gate_coords : null);
+                let pathData = data.path_coords || (data.map_coords ? data.map_coords.path_coords : null);
+                
+                if (typeof gatesData === 'string') { try { gatesData = JSON.parse(gatesData); } catch(e) {} }
+                if (typeof pathData === 'string') { try { pathData = JSON.parse(pathData); } catch(e) {} }
+
+                // Fallback single gate
                 if (!gatesData || (Array.isArray(gatesData) && gatesData.length === 0)) {
                     const gx = data.gate_x || (data.map_coords ? data.map_coords.gate_x : null);
                     const gy = data.gate_y || (data.map_coords ? data.map_coords.gate_y : null);
-                    const gName = data.gate_name || (data.map_coords ? data.map_coords.gate_name : "Entrance");
-                    
-                    if (gx && gy && gx !== '-' && gy !== '-') {
-                        gatesData = [{ x: gx, y: gy, name: gName }];
-                    }
+                    if (gx && gy && gx !== '-' ) gatesData = [{ x: gx, y: gy, name: data.gate_name || "Entrance" }];
                 }
 
-                // Normalizer to array
-                if (gatesData && !Array.isArray(gatesData)) gatesData = [gatesData];
-
-                if (gatesData && Array.isArray(gatesData)) {
+                if (Array.isArray(gatesData)) {
                     gatesData.forEach(gate => {
-                        // Support both gate.x/y and gate.px/py (different API versions)
                         const x = gate.x || gate.px;
                         const y = gate.y || gate.py;
-                        
-                        if (x && y && x !== '-' && y !== '-') {
+                        if (x && y && x !== '-') {
                             const gatePin = gateTemplate.cloneNode(true);
-                            gatePin.id = ""; 
-                            gatePin.style.display = "block";
-                            gatePin.style.zIndex = "11"; // Above everything
-                            
+                            gatePin.id = ""; gatePin.style.display = "block";
                             gatePin.style.left = `${(x / mapWidth) * 100}%`;
                             gatePin.style.top = `${(y / mapHeight) * 100}%`;
-                            
                             const label = gatePin.querySelector(".gate-label");
                             if (label) label.textContent = gate.name || "Entrance";
-                            
                             gatesContainer.appendChild(gatePin);
                         }
                     });
+                }
+
+                // Render Path if available
+                if (pathOverlay && Array.isArray(pathData) && pathData.length > 1) {
+                    const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+                    polyline.setAttribute("class", "modal-map-path");
+                    polyline.setAttribute("marker-end", "url(#modal-arrowhead)");
+                    
+                    let points = "";
+                    pathData.forEach(pt => {
+                        const px = (parseFloat(pt.px || pt.x) / mapWidth) * 100;
+                        const py = (parseFloat(pt.py || pt.y) / mapHeight) * 100;
+                        points += `${px},${py} `;
+                    });
+                    
+                    polyline.setAttribute("points", points.trim());
+                    pathOverlay.appendChild(polyline);
                 }
             }
         };
