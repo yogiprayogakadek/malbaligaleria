@@ -30,8 +30,13 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/event/index.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <style>
-        .event-status-pills { display: none !important; }
-        .events-filter-toolbar { justify-content: flex-end; }
+        .event-status-pills {
+            display: none !important;
+        }
+
+        .events-filter-toolbar {
+            justify-content: flex-end;
+        }
     </style>
 </head>
 
@@ -70,7 +75,8 @@
             <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" />
             <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
             <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor"
+                stroke-width="2" />
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor"
                 stroke-width="2" />
         </svg>
@@ -223,7 +229,7 @@
                         // Date range logic
                         $startDate = $event->start_date;
                         $endDate = $event->end_date ?? null;
-                        
+
                         if ($event->type === 'regular') {
                             // For regular shows, use label
                             $dateRange = $event->recurring_label ?: 'Regular Event';
@@ -283,20 +289,15 @@
                     @endphp
                     <a href="javascript:void(0)"
                         class="event-card-v2 event-modal-trigger {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
-                        data-event-uuid="{{ $event->uuid }}"
-                        data-event-name="{{ e($event->name) }}"
-                        data-event-image="{{ $imgUrl }}"
-                        data-event-date="{{ $dateRange }}"
+                        data-event-uuid="{{ $event->uuid }}" data-event-name="{{ e($event->name) }}"
+                        data-event-image="{{ $imgUrl }}" data-event-date="{{ $dateRange }}"
                         data-event-time="{{ $event->start_time && $event->end_time ? date('H:i', strtotime($event->start_time)) . ' - ' . date('H:i', strtotime($event->end_time)) : 'All Day' }}"
                         data-event-location="{{ $event->location ?? 'Mal Bali Galeria' }}"
                         data-event-type="{{ ucfirst($event->type) }}"
                         data-event-description="{{ e($event->description) }}"
-                        data-event-highlights="{{ e($event->highlights) }}"
-                        data-month="{{ $monthValue }}"
-                        data-month-label="{{ $monthLabel }}"
-                        data-year="{{ $yearValue }}"
-                        data-status="{{ strtolower($statusLabel) }}"
-                        data-date="{{ $event->start_date }}"
+                        data-event-highlights="{{ e($event->highlights) }}" data-month="{{ $monthValue }}"
+                        data-month-label="{{ $monthLabel }}" data-year="{{ $yearValue }}"
+                        data-status="{{ strtolower($statusLabel) }}" data-date="{{ $event->start_date }}"
                         data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
                             <!-- <div class="event-card-logo-badge">
@@ -314,7 +315,8 @@
                             <div class="event-card-info">
                                 <span class="event-date-pill">{{ $fullDate }}</span>
                                 <h3 class="event-title-v2">{{ $event->name }}</h3>
-                                <p class="event-month-year-v2">{{ strtoupper(date('F Y', strtotime($event->start_date ?? now()))) }}</p>
+                                <p class="event-month-year-v2">
+                                    {{ strtoupper(date('F Y', strtotime($event->start_date ?? now()))) }}</p>
                                 <div class="event-card-footer">
                                     <span class="event-learn-more-btn">LEARN MORE →</span>
                                 </div>
@@ -569,7 +571,7 @@
                             </svg>
                             Add to Calendar
                         </button>
-                        <button class="event-modal-share-btn" id="eventModalShareBtn">
+                        <button class="event-modal-share-btn" style="display: none" id="eventModalShareBtn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="18" cy="5" r="3" />
                                 <circle cx="6" cy="12" r="3" />
