@@ -1399,6 +1399,14 @@ function updateModalContent(data) {
         });
     }
 
+    // Map setup - NEW: Update map if we have coordinates and are currently in Map View
+    if (data.x && data.y) {
+        const mapView = document.getElementById("modalMapView");
+        if (mapView && mapView.style.display !== "none") {
+            renderModalMap(data);
+        }
+    }
+
     // Swipe hint
     const swipeHint = document.getElementById("carouselSwipeHint");
     if (swipeHint) {
@@ -1856,25 +1864,41 @@ function renderModalMap(data) {
             if (gatesContainer && gateTemplate) {
                 gatesContainer.innerHTML = ""; // Always clear old pins
 
-                let gatesData = data.gate_coords;
+                // 1. Try to find gates in gate_coords (array or string)
+                let gatesData = data.gate_coords || (data.map_coords ? data.map_coords.gate_coords : null);
+                
                 if (typeof gatesData === 'string') {
                     try { gatesData = JSON.parse(gatesData); } catch(e) { gatesData = null; }
                 }
 
+                // 2. Fallback to single gate_x / gate_y if array is empty
+                if (!gatesData || (Array.isArray(gatesData) && gatesData.length === 0)) {
+                    const gx = data.gate_x || (data.map_coords ? data.map_coords.gate_x : null);
+                    const gy = data.gate_y || (data.map_coords ? data.map_coords.gate_y : null);
+                    const gName = data.gate_name || (data.map_coords ? data.map_coords.gate_name : "Entrance");
+                    
+                    if (gx && gy && gx !== '-' && gy !== '-') {
+                        gatesData = [{ x: gx, y: gy, name: gName }];
+                    }
+                }
+
                 // Normalizer to array
                 if (gatesData && !Array.isArray(gatesData)) gatesData = [gatesData];
-                if (!gatesData && data.gate_x && data.gate_y) {
-                    gatesData = [{ x: data.gate_x, y: data.gate_y, name: data.gate_name || "Entrance" }];
-                }
 
                 if (gatesData && Array.isArray(gatesData)) {
                     gatesData.forEach(gate => {
-                        if (gate.x && gate.y && gate.x !== '-' && gate.y !== '-') {
+                        // Support both gate.x/y and gate.px/py (different API versions)
+                        const x = gate.x || gate.px;
+                        const y = gate.y || gate.py;
+                        
+                        if (x && y && x !== '-' && y !== '-') {
                             const gatePin = gateTemplate.cloneNode(true);
                             gatePin.id = ""; 
                             gatePin.style.display = "block";
-                            gatePin.style.left = `${(gate.x / mapWidth) * 100}%`;
-                            gatePin.style.top = `${(gate.y / mapHeight) * 100}%`;
+                            gatePin.style.zIndex = "11"; // Above everything
+                            
+                            gatePin.style.left = `${(x / mapWidth) * 100}%`;
+                            gatePin.style.top = `${(y / mapHeight) * 100}%`;
                             
                             const label = gatePin.querySelector(".gate-label");
                             if (label) label.textContent = gate.name || "Entrance";
