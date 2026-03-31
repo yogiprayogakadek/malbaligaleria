@@ -288,8 +288,8 @@
                                 loading="{{ $index < 4 ? 'eager' : 'lazy' }}">
                             <div class="event-img-overlay"></div>
 
-                            {{-- Status badge top-left --}}
-                            <span class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                            {{-- Status badge hidden per request --}}
+                            {{-- <span class="event-status-badge {{ $statusClass }}">{{ $statusLabel }}</span> --}}
 
                             {{-- WA Share button hidden per request --}}
                             {{-- <div class="event-wa-share"
