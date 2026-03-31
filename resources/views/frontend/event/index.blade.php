@@ -109,12 +109,24 @@
         </button>
         <nav>
             <ul>
-                <li><a href="{{ route('frontend.landing') }}">Home</a></li>
+                {{-- <li><a href="{{ route('frontend.landing') }}">Home</a></li>
                 <li><a href="{{ route('frontend.landing') }}#about">About</a></li>
                 <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
                 <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
                 <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li> --}}
+                <li><a href="{{ route('frontend.landing') }}">Home</a></li>
+                <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
+
+                <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Tenants Directory</a></li>
+
                 <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
+                @role(['admin', 'superuser'])
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                @endrole
             </ul>
         </nav>
     </div>
@@ -262,20 +274,20 @@
                     @endphp
                     <a href="javascript:void(0)"
                         class="event-card-v2 event-modal-trigger {{ $index >= 8 ? 'event-hidden' : '' }} {{ $statusLabel === 'Ended' ? 'event-ended' : '' }}"
-                        data-event-uuid="{{ $event->uuid }}" 
+                        data-event-uuid="{{ $event->uuid }}"
                         data-event-name="{{ e($event->name) }}"
-                        data-event-image="{{ $imgUrl }}" 
+                        data-event-image="{{ $imgUrl }}"
                         data-event-date="{{ $dateRange }}"
                         data-event-time="{{ $event->start_time && $event->end_time ? date('H:i', strtotime($event->start_time)) . ' - ' . date('H:i', strtotime($event->end_time)) : 'All Day' }}"
                         data-event-location="{{ $event->location ?? 'Mal Bali Galeria' }}"
                         data-event-type="{{ ucfirst($event->type) }}"
                         data-event-description="{{ e($event->description) }}"
                         data-event-highlights="{{ e($event->highlights) }}"
-                        data-month="{{ $monthValue }}" 
+                        data-month="{{ $monthValue }}"
                         data-month-label="{{ $monthLabel }}"
-                        data-year="{{ $yearValue }}" 
+                        data-year="{{ $yearValue }}"
                         data-status="{{ strtolower($statusLabel) }}"
-                        data-date="{{ $event->start_date }}" 
+                        data-date="{{ $event->start_date }}"
                         data-name="{{ e($event->name) }}">
                         <div class="event-img-wrapper">
                             <!-- <div class="event-card-logo-badge">
