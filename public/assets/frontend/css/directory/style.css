@@ -2421,8 +2421,8 @@ body.dark-mode .map-container {
 }
 
 .map-pin-logo.small {
-    width: 18px;
-    height: 18px;
+    width: 26px;
+    height: 26px;
     border-width: 1.5px;
     margin-top: -9px;
     margin-left: 9px;
@@ -2611,8 +2611,8 @@ body.dark-mode .map-gate-label {
     }
 
     .map-pin-logo.small {
-        width: 12px !important;
-        height: 12px !important;
+        width: 30px !important;
+        height: 30px !important;
         border-width: 1px !important;
         margin-top: -6px !important;
         margin-left: 6px !important;
@@ -4251,8 +4251,8 @@ body.dark-mode .share-btn:hover {
     }
 
     .map-pin-logo.small {
-        width: 16px;
-        height: 16px;
+        width: 26px;
+        height: 26px;
     }
 
     /* Mobile Layout Refactor */
