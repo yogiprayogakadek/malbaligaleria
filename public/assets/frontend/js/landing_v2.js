@@ -2110,6 +2110,20 @@ function renderModalMap(data) {
         }
     });
 
+    // Check for deep-link parameter on load (Events)
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventUuid = urlParams.get("id") || urlParams.get("event");
+        if (eventUuid) {
+            setTimeout(() => {
+                const card = document.querySelector(`.event-modal-trigger[data-event-uuid="${eventUuid}"]`);
+                if (card && typeof openEventModal === "function") {
+                    openEventModal(card);
+                }
+            }, 1000);
+        }
+    });
+
     if (calendarBtn) {
         calendarBtn.addEventListener("click", () => {
             if (!titleEl) return;
@@ -2127,7 +2141,8 @@ function renderModalMap(data) {
 
     if (shareBtn) {
         shareBtn.addEventListener("click", () => {
-            const url = currentEventUuid ? `${window.location.origin}/event/${currentEventUuid}` : window.location.href;
+            if (!currentEventUuid) return;
+            const url = `${window.location.origin}${window.location.pathname}?id=${currentEventUuid}`;
             if (navigator.share) {
                 navigator.share({
                     title: titleEl ? titleEl.textContent : "Event at MBG",

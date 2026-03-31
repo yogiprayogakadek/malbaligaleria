@@ -948,7 +948,7 @@
                             </svg>
                             Add to Calendar
                         </button>
-                        <button class="event-modal-share-btn" style="display: none" id="eventModalShareBtn">
+                        <button class="event-modal-share-btn" id="eventModalShareBtn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="18" cy="5" r="3" />
                                 <circle cx="6" cy="12" r="3" />
