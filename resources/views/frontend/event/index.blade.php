@@ -754,8 +754,11 @@
 
         function applyFilters() {
             const grid = document.getElementById('eventsGrid');
+            if (!grid) return;
+
             const allCards = [...document.querySelectorAll('.event-card-v2')];
             
+            // 1. Filter
             let visible = allCards.filter(card => {
                 const targetCat = (window.activeCategory || 'all').toLowerCase();
                 const cardTypeAttr = (card.dataset.eventType || '').toLowerCase();
@@ -764,33 +767,39 @@
                 return catMatch;
             });
 
-            // Sort
+            // 2. Sort
             visible.sort((a, b) => {
                 const sortVal = window.activeSort || 'newest';
                 const dateA = a.dataset.date || '';
                 const dateB = b.dataset.date || '';
                 const nameA = a.dataset.name || '';
                 const nameB = b.dataset.name || '';
+                
                 if (sortVal === 'newest') return dateB.localeCompare(dateA);
                 if (sortVal === 'oldest') return dateA.localeCompare(dateB);
                 if (sortVal === 'name_asc') return nameA.localeCompare(nameB);
                 return 0;
             });
 
-            // Hide all
+            // 3. Update DOM Order & Visibility
             allCards.forEach(c => {
                 c.style.display = 'none';
                 c.classList.remove('event-reveal');
             });
 
-            // Show visible
             visible.forEach((card, i) => {
+                // Re-append moves the element to the end of the container in the new order
+                grid.appendChild(card); 
                 card.style.display = '';
                 card.style.animationDelay = (i * 0.05) + 's';
-                card.classList.add('event-reveal');
+                
+                // Small timeout to trigger animation
+                setTimeout(() => {
+                    card.classList.add('event-reveal');
+                }, 10);
             });
 
-            // Update count
+            // 4. Update count
             const countEl = document.getElementById('eventsShownCount');
             if (countEl) countEl.textContent = `${visible.length} Events`;
         }
