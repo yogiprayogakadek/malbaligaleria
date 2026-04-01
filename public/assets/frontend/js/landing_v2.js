@@ -2011,7 +2011,30 @@ async function drawGates(floorId) {
 
     const floorData = allTenantsCache[floorName] || [];
     const gates = floorData.filter(t => t.type === 'gate');
-    
+
+    // ===== DEBUG: Gate Diagnostics =====
+    console.group(`🗺️ drawGates() → Floor: "${floorName}" (floorId: ${floorId})`);
+    console.log(`📦 Total tenants in cache for "${floorName}":`, floorData.length);
+    console.log(`✅ Tenants with type === 'gate':`, gates.length);
+    if (gates.length > 0) {
+        gates.forEach((gate, i) => {
+            console.group(`  Gate #${i + 1}: "${gate.name}"`);
+            console.log('  type:', gate.type);
+            console.log('  path_coords (raw):', gate.path_coords);
+            const parsed = typeof gate.path_coords === 'string'
+                ? (() => { try { return JSON.parse(gate.path_coords); } catch(e) { return null; } })()
+                : gate.path_coords;
+            console.log('  path_coords (parsed):', parsed);
+            console.log('  path_coords valid (Array & length > 1):', Array.isArray(parsed) && parsed.length > 1);
+            console.groupEnd();
+        });
+    } else {
+        console.warn('  ⚠️ No gate-type tenants found. Showing ALL tenants in this floor cache for inspection:');
+        console.table(floorData.map(t => ({ id: t.id, name: t.name, type: t.type, floor: t.floor })));
+    }
+    console.groupEnd();
+    // ===== END DEBUG =====
+
     if (gates.length === 0) return;
 
     // Create SVG overlay
