@@ -22,6 +22,11 @@ class TenantService
         return $this->tenantRepository->getAll($fields);
     }
 
+    public function getFilteredQuery(array $fields = ['*'], array $filters = [])
+    {
+        return $this->tenantRepository->getFilteredQuery($fields, $filters);
+    }
+
     public function getTenantsByStatus(array $fields = ['*'], bool $is_active = true)
     {
         return $this->tenantRepository->getTenantsByStatus($fields, $is_active);

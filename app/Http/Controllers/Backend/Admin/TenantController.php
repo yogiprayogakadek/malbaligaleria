@@ -24,8 +24,15 @@ class TenantController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $tenants = $this->tenantService->getAll(
-                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type', 'logo'],
+            $filters = [
+                'floor' => $request->get('floor'),
+                'is_active' => $request->get('is_active'),
+                'is_new' => $request->get('is_new'),
+            ];
+
+            $tenants = $this->tenantService->getFilteredQuery(
+                ['id', 'uuid', 'name', 'phone', 'is_active', 'map_coords', 'launched_at', 'category_id', 'type', 'logo', 'isNew'],
+                $filters
             );
 
             return DataTables::of($tenants)

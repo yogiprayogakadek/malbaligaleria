@@ -24,6 +24,45 @@
     @endif
     <div class="row">
         <div class="col-12">
+            <div class="card mb-3 shadow-sm border-0" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
+                <div class="card-body p-3">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-layers-intersect me-1"></i>Floor</label>
+                            <select id="filter-floor" class="form-select border-0 bg-light-subtle shadow-none">
+                                <option value="">All Floors</option>
+                                <option value="1">1st Floor</option>
+                                <option value="2">2nd Floor</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-toggle-left me-1"></i>Status</label>
+                            <select id="filter-status" class="form-select border-0 bg-light-subtle shadow-none">
+                                <option value="">All Status</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-sparkles me-1"></i>Is New</label>
+                            <select id="filter-new" class="form-select border-0 bg-light-subtle shadow-none">
+                                <option value="">All Store</option>
+                                <option value="1">New Store</option>
+                                <option value="0">Existing Store</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button id="btn-reset" class="btn btn-outline-secondary w-100 border-dashed">
+                                <i class="ti ti-refresh me-1"></i>Reset Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -58,7 +97,14 @@
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
-                ajax: "{{ route('admin.tenant.index') }}",
+                ajax: {
+                    url: "{{ route('admin.tenant.index') }}",
+                    data: function (d) {
+                        d.floor = $('#filter-floor').val();
+                        d.is_active = $('#filter-status').val();
+                        d.is_new = $('#filter-new').val();
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -106,6 +152,19 @@
                         searchable: false
                     },
                 ]
+            });
+
+            // Filter Change Events
+            $('#filter-floor, #filter-status, #filter-new').on('change', function() {
+                $('#table').DataTable().ajax.reload();
+            });
+
+            // Reset Logic
+            $('#btn-reset').on('click', function() {
+                $('#filter-floor').val('');
+                $('#filter-status').val('');
+                $('#filter-new').val('');
+                $('#table').DataTable().ajax.reload();
             });
 
             @role('superuser')

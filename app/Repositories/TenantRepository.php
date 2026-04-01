@@ -13,6 +13,30 @@ class TenantRepository
         return $this->model::select($fields)->get();
     }
 
+    public function getFilteredQuery(array $fields, array $filters)
+    {
+        $query = $this->model::select($fields)->with('category:id,name,is_active');
+
+        if (isset($filters['floor']) && $filters['floor'] !== '') {
+            $floor = $filters['floor'];
+            $query->where(function ($q) use ($floor) {
+                // Support both integer and string floor values in JSON
+                $q->whereJsonContains('map_coords->floor', (int) $floor)
+                  ->orWhereJsonContains('map_coords->floor', (string) $floor);
+            });
+        }
+
+        if (isset($filters['is_active']) && $filters['is_active'] !== '') {
+            $query->where('is_active', $filters['is_active']);
+        }
+
+        if (isset($filters['is_new']) && $filters['is_new'] !== '') {
+            $query->where('isNew', $filters['is_new']);
+        }
+
+        return $query;
+    }
+
     public function getTenantsByStatus(array $fields, bool $is_active)
     {
         return $this->model::select($fields)->where('is_active', $is_active)->get();
