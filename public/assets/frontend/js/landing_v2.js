@@ -2291,12 +2291,13 @@ async function drawGates(floorId) {
         shareBtn.addEventListener("click", () => {
             if (!currentEventUuid) return;
             const url = `${window.location.origin}${window.location.pathname}?id=${currentEventUuid}`;
-            if (navigator.share) {
-                navigator.share({
-                    title: titleEl ? titleEl.textContent : "Event at MBG",
-                    text: "Check out this event at Mal Bali Galeria!",
-                    url: url
-                }).catch(() => copyToClipboard(url));
+            
+            if (typeof openShareMenu === 'function') {
+                openShareMenu({
+                    name: titleEl ? titleEl.textContent : "Event",
+                    url: url,
+                    type: 'Event'
+                });
             } else {
                 copyToClipboard(url);
             }
