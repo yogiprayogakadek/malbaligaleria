@@ -2180,7 +2180,10 @@ async function drawGates(floorId) {
             // If type is Regular Show, show the recurring_label (which is passed in data-event-date)
             dateEl.textContent = card.dataset.eventDate || "TBA";
         }
-        if (descEl) descEl.innerHTML = card.dataset.eventDesc ? `<p>${card.dataset.eventDesc}</p>` : "";
+        if (descEl) {
+            const currentMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
+            descEl.innerHTML = card.dataset.eventDesc ? `<strong>${currentMonthYear}</strong><br>${card.dataset.eventDesc}` : "";
+        }
         if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
         if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
 
@@ -2239,7 +2242,10 @@ async function drawGates(floorId) {
             }
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
-            if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
+            if (descEl) {
+                const currentMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
+                descEl.innerHTML = data.description ? `<strong>${currentMonthYear}</strong><br>${data.description}` : `<p>No description available.</p>`;
+            }
 
             // New Fields (Full Data Update)
             if (timeEl) {
