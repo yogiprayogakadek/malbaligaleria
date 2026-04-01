@@ -435,7 +435,8 @@
                                 data-event-highlight="{{ optional($rEvent)->highlights ?? '-' }}"
                                 data-event-monthyear="{{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                                 data-event-image="{{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
-                                data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}">
+                                data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}"
+                                data-event-specific-dates="{{ $rEvent->specific_dates ? json_encode($rEvent->specific_dates) : '' }}">
                                 <div class="rsc-card-bg"
                                     style="background-image: url({{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . $rEvent->primaryPhoto->path) : asset('assets/images/no_image.jpg') }});">
                                 </div>
@@ -493,7 +494,8 @@
                             data-event-highlight="{{ optional($event)->highlights ?? '-' }}"
                             data-event-monthyear="{{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                             data-event-image="{{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
-                            data-event-type="{{ $typeLabels[optional($event)->type] ?? 'Upcoming Event' }}">
+                            data-event-type="{{ $typeLabels[optional($event)->type] ?? 'Upcoming Event' }}"
+                            data-event-specific-dates="{{ optional($event)->specific_dates ? json_encode($event->specific_dates) : '' }}">
                             <div class="rsc-card-bg"
                                 style="background-image: url({{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }});">
                             </div>
