@@ -26,6 +26,7 @@ class TenantController extends Controller
         if ($request->ajax()) {
             $filters = [
                 'floor' => $request->get('floor'),
+                'category_id' => $request->get('category_id'),
                 'is_active' => $request->get('is_active'),
                 'is_new' => $request->get('is_new'),
             ];
@@ -82,7 +83,8 @@ class TenantController extends Controller
                 ->rawColumns(['action', 'is_active', 'category'])
                 ->make(true);
         }
-        return view('backend.admin.tenant.index');
+        $categories = $this->categoryService->getCategoriesByStatus(['id', 'name'], true);
+        return view('backend.admin.tenant.index', compact('categories'));
     }
 
     public function create()

@@ -34,6 +34,10 @@ class TenantRepository
             $query->where('isNew', $filters['is_new']);
         }
 
+        if (isset($filters['category_id']) && $filters['category_id'] !== '') {
+            $query->where('category_id', $filters['category_id']);
+        }
+
         return $query;
     }
 

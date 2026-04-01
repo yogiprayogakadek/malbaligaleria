@@ -26,8 +26,14 @@
         <div class="col-12">
             <div class="card mb-3 shadow-sm border-0" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
                 <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold text-primary"><i class="ti ti-adjustments me-2"></i>Filter Options</h6>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                            Found <span id="tenant-count" class="fw-bold">0</span> tenants
+                        </span>
+                    </div>
                     <div class="row align-items-end g-3">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-layers-intersect me-1"></i>Floor</label>
                             <select id="filter-floor" class="form-select border-0 bg-light-subtle shadow-none">
                                 <option value="">All Floors</option>
@@ -36,6 +42,15 @@
                             </select>
                         </div>
                         <div class="col-md-3">
+                            <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-category me-1"></i>Category</label>
+                            <select id="filter-category" class="form-select border-0 bg-light-subtle shadow-none">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
                             <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-toggle-left me-1"></i>Status</label>
                             <select id="filter-status" class="form-select border-0 bg-light-subtle shadow-none">
                                 <option value="">All Status</option>
@@ -43,7 +58,7 @@
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-sparkles me-1"></i>Is New</label>
                             <select id="filter-new" class="form-select border-0 bg-light-subtle shadow-none">
                                 <option value="">All Store</option>
@@ -61,6 +76,7 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -101,6 +117,7 @@
                     url: "{{ route('admin.tenant.index') }}",
                     data: function (d) {
                         d.floor = $('#filter-floor').val();
+                        d.category_id = $('#filter-category').val();
                         d.is_active = $('#filter-status').val();
                         d.is_new = $('#filter-new').val();
                     }
@@ -154,17 +171,25 @@
                 ]
             });
 
+            // Update result count dynamically
+            table.on('xhr.dt', function(e, settings, json, xhr) {
+                if (json && json.recordsFiltered !== undefined) {
+                    $('#tenant-count').text(json.recordsFiltered);
+                }
+            });
+
             // Filter Change Events
-            $('#filter-floor, #filter-status, #filter-new').on('change', function() {
-                $('#table').DataTable().ajax.reload();
+            $('#filter-floor, #filter-category, #filter-status, #filter-new').on('change', function() {
+                table.ajax.reload();
             });
 
             // Reset Logic
             $('#btn-reset').on('click', function() {
                 $('#filter-floor').val('');
+                $('#filter-category').val('');
                 $('#filter-status').val('');
                 $('#filter-new').val('');
-                $('#table').DataTable().ajax.reload();
+                table.ajax.reload();
             });
 
             @role('superuser')
