@@ -2227,20 +2227,22 @@ async function drawGates(floorId) {
         if (specDatesCont) {
             const rawSpecDates = card.dataset.eventSpecificDates;
             const specDatesEl = document.getElementById("eventModalSpecificDates");
+            
             if (rawSpecDates && rawSpecDates !== "" && rawSpecDates !== "[]" && specDatesEl) {
                 try {
                     const parsedDates = JSON.parse(rawSpecDates);
-                    if (parsedDates.length > 0) {
+                    if (parsedDates && parsedDates.length > 0) {
                         specDatesEl.textContent = formatSpecificDates(parsedDates);
+                        specDatesCont.style.display = "flex";
                     } else {
-                        specDatesEl.textContent = "-";
+                        specDatesCont.style.display = "none";
                     }
                 } catch (e) {
                     console.error("Error parsing specific dates", e);
-                    if (specDatesEl) specDatesEl.textContent = "-";
+                    specDatesCont.style.display = "none";
                 }
             } else {
-                if (specDatesEl) specDatesEl.textContent = "-";
+                specDatesCont.style.display = "none";
             }
         }
 
@@ -2293,6 +2295,9 @@ async function drawGates(floorId) {
                 const newData = formatSpecificDates(data.specific_dates);
                 if (newData !== "-") {
                     specDatesEl.textContent = newData;
+                    if (specDatesCont) specDatesCont.style.display = "flex";
+                } else {
+                    if (specDatesCont) specDatesCont.style.display = "none";
                 }
             }
 
