@@ -24,6 +24,12 @@
         <div class="col-12">
             <div class="card mb-3 shadow-sm border-0" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
                 <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold text-primary"><i class="ti ti-adjustments me-2"></i>Filter Options</h6>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                            Found <span id="event-count" class="fw-bold">0</span> events
+                        </span>
+                    </div>
                     <div class="row align-items-end g-3">
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-filter me-1"></i>Event Type</label>
@@ -86,7 +92,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable({
+            const table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
@@ -142,16 +148,23 @@
                 ]
             });
 
+            // Update result count dynamically
+            table.on('xhr.dt', function(e, settings, json, xhr) {
+                if (json && json.recordsFiltered !== undefined) {
+                    $('#event-count').text(json.recordsFiltered);
+                }
+            });
+
             // Filter Change Events
             $('#filter-type, #filter-status').on('change', function() {
-                $('#table').DataTable().ajax.reload();
+                table.ajax.reload();
             });
 
             // Reset Logic
             $('#btn-reset').on('click', function() {
                 $('#filter-type').val('');
                 $('#filter-status').val('');
-                $('#table').DataTable().ajax.reload();
+                table.ajax.reload();
             });
         });
     </script>

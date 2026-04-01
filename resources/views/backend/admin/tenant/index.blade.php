@@ -109,7 +109,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable({
+            const table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
