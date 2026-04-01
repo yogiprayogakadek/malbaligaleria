@@ -2193,7 +2193,28 @@ async function drawGates(floorId) {
         if (timeEl) timeEl.textContent = card.dataset.eventTime || "All Day";
         if (highlightEl) highlightEl.textContent = card.dataset.eventHighlight || "-";
         if (monthYearEl) monthYearEl.textContent = card.dataset.eventMonthyear || "";
-        if (specDatesCont) specDatesCont.style.display = "none";
+        
+        // Fast Load Specific Dates
+        if (specDatesCont) {
+            const rawSpecDates = card.dataset.eventSpecificDates;
+            const specDatesEl = document.getElementById("eventModalSpecificDates");
+            if (rawSpecDates && rawSpecDates !== "" && rawSpecDates !== "[]" && specDatesEl) {
+                try {
+                    const parsedDates = JSON.parse(rawSpecDates);
+                    if (parsedDates.length > 0) {
+                        specDatesEl.textContent = formatSpecificDates(parsedDates);
+                        specDatesCont.style.display = "flex";
+                    } else {
+                        specDatesCont.style.display = "none";
+                    }
+                } catch (e) {
+                    console.error("Error parsing specific dates", e);
+                    specDatesCont.style.display = "none";
+                }
+            } else {
+                specDatesCont.style.display = "none";
+            }
+        }
 
         // Use card image as placeholder in carousel
         const placeholderImg = card.dataset.eventImage || "/assets/images/no_image.jpg";
