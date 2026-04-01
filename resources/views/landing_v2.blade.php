@@ -88,6 +88,17 @@
                 padding: 1px 4px;
             }
         }
+
+        #specificDatesContainer {
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+            margin-top: 10px !important;
+        }
+
+        #specificDatesContainer.hidden {
+            display: none !important;
+        }
     </style>
 </head>
 
