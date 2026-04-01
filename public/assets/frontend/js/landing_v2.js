@@ -2194,8 +2194,6 @@ async function drawGates(floorId) {
         if (highlightEl) highlightEl.textContent = card.dataset.eventHighlight || "-";
         if (monthYearEl) monthYearEl.textContent = card.dataset.eventMonthyear || "";
         
-        console.log("Card Event Name:", card.dataset.eventName);
-        console.log("Raw Specific Dates from Card:", card.dataset.eventSpecificDates);
 
         // Fast Load Specific Dates
         if (specDatesCont) {
@@ -2204,7 +2202,6 @@ async function drawGates(floorId) {
             if (rawSpecDates && rawSpecDates !== "" && rawSpecDates !== "[]" && specDatesEl) {
                 try {
                     const parsedDates = JSON.parse(rawSpecDates);
-                    console.log("Parsed Specific Dates (Fast Load):", parsedDates);
                     if (parsedDates.length > 0) {
                         specDatesEl.textContent = formatSpecificDates(parsedDates);
                     } else {
@@ -2215,7 +2212,6 @@ async function drawGates(floorId) {
                     if (specDatesEl) specDatesEl.textContent = "-";
                 }
             } else {
-                console.log("No specific dates found in card dataset");
                 if (specDatesEl) specDatesEl.textContent = "-";
             }
         }
@@ -2260,10 +2256,9 @@ async function drawGates(floorId) {
 
             const specDatesEl = document.getElementById("eventModalSpecificDates");
             if (specDatesEl) {
-                if (data.specific_dates && data.specific_dates.length > 0) {
-                    specDatesEl.textContent = formatSpecificDates(data.specific_dates);
-                } else {
-                    specDatesEl.textContent = "-";
+                const newData = formatSpecificDates(data.specific_dates);
+                if (newData !== "-") {
+                    specDatesEl.textContent = newData;
                 }
             }
 
@@ -2326,7 +2321,6 @@ async function drawGates(floorId) {
             return null;
         }).filter(d => d !== null);
 
-        console.log("Final Formatted Dates Array:", formatted);
         return formatted.length > 0 ? formatted.join(", ") : "-";
     }
 
