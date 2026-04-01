@@ -1204,24 +1204,6 @@ function updateMapView() {
         svgOverlay.setAttribute("preserveAspectRatio", "none");
         svgOverlay.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;";
         
-        // Add Marker definition for Arrowheads
-        const defs = document.createElementNS(svgNamespace, "defs");
-        const marker = document.createElementNS(svgNamespace, "marker");
-        marker.setAttribute("id", "arrowhead");
-        marker.setAttribute("markerWidth", "10");
-        marker.setAttribute("markerHeight", "7");
-        marker.setAttribute("refX", "9"); // Position tip at end of line
-        marker.setAttribute("refY", "3.5");
-        marker.setAttribute("orient", "auto");
-        
-        const polygon = document.createElementNS(svgNamespace, "polygon");
-        polygon.setAttribute("points", "0 0, 10 3.5, 0 7");
-        polygon.setAttribute("fill", "#FF0000"); // Red for Gate paths
-        
-        marker.appendChild(polygon);
-        defs.appendChild(marker);
-        svgOverlay.appendChild(defs);
-        
         mapWrapper.appendChild(svgOverlay);
 
         const currentWidth = mapImage.width;
@@ -1378,7 +1360,6 @@ function updateMapView() {
                         
                         if (pointsStr) {
                             polyline.setAttribute("points", pointsStr.trim());
-                            polyline.setAttribute("marker-end", "url(#arrowhead)");
                             svgOverlay.appendChild(polyline);
                         }
 
