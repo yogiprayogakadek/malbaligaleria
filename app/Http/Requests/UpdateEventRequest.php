@@ -40,6 +40,7 @@ class UpdateEventRequest extends FormRequest
             'recurring_days'   => 'nullable|array',
             'recurring_days.*' => 'integer|between:0,6',
             'recurring_label'  => 'nullable|string|max:100|required_if:type,regular',
+            'specific_dates'   => 'nullable|string',
         ];
     }
 

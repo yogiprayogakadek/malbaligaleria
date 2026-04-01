@@ -118,14 +118,18 @@
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-0">
-                                    <label class="form-label fw-semibold" for="recurring_label">Label Jadwal <small class="text-muted fw-normal">(ditampilkan ke pengunjung)</small></label>
-                                    <input type="text" class="form-control @error('recurring_label') is-invalid @enderror"
-                                        id="recurring_label" name="recurring_label"
-                                        placeholder="Contoh: Setiap Jum'at, Sabtu & Minggu"
-                                        value="{{ old('recurring_label') }}">
-                                    @error('recurring_label')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="mt-4 mb-0 pt-3 border-top">
+                                    <label class="form-label fw-semibold" for="specific_dates">Tanggal Spesifik <small class="text-muted fw-normal">(Pilih tanggal tertentu jika event tidak rutin setiap minggu)</small></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="ti ti-calendar"></i></span>
+                                        <input type="text" class="form-control @error('specific_dates') is-invalid @enderror"
+                                            id="specific_dates" name="specific_dates"
+                                            placeholder="Klik untuk pilih tanggal-tanggal spesifik..."
+                                            value="{{ is_array(old('specific_dates')) ? implode(', ', old('specific_dates')) : old('specific_dates') }}">
+                                    </div>
+                                    <small class="form-text text-muted">Abaikan pilihan hari di atas jika menggunakan tanggal spesifik ini.</small>
+                                    @error('specific_dates')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -305,6 +309,13 @@
                 dateFormat: "H:i",
                 altInput: true,
                 altFormat: "h:i K"
+            });
+            flatpickr("#specific_dates", {
+                mode: "multiple",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "F j, Y",
+                conjunction: ", "
             });
 
             // Toggle event sections based on type

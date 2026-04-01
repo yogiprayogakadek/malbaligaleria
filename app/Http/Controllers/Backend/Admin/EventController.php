@@ -63,12 +63,13 @@ class EventController extends Controller
     public function store(StoreEventRequest $request)
     {
         $isRegular = $request->type === 'regular';
-
+        $specificDates = $request->specific_dates ? explode(', ', $request->specific_dates) : null;
+        
         $data = [
             'name'            => $request->name,
             'type'            => $request->type,
-            'start_date'      => ($request->type === 'regular') ? null : $request->start_date,
-            'end_date'        => ($request->type === 'regular') ? null : $request->end_date,
+            'start_date'      => ($request->type === 'regular' && !$request->start_date) ? null : $request->start_date,
+            'end_date'        => ($request->type === 'regular' && !$request->end_date) ? null : $request->end_date,
             'start_time'      => $request->start_time,
             'end_time'        => $request->end_time,
             'description'     => $request->description,
@@ -82,6 +83,7 @@ class EventController extends Controller
             'is_exhibition'   => ($request->type === 'exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
             'recurring_label' => $isRegular ? $request->recurring_label : null,
+            'specific_dates'  => $isRegular ? $specificDates : null,
         ];
 
         $this->eventService->create($data);
@@ -99,12 +101,13 @@ class EventController extends Controller
     public function update(UpdateEventRequest $request, $uuid)
     {
         $isRegular = $request->type === 'regular';
+        $specificDates = $request->specific_dates ? explode(', ', $request->specific_dates) : null;
 
         $data = [
             'name'            => $request->name,
             'type'            => $request->type,
-            'start_date'      => ($request->type === 'regular') ? null : $request->start_date,
-            'end_date'        => ($request->type === 'regular') ? null : $request->end_date,
+            'start_date'      => ($request->type === 'regular' && !$request->start_date) ? null : $request->start_date,
+            'end_date'        => ($request->type === 'regular' && !$request->end_date) ? null : $request->end_date,
             'start_time'      => $request->start_time,
             'end_time'        => $request->end_time,
             'description'     => $request->description,
@@ -119,6 +122,7 @@ class EventController extends Controller
             'is_exhibition'   => ($request->type === 'exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
             'recurring_label' => $isRegular ? $request->recurring_label : null,
+            'specific_dates'  => $isRegular ? $specificDates : null,
         ];
 
         $this->eventService->update($data, $uuid);

@@ -32,6 +32,7 @@ class Event extends Model
         'type',
         'is_regular',
         'recurring_label',
+        'specific_dates',
     ];
     
     public function getActivitylogOptions(): LogOptions
@@ -49,6 +50,7 @@ class Event extends Model
         'recurring_days' => 'array',
         'is_paid'        => 'boolean',
         'is_active'      => 'boolean',
+        'specific_dates' => 'array',
     ];
 
     protected static function boot()

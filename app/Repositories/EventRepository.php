@@ -41,12 +41,17 @@ class EventRepository
                     $q->where('type', 'special')
                         ->where('end_date', '>=', today());
                 })
-                // Logika untuk tipe 'regular' (muncul jika end_date kosong atau belum lewat)
+                // Logika untuk tipe 'regular'
                 ->orWhere(function ($q) {
                     $q->where('type', 'regular')
                         ->where(function ($sub) {
                             $sub->whereNull('end_date')
                                 ->orWhere('end_date', '>=', today());
+                        })
+                        ->where(function ($sub) {
+                            // Jika specific_dates tidak kosong, harus ada tanggal hari ini di dalamnya
+                            $sub->whereNull('specific_dates')
+                                ->orWhereJsonContains('specific_dates', today()->format('Y-m-d'));
                         });
                 });
             })
