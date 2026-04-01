@@ -1034,28 +1034,28 @@ body.dark-mode .category-chip.active {
     top: 15px;
     left: 15px;
     right: auto;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 3;
 }
 
 body.dark-mode .share-btn {
-    background: rgba(42, 42, 42, 0.9);
+    background: rgba(42, 42, 42, 0.95);
 }
 
 .share-btn:hover {
     background: white;
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 body.dark-mode .share-btn:hover {
@@ -1063,8 +1063,8 @@ body.dark-mode .share-btn:hover {
 }
 
 .share-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     stroke: #2c5f5d;
 }
 
@@ -1072,34 +1072,34 @@ body.dark-mode .share-btn svg {
     stroke: #f5f5dc;
 }
 
-/* ===== BOOKMARK BUTTON ===== */
+/* ===== HEART (FAVORITE) BUTTON ===== */
 .bookmark-btn {
     position: absolute;
     top: 15px;
-    left: 65px;
+    left: 67px;
     right: auto;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 3;
 }
 
 body.dark-mode .bookmark-btn {
-    background: rgba(42, 42, 42, 0.9);
+    background: rgba(42, 42, 42, 0.95);
 }
 
 .bookmark-btn:hover {
     background: white;
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 body.dark-mode .bookmark-btn:hover {
@@ -1107,11 +1107,11 @@ body.dark-mode .bookmark-btn:hover {
 }
 
 .bookmark-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     stroke: #2c5f5d;
     fill: transparent;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 body.dark-mode .bookmark-btn svg {
@@ -1119,14 +1119,67 @@ body.dark-mode .bookmark-btn svg {
 }
 
 .bookmark-btn.active svg {
-    fill: #2c5f5d;
-    stroke: #2c5f5d;
+    fill: #ff4757;
+    stroke: #ff4757;
+    transform: scale(1.2);
 }
 
 body.dark-mode .bookmark-btn.active svg {
-    fill: #2c5f5d;
-    stroke: #2c5f5d;
+    fill: #ff4757;
+    stroke: #ff4757;
 }
+
+/* Modal Interaction Buttons Layout */
+.modal-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.modal-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    width: 100%;
+}
+
+.modal-action-btn.share {
+    background: linear-gradient(135deg, #2c5f5d, #1a3a38);
+    color: white;
+    box-shadow: 0 4px 15px rgba(44, 95, 93, 0.2);
+}
+
+.modal-action-btn.calendar {
+    background: #f8f9fa;
+    color: #2c5f5d;
+    border: 1px solid #e0e0e0;
+}
+
+body.dark-mode .modal-action-btn.calendar {
+    background: #1a1a1a;
+    color: #f5f5dc;
+    border-color: #333;
+}
+
+.modal-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.modal-action-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
 
 /* ===== REUSABLE TOOLBAR ===== */
 .promotion-toolbar {

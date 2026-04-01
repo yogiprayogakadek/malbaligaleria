@@ -435,8 +435,17 @@
                         </div>
                     </div>
 
-                    <div class="modal-share-container">
-                        <button id="eventModalShareBtn" class="modal-share-trigger">
+                    <div class="modal-actions-grid">
+                        <button id="promoModalCalendarBtn" class="modal-action-btn calendar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <span>Add to Calendar</span>
+                        </button>
+                        <button id="eventModalShareBtn" class="modal-action-btn share">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="18" cy="5" r="3" />
                                 <circle cx="6" cy="12" r="3" />
@@ -444,7 +453,7 @@
                                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
                                 <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                             </svg>
-                            <span>Share this Promotion</span>
+                            <span>Share Promotion</span>
                         </button>
                     </div>
 

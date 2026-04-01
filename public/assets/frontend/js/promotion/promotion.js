@@ -482,9 +482,9 @@ async function displayPromotions() {
         <div class="promotion-card ${isUrgent ? 'urgent' : ''}" data-promo-id="${promo.id}" style="animation-delay: ${index * 0.1}s">
             <div class="promotion-image" style="background-image: url('${promo.images[0]}')">
                 ${badgesHTML}
-                <button class="bookmark-btn ${isFav ? 'active' : ''}" data-promo-id="${promo.id}" aria-label="Bookmark">
+                <button class="bookmark-btn ${isFav ? 'active' : ''}" data-promo-id="${promo.id}" aria-label="Favorite">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                 </button>
                 <button class="share-btn" data-promo-id="${promo.id}" data-promo-title="${promo.title}" aria-label="Share">
@@ -609,6 +609,54 @@ function sharePromotion(promoId, promoTitle) {
     }
 }
 
+// ===== ADD TO CALENDAR FUNCTION =====
+function addToCalendar(promo) {
+    const title = encodeURIComponent(`Promotion: ${promo.title} @ ${promo.tenant}`);
+    const details = encodeURIComponent(`${promo.description}\n\nLocation: ${promo.floor}, Unit ${promo.unit}\nMore info: ${window.location.origin}${window.location.pathname}?id=${promo.id}`);
+    const location = encodeURIComponent(`Mal Bali Galeria, ${promo.floor}, Unit ${promo.unit}`);
+    
+    // Format dates for Google Calendar (YYYYMMDDTHHmmSSZ)
+    const formatDate = (dateStr) => {
+        const d = new Date(dateStr);
+        return d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+    };
+
+    const start = formatDate(promo.validFrom);
+    const end = formatDate(promo.validUntil);
+
+    const googleUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+    
+    // Create hidden menu or just open Google for now (most common)
+    // In a high-fidelity app, we might show a small choice menu
+    const choice = confirm("Add to Google Calendar?\n\n(Click Cancel to download .ics file for other calendars)");
+    
+    if (choice) {
+        window.open(googleUrl, '_blank');
+    } else {
+        // Generate .ics file
+        const icsContent = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "BEGIN:VEVENT",
+            `DTSTART:${start}`,
+            `DTEND:${end}`,
+            `SUMMARY:${promo.title} @ ${promo.tenant}`,
+            `DESCRIPTION:${promo.description.replace(/\n/g, "\\n")}`,
+            `LOCATION:Mal Bali Galeria\\, ${promo.floor}\\, Unit ${promo.unit}`,
+            "END:VEVENT",
+            "END:VCALENDAR"
+        ].join("\n");
+
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', `${promo.title.replace(/\s+/g, "_")}.ics`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
 function copyToClipboard(text) {
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
@@ -707,11 +755,18 @@ function showPromotionModal(promo) {
     document.body.style.overflow = 'hidden';
     if (window.lenis) window.lenis.stop();
 
-    // ===== #9 Share button in modal (CONSISTENT WITH DIRECTORY) =====
-    const modalShareBtn = document.getElementById('eventModalShareBtn'); // Reusing ID for consistency if template uses it
+    // ===== Action buttons in modal =====
+    const modalShareBtn = document.getElementById('eventModalShareBtn');
     if (modalShareBtn) {
         modalShareBtn.onclick = () => {
             sharePromotion(promo.id, promo.title);
+        };
+    }
+
+    const modalCalendarBtn = document.getElementById('promoModalCalendarBtn');
+    if (modalCalendarBtn) {
+        modalCalendarBtn.onclick = () => {
+            addToCalendar(promo);
         };
     }
 
