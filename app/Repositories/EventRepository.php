@@ -35,6 +35,13 @@ class EventRepository
             ->with($relationship)
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
+            ->where(function ($query) {
+                $query->where('type', '!=', 'special')
+                    ->orWhere(function ($q) {
+                        $q->where('type', 'special')
+                            ->where('end_date', '>=', today());
+                    });
+            })
             ->get();
     }
 
