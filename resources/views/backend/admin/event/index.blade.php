@@ -22,6 +22,39 @@
     @endif
     <div class="row">
         <div class="col-12">
+            <div class="card mb-3 shadow-sm border-0" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
+                <div class="card-body p-3">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-filter me-1"></i>Event Type</label>
+                            <select id="filter-type" class="form-select border-0 bg-light-subtle shadow-none">
+                                <option value="">All Types</option>
+                                <option value="regular">Regular</option>
+                                <option value="special">Special</option>
+                                <option value="exhibition">Exhibition</option>
+                                <option value="upcoming">Upcoming</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small mb-1"><i class="ti ti-toggle-left me-1"></i>Status</label>
+                            <select id="filter-status" class="form-select border-0 bg-light-subtle shadow-none">
+                                <option value="">All Status</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button id="btn-reset" class="btn btn-outline-secondary w-100 border-dashed">
+                                <i class="ti ti-refresh me-1"></i>Reset Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -57,7 +90,13 @@
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
-                ajax: "{{ route('admin.event.index') }}",
+                ajax: {
+                    url: "{{ route('admin.event.index') }}",
+                    data: function (d) {
+                        d.type = $('#filter-type').val();
+                        d.is_active = $('#filter-status').val();
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -101,6 +140,18 @@
                         searchable: false
                     },
                 ]
+            });
+
+            // Filter Change Events
+            $('#filter-type, #filter-status').on('change', function() {
+                $('#table').DataTable().ajax.reload();
+            });
+
+            // Reset Logic
+            $('#btn-reset').on('click', function() {
+                $('#filter-type').val('');
+                $('#filter-status').val('');
+                $('#table').DataTable().ajax.reload();
             });
         });
     </script>

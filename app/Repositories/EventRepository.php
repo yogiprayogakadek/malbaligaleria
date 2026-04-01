@@ -13,6 +13,21 @@ class EventRepository
         return $this->model::select($fields)->get();
     }
 
+    public function getFilteredQuery(array $fields, array $filters)
+    {
+        $query = $this->model::select($fields);
+
+        if (isset($filters['type']) && $filters['type'] !== '') {
+            $query->where('type', $filters['type']);
+        }
+
+        if (isset($filters['is_active']) && $filters['is_active'] !== '') {
+            $query->where('is_active', $filters['is_active']);
+        }
+
+        return $query;
+    }
+
     public function getEventsByStatus(array $fields, bool $is_active)
     {
         return $this->model::select($fields)->where('is_active', $is_active)->get();

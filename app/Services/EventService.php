@@ -21,6 +21,11 @@ class EventService
         return $this->eventRepository->getAll($fields);
     }
 
+    public function getFilteredQuery(array $fields = ['*'], array $filters = [])
+    {
+        return $this->eventRepository->getFilteredQuery($fields, $filters);
+    }
+
     public function getEventsByStatus(array $fields = ['*'], bool $is_active = true)
     {
         return $this->eventRepository->getEventsByStatus($fields, $is_active);

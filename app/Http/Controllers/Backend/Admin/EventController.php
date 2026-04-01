@@ -21,7 +21,12 @@ class EventController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $events = $this->eventService->getAll(['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_label']);
+            $filters = [
+                'type' => $request->get('type'),
+                'is_active' => $request->get('is_active'),
+            ];
+
+            $events = $this->eventService->getFilteredQuery(['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_label'], $filters);
 
             return DataTables::of($events)
                 ->addIndexColumn()
