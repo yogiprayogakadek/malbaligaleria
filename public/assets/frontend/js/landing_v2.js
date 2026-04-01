@@ -2289,20 +2289,33 @@ async function drawGates(floorId) {
     }
 
     function formatSpecificDates(dates) {
-        if (!dates || dates.length === 0) return "";
+        if (!dates) return "-";
         
-        // Sort dates first
-        dates.sort();
+        let datesArray = dates;
+        if (typeof dates === 'string') {
+            try {
+                datesArray = JSON.parse(dates);
+            } catch (e) {
+                // If it's not JSON, might be a single date string
+                datesArray = [dates];
+            }
+        }
+        
+        if (!Array.isArray(datesArray) || datesArray.length === 0) return "-";
+
+        // Filter and sort
+        const cleanDates = datesArray.filter(d => d && typeof d === 'string').sort();
+        if (cleanDates.length === 0) return "-";
 
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         
-        // Group by month to make it cleaner if many dates
-        const formatted = dates.map(d => {
+        const formatted = cleanDates.map(d => {
             const dateObj = new Date(d);
+            if (isNaN(dateObj.getTime())) return null;
             return `${dateObj.getDate()} ${monthNames[dateObj.getMonth()]}`;
-        });
+        }).filter(d => d !== null);
 
-        return formatted.join(", ");
+        return formatted.length > 0 ? formatted.join(", ") : "-";
     }
 
     document.addEventListener("click", (e) => {
