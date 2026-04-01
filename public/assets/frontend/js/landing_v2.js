@@ -2188,10 +2188,12 @@ async function drawGates(floorId) {
         const timeEl = document.getElementById("eventModalTime");
         const highlightEl = document.getElementById("eventModalHighlights");
         const monthYearEl = document.getElementById("eventModalMonthYear");
+        const specDatesCont = document.getElementById("specificDatesContainer");
 
         if (timeEl) timeEl.textContent = card.dataset.eventTime || "All Day";
         if (highlightEl) highlightEl.textContent = card.dataset.eventHighlight || "-";
         if (monthYearEl) monthYearEl.textContent = card.dataset.eventMonthyear || "";
+        if (specDatesCont) specDatesCont.style.display = "none";
 
         // Use card image as placeholder in carousel
         const placeholderImg = card.dataset.eventImage || "/assets/images/no_image.jpg";
@@ -2231,6 +2233,16 @@ async function drawGates(floorId) {
                 monthYearEl.textContent = formatter.format(dateObj).toUpperCase();
             }
 
+            const specDatesEl = document.getElementById("eventModalSpecificDates");
+            if (specDatesEl && specDatesCont) {
+                if (data.specific_dates && data.specific_dates.length > 0) {
+                    specDatesEl.textContent = formatSpecificDates(data.specific_dates);
+                    specDatesCont.style.display = "flex";
+                } else {
+                    specDatesCont.style.display = "none";
+                }
+            }
+
             renderCarousel(data.images, data.name);
         }
 
@@ -2250,6 +2262,23 @@ async function drawGates(floorId) {
         document.body.style.overflow = "";
         if (window.lenis) window.lenis.start();
         currentEventUuid = null;
+    }
+
+    function formatSpecificDates(dates) {
+        if (!dates || dates.length === 0) return "";
+        
+        // Sort dates first
+        dates.sort();
+
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+        // Group by month to make it cleaner if many dates
+        const formatted = dates.map(d => {
+            const dateObj = new Date(d);
+            return `${dateObj.getDate()} ${monthNames[dateObj.getMonth()]}`;
+        });
+
+        return formatted.join(", ");
     }
 
     document.addEventListener("click", (e) => {

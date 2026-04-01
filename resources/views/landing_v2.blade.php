@@ -919,6 +919,18 @@
                             </div>
                         </div>
 
+                        <div class="event-modal-info-item" id="specificDatesContainer" style="display: none;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <polyline points="9 11 12 14 22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
+                            <div>
+                                <span class="info-label">Dates Highlighted</span>
+                                <span class="info-value" id="eventModalSpecificDates"></span>
+                            </div>
+                        </div>
+
                         <div class="event-modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
