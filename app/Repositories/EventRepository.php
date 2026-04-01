@@ -36,25 +36,13 @@ class EventRepository
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
             ->where(function ($query) {
-                // Logika untuk tipe 'special' (sudah lewat end_date tidak muncul)
-                $query->where(function ($q) {
-                    $q->where('type', 'special')
-                        ->where('end_date', '>=', today());
-                })
-                // Logika untuk tipe 'regular'
-                ->orWhere(function ($q) {
-                    $q->where('type', 'regular')
-                        ->where(function ($sub) {
-                            $sub->whereNull('end_date')
-                                ->orWhere('end_date', '>=', today());
-                        })
-                        ->where(function ($sub) {
-                            $today = today()->format('Y-m-d');
-                            $sub->whereNull('specific_dates')
-                                ->orWhereJsonLength('specific_dates', 0)
-                                ->orWhereJsonContains('specific_dates', $today);
-                        });
-                });
+                // Semua tipe (regular & special) tampil jika start_date <= hari ini
+                // AND (end_date kosong OR end_date >= hari ini)
+                $query->where('start_date', '<=', today())
+                    ->where(function ($sub) {
+                        $sub->whereNull('end_date')
+                            ->orWhere('end_date', '>=', today());
+                    });
             })
             ->get();
     }

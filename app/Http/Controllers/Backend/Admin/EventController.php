@@ -68,8 +68,8 @@ class EventController extends Controller
         $data = [
             'name'            => $request->name,
             'type'            => $request->type,
-            'start_date'      => ($request->type === 'regular' && !$request->start_date) ? null : $request->start_date,
-            'end_date'        => ($request->type === 'regular' && !$request->end_date) ? null : $request->end_date,
+            'start_date'      => $request->start_date,
+            'end_date'        => $request->end_date,
             'start_time'      => $request->start_time,
             'end_time'        => $request->end_time,
             'description'     => $request->description,
@@ -106,8 +106,8 @@ class EventController extends Controller
         $data = [
             'name'            => $request->name,
             'type'            => $request->type,
-            'start_date'      => ($request->type === 'regular' && !$request->start_date) ? null : $request->start_date,
-            'end_date'        => ($request->type === 'regular' && !$request->end_date) ? null : $request->end_date,
+            'start_date'      => $request->start_date,
+            'end_date'        => $request->end_date,
             'start_time'      => $request->start_time,
             'end_time'        => $request->end_time,
             'description'     => $request->description,
