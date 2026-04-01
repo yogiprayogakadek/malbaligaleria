@@ -186,26 +186,7 @@
 
 
                 <div class="events-grid" id="eventsGrid">
-                @php
-                    $now = \Carbon\Carbon::now();
-                    $today = \Carbon\Carbon::today();
-                    
-                    $filteredEvents = $events->whereIn('type', ['regular', 'special'])->filter(function($event) use ($now, $today) {
-                        $startDate = \Carbon\Carbon::parse($event->start_date);
-                        $endDate = $event->end_date ? \Carbon\Carbon::parse($event->end_date) : null;
-                        
-                        // Check if year/month is >= current year/month
-                        $isCurrentOrFutureMonth = ($startDate->year > $now->year) || 
-                                                 ($startDate->year == $now->year && $startDate->month >= $now->month);
-                        
-                        // Check if it has ended
-                        $hasNotEnded = !$endDate || $endDate->greaterThanOrEqualTo($today);
-                        
-                        return $isCurrentOrFutureMonth && $hasNotEnded;
-                    });
-                @endphp
-
-                @foreach ($filteredEvents as $index => $event)
+                @foreach ($events as $index => $event)
                     @php
                         $startDate = $event->start_date;
                         $day = $startDate ? date_format(date_create($startDate), 'd') : '—';

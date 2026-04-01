@@ -17,12 +17,10 @@ class EventController extends Controller
 
     public function index()
     {
-        // Tampilkan event yang aktif dengan tipe upcoming, regular, atau special
-        $events = $this->eventService->getEventsWithRelationship(
-            ['id', 'uuid', 'name', 'start_date', 'end_date', 'description', 'location', 'is_paid', 'type'],
-            [
-                'primaryPhoto:id,event_id,path',
-            ]
+        // Gunakan logic yang sama dengan Landing (Hanya Regular & Special + Filter Waktu)
+        $events = $this->eventService->getRegularEvents(
+            ['id', 'uuid', 'name', 'type', 'description', 'recurring_label', 'start_time', 'end_time', 'location', 'highlights', 'start_date', 'end_date', 'specific_dates', 'is_paid'],
+            ['primaryPhoto:id,event_id,path']
         );
 
         return view('frontend.event.index', compact('events'));
