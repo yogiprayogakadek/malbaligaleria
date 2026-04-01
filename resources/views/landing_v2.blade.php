@@ -440,7 +440,7 @@
                                 data-event-desc="{{ optional($rEvent)->description }}"
                                 data-event-location="{{ optional($rEvent)->location }}"
                                 data-event-highlight="{{ optional($rEvent)->highlights ?? '-' }}"
-                                data-event-monthyear="{{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                                data-event-monthyear="{{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                                 data-event-image="{{ optional(optional($rEvent)->primaryPhoto)->path ? asset('storage/' . optional(optional($rEvent)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                                 data-event-type="{{ $typeLabels[optional($rEvent)->type] ?? 'Event' }}"
                                 data-event-specific-dates="{{ $rEvent->specific_dates ? json_encode($rEvent->specific_dates) : '' }}">
@@ -451,7 +451,7 @@
                                     <span class="event-date">{{ $rDateStr }}</span>
                                     <h3>{{ optional($rEvent)->name }}</h3>
                                     <p class="event-desc">
-                                        {{ optional($rEvent)->start_date ? strtoupper(\Carbon\Carbon::parse($rEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                        {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                     </p>
                                     <span class="event-link">Learn More →</span>
                                 </div>
@@ -499,7 +499,7 @@
                             data-event-desc="{{ optional($event)->description }}"
                             data-event-location="{{ optional($event)->location }}"
                             data-event-highlight="{{ optional($event)->highlights ?? '-' }}"
-                            data-event-monthyear="{{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
+                            data-event-monthyear="{{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}"
                             data-event-image="{{ optional(optional($event)->primaryPhoto)->path ? asset('storage/' . optional(optional($event)->primaryPhoto)->path) : asset('assets/images/no_image.jpg') }}"
                             data-event-type="{{ $typeLabels[optional($event)->type] ?? 'Upcoming Event' }}"
                             data-event-specific-dates="{{ optional($event)->specific_dates ? json_encode($event->specific_dates) : '' }}">
@@ -510,7 +510,7 @@
                                 <span class="event-date">{{ $eDateStr }}</span>
                                 <h3>{{ optional($event)->name }}</h3>
                                 <p class="event-desc">
-                                    {{ optional($event)->start_date ? strtoupper(\Carbon\Carbon::parse($event->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
+                                    {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
                                 <span class="event-link">Learn More →</span>
                             </div>
