@@ -269,9 +269,7 @@
                         data-event-location="{{ $event->location ?? 'Mal Bali Galeria' }}"
                         data-event-type="{{ ucfirst($event->type) }}"
                         data-event-description="{{ e($event->description) }}"
-                        data-event-highlights="{{ e($event->highlights) }}" 
-                        data-event-specific-dates="{{ $event->specific_dates ? json_encode($event->specific_dates) : '' }}"
-                        data-month="{{ $monthValue }}"
+                        data-event-highlights="{{ e($event->highlights) }}" data-month="{{ $monthValue }}"
                         data-month-label="{{ $monthLabel }}" data-year="{{ $yearValue }}"
                         data-status="{{ strtolower($statusLabel) }}" data-date="{{ $event->start_date }}"
                         data-name="{{ e($event->name) }}">
@@ -292,7 +290,7 @@
                                 <span class="event-date-pill">{{ $fullDate }}</span>
                                 <h3 class="event-title-v2">{{ $event->name }}</h3>
                                 <p class="event-month-year-v2">
-                                    {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}</p>
+                                    {{ strtoupper(date('F Y', strtotime($event->start_date ?? now()))) }}</p>
                                 <div class="event-card-footer">
                                     <span class="event-learn-more-btn">LEARN MORE →</span>
                                 </div>
@@ -486,18 +484,6 @@
                             </div>
                         </div>
 
-                        <div class="event-modal-info-item" id="specificDatesContainer">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                <polyline points="9 11 12 14 22 4" />
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Dates Highlighted</span>
-                                <span class="info-value" id="eventModalSpecificDates"></span>
-                            </div>
-                        </div>
-
                         <div class="event-modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
@@ -519,7 +505,6 @@
                                 <span class="info-value" id="eventModalLocation"></span>
                             </div>
                         </div>
-
 
                         <div class="event-modal-info-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
