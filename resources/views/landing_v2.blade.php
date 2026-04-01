@@ -97,7 +97,7 @@
         }
 
         #specificDatesContainer.hidden {
-            display: none !important;
+            display: none;
         }
     </style>
 </head>
