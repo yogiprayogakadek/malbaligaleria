@@ -435,6 +435,10 @@
                         </div>
                     </div>
 
+                    <div class="modal-description" id="modalDescription">
+
+                    <div class="modal-divider"></div>
+
                     <div class="modal-actions-grid">
                         <button id="promoModalCalendarBtn" class="modal-action-btn calendar">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -456,10 +460,6 @@
                             <span>Share Promotion</span>
                         </button>
                     </div>
-
-                    <div class="modal-divider"></div>
-
-                    <div class="modal-description" id="modalDescription">
 
                     </div>
                 </div>
