@@ -2175,8 +2175,11 @@ async function drawGates(floorId) {
         currentEventUuid = uuid;
 
         // Show modal with skeleton or partial data first
-        if (titleEl) titleEl.textContent = card.dataset.eventName || "Loading...";
-        if (dateEl) dateEl.textContent = card.dataset.eventDate || "";
+        if (titleEl) titleEl.textContent = card.dataset.eventName || "Event";
+        if (dateEl) {
+            // If type is Regular Show, show the recurring_label (which is passed in data-event-date)
+            dateEl.textContent = card.dataset.eventDate || "TBA";
+        }
         if (descEl) descEl.innerHTML = card.dataset.eventDesc ? `<p>${card.dataset.eventDesc}</p>` : "";
         if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
         if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
@@ -2202,7 +2205,15 @@ async function drawGates(floorId) {
         const data = await fetchEventData(uuid);
         if (data && currentEventUuid === uuid) {
             if (titleEl) titleEl.textContent = data.name;
-            if (dateEl) dateEl.textContent = data.date;
+            
+            // If type is regular, show recurring_label on Date field
+            if (dateEl) {
+                if (data.type === 'regular' && data.recurring_label) {
+                    dateEl.textContent = data.recurring_label;
+                } else {
+                    dateEl.textContent = data.date;
+                }
+            }
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
             if (descEl) descEl.innerHTML = data.description ? `<p>${data.description}</p>` : "<p>No description available.</p>";
