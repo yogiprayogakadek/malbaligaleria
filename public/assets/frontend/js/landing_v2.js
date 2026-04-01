@@ -2180,12 +2180,16 @@ async function drawGates(floorId) {
             // If type is Regular Show, show the recurring_label (which is passed in data-event-date)
             dateEl.textContent = card.dataset.eventDate || "TBA";
         }
+        if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
+        const eventType = card.dataset.eventType || "Event";
+        if (typeBadge) typeBadge.textContent = eventType;
+
         if (descEl) {
             const currentMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
-            descEl.innerHTML = card.dataset.eventDesc ? `<strong>${currentMonthYear}</strong><br>${card.dataset.eventDesc}` : "";
+            const showMonthYear = (eventType === 'Regular Show' || eventType === 'Exhibition');
+            const prefix = showMonthYear ? `<strong>${currentMonthYear}</strong><br>` : "";
+            descEl.innerHTML = card.dataset.eventDesc ? `${prefix}${card.dataset.eventDesc}` : "";
         }
-        if (locationEl) locationEl.textContent = card.dataset.eventLocation || "Mal Bali Galeria";
-        if (typeBadge) typeBadge.textContent = card.dataset.eventType || "Event";
 
         // New Fields (Fast Load)
         const timeEl = document.getElementById("eventModalTime");
@@ -2242,9 +2246,12 @@ async function drawGates(floorId) {
             }
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
+            const displayType = typeBadge ? typeBadge.textContent : data.type;
             if (descEl) {
                 const currentMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
-                descEl.innerHTML = data.description ? `<strong>${currentMonthYear}</strong><br>${data.description}` : `<p>No description available.</p>`;
+                const showMonthYear = (displayType === 'Regular Show' || displayType === 'Exhibition' || data.type === 'regular' || data.type === 'exhibition');
+                const prefix = showMonthYear ? `<strong>${currentMonthYear}</strong><br>` : "";
+                descEl.innerHTML = data.description ? `${prefix}${data.description}` : `<p>No description available.</p>`;
             }
 
             // New Fields (Full Data Update)
