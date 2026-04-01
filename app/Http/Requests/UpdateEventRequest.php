@@ -23,7 +23,7 @@ class UpdateEventRequest extends FormRequest
                 'max:255',
                 Rule::unique('events', 'name')->ignore($this->uuid, 'uuid'),
             ],
-            'start_date'       => 'required|date|before_or_equal:end_date',
+            'start_date'       => 'required|date',
             'end_date'         => 'nullable|date|after_or_equal:start_date',
             'start_time'       => 'required',
             'end_time'         => 'required',

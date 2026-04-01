@@ -17,7 +17,7 @@ class StoreEventRequest extends FormRequest
 
         return [
             'name'             => 'required|string|unique:events,name',
-            'start_date'       => 'required|date|before_or_equal:end_date',
+            'start_date'       => 'required|date',
             'end_date'         => 'nullable|date|after_or_equal:start_date',
             'start_time'       => 'required',
             'end_time'         => 'required',
