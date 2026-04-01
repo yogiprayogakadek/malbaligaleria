@@ -43,6 +43,25 @@ class TenantRepository
         return $this->model::select($fields)->whereDoesntHave('photos')->get();
     }
 
+    /**
+     * Fetch gate-type tenants for a given floor, regardless of isNew value.
+     * Gates are often created without isNew input → isNew=NULL in DB,
+     * so they are missed by WHERE isNew=false queries.
+     */
+    public function getGatesByFloor(array $fields, array $relationship, int $floorNumber)
+    {
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where('type', 'gate')
+            ->where('is_active', true)
+            ->where(function ($q) use ($floorNumber) {
+                // floor can be stored as int or string in JSON
+                $q->whereJsonContains('map_coords->floor', $floorNumber)
+                  ->orWhereJsonContains('map_coords->floor', (string) $floorNumber);
+            })
+            ->get();
+    }
+
     public function create(array $data)
     {
         $tenant = $this->model::create($data);

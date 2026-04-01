@@ -156,15 +156,26 @@ class TenantService
     {
         $query = $this->getTenantsWithRelationshipAndCondition($fields, $relationship, 'isNew', $isNew);
 
-        // Filter by floor and include gates for map rendering
+        // Filter by floor
         if (!$isNew) {
             $floorNumber = str_contains($cat, '1st') ? '1' : (str_contains($cat, '2nd') ? '2' : null);
             if ($floorNumber) {
                 $query = $query->filter(function ($tenant) use ($floorNumber) {
                     $tenantFloor = data_get($tenant, 'map_coords.floor');
-                    // Return if matches floor OR if it's a gate on this floor
                     return $tenantFloor == $floorNumber;
                 });
+
+                // Also fetch gate-type tenants separately.
+                // Gates are created without an isNew input → isNew=NULL in DB.
+                // WHERE isNew=false misses NULL rows, so we query them independently.
+                $gateFields = array_unique(array_merge($fields, ['id', 'name', 'type', 'map_coords', 'path_coords', 'logo', 'isNew']));
+                $gates = $this->tenantRepository->getGatesByFloor($gateFields, $relationship, (int) $floorNumber);
+
+                // Merge gates into $query, avoiding duplicates by id
+                $existingIds = $query->pluck('id')->toArray();
+                $gates = $gates->filter(fn($g) => !in_array($g->id, $existingIds));
+
+                $query = $query->concat($gates);
             }
         }
 
@@ -187,7 +198,7 @@ class TenantService
                         : asset('storage/' . $tenant->logo)
                     )
                     : asset('assets/images/no_image.jpg'),
-                'type' => $tenant->type,
+                'type' => $tenant->type ?? 'tenant',
                 'path_coords' => $tenant->path_coords,
                 'hours' => "10:00 AM - 10:00 PM",
                 'album' => optional($tenant->albumPhoto)->map(function ($photo) {
