@@ -2194,6 +2194,9 @@ async function drawGates(floorId) {
         if (highlightEl) highlightEl.textContent = card.dataset.eventHighlight || "-";
         if (monthYearEl) monthYearEl.textContent = card.dataset.eventMonthyear || "";
         
+        console.log("Card Event Name:", card.dataset.eventName);
+        console.log("Raw Specific Dates from Card:", card.dataset.eventSpecificDates);
+
         // Fast Load Specific Dates
         if (specDatesCont) {
             const rawSpecDates = card.dataset.eventSpecificDates;
@@ -2201,6 +2204,7 @@ async function drawGates(floorId) {
             if (rawSpecDates && rawSpecDates !== "" && rawSpecDates !== "[]" && specDatesEl) {
                 try {
                     const parsedDates = JSON.parse(rawSpecDates);
+                    console.log("Parsed Specific Dates (Fast Load):", parsedDates);
                     if (parsedDates.length > 0) {
                         specDatesEl.textContent = formatSpecificDates(parsedDates);
                         specDatesCont.style.display = "flex";
@@ -2212,6 +2216,7 @@ async function drawGates(floorId) {
                     specDatesCont.style.display = "none";
                 }
             } else {
+                console.log("No specific dates found in card dataset");
                 specDatesCont.style.display = "none";
             }
         }
