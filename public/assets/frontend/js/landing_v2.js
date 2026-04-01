@@ -2296,25 +2296,37 @@ async function drawGates(floorId) {
             try {
                 datesArray = JSON.parse(dates);
             } catch (e) {
-                // If it's not JSON, might be a single date string
                 datesArray = [dates];
             }
         }
         
         if (!Array.isArray(datesArray) || datesArray.length === 0) return "-";
 
-        // Filter and sort
+        // Filter valid strings and sort
         const cleanDates = datesArray.filter(d => d && typeof d === 'string').sort();
         if (cleanDates.length === 0) return "-";
 
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "August", "Sep", "Oct", "Nov", "Dec"];
         
         const formatted = cleanDates.map(d => {
+            // Manual parsing of YYYY-MM-DD to avoid "Invalid Date"
+            const parts = d.split('-');
+            if (parts.length === 3) {
+                const day = parseInt(parts[2], 10);
+                const monthIndex = parseInt(parts[1], 10) - 1;
+                if (!isNaN(day) && monthIndex >= 0 && monthIndex < 12) {
+                    return `${day} ${monthNames[monthIndex]}`;
+                }
+            }
+            // Fallback to standard if not YYYY-MM-DD
             const dateObj = new Date(d);
-            if (isNaN(dateObj.getTime())) return null;
-            return `${dateObj.getDate()} ${monthNames[dateObj.getMonth()]}`;
+            if (!isNaN(dateObj.getTime())) {
+                return `${dateObj.getDate()} ${monthNames[dateObj.getMonth()]}`;
+            }
+            return null;
         }).filter(d => d !== null);
 
+        console.log("Final Formatted Dates Array:", formatted);
         return formatted.length > 0 ? formatted.join(", ") : "-";
     }
 
