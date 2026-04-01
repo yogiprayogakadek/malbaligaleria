@@ -93,7 +93,7 @@ class EventController extends Controller
 
     public function edit($uuid)
     {
-        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label']);
+        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label', 'specific_dates']);
 
         return view('backend.admin.event.edit', compact('event'));
     }
