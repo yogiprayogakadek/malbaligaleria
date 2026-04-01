@@ -1737,6 +1737,22 @@ function shareContent(platform) {
                 "_blank"
             );
             break;
+            
+        case "instagram":
+            if (navigator.share) {
+                navigator.share({
+                    title: currentShareData.name,
+                    text: text,
+                    url: url
+                }).catch(err => {
+                    console.error("Error sharing to Instagram Stories", err);
+                    copyToClipboard(url);
+                });
+            } else {
+                copyToClipboard(url);
+            }
+            document.getElementById("shareMenu").classList.remove("active");
+            break;
     }
 }
 
@@ -1746,11 +1762,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const waBtn = document.getElementById('shareWhatsApp');
     const fbBtn = document.getElementById('shareFacebook');
     const twBtn = document.getElementById('shareTwitter');
+    const igBtn = document.getElementById('shareInstagram');
 
     if (copyBtn) copyBtn.onclick = () => shareContent('copy');
     if (waBtn) waBtn.onclick = () => shareContent('whatsapp');
     if (fbBtn) fbBtn.onclick = () => shareContent('facebook');
     if (twBtn) twBtn.onclick = () => shareContent('twitter');
+    if (igBtn) igBtn.onclick = () => shareContent('instagram');
 });
 
 // Check for deep-link parameter on load (Tenant prioritized by 'store' or fallback 'id')
