@@ -2009,31 +2009,29 @@ async function drawGates(floorId) {
         await fetchAllTenantsForSearch();
     }
 
-    const floorData = allTenantsCache[floorName] || [];
-    const gates = floorData.filter(t => t.type === 'gate');
+    // Search gates across ALL cache buckets (1st Floor, 2nd Floor, New Store)
+    // A gate may be miscategorised as isNew=true in the DB and land in the "New Store"
+    // bucket instead of the expected floor bucket. We guard against this by checking
+    // every bucket and matching on the gate's own `floor` field.
+    const allCachedTenants = [
+        ...(allTenantsCache["1st Floor"] || []),
+        ...(allTenantsCache["2nd Floor"] || []),
+        ...(allTenantsCache["New Store"] || []),
+    ];
+    const gates = allCachedTenants.filter(t => t.type === 'gate' && t.floor === floorName);
 
-    // ===== DEBUG: Gate Diagnostics =====
+    // Diagnostic log
+    const floorBucketData = allTenantsCache[floorName] || [];
     console.group(`🗺️ drawGates() → Floor: "${floorName}" (floorId: ${floorId})`);
-    console.log(`📦 Total tenants in cache for "${floorName}":`, floorData.length);
-    console.log(`✅ Tenants with type === 'gate':`, gates.length);
-    if (gates.length > 0) {
-        gates.forEach((gate, i) => {
-            console.group(`  Gate #${i + 1}: "${gate.name}"`);
-            console.log('  type:', gate.type);
-            console.log('  path_coords (raw):', gate.path_coords);
-            const parsed = typeof gate.path_coords === 'string'
-                ? (() => { try { return JSON.parse(gate.path_coords); } catch(e) { return null; } })()
-                : gate.path_coords;
-            console.log('  path_coords (parsed):', parsed);
-            console.log('  path_coords valid (Array & length > 1):', Array.isArray(parsed) && parsed.length > 1);
-            console.groupEnd();
-        });
-    } else {
-        console.warn('  ⚠️ No gate-type tenants found. Showing ALL tenants in this floor cache for inspection:');
-        console.table(floorData.map(t => ({ id: t.id, name: t.name, type: t.type, floor: t.floor })));
+    console.log(`📦 Tenants in "${floorName}" bucket:`, floorBucketData.length);
+    console.log(`📦 Total tenants across ALL buckets:`, allCachedTenants.length);
+    console.log(`✅ Gates found for "${floorName}" (all buckets):`, gates.length, gates.map(g => g.name));
+    if (gates.length === 0) {
+        console.warn('⚠️ No gates found. Gate-type tenants in ALL buckets:',
+            allCachedTenants.filter(t => t.type === 'gate').map(g => ({ name: g.name, floor: g.floor, type: g.type }))
+        );
     }
     console.groupEnd();
-    // ===== END DEBUG =====
 
     if (gates.length === 0) return;
 
