@@ -26,6 +26,72 @@ let modalCarouselImages = [];
 let modalSwipeStartX = 0;
 let modalSwipeEndX = 0;
 
+// ===== SHARE MENU STATE (CONSISTENT WITH LANDING PAGE) =====
+let currentShareData = null;
+
+function openShareMenu(data) {
+    currentShareData = data;
+    const shareMenu = document.getElementById("shareMenu");
+    const shareMenuTitle = document.getElementById("shareMenuTitle");
+    
+    if (shareMenu) {
+        if (shareMenuTitle) {
+            shareMenuTitle.textContent = `Share ${data.type || 'Content'}`;
+        }
+        shareMenu.classList.add("active");
+    }
+}
+
+function shareContent(platform) {
+    if (!currentShareData) return;
+
+    const url = currentShareData.url;
+    const text = `Check out ${currentShareData.name} at Mal Bali Galeria!`;
+
+    switch (platform) {
+        case "copy":
+            copyToClipboard(url);
+            document.getElementById("shareMenu").classList.remove("active");
+            break;
+
+        case "whatsapp":
+            window.open(
+                `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+                "_blank"
+            );
+            break;
+
+        case "facebook":
+            window.open(
+                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    url
+                )}`,
+                "_blank"
+            );
+            break;
+
+        case "twitter":
+            window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                    text
+                )}&url=${encodeURIComponent(url)}`,
+                "_blank"
+            );
+            break;
+    }
+}
+
+function sharePromotion(promoId, promoTitle) {
+    const url = `${window.location.origin}${window.location.pathname}?id=${promoId}`;
+    
+    openShareMenu({
+        name: promoTitle,
+        url: url,
+        type: 'Promotion'
+    });
+}
+
+
 // ===== HELPER FUNCTIONS =====
 function saveFavorites() {
     localStorage.setItem('promoFavorites', JSON.stringify(favorites));
@@ -232,6 +298,17 @@ if (darkModeToggle) {
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Share Menu button listeners
+    const copyBtn = document.getElementById('shareCopyLink');
+    const waBtn = document.getElementById('shareWhatsApp');
+    const fbBtn = document.getElementById('shareFacebook');
+    const twBtn = document.getElementById('shareTwitter');
+
+    if (copyBtn) copyBtn.onclick = () => shareContent('copy');
+    if (waBtn) waBtn.onclick = () => shareContent('whatsapp');
+    if (fbBtn) fbBtn.onclick = () => shareContent('facebook');
+    if (twBtn) twBtn.onclick = () => shareContent('twitter');
+
     initializePage();
     setupEventListeners();
 
@@ -594,20 +671,7 @@ function setupScrollToTop() {
     });
 }
 
-// ===== SHARE FUNCTION =====
-function sharePromotion(promoId, promoTitle) {
-    const url = `${window.location.origin}${window.location.pathname}?id=${promoId}`;
 
-    if (typeof openShareMenu === 'function') {
-        openShareMenu({
-            name: promoTitle,
-            url: url,
-            type: 'Promotion'
-        });
-    } else {
-        copyToClipboard(url);
-    }
-}
 
 // ===== ADD TO CALENDAR FUNCTION =====
 function addToCalendar(promo) {
@@ -770,11 +834,7 @@ function showPromotionModal(promo) {
         };
     }
 
-    const modalShareWA = document.getElementById('modalShareWA');
-    if (modalShareWA) {
-        const waText = encodeURIComponent(`Cek promo menarik dari ${promo.tenant} di Mal Bali Galeria: *${promo.title}*\nBerlaku hingga ${formatDate(promo.validUntil)}\n${window.location.origin}${window.location.pathname}?id=${promo.id}`);
-        modalShareWA.href = `https://wa.me/?text=${waText}`;
-    }
+
 
     // Reset and show scroll hint — auto-hide after 2.5s (#8)
     const scrollHint = modal.querySelector('.modal-scroll-hint');
