@@ -2207,9 +2207,9 @@ async function drawGates(floorId) {
                     console.log("Parsed Specific Dates (Fast Load):", parsedDates);
                     if (parsedDates.length > 0) {
                         specDatesEl.textContent = formatSpecificDates(parsedDates);
-                        specDatesCont.style.display = "flex";
+                        specDatesCont.style.setProperty('display', 'flex', 'important');
                     } else {
-                        specDatesCont.style.display = "none";
+                        specDatesCont.style.setProperty('display', 'none', 'important');
                     }
                 } catch (e) {
                     console.error("Error parsing specific dates", e);
@@ -2217,7 +2217,7 @@ async function drawGates(floorId) {
                 }
             } else {
                 console.log("No specific dates found in card dataset");
-                specDatesCont.style.display = "none";
+                specDatesCont.style.setProperty('display', 'none', 'important');
             }
         }
 
@@ -2263,9 +2263,9 @@ async function drawGates(floorId) {
             if (specDatesEl && specDatesCont) {
                 if (data.specific_dates && data.specific_dates.length > 0) {
                     specDatesEl.textContent = formatSpecificDates(data.specific_dates);
-                    specDatesCont.style.display = "flex";
+                    specDatesCont.style.setProperty('display', 'flex', 'important');
                 } else {
-                    specDatesCont.style.display = "none";
+                    specDatesCont.style.setProperty('display', 'none', 'important');
                 }
             }
 
