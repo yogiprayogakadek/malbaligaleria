@@ -128,7 +128,7 @@
                             </div>
                         </div>
 
-                        {{-- Date (hidden when regular) --}}
+                        {{-- Date --}}
                         <div id="dateSection" class="mb-4 row align-items-center">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -141,7 +141,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="end_date">End Date</label>
+                                    <label for="end_date">End Date <small class="text-muted fw-normal">(Kosongkan jika event berlangsung terus-menerus/tanpa batas)</small></label>
                                     <input type="text" class="form-control @error('end_date') is-invalid @enderror"
                                         id="end_date" name="end_date" placeholder="Enter end date event"
                                         value="{{ $event->end_date }}">
@@ -321,10 +321,9 @@
                 const type = $('input[name="type"]:checked').val();
                 if (type === 'regular') {
                     $('#recurringSection').slideDown(250);
-                    $('#dateSection').slideUp(250);
+                    // No longer hiding date section
                 } else {
                     $('#recurringSection').slideUp(250);
-                    $('#dateSection').slideDown(250);
                 }
             }
             $('input[name="type"]').on('change', toggleType);
