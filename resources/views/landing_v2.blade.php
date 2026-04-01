@@ -95,10 +95,6 @@
             background: rgba(212, 175, 55, 0.05);
             margin-top: 10px !important;
         }
-
-        #specificDatesContainer.hidden {
-            display: none;
-        }
     </style>
 </head>
 
@@ -932,7 +928,7 @@
                             </div>
                         </div>
 
-                        <div class="event-modal-info-item hidden" id="specificDatesContainer">
+                        <div class="event-modal-info-item" id="specificDatesContainer">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                                 <polyline points="9 11 12 14 22 4" />
