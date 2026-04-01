@@ -49,10 +49,10 @@ class EventRepository
                                 ->orWhere('end_date', '>=', today());
                         })
                         ->where(function ($sub) {
-                            // Munculkan jika specific_dates null, array kosong [], atau mengandung hari ini
+                            $today = today()->format('Y-m-d');
                             $sub->whereNull('specific_dates')
                                 ->orWhereJsonLength('specific_dates', 0)
-                                ->orWhereJsonContains('specific_dates', today()->format('Y-m-d'));
+                                ->orWhereJsonContains('specific_dates', $today);
                         });
                 });
             })
