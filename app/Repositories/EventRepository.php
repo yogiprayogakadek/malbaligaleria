@@ -36,17 +36,19 @@ class EventRepository
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
             ->where(function ($query) {
-                // Tampil jika (Bulan & Tahun start_date == Sekarang) 
-                // OR (start_date <= hari ini AND (end_date kosong OR end_date >= hari ini))
+                // 1. Tampil jika Bulan & Tahun >= Sekarang
+                // 2. ATAU sedang berlangsung (end_date >= hari ini)
                 $query->where(function ($q) {
-                    $q->whereMonth('start_date', now()->month)
-                        ->whereYear('start_date', now()->year);
+                    $q->where(function ($sub) {
+                        $sub->whereYear('start_date', '>', now()->year)
+                            ->orWhere(function ($s) {
+                                $s->whereYear('start_date', now()->year)
+                                    ->whereMonth('start_date', '>=', now()->month);
+                            });
+                    });
                 })->orWhere(function ($q) {
-                    $q->where('start_date', '<=', today())
-                        ->where(function ($sub) {
-                            $sub->whereNull('end_date')
-                                ->orWhere('end_date', '>=', today());
-                        });
+                    $q->whereNotNull('end_date')
+                        ->where('end_date', '>=', today());
                 });
             })
             ->get();
