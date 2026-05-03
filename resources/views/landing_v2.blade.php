@@ -217,7 +217,7 @@
             <p>Enjoy the moment. Play without limits. Eat with passion. Shop the best.</p>
             <a href="{{ route('frontend.directory.index') }}" style="text-decoration: none;">
                 <button class="explore-btn">
-                    <span class="arrow">→</span>
+                    <span class="arrow">&rarr;</span>
                     <span class="text">Explore malbaligaleria</span>
                 </button>
             </a>
@@ -235,20 +235,20 @@
             <h2>Welcome to Mal Bali Galeria</h2>
             <div class="about-content">
                 {{-- <p>An iconic lifestyle destination in the heart of Kuta, set at the prestigious Simpang Dewa Ruci. As
-                    Bali’s first mall to introduce premium retail concepts that continue to thrive, Mal Bali Galeria
+                    Bali's first mall to introduce premium retail concepts that continue to thrive, Mal Bali Galeria
                     blends refined shopping and curated dining with a vibrant calendar of unique, high-energy
-                    events—delivering a sophisticated Family Mall experience where excitement, culture, and elegance
+                    events-delivering a sophisticated Family Mall experience where excitement, culture, and elegance
                     come together.
                     Enjoy. Play. Eat. Shop.</p> --}}
 
                 <p>
                     Right in the vibrant heart of Kuta at the iconic Simpang Dewa Ruci, Mal Bali Galeria is where Bali
-                    comes to life. As the island’s pioneer of premium retail concepts, the mall continues to set the
+                    comes to life. As the island's pioneer of premium retail concepts, the mall continues to set the
                     standard for trendsetting brands, exciting experiences, and unforgettable moments.
                     With its signature motto, Enjoy Play Eat Shop, Mal Bali Galeria is more than a shopping
-                    destination, it’s a lifestyle playground. From fashion, forward retail and curated dining spots to
-                    thrilling, high-energy events that light up the calendar, there’s always something happening.
-                    Designed as a dynamic Family Mall, it’s the place where friends gather, families connect, cultures
+                    destination, it's a lifestyle playground. From fashion, forward retail and curated dining spots to
+                    thrilling, high-energy events that light up the calendar, there's always something happening.
+                    Designed as a dynamic Family Mall, it's the place where friends gather, families connect, cultures
                     meet, and excitement never stops. Every visit brings new discoveries, fresh flavors, and vibrant
                     experiences, all under one roof.
                 </p>
@@ -303,8 +303,8 @@
                 </div>
             </div>
             <div class="carousel-controls">
-                <button class="carousel-btn" id="prevBtn">←</button>
-                <button class="carousel-btn" id="nextBtn">→</button>
+                <button class="carousel-btn" id="prevBtn">&larr;</button>
+                <button class="carousel-btn" id="nextBtn">&rarr;</button>
             </div>
         </div>
     </section>
@@ -313,7 +313,8 @@
         <div class="experience-container">
             <div class="experience-header">
                 <h2>What's On at MBG</h2>
-                <p class="experience-subtitle">From exciting events to brand-new stores — there's always something
+                <p class="experience-subtitle">From exciting events to brand-new stores - there's always
+                    something
                     happening.</p>
                 <div class="header-divider"></div>
             </div>
@@ -346,46 +347,6 @@
         </div>
     </section>
 
-    {{-- <section class="instagram-section reveal" id="instagram">
-        <div class="instagram-container">
-            <div class="instagram-header">
-                <h2>Moments @ Galeria</h2>
-                <p>Follow us <a href="https://www.instagram.com/malbaligaleria/" target="_blank">@malbaligaleria</a></p>
-            </div>
-            <div class="instagram-grid">
-                @php
-                    $igImages = [
-                        asset('assets/frontend/images/instagram/ig_1.png'),
-                        asset('assets/frontend/images/instagram/ig_2.png'),
-                        asset('assets/frontend/images/instagram/ig_3.png'),
-                        asset('assets/frontend/images/instagram/ig_4.png'),
-                        asset('assets/frontend/images/instagram/ig_5.png'),
-                        asset('assets/frontend/images/instagram/ig_6.png'),
-                    ];
-                @endphp
-                @for ($i = 0; $i < 20; $i++)
-                    <div class="instagram-item {{ $i >= 6 ? 'ig-hidden' : '' }}">
-                        <img src="{{ $igImages[$i % 6] }}" alt="Instagram Moment">
-                        <div class="instagram-overlay">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                            </svg>
-                        </div>
-                    </div>
-                @endfor
-            </div>
-            <div class="instagram-footer">
-                <button class="instagram-btn load-more-ig" id="loadMoreIg">
-                    <span>Load More</span>
-                </button>
-                <a href="https://www.instagram.com/malbaligaleria/" target="_blank" class="instagram-btn">
-                    <span>Follow us on Instagram</span>
-                </a>
-            </div>
-        </div>
-    </section> --}}
 
     {{-- ===== REGULAR SHOWS SECTION ===== --}}
     @if (isset($regularEvents) && $regularEvents->count() > 0)
@@ -423,7 +384,7 @@
                                     if ($rEvent->start_date) {
                                         $rDateStr = date('d M', strtotime($rEvent->start_date));
                                         if ($rEvent->end_date && $rEvent->start_date != $rEvent->end_date) {
-                                            $rDateStr .= ' – ' . date('d M Y', strtotime($rEvent->end_date));
+                                            $rDateStr .= ' - ' . date('d M Y', strtotime($rEvent->end_date));
                                         } else {
                                             $rDateStr .= ' ' . date('Y', strtotime($rEvent->start_date));
                                         }
@@ -453,7 +414,7 @@
                                     <p class="event-desc">
                                         {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                     </p>
-                                    <span class="event-link">Learn More →</span>
+                                    <span class="event-link">Learn More &rarr;</span>
                                 </div>
                             </div>
                         @endforeach
@@ -461,8 +422,8 @@
                 </div>
 
                 <div class="regular-shows-controls" id="regularShowsControls">
-                    <button class="event-nav-btn" id="regularShowsPrevBtn">←</button>
-                    <button class="event-nav-btn" id="regularShowsNextBtn">→</button>
+                    <button class="event-nav-btn" id="regularShowsPrevBtn">&larr;</button>
+                    <button class="event-nav-btn" id="regularShowsNextBtn">&rarr;</button>
                 </div>
             </div>
         </section>
@@ -472,7 +433,7 @@
     <section class="event-section reveal" id="events">
         <div class="event-container">
             <h2>Upcoming Events</h2>
-            <p class="event-subtitle">Don't miss out — explore what's coming up at Mal Bali Galeria</p>
+            <p class="event-subtitle">Don't miss out - explore what's coming up at Mal Bali Galeria</p>
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
@@ -484,7 +445,7 @@
                                     optional($event)->end_date &&
                                     optional($event)->start_date != optional($event)->end_date
                                 ) {
-                                    $eDateStr .= ' – ' . date('d M Y', strtotime(optional($event)->end_date));
+                                    $eDateStr .= ' - ' . date('d M Y', strtotime(optional($event)->end_date));
                                 } else {
                                     $eDateStr .= ' ' . date('Y', strtotime(optional($event)->start_date));
                                 }
@@ -512,7 +473,7 @@
                                 <p class="event-desc">
                                     {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
-                                <span class="event-link">Learn More →</span>
+                                <span class="event-link">Learn More &rarr;</span>
                             </div>
                         </div>
                     @empty
@@ -535,8 +496,8 @@
             </div>
             <div class="event-controls {{ !isset($events) || $events->count() <= 1 ? 'hidden' : '' }}"
                 id="eventControls">
-                <button class="event-nav-btn" id="eventPrevBtn">←</button>
-                <button class="event-nav-btn" id="eventNextBtn">→</button>
+                <button class="event-nav-btn" id="eventPrevBtn">&larr;</button>
+                <button class="event-nav-btn" id="eventNextBtn">&rarr;</button>
             </div>
         </div>
     </section>
@@ -557,7 +518,7 @@
                                     optional($exEvent)->end_date &&
                                     optional($exEvent)->start_date != optional($exEvent)->end_date
                                 ) {
-                                    $exDateStr .= ' – ' . date('d M Y', strtotime(optional($exEvent)->end_date));
+                                    $exDateStr .= ' - ' . date('d M Y', strtotime(optional($exEvent)->end_date));
                                 } else {
                                     $exDateStr .= ' ' . date('Y', strtotime(optional($exEvent)->start_date));
                                 }
@@ -582,7 +543,7 @@
                                 <p class="event-desc">
                                     {{ $exEvent && isset($exEvent->start_date) ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
-                                <span class="event-link">Learn More →</span>
+                                <span class="event-link">Learn More &rarr;</span>
                             </div>
                         </div>
                     @empty
@@ -606,11 +567,132 @@
             </div>
             <div class="event-controls {{ !isset($exhibitionEvents) || $exhibitionEvents->count() <= 1 ? 'hidden' : '' }}"
                 id="exhibitionControls">
-                <button class="event-nav-btn" id="exhibitionPrevBtn">←</button>
-                <button class="event-nav-btn" id="exhibitionNextBtn">→</button>
+                <button class="event-nav-btn" id="exhibitionPrevBtn">&larr;</button>
+                <button class="event-nav-btn" id="exhibitionNextBtn">&rarr;</button>
             </div>
         </div>
     </section>
+
+    {{-- ===== LIVE IG FEED SECTION ===== --}}
+    {{-- <section class="ig-feed-section reveal" id="ig-feed">
+        <div class="ig-feed-container">
+
+            <div class="ig-feed-header">
+                <div class="ig-feed-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                    @malbaligaleria
+                </div>
+                <h2 class="ig-feed-title">Live <span>IG</span> Feed</h2>
+                <p class="ig-feed-subtitle">Lihat momen terkini dari Mal Bali Galeria</p>
+            </div>
+
+            @php
+                $igDummy = [
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg1/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '1.2K',
+                        'caption' => 'An amazing evening at MBG',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg2/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '894',
+                        'caption' => 'Your favorite food spots are here',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg3/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '2.1K',
+                        'caption' => 'LED Dance Butterfly every thursday',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg4/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '3.4K',
+                        'caption' => 'New season, new style. Shop now',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg5/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '756',
+                        'caption' => 'Weekends are better at Galeria',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg6/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '1.8K',
+                        'caption' => 'Bali vibes at the heart of Kuta',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg7/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '990',
+                        'caption' => 'Enjoy, Play, Eat, Shop',
+                    ],
+                    [
+                        'img' => 'https://picsum.photos/seed/mbg8/600/600',
+                        'link' => 'https://www.instagram.com/malbaligaleria/',
+                        'likes' => '1.5K',
+                        'caption' => 'Family fun every weekend',
+                    ],
+                ];
+            @endphp
+
+            <div class="ig-feed-grid">
+                @foreach ($igDummy as $index => $post)
+                    <a href="{{ $post['link'] }}" target="_blank" rel="noopener noreferrer" class="ig-feed-item"
+                        data-index="{{ $index }}">
+                        <img src="{{ $post['img'] }}" alt="Instagram post" loading="lazy">
+                        <div class="ig-feed-overlay">
+                            <div class="ig-feed-overlay-inner">
+                                <svg class="ig-heart-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                                <span class="ig-likes">{{ $post['likes'] }}</span>
+                            </div>
+                            <p class="ig-caption">{{ $post['caption'] }}</p>
+                        </div>
+                        <div class="ig-item-corner">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                            </svg>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+
+            <div class="ig-feed-cta">
+                <div class="ig-feed-cta-inner">
+                    <div class="ig-cta-avatar">
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo">
+                    </div>
+                    <div class="ig-cta-text">
+                        <strong>@malbaligaleria</strong>
+                        <span>Ikuti kami untuk momen terbaru</span>
+                    </div>
+                    <a href="https://www.instagram.com/malbaligaleria/" target="_blank" rel="noopener noreferrer"
+                        class="ig-cta-btn" id="igViewAllBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                        </svg>
+                        Lihat di Instagram
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section> --}}
+    {{-- ===== END IG FEED SECTION ===== --}}
 
     <section class="map-section reveal">
         <div class="map-container">
@@ -676,7 +758,7 @@
                         </div>
                         <div class="floor-item">
                             <h4>New Store</h4>
-                            <p>Fresh arrivals — fashion, food & island vibes</p>
+                            <p>Fresh arrivals - fashion, food & island vibes</p>
                         </div>
                         <div class="floor-item">
                             <h4>Favorites</h4>
@@ -1055,7 +1137,7 @@
             <div class="share-menu-header">
                 <h4 id="shareMenuTitle">Share Content</h4>
                 <button class="share-menu-close"
-                    onclick="document.getElementById('shareMenu').classList.remove('active')">×</button>
+                    onclick="document.getElementById('shareMenu').classList.remove('active')">Ã—</button>
             </div>
             <div class="share-menu-body">
                 <button class="share-option" id="shareCopyLink">
@@ -1099,6 +1181,7 @@
         };
     </script>
     <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
+
 
 </body>
 
