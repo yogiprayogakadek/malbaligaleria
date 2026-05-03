@@ -540,3 +540,39 @@
     }
 
 })();
+
+// Visitor Counter Animation
+(() => {
+    const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const parseNumber = (str) => parseInt(str.replace(/,/g, '')) || 0;
+
+    const animateCounter = (el) => {
+        const end = parseNumber(el.getAttribute('data-target') || el.textContent);
+        const duration = parseInt(el.getAttribute('data-duration')) || 2000;
+        let start = 0;
+        const increment = end / (duration / 16);
+
+        const updateCount = () => {
+            start += increment;
+            if (start < end) {
+                el.textContent = formatNumber(Math.floor(start));
+                requestAnimationFrame(updateCount);
+            } else {
+                el.textContent = formatNumber(end);
+            }
+        };
+        updateCount();
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.visitor-count').forEach(animateCounter);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const footer = document.querySelector('footer');
+    if (footer) observer.observe(footer);
+})();

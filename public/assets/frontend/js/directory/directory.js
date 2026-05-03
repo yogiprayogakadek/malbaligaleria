@@ -32,6 +32,30 @@ function hideLoading() {
         skeletonGrid.classList.add("loaded");
     }
     document.body.classList.add("loaded");
+
+    // Automatically show MAP Tenant List flyer modal after loader
+    setTimeout(showFlyerModal, 800);
+}
+
+// ===== FLYER MODAL SYSTEM =====
+function showFlyerModal() {
+    const flyerModal = document.getElementById("flyerModal");
+    if (flyerModal) {
+        flyerModal.classList.add("active");
+        document.body.style.overflow = "hidden"; // Prevent background scroll
+    }
+}
+
+function closeFlyerModal() {
+    const flyerModal = document.getElementById("flyerModal");
+    if (flyerModal) {
+        flyerModal.classList.remove("active");
+        // Only re-enable scroll if no other modals are active
+        const otherModals = document.querySelectorAll('.tenant-modal.active, .shortcuts-modal.active');
+        if (otherModals.length === 0) {
+            document.body.style.overflow = "";
+        }
+    }
 }
 
 // ===== TOAST NOTIFICATION SYSTEM =====
@@ -2698,6 +2722,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             initPullToRefresh(); // Initialize pull to refresh
             initSwipeGestures(); // Initialize swipe gestures
 
+            // Initialize Flyer Modal Listeners
+            const flyerCloseBtn = document.getElementById("flyerCloseBtn");
+            const flyerOverlay = document.getElementById("flyerOverlay");
+            if (flyerCloseBtn) flyerCloseBtn.addEventListener("click", closeFlyerModal);
+            if (flyerOverlay) flyerOverlay.addEventListener("click", closeFlyerModal);
+
             // Helper for search input synchronization
             const syncSearchInputs = (val) => {
                 const ids = ["searchInput", "headerSearch", "sidebarSearch"];
@@ -3048,3 +3078,39 @@ function locateTenantOnMap(tenant) {
     }, 600);
 }
 
+
+// Visitor Counter Animation
+(() => {
+    const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const parseNumber = (str) => parseInt(str.replace(/,/g, '')) || 0;
+
+    const animateCounter = (el) => {
+        const end = parseNumber(el.getAttribute('data-target') || el.textContent);
+        const duration = parseInt(el.getAttribute('data-duration')) || 2000;
+        let start = 0;
+        const increment = end / (duration / 16);
+
+        const updateCount = () => {
+            start += increment;
+            if (start < end) {
+                el.textContent = formatNumber(Math.floor(start));
+                requestAnimationFrame(updateCount);
+            } else {
+                el.textContent = formatNumber(end);
+            }
+        };
+        updateCount();
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.visitor-count').forEach(animateCounter);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const footer = document.querySelector('footer');
+    if (footer) observer.observe(footer);
+})();

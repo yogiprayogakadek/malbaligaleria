@@ -8,6 +8,7 @@ use App\Http\Responses\RegisterResponse;
 use App\Http\Responses\LoginResponse as CustomLoginResponse;
 use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,17 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Event::listen(
             \Illuminate\Auth\Events\Login::class,
             \App\Listeners\LoginListener::class
+        );
+        Schema::defaultStringLength(191);
+
+        \Illuminate\Support\Facades\View::composer(
+            [
+                'frontend.partials.footer_v2',
+                'frontend.directory.index',
+                'frontend.promotion.index',
+                'frontend.new-store.index'
+            ],
+            \App\Http\View\Composers\StatsComposer::class
         );
     }
 }

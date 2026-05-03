@@ -58,6 +58,7 @@
                 font-size: 7px !important;
                 padding: 1px 3px !important;
             }
+
             .map-pin.gate {
                 width: 6px !important;
                 height: 6px !important;
@@ -87,11 +88,13 @@
                 left: 10px !important;
                 bottom: 20px !important;
             }
+
             .zoom-btn {
                 width: 28px !important;
                 height: 28px !important;
                 padding: 5px !important;
             }
+
             .zoom-btn svg {
                 width: 16px !important;
                 height: 16px !important;
@@ -494,6 +497,27 @@
         </div>
     </main>
 
+    <!-- MAP Tenant List Flyer Modal -->
+    <div class="flyer-modal" id="flyerModal">
+        <div class="flyer-overlay" id="flyerOverlay"></div>
+        <div class="flyer-container">
+            <button class="flyer-close-btn" id="flyerCloseBtn" aria-label="Close Flyer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            <div class="flyer-content">
+                <div class="flyer-header">
+                    <h2>MAP Tenant List</h2>
+                    <div class="header-line"></div>
+                </div>
+                <div class="flyer-image-wrapper">
+                    <img src="{{ asset('assets/images/flyers/map_tenant_list.png') }}" alt="MAP Tenant List Flyer">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="tenant-modal" id="tenantModal">
         <div class="modal-overlay" id="modalOverlay" onclick="closeTenantModal()"></div>
@@ -826,6 +850,27 @@
                         <a href="mailto:info@malbaligaleria.com">info@malbaligaleria.com</a>
                     </div>
                 </div>
+
+                <div class="footer-column">
+                    <h3>Visitors</h3>
+                    <div class="footer-visitor">
+                        <div class="visitor-item">
+                            <span class="visitor-label">Total Visitors</span>
+                            <span class="visitor-count" data-target="{{ $totalVisitors }}" data-duration="2500">{{ number_format($totalVisitors) }}</span>
+                        </div>
+                        <div class="visitor-item">
+                            <span class="visitor-label">Today</span>
+                            <span class="visitor-count" data-target="{{ $todayVisitors }}" data-duration="2000">{{ number_format($todayVisitors) }}</span>
+                        </div>
+                        <div class="visitor-item online">
+                            <div class="online-indicator">
+                                <span class="online-dot"></span>
+                                <span class="visitor-label">Online Users</span>
+                            </div>
+                            <span class="visitor-count" data-target="{{ $onlineVisitors }}" data-duration="1500">{{ number_format($onlineVisitors) }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="footer-divider"></div>
@@ -860,7 +905,7 @@
             <span>Promo</span>
         </a>
         <a href="{{ route('frontend.directory.index') }}" class="dir-mobile-cta-btn admin-theme">
-             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
                 <rect x="14" y="14" width="7" height="7"></rect>

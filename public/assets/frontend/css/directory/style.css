@@ -5574,3 +5574,230 @@ body.dark-mode .dir-mobile-cta-btn svg {
     }
 }
 
+
+/* Flyer Modal */
+.flyer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.flyer-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.flyer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.flyer-container {
+    position: relative;
+    width: 90%;
+    max-width: 650px;
+    max-height: 90vh;
+    background: var(--bg-light);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+}
+
+body.dark-mode .flyer-container {
+    background: var(--bg-dark);
+}
+
+.flyer-modal.active .flyer-container {
+    transform: scale(1) translateY(0);
+}
+
+.flyer-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .flyer-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.flyer-close-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.flyer-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 35px;
+}
+
+.flyer-header {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.flyer-header h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
+}
+
+.header-line {
+    width: 60px;
+    height: 4px;
+    background: var(--primary-gradient);
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+.flyer-image-wrapper {
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 12px;
+    overflow-y: auto;
+    background: #f0f0f0;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+}
+
+body.dark-mode .flyer-image-wrapper {
+    background: #1a1a1a;
+}
+
+.flyer-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .flyer-content {
+        padding: 25px 15px;
+    }
+    
+    .flyer-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .flyer-close-btn {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Visitor Counter Styles */
+.footer-visitor {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-visitor:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    border-color: rgba(245, 245, 220, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.visitor-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.visitor-item:last-child {
+    margin-bottom: 0;
+}
+
+.visitor-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+}
+
+.visitor-count {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+}
+
+.online-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.online-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #2ecc71;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
+}
+
+.online-dot::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 1px solid #2ecc71;
+    border-radius: 50%;
+    animation: visitor-pulse 2s infinite;
+}
+
+@keyframes visitor-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
+
+body.dark-mode .footer-visitor {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.05);
+}

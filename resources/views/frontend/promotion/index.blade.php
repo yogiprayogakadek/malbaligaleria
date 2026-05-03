@@ -553,6 +553,27 @@
                         <a href="mailto:info@malbaligaleria.com">info@malbaligaleria.com</a>
                     </div>
                 </div>
+
+                <div class="footer-column">
+                    <h3>Visitors</h3>
+                    <div class="footer-visitor">
+                        <div class="visitor-item">
+                            <span class="visitor-label">Total Visitors</span>
+                            <span class="visitor-count" data-target="{{ $totalVisitors }}" data-duration="2500">{{ number_format($totalVisitors) }}</span>
+                        </div>
+                        <div class="visitor-item">
+                            <span class="visitor-label">Today</span>
+                            <span class="visitor-count" data-target="{{ $todayVisitors }}" data-duration="2000">{{ number_format($todayVisitors) }}</span>
+                        </div>
+                        <div class="visitor-item online">
+                            <div class="online-indicator">
+                                <span class="online-dot"></span>
+                                <span class="visitor-label">Online Users</span>
+                            </div>
+                            <span class="visitor-count" data-target="{{ $onlineVisitors }}" data-duration="1500">{{ number_format($onlineVisitors) }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="footer-divider"></div>

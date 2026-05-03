@@ -128,10 +128,10 @@ class DirectoryController extends Controller
                 'path_coords' => $data['path_coords'],
             ];
 
-            $hasValidCoords = isset($data['map_coords']['x']) && 
-                            isset($data['map_coords']['y']) &&
-                            is_numeric($data['map_coords']['x']) && 
-                            is_numeric($data['map_coords']['y']);
+            $hasValidCoords = isset($data['map_coords']['x']) &&
+                isset($data['map_coords']['y']) &&
+                is_numeric($data['map_coords']['x']) &&
+                is_numeric($data['map_coords']['y']);
 
             if ($hasValidCoords) {
                 $tenantData['mapCoords'] = [

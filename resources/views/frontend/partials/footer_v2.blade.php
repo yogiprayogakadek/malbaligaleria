@@ -76,6 +76,27 @@
                     <a href="mailto:info@malbaligaleria.com">info@malbaligaleria.com</a>
                 </div>
             </div>
+
+            <div class="footer-column">
+                <h3>Visitors</h3>
+                <div class="footer-visitor">
+                    <div class="visitor-item">
+                        <span class="visitor-label">Total Visitors</span>
+                        <span class="visitor-count" id="totalVisitors">{{ number_format($totalVisitors) }}</span>
+                    </div>
+                    <div class="visitor-item">
+                        <span class="visitor-label">Today</span>
+                        <span class="visitor-count" id="todayVisitors">{{ number_format($todayVisitors) }}</span>
+                    </div>
+                    <div class="visitor-item online">
+                        <div class="online-indicator">
+                            <span class="online-dot"></span>
+                            <span class="visitor-label">Online Users</span>
+                        </div>
+                        <span class="visitor-count" id="onlineVisitors">{{ number_format($onlineVisitors) }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="footer-divider"></div>
@@ -89,3 +110,58 @@
         </div>
     </div>
 </footer>
+
+@if(!isset($disableFooterVisitorScript) || !$disableFooterVisitorScript)
+<script>
+    // Visitor Counter Animation
+    document.addEventListener('DOMContentLoaded', () => {
+        const counters = [
+            { id: 'totalVisitors', end: {{ $totalVisitors }}, duration: 2500 },
+            { id: 'todayVisitors', end: {{ $todayVisitors }}, duration: 2000 },
+            { id: 'onlineVisitors', end: {{ $onlineVisitors }}, duration: 1500 }
+        ];
+
+        const formatNumber = (num) => {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+
+        const animateCounter = (id, end, duration) => {
+            const element = document.getElementById(id);
+            if (!element) return;
+
+            let start = 0;
+            const increment = end / (duration / 16);
+            
+            const updateCount = () => {
+                start += increment;
+                if (start < Math.floor(end)) {
+                    element.textContent = formatNumber(Math.floor(start));
+                    requestAnimationFrame(updateCount);
+                } else {
+                    element.textContent = formatNumber(end);
+                }
+            };
+            
+            updateCount();
+        };
+
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    counters.forEach(counter => {
+                        animateCounter(counter.id, counter.end, counter.duration);
+                    });
+                    observer.disconnect();
+                }
+            });
+        }, observerOptions);
+
+        const footer = document.querySelector('footer');
+        if (footer) observer.observe(footer);
+    });
+</script>
+@endif

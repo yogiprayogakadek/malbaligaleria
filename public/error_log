@@ -1,0 +1,2 @@
+[03-Feb-2026 18:10:11 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 69601856 bytes) in /home/ergserve/public_html/malbaligaleria/vendor/laravel/framework/src/Illuminate/Support/helpers.php on line 137
+[04-Feb-2026 01:12:58 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 84947624 bytes) in /home/ergserve/public_html/malbaligaleria/vendor/laravel/framework/src/Illuminate/Support/helpers.php on line 137

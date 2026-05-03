@@ -51,7 +51,7 @@ class EventRepository
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
             ->where(function ($query) {
-                // Tampil jika (Bulan & Tahun start_date == Sekarang) 
+                // Tampil jika (Bulan & Tahun start_date == Sekarang)
                 // OR (start_date <= hari ini AND (end_date kosong OR end_date >= hari ini))
                 $query->where(function ($q) {
                     $q->whereMonth('start_date', now()->month)
@@ -79,7 +79,7 @@ class EventRepository
 
     public function getEventsWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
     {
-        return $this->model::select($fields)->with($relationship)->where($column, $condition)->where('is_active',true)->get();
+        return $this->model::select($fields)->with($relationship)->where($column, $condition)->where('is_active', true)->get();
     }
 
     public function getUpcomingEvents(array $fields, array $relationship, string $uuid)

@@ -388,7 +388,7 @@
 
     </div> {{-- End .main-content --}}
 
-    @include('frontend.partials.footer_v2')
+    @include('frontend.partials.footer_v2', ['disableFooterVisitorScript' => true])
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
