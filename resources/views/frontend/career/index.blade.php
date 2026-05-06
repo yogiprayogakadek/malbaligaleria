@@ -28,6 +28,8 @@
             background: #ffffff;
             border: 1px solid var(--border);
             margin-bottom: 32px;
+            position: relative;
+            z-index: 1000;
         }
 
         .filter-group {
@@ -40,7 +42,7 @@
         .career-dropdown {
             position: relative;
             min-width: 220px;
-            z-index: 100;
+            z-index: 1001;
         }
 
         .career-dropdown-toggle {
