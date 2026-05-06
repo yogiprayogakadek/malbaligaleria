@@ -18,6 +18,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/career.css') }}?v={{ time() }}">
+    <style>
+        .vacancy-card-share-btn {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(44, 95, 93, 0.2);
+            background: rgba(44, 95, 93, 0.05);
+            color: #2c5f5d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .vacancy-card-share-btn:hover {
+            background: #2c5f5d;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        body.dark-mode .vacancy-card-share-btn {
+            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #eee;
+        }
+
+        body.dark-mode .vacancy-card-share-btn:hover {
+            background: var(--gold, #D4AF37);
+            border-color: var(--gold, #D4AF37);
+            color: #1a1a1a;
+        }
+
+        .vacancy-card-share-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+    </style>
 </head>
 
 <body>
@@ -200,14 +240,28 @@
                                     <span>Open Recruitment</span>
                                 @endif
                             </div>
-                            @if(!$vacancy->isExpired())
-                                <a href="{{ route('frontend.career.show', $vacancy->uuid) }}" class="vacancy-apply-btn">
-                                    View Details
-                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </a>
-                            @else
-                                <span style="font-size:12px; color:#e74c3c; font-weight:600;">Recruitment Closed</span>
-                            @endif
+                            <div class="vacancy-actions" style="display:flex; align-items:center; gap:8px;">
+                                <button type="button" class="vacancy-card-share-btn" 
+                                        data-url="{{ route('frontend.career.show', $vacancy->uuid) }}"
+                                        data-title="{{ $vacancy->title }}"
+                                        title="Share Vacancy">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="18" cy="5" r="3" />
+                                        <circle cx="6" cy="12" r="3" />
+                                        <circle cx="18" cy="19" r="3" />
+                                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                                    </svg>
+                                </button>
+                                @if(!$vacancy->isExpired())
+                                    <a href="{{ route('frontend.career.show', $vacancy->uuid) }}" class="vacancy-apply-btn">
+                                        View Details
+                                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </a>
+                                @else
+                                    <span style="font-size:12px; color:#e74c3c; font-weight:600;">Closed</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 @empty
@@ -232,6 +286,7 @@
         </div>
     </section>
 
+    @include('frontend.partials.share_menu')
     @include('frontend.partials.footer_v2')
 
     <div class="mobile-sticky-cta" id="mobileStickyBar">
@@ -300,6 +355,21 @@
         });
 
         searchInput.addEventListener('input', filterCards);
+
+        // Share Vacancy
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.vacancy-card-share-btn');
+            if (btn && window.openShareMenu) {
+                const url = btn.dataset.url;
+                const title = btn.dataset.title;
+                window.openShareMenu({
+                    name: title,
+                    url: url,
+                    type: 'Vacancy',
+                    text: `Check out this vacancy at Mal Bali Galeria: ${title}`
+                });
+            }
+        });
     });
     </script>
 </body>

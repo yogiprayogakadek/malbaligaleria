@@ -11,6 +11,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/career.css') }}?v={{ time() }}">
+    <style>
+        .career-share-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1.5px solid rgba(44, 95, 93, 0.2);
+            background: #f8f9fa;
+            color: #2c5f5d;
+            text-decoration: none;
+            width: 100%;
+            margin-top: 12px;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        .career-share-btn:hover {
+            background: #e8e8e8;
+            border-color: #2c5f5d;
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .career-share-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #eee;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .career-share-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .career-share-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+    </style>
 </head>
 
 <body>
@@ -237,6 +281,17 @@
                                 Recruitment Closed
                             </div>
                         @endif
+
+                        <button type="button" class="career-share-btn" id="careerShareBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3" />
+                                <circle cx="6" cy="12" r="3" />
+                                <circle cx="18" cy="19" r="3" />
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                            </svg>
+                            Share Vacancy
+                        </button>
                     </div>
                 </div>
 
@@ -324,6 +379,7 @@
     </div>
     @endif
 
+    @include('frontend.partials.share_menu')
     @include('frontend.partials.footer_v2')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -410,6 +466,21 @@
                 }
             });
         @endif
+
+        // Share Vacancy
+        const shareBtn = document.getElementById('careerShareBtn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                if (window.openShareMenu) {
+                    window.openShareMenu({
+                        name: "{{ $vacancy->title }}",
+                        url: window.location.href,
+                        type: 'Vacancy',
+                        text: "Check out this vacancy at Mal Bali Galeria: {{ $vacancy->title }}"
+                    });
+                }
+            });
+        }
     });
     </script>
 </body>
