@@ -19,6 +19,7 @@ use App\Http\Controllers\Frontend\DirectoryController;
 use App\Http\Controllers\Frontend\PromotionPageController as PromotionController;
 use App\Http\Controllers\Frontend\NewStoreController;
 use App\Http\Controllers\Frontend\EventController as FrontendEventController;
+use App\Http\Controllers\Frontend\CareerController;
 use App\Http\Controllers\Backend\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Backend\Admin\CategoryController;
 use App\Http\Controllers\Backend\Admin\TenantController;
@@ -28,6 +29,8 @@ use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\Admin\ActivityController;
 use App\Http\Controllers\Backend\Admin\SettingController;
+use App\Http\Controllers\Backend\Admin\JobVacancyController;
+use App\Http\Controllers\Backend\Admin\JobApplicationController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
@@ -64,6 +67,12 @@ Route::name('frontend.')->group(function () {
 
     Route::prefix('/events')->name('event.')->group(function () {
         Route::get('/', [FrontendEventController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('/career')->name('career.')->group(function () {
+        Route::get('/', [CareerController::class, 'index'])->name('index');
+        Route::get('/{uuid}', [CareerController::class, 'show'])->name('show');
+        Route::post('/{uuid}/apply', [CareerController::class, 'apply'])->name('apply');
     });
 });
 
@@ -196,6 +205,24 @@ Route::controller(AdminDashboardController::class)
                 Route::put('/{id}/update', 'update')->name('update');
                 Route::delete('/{id}/destroy', 'destroy')->name('destroy');
             });
+
+        // CAREER — VACANCIES
+        Route::controller(JobVacancyController::class)->prefix('/career/vacancy')->name('career.vacancy.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/{uuid}/edit', 'edit')->name('edit');
+            Route::put('/{uuid}/update', 'update')->name('update');
+            Route::delete('/{uuid}/destroy', 'destroy')->name('destroy');
+        });
+
+        // CAREER — APPLICATIONS
+        Route::controller(JobApplicationController::class)->prefix('/career/application')->name('career.application.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{uuid}', 'show')->name('show');
+            Route::put('/{uuid}/status', 'updateStatus')->name('updateStatus');
+            Route::get('/{uuid}/download-cv', 'downloadCv')->name('downloadCv');
+        });
     });
 
 // BACKEND

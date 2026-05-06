@@ -14,19 +14,19 @@
                 @if($eventsWithoutPhoto > 0)
                 <div class="alert alert-warning d-flex align-items-center gap-2 mb-0 py-2 px-3" style="border-radius:10px;">
                     <i class="ti ti-photo-off fs-5"></i>
-                    <span><strong>{{ $eventsWithoutPhoto }} event</strong> belum memiliki foto. <a href="{{ route('admin.event.photo.create') }}" class="alert-link">Upload sekarang →</a></span>
+                    <span><strong>{{ $eventsWithoutPhoto }} events</strong> do not have photos. <a href="{{ route('admin.event.photo.create') }}" class="alert-link">Upload now →</a></span>
                 </div>
                 @endif
                 @if($expiringPromos > 0)
                 <div class="alert alert-info d-flex align-items-center gap-2 mb-0 py-2 px-3" style="border-radius:10px;">
                     <i class="ti ti-clock-exclamation fs-5"></i>
-                    <span><strong>{{ $expiringPromos }} promo</strong> akan berakhir dalam 7 hari. <a href="{{ route('admin.promo.index') }}" class="alert-link">Cek sekarang →</a></span>
+                    <span><strong>{{ $expiringPromos }} promos</strong> will expire within 7 days. <a href="{{ route('admin.promo.index') }}" class="alert-link">Check now →</a></span>
                 </div>
                 @endif
                 @if($expiredEvents > 0)
                 <div class="alert alert-secondary d-flex align-items-center gap-2 mb-0 py-2 px-3" style="border-radius:10px;">
                     <i class="ti ti-calendar-x fs-5"></i>
-                    <span><strong>{{ $expiredEvents }} event</strong> telah berakhir. <a href="{{ route('admin.event.index') }}" class="alert-link">Kelola event →</a></span>
+                    <span><strong>{{ $expiredEvents }} events</strong> have ended. <a href="{{ route('admin.event.index') }}" class="alert-link">Manage events →</a></span>
                 </div>
                 @endif
             </div>

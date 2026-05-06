@@ -221,6 +221,30 @@
                             </ul>
                         </li>
 
+                        <!-- ---------------------------------- -->
+                        <!-- Careers -->
+                        <!-- ---------------------------------- -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:case-minimalistic-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Careers</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.career.vacancy.index') }}">
+                                        <iconify-icon icon="solar:document-text-line-duotone" class="fs-4 me-1"></iconify-icon>
+                                        <span class="hide-menu">Vacancies</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.career.application.index') }}">
+                                        <iconify-icon icon="solar:users-group-two-rounded-line-duotone" class="fs-4 me-1"></iconify-icon>
+                                        <span class="hide-menu">Applications</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         @role('superuser')
                             <!-- ---------------------------------- -->
                             <!-- Activity Logs -->

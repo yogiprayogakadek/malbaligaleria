@@ -18,6 +18,7 @@
             <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
             <li><a href="{{ url('/') }}#experience">Experience</a></li>
             <li><a href="{{ url('/') }}#events">Events</a></li>
+            <li><a href="{{ route('frontend.career.index') }}">Careers</a></li>
             <li><a href="{{ url('/') }}#contact">Contact</a></li>
         </ul>
     </nav>

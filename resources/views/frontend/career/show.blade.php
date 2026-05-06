@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $vacancy->title }} — Careers Mal Bali Galeria</title>
+    <meta name="description" content="Apply for {{ $vacancy->title }} position at Mal Bali Galeria, {{ $vacancy->department }}. {{ Str::limit($vacancy->description, 120) }}">
+
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/career.css') }}?v={{ time() }}">
+</head>
+
+<body>
+    {{-- Page Loader --}}
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-logo"><div class="loader-logo-circle">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" class="loader-logo-image" onerror="this.style.display='none'">
+            </div></div>
+            <div class="loader-spinner"><div class="spinner-ring"></div><div class="spinner-ring"></div><div class="spinner-ring"></div></div>
+            <div class="loader-progress"><div class="progress-bar"></div></div>
+            <p class="loader-text">LOADING...</p>
+        </div>
+    </div>
+
+    {{-- Dark Mode Toggle --}}
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" />
+            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" />
+        </svg>
+    </button>
+
+    {{-- Header --}}
+    <header>
+        <div class="header-left">
+            <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="MBG Logo" id="headerLogo" style="height: 30px; width: auto;">
+            </a>
+        </div>
+        <div class="logo">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo" style="height: 45px; width: auto; object-fit: contain;">
+            </a>
+        </div>
+        <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+    </header>
+
+    {{-- Sidebar --}}
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo"><h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2></div>
+        <button class="sidebar-close" id="sidebarClose"><span></span><span></span><span></span></button>
+        <nav>
+            <ul>
+                <li><a href="{{ url('/') }}">Home</a></li>
+                <li><a href="{{ url('/') }}#about">About</a></li>
+                <li><a href="{{ route('frontend.landing') }}#regular-shows">Events</a></li>
+                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
+                <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
+                <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
+                <li><a href="{{ route('frontend.career.index') }}" class="active-nav">Careers</a></li>
+                <li><a href="{{ url('/') }}#contact">Contact</a></li>
+                @role(['admin', 'superuser'])
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                @endrole
+            </ul>
+        </nav>
+        <div class="sidebar-search">
+            <form action="{{ route('frontend.directory.index') }}" method="GET">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke-width="2" /><path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" /></svg>
+                    <input type="text" name="search" placeholder="Search tenants..." autocomplete="off">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Detail Hero --}}
+    <div class="career-detail-hero">
+        <div style="max-width:1100px;margin:0 auto;">
+            <div class="career-detail-breadcrumb">
+                <a href="{{ url('/') }}">Home</a>
+                <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                <a href="{{ route('frontend.career.index') }}">Careers</a>
+                <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                <span>{{ $vacancy->title }}</span>
+            </div>
+
+            <div class="vacancy-badges" style="margin-bottom:16px;">
+                <span class="vacancy-badge badge-{{ $vacancy->type }}">{{ $vacancy->type_label }}</span>
+                <span class="vacancy-badge badge-department">{{ $vacancy->department }}</span>
+                @if($vacancy->isExpired())
+                    <span class="vacancy-badge badge-expired">Recruitment Closed</span>
+                @endif
+            </div>
+
+            <h1 class="career-detail-title">{{ $vacancy->title }}</h1>
+
+            <div class="career-detail-meta">
+                <div class="detail-meta-item">
+                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    {{ $vacancy->location }}
+                </div>
+                <div class="detail-meta-item">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    {{ $vacancy->deadline ? 'Deadline: ' . $vacancy->deadline->format('d M Y') : 'Open Recruitment' }}
+                </div>
+                @if($vacancy->salary_range)
+                <div class="detail-meta-item">
+                    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Salary: {{ $vacancy->salary_range }}
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- Detail Body --}}
+    <div class="career-detail-body-section">
+        <div class="career-detail-layout">
+
+            {{-- Left: Content --}}
+            <div>
+                @if(session('success'))
+                    <div class="career-success-alert">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-left:4px solid #e74c3c;border-radius:12px;padding:16px 20px;margin-bottom:20px;">
+                        <ul style="margin:0;padding-left:16px;font-size:14px;color:#e74c3c;">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <div class="detail-card career-reveal">
+                    <div class="detail-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            About This Position
+                        </h3>
+                        <div class="detail-content">{{ $vacancy->description }}</div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                            Required Qualifications
+                        </h3>
+                        <div class="detail-content">{{ $vacancy->requirements }}</div>
+                    </div>
+
+                    @if($vacancy->responsibilities)
+                    <div class="detail-section">
+                        <h3>
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Responsibilities
+                        </h3>
+                        <div class="detail-content">{{ $vacancy->responsibilities }}</div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Right: Apply Sidebar --}}
+            <div class="apply-sidebar">
+                <div class="apply-card">
+                    <div class="apply-card-header">
+                        <h3>Job Information</h3>
+                    </div>
+                    <div class="apply-card-body">
+                        <div class="apply-quick-info">
+                            <div class="apply-info-row">
+                                <span class="apply-info-label">
+                                    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                                    Position
+                                </span>
+                                <span class="apply-info-value">{{ $vacancy->title }}</span>
+                            </div>
+                            <div class="apply-info-row">
+                                <span class="apply-info-label">
+                                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                    Department
+                                </span>
+                                <span class="apply-info-value">{{ $vacancy->department }}</span>
+                            </div>
+                            <div class="apply-info-row">
+                                <span class="apply-info-label">
+                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    Type
+                                </span>
+                                <span class="apply-info-value">{{ $vacancy->type_label }}</span>
+                            </div>
+                            <div class="apply-info-row">
+                                <span class="apply-info-label">
+                                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    Location
+                                </span>
+                                <span class="apply-info-value">{{ $vacancy->location }}</span>
+                            </div>
+                            @if($vacancy->salary_range)
+                            <div class="apply-info-row">
+                                <span class="apply-info-label">
+                                    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                    Salary
+                                </span>
+                                <span class="apply-info-value">{{ $vacancy->salary_range }}</span>
+                            </div>
+                            @endif
+                            <div class="apply-info-row">
+                                <span class="apply-info-label">
+                                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    Deadline
+                                </span>
+                                <span class="apply-info-value" style="{{ $vacancy->isExpired() ? 'color:#e74c3c' : '' }}">
+                                    {{ $vacancy->deadline ? $vacancy->deadline->format('d M Y') : 'Open' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        @if(!$vacancy->isExpired())
+                            <button type="button" class="apply-now-btn" id="openApplyModal">
+                                Apply Now &rarr;
+                            </button>
+                        @else
+                            <div style="text-align:center;padding:12px;background:rgba(231,76,60,0.1);border-radius:10px;font-size:13px;color:#e74c3c;font-weight:600;">
+                                Recruitment Closed
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="apply-card">
+                    <div class="apply-card-body" style="padding:20px 24px;">
+                        <p style="font-size:13px;color:var(--text-secondary,#aaa);line-height:1.7;margin-bottom:16px;">
+                            Interested in this position? Submit your CV and cover letter now.
+                        </p>
+                        <a href="{{ route('frontend.career.index') }}" style="display:flex;align-items:center;gap:8px;color:var(--gold,#D4AF37);font-size:13px;font-weight:600;text-decoration:none;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            View Other Vacancies
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Apply Modal --}}
+    @if(!$vacancy->isExpired())
+    <div class="apply-modal-overlay" id="applyModalOverlay"></div>
+    <div class="apply-modal" id="applyModal">
+        <div class="apply-modal-header">
+            <h3>Submit Application</h3>
+            <button class="apply-modal-close" id="closeApplyModal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="apply-modal-body">
+            <div class="apply-modal-info">
+                <div class="modal-info-icon">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div>
+                    <p class="modal-info-label">Applying for position</p>
+                    <h4 class="modal-info-title">{{ $vacancy->title }}</h4>
+                </div>
+            </div>
+            <form action="{{ route('frontend.career.apply', $vacancy->uuid) }}" method="POST" enctype="multipart/form-data" id="applyForm">
+                @csrf
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" name="name" id="name" class="form-control-career" placeholder="Full name as on ID" value="{{ old('name') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" name="email" id="email" class="form-control-career" placeholder="name@email.com" value="{{ old('email') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone / WhatsApp Number <span class="required">*</span></label>
+                    <input type="tel" name="phone" id="phone" class="form-control-career" placeholder="08xx-xxxx-xxxx" value="{{ old('phone') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address <small style="color:#666;text-transform:none;">(optional)</small></label>
+                    <input type="text" name="address" id="address" class="form-control-career" placeholder="Current city" value="{{ old('address') }}">
+                </div>
+                <div class="form-group">
+                    <label for="cover_letter">Cover Letter <small style="color:#666;text-transform:none;">(optional)</small></label>
+                    <textarea name="cover_letter" id="cover_letter" class="form-control-career" rows="4"
+                        placeholder="Tell us why you are interested in this position...">{{ old('cover_letter') }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>CV / Resume <span class="required">*</span></label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input type="file" name="cv" id="cv" accept=".pdf,.doc,.docx" required>
+                        <div class="file-upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="file-upload-text">
+                            <strong>Click to upload</strong> or drag & drop<br>
+                            <small>PDF, DOC, DOCX — Max 2MB</small>
+                        </div>
+                        <div class="file-name-display" id="fileNameDisplay"></div>
+                    </div>
+                </div>
+                <button type="submit" class="submit-apply-btn" id="submitApplyBtn">
+                    Submit Application
+                </button>
+            </form>
+        </div>
+    </div>
+    @endif
+
+    @include('frontend.partials.footer_v2')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="{{ asset('assets/frontend/js/landing_v2.js') }}?v={{ time() }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Reveal
+        const reveals = document.querySelectorAll('.career-reveal');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 100); observer.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
+
+        @if(!$vacancy->isExpired())
+        const overlay  = document.getElementById('applyModalOverlay');
+        const modal    = document.getElementById('applyModal');
+        const openBtn  = document.getElementById('openApplyModal');
+        const closeBtn = document.getElementById('closeApplyModal');
+
+        const openModal  = () => {
+            overlay.classList.add('active');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.lenis) window.lenis.stop();
+        };
+
+        const closeModal = () => {
+            overlay.classList.remove('active');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (window.lenis) window.lenis.start();
+        };
+
+        openBtn?.addEventListener('click', openModal);
+        closeBtn?.addEventListener('click', closeModal);
+        overlay?.addEventListener('click', closeModal);
+
+        // Auto-open if there were validation errors
+        @if($errors->any())
+            openModal();
+        @endif
+
+        // File upload display
+        const fileInput = document.getElementById('cv');
+        const fileDisplay = document.getElementById('fileNameDisplay');
+        const uploadArea = document.getElementById('fileUploadArea');
+
+        fileInput?.addEventListener('change', e => {
+            const file = e.target.files[0];
+            fileDisplay.textContent = file ? '✓ ' + file.name : '';
+        });
+
+        ['dragover', 'dragenter'].forEach(evt => {
+            uploadArea?.addEventListener(evt, e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+        });
+        ['dragleave', 'drop'].forEach(evt => {
+            uploadArea?.addEventListener(evt, () => uploadArea.classList.remove('drag-over'));
+        });
+
+        // Submit loading state
+        document.getElementById('applyForm')?.addEventListener('submit', function() {
+            const btn = document.getElementById('submitApplyBtn');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+        });
+        @endif
+
+        // Success Alert
+        @if(session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                confirmButtonColor: '#D4AF37',
+                background: '#ffffff',
+                color: '#1a1a1a',
+                customClass: {
+                    popup: 'swal-premium-popup',
+                    confirmButton: 'swal-premium-btn'
+                }
+            });
+        @endif
+    });
+    </script>
+</body>
+</html>
