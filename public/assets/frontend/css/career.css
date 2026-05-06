@@ -591,6 +591,10 @@ body.dark-mode {
     white-space: pre-wrap;
 }
 
+.detail-content.structured-content {
+    white-space: normal;
+}
+
 /* ===== APPLY SIDEBAR ===== */
 .apply-sidebar {
     position: sticky;
