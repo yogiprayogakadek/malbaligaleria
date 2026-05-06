@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             AdminSeeder::class,
+            HRSeeder::class,
             CategorySeeder::class,
             TenantSeederV3::class,
             SettingSeeder::class,
-            JobVacancySeeder::class,
         ]);
     }
 }

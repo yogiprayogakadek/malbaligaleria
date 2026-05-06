@@ -138,6 +138,40 @@
         </div>
     </div>
 
+    {{-- === CAREER STATS (ONLY FOR SUPERUSER) === --}}
+    @role('superuser')
+    <div class="row mt-3">
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-info-subtle border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="ti ti-briefcase fs-1 text-info"></i>
+                        <div class="ms-3">
+                            <h6 class="text-info mb-0">Total Vacancies</h6>
+                            <h3 class="mb-0 fw-semibold text-dark">{{ $totalVacancies }}</h3>
+                            <small class="text-muted">{{ $activeVacancies }} Active</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-primary-subtle border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="ti ti-users-group fs-1 text-primary"></i>
+                        <div class="ms-3">
+                            <h6 class="text-primary mb-0">Total Applications</h6>
+                            <h3 class="mb-0 fw-semibold text-dark">{{ $totalApplications }}</h3>
+                            <small class="text-success"><i class="ti ti-bell"></i> {{ $newApplications }} New</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endrole
+
     {{-- === SECONDARY STATS (contextual, no duplicates) === --}}
     <div class="row mt-3">
         <div class="col-lg-3 col-md-6">
@@ -393,6 +427,19 @@
                                 <span class="small">Categories</span>
                             </a>
                         </div>
+                        @role('superuser')
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <a href="{{ route('admin.career.vacancy.index') }}" class="btn btn-outline-info w-100 d-flex align-items-center justify-content-center py-3 flex-column gap-1">
+                                <i class="ti ti-briefcase fs-4"></i>
+                                <span class="small">Vacancies</span>
+                            </a>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <a href="{{ route('admin.career.application.index') }}" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-3 flex-column gap-1">
+                                <i class="ti ti-users-group fs-4"></i>
+                                <span class="small">Applicants</span>
+                            </a>
+                        </div>
                         <div class="col-lg-2 col-md-4 col-6">
                             <a href="{{ route('admin.user.index') }}" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center py-3 flex-column gap-1">
                                 <i class="ti ti-users fs-4"></i>
@@ -405,6 +452,7 @@
                                 <span class="small">Settings</span>
                             </a>
                         </div>
+                        @endrole
                     </div>
                 </div>
             </div>

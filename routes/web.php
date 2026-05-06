@@ -78,7 +78,7 @@ Route::name('frontend.')->group(function () {
 
 // ADMIN & SUPERUSER COMMON ROUTES
 Route::controller(AdminDashboardController::class)
-    ->middleware(['auth', 'verified', 'checkUserStatus', 'role:admin,superuser'])
+    ->middleware(['auth', 'verified', 'checkUserStatus', 'role:admin,superuser,hr'])
     ->prefix('/dashboard')
     ->name('admin.')
     ->group(function () {
@@ -95,118 +95,121 @@ Route::controller(AdminDashboardController::class)
                 Route::post('/change-password', 'updatePassword')->name('password.update');
             });
 
-        // User (RESTRICTED TO SUPERUSER)
-        Route::controller(UserController::class)
-            ->middleware('superuser')
-            ->prefix('/user')
-            ->name('user.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/{id}/edit', 'edit')->name('edit');
-                Route::put('/{id}/update', 'update')->name('update');
-                Route::put('/{id}/activate', 'activate')->name('activate');
-            });
+        // Restricted to Admin & Superuser Only
+        Route::middleware(['role:admin,superuser'])->group(function () {
+            // User (RESTRICTED TO SUPERUSER)
+            Route::controller(UserController::class)
+                ->middleware('superuser')
+                ->prefix('/user')
+                ->name('user.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::put('/{id}/activate', 'activate')->name('activate');
+                });
 
-        // CATEGORY
-        Route::controller(CategoryController::class)->prefix('/category')
-            ->name('category.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/{uuid}/edit', 'edit')->name('edit');
-                Route::put('/{uuid}/update', 'update')->name('update');
-            });
+            // CATEGORY
+            Route::controller(CategoryController::class)->prefix('/category')
+                ->name('category.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{uuid}/edit', 'edit')->name('edit');
+                    Route::put('/{uuid}/update', 'update')->name('update');
+                });
 
-        // TENANT
-        Route::controller(TenantController::class)->prefix('/tenant')
-            ->name('tenant.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{uuid}', 'edit')->name('edit');
-                Route::put('/update/{uuid}', 'update')->name('update');
-                Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
-            });
+            // TENANT
+            Route::controller(TenantController::class)->prefix('/tenant')
+                ->name('tenant.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/edit/{uuid}', 'edit')->name('edit');
+                    Route::put('/update/{uuid}', 'update')->name('update');
+                    Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
+                });
 
-        // TENANT PHOTO
-        Route::controller(TenantPhotoController::class)->prefix('/tenant-photo')
-            ->name('tenant.photo.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::get('/bulk-create', 'bulkCreate')->name('bulk.create');
-                Route::post('/bulk-store', 'bulkStore')->name('bulk.store');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/{tenant_id}/edit', 'edit')->name('edit');
-                Route::put('/{id}/update', 'update')->name('update');
-                Route::delete('/delete/{id}', 'delete')->name('delete');
-            });
+            // TENANT PHOTO
+            Route::controller(TenantPhotoController::class)->prefix('/tenant-photo')
+                ->name('tenant.photo.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::get('/bulk-create', 'bulkCreate')->name('bulk.create');
+                    Route::post('/bulk-store', 'bulkStore')->name('bulk.store');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{tenant_id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::delete('/delete/{id}', 'delete')->name('delete');
+                });
 
-        // EVENT
-        Route::controller(EventController::class)->prefix('/event')
-            ->name('event.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{uuid}', 'edit')->name('edit');
-                Route::put('/update/{uuid}', 'update')->name('update');
-            });
+            // EVENT
+            Route::controller(EventController::class)->prefix('/event')
+                ->name('event.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/edit/{uuid}', 'edit')->name('edit');
+                    Route::put('/update/{uuid}', 'update')->name('update');
+                });
 
-        // EVENT PHOTO
-        Route::controller(EventPhotoController::class)->prefix('/event-photo')
-            ->name('event.photo.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/{event_id}/edit', 'edit')->name('edit');
-                Route::put('/{id}/update', 'update')->name('update');
-                Route::delete('/delete/{id}', 'delete')->name('delete');
-            });
+            // EVENT PHOTO
+            Route::controller(EventPhotoController::class)->prefix('/event-photo')
+                ->name('event.photo.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{event_id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::delete('/delete/{id}', 'delete')->name('delete');
+                });
 
-        // PROMO
-        Route::controller(PromoController::class)->prefix('/promo')
-            ->name('promo.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/edit/{uuid}', 'edit')->name('edit');
-                Route::put('/update/{uuid}', 'update')->name('update');
-            });
+            // PROMO
+            Route::controller(PromoController::class)->prefix('/promo')
+                ->name('promo.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/edit/{uuid}', 'edit')->name('edit');
+                    Route::put('/update/{uuid}', 'update')->name('update');
+                });
 
-        // Activity (RESTRICTED TO SUPERUSER)
-        Route::controller(ActivityController::class)
-            ->middleware('superuser')
-            ->prefix('/activity')
-            ->name('activity.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::delete('/destroy-all', 'destroyAll')->name('destroyAll');
-                Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
-                Route::delete('/{id}', 'destroy')->name('destroy');
-            });
+            // Activity (RESTRICTED TO SUPERUSER)
+            Route::controller(ActivityController::class)
+                ->middleware('superuser')
+                ->prefix('/activity')
+                ->name('activity.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::delete('/destroy-all', 'destroyAll')->name('destroyAll');
+                    Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
+                    Route::delete('/{id}', 'destroy')->name('destroy');
+                });
 
-        // Setting (RESTRICTED TO SUPERUSER)
-        Route::controller(SettingController::class)
-            ->middleware('superuser')
-            ->prefix('/setting')
-            ->name('setting.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/{id}/edit', 'edit')->name('edit');
-                Route::put('/{id}/update', 'update')->name('update');
-                Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            });
+            // Setting (RESTRICTED TO SUPERUSER)
+            Route::controller(SettingController::class)
+                ->middleware('superuser')
+                ->prefix('/setting')
+                ->name('setting.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                });
+        });
 
-        // CAREER — VACANCIES
+        // CAREER — ACCESSIBLE BY ADMIN, SUPERUSER, AND HR
         Route::controller(JobVacancyController::class)->prefix('/career/vacancy')->name('career.vacancy.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/create', 'create')->name('create');
@@ -216,7 +219,6 @@ Route::controller(AdminDashboardController::class)
             Route::delete('/{uuid}/destroy', 'destroy')->name('destroy');
         });
 
-        // CAREER — APPLICATIONS
         Route::controller(JobApplicationController::class)->prefix('/career/application')->name('career.application.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/{uuid}', 'show')->name('show');

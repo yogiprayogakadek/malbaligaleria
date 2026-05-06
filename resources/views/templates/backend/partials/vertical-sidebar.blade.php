@@ -29,7 +29,7 @@
                         <span class="hide-menu">Menu</span>
                     </li>
 
-                    @role(['admin', 'superuser'])
+                    @role(['admin', 'superuser', 'hr'])
                         <!-- ---------------------------------- -->
                         <!-- Dashboard -->
                         <!-- ---------------------------------- -->
@@ -67,9 +67,10 @@
                             </li>
                         @endrole
 
-                        <!-- ---------------------------------- -->
-                        <!-- Category Tenants -->
-                        <!-- ---------------------------------- -->
+                        @role(['admin', 'superuser'])
+                            <!-- ---------------------------------- -->
+                            <!-- Category Tenants -->
+                            <!-- ---------------------------------- -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:layers-line-duotone"></iconify-icon>
@@ -220,10 +221,9 @@
                                 </li>
                             </ul>
                         </li>
+                    @endrole
 
-                        <!-- ---------------------------------- -->
-                        <!-- Careers -->
-                        <!-- ---------------------------------- -->
+                        @role(['hr', 'superuser'])
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:case-minimalistic-line-duotone"></iconify-icon>
@@ -244,6 +244,7 @@
                                 </li>
                             </ul>
                         </li>
+                        @endrole
 
                         @role('superuser')
                             <!-- ---------------------------------- -->
