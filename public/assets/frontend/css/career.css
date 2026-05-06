@@ -595,6 +595,10 @@ body.dark-mode {
     white-space: normal;
 }
 
+.detail-content.single-item-content {
+    margin-top: -12px;
+}
+
 /* ===== APPLY SIDEBAR ===== */
 .apply-sidebar {
     position: sticky;
