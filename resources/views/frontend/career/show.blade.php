@@ -196,11 +196,11 @@
                         @php
                             $description = array_filter(array_map('trim', explode("\n", $vacancy->description ?? '')));
                         @endphp
-                        <div class="detail-content {{ count($description) > 1 ? 'structured-content' : 'single-item-content' }}">
+                        <div class="detail-content {{ count($description) > 1 ? 'structured-content' : '' }}">
                             @if(count($description) > 1)
                                 <ol class="detail-list">@foreach($description as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ol>
                             @else
-                                <p style="margin:0; padding:0;">{{ ltrim($vacancy->description, "-* \t\n\r\0\x0B") }}</p>
+                                {{ $vacancy->description }}
                             @endif
                         </div>
                     </div>
@@ -213,11 +213,11 @@
                         @php
                             $requirements = array_filter(array_map('trim', explode("\n", $vacancy->requirements ?? '')));
                         @endphp
-                        <div class="detail-content {{ count($requirements) > 1 ? 'structured-content' : 'single-item-content' }}">
+                        <div class="detail-content {{ count($requirements) > 1 ? 'structured-content' : '' }}">
                             @if(count($requirements) > 1)
                                 <ol class="detail-list">@foreach($requirements as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ol>
                             @else
-                                <p style="margin:0; padding:0;">{{ ltrim($vacancy->requirements, "-* \t\n\r\0\x0B") }}</p>
+                                {{ $vacancy->requirements }}
                             @endif
                         </div>
                     </div>
@@ -231,11 +231,11 @@
                         @php
                             $responsibilities = array_filter(array_map('trim', explode("\n", $vacancy->responsibilities ?? '')));
                         @endphp
-                        <div class="detail-content {{ count($responsibilities) > 1 ? 'structured-content' : 'single-item-content' }}">
+                        <div class="detail-content {{ count($responsibilities) > 1 ? 'structured-content' : '' }}">
                             @if(count($responsibilities) > 1)
                                 <ol class="detail-list">@foreach($responsibilities as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ol>
                             @else
-                                <p style="margin:0; padding:0;">{{ ltrim($vacancy->responsibilities, "-* \t\n\r\0\x0B") }}</p>
+                                {{ $vacancy->responsibilities }}
                             @endif
                         </div>
                     </div>
