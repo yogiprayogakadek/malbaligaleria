@@ -1003,27 +1003,27 @@ body.dark-mode {
     list-style: none;
     counter-reset: detail-counter;
     padding: 0;
-    margin: 15px 0;
+    margin: 10px 0 0;
 }
 
 .detail-list li {
     position: relative;
     padding-left: 38px;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     counter-increment: detail-counter;
-    line-height: 1.8;
+    line-height: 1.6;
 }
 
 .detail-list li::before {
     content: counter(detail-counter);
     position: absolute;
     left: 0;
-    top: 3px;
+    top: 2px;
     width: 24px;
     height: 24px;
-    background: rgba(212, 175, 55, 0.12);
+    background: rgba(212, 175, 55, 0.1);
     color: var(--gold-dark);
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 6px;
     display: flex;
     align-items: center;
