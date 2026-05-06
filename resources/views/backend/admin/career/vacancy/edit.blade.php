@@ -71,21 +71,21 @@
                             <div class="col-12">
                                 <label for="description" class="form-label fw-semibold">Job Description <span class="text-danger">*</span></label>
                                 <textarea name="description" id="description" rows="5"
-                                    class="form-control @error('description') is-invalid @enderror" required>{{ old('description', $vacancy->description) }}</textarea>
+                                    class="form-control @error('description') is-invalid @enderror" placeholder="Write job description (one per line)..." required>{{ old('description', $vacancy->description) }}</textarea>
                                 @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-12">
                                 <label for="requirements" class="form-label fw-semibold">Required Qualifications <span class="text-danger">*</span></label>
                                 <textarea name="requirements" id="requirements" rows="5"
-                                    class="form-control @error('requirements') is-invalid @enderror" required>{{ old('requirements', $vacancy->requirements) }}</textarea>
+                                    class="form-control @error('requirements') is-invalid @enderror" placeholder="Write qualifications (one per line)..." required>{{ old('requirements', $vacancy->requirements) }}</textarea>
                                 @error('requirements')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-12">
                                 <label for="responsibilities" class="form-label fw-semibold">Responsibilities <small class="text-muted">(optional)</small></label>
                                 <textarea name="responsibilities" id="responsibilities" rows="5"
-                                    class="form-control @error('responsibilities') is-invalid @enderror">{{ old('responsibilities', $vacancy->responsibilities) }}</textarea>
+                                    class="form-control @error('responsibilities') is-invalid @enderror" placeholder="Write responsibilities (one per line)...">{{ old('responsibilities', $vacancy->responsibilities) }}</textarea>
                                 @error('responsibilities')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 

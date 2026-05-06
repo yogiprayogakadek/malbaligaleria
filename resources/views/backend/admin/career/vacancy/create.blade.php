@@ -90,7 +90,7 @@
                                 <label for="description" class="form-label fw-semibold">Job Description <span class="text-danger">*</span></label>
                                 <textarea name="description" id="description" rows="5"
                                     class="form-control @error('description') is-invalid @enderror"
-                                    placeholder="Explain about this position, work environment, and expectations..." required>{{ old('description') }}</textarea>
+                                    placeholder="Write job description (one per line)..." required>{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
