@@ -21,7 +21,7 @@ class DashboardController extends Controller
         // 1. HR DASHBOARD (ONLY CAREER DATA)
         if ($user->hasRole('hr')) {
             $totalVacancies    = \App\Models\JobVacancy::count();
-            $activeVacancies   = \App\Models\JobVacancy::where('status', 'open')->count();
+            $activeVacancies   = \App\Models\JobVacancy::where('is_active', true)->count();
             $totalApplications = \App\Models\JobApplication::count();
             $newApplications   = \App\Models\JobApplication::where('status', 'new')->count();
 
@@ -92,7 +92,7 @@ class DashboardController extends Controller
 
             // Superuser also sees career stats
             $totalVacancies    = \App\Models\JobVacancy::count();
-            $activeVacancies   = \App\Models\JobVacancy::where('status', 'open')->count();
+            $activeVacancies   = \App\Models\JobVacancy::where('is_active', true)->count();
             $totalApplications = \App\Models\JobApplication::count();
             $newApplications   = \App\Models\JobApplication::where('status', 'new')->count();
         }
