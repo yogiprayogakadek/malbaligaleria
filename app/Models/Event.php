@@ -31,6 +31,8 @@ class Event extends Model
         'is_active',
         'type',
         'is_regular',
+        'is_exhibition',
+        'recurring_days',
         'recurring_label',
         'specific_dates',
     ];

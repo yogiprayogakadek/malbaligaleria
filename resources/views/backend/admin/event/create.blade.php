@@ -118,6 +118,16 @@
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="mb-3 pt-3 border-top">
+                                    <label class="form-label fw-semibold" for="recurring_label">Label Jadwal <small class="text-muted fw-normal">(ditampilkan ke pengunjung)</small></label>
+                                    <input type="text" class="form-control @error('recurring_label') is-invalid @enderror"
+                                        id="recurring_label" name="recurring_label"
+                                        placeholder="Contoh: Setiap Jum'at, Sabtu & Minggu"
+                                        value="{{ old('recurring_label') }}">
+                                    @error('recurring_label')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="mt-4 mb-0 pt-3 border-top">
                                     <label class="form-label fw-semibold" for="specific_dates">Tanggal Spesifik <small class="text-muted fw-normal">(Pilih tanggal tertentu jika event tidak rutin setiap minggu)</small></label>
                                     <div class="input-group">
