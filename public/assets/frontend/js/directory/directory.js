@@ -34,7 +34,7 @@ function hideLoading() {
     document.body.classList.add("loaded");
 
     // Automatically show MAP Tenant List flyer modal after loader
-    setTimeout(showFlyerModal, 800);
+    // setTimeout(showFlyerModal, 800);
 }
 
 // ===== FLYER MODAL SYSTEM =====
