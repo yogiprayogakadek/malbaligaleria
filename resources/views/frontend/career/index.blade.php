@@ -19,6 +19,137 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/career.css') }}?v={{ time() }}">
     <style>
+        .career-filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 24px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .career-dropdown {
+            position: relative;
+            min-width: 220px;
+            z-index: 100;
+        }
+
+        .career-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 18px;
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .career-dropdown-toggle:hover {
+            border-color: var(--gold);
+            background: #fff;
+        }
+
+        .career-dropdown-toggle svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .career-dropdown.active .career-dropdown-toggle {
+            border-color: var(--gold);
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .career-dropdown.active .career-dropdown-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .career-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .career-dropdown.active .career-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .career-dropdown-item {
+            padding: 12px 18px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .career-dropdown-item:hover {
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--gold-dark);
+        }
+
+        .career-dropdown-item.active {
+            background: var(--gold);
+            color: #000;
+            font-weight: 600;
+        }
+
+        body.dark-mode .career-dropdown-toggle {
+            background: #1a1a1a;
+            color: #eee;
+        }
+
+        body.dark-mode .career-dropdown-menu {
+            background: #222;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode .career-dropdown-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        body.dark-mode .career-dropdown-item.active {
+            background: var(--gold);
+            color: #1a1a1a;
+        }
+
+        @media (max-width: 768px) {
+            .career-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .career-dropdown {
+                min-width: 100%;
+            }
+        }
+
         .vacancy-card-share-btn {
             width: 38px;
             height: 38px;
@@ -172,12 +303,20 @@
 
             {{-- Filter Bar --}}
             <div class="career-filter-bar career-reveal">
-                <span class="career-filter-label">Filter:</span>
-                <div class="filter-pills">
-                    <button class="filter-pill active" data-filter="all">All</button>
-                    @foreach($departments as $dept)
-                        <button class="filter-pill" data-filter="{{ Str::slug($dept) }}" data-dept="{{ $dept }}">{{ $dept }}</button>
-                    @endforeach
+                <div class="filter-group">
+                    <span class="career-filter-label">Department:</span>
+                    <div class="career-dropdown" id="deptDropdown">
+                        <div class="career-dropdown-toggle">
+                            <span id="selectedDeptName">All Departments</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                        </div>
+                        <div class="career-dropdown-menu">
+                            <div class="career-dropdown-item active" data-filter="all">All Departments</div>
+                            @foreach($departments as $dept)
+                                <div class="career-dropdown-item" data-filter="{{ Str::slug($dept) }}" data-dept="{{ $dept }}">{{ $dept }}</div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
                 <div class="career-search">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -327,13 +466,42 @@
         const noMatch = document.getElementById('noMatchState');
         const searchInput = document.getElementById('vacancySearch');
 
-        function filterCards() {
-            const activeFilter = document.querySelector('.filter-pill.active')?.dataset.filter || 'all';
+        searchInput.addEventListener('input', filterCards);
+
+        // Custom Dropdown Logic
+        const dropdown = document.getElementById('deptDropdown');
+        const dropdownToggle = dropdown.querySelector('.career-dropdown-toggle');
+        const dropdownMenu = dropdown.querySelector('.career-dropdown-menu');
+        const dropdownItems = dropdown.querySelectorAll('.career-dropdown-item');
+        const selectedText = document.getElementById('selectedDeptName');
+
+        dropdownToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        });
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', () => {
+                dropdownItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                selectedText.textContent = item.textContent;
+                dropdown.classList.remove('active');
+                
+                // Trigger filter
+                filterDropdown(item.dataset.filter);
+            });
+        });
+
+        document.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+        });
+
+        function filterDropdown(filter) {
             const searchTerm = searchInput.value.toLowerCase().trim();
             let visible = 0;
 
             cards.forEach(card => {
-                const deptMatch = activeFilter === 'all' || card.dataset.dept === activeFilter;
+                const deptMatch = filter === 'all' || card.dataset.dept === filter;
                 const searchMatch = !searchTerm || card.dataset.title.includes(searchTerm) || card.dataset.deptName?.toLowerCase().includes(searchTerm);
                 if (deptMatch && searchMatch) {
                     card.style.display = '';
@@ -346,15 +514,11 @@
             noMatch.style.display = visible === 0 ? 'block' : 'none';
         }
 
-        pills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                pills.forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                filterCards();
-            });
-        });
-
-        searchInput.addEventListener('input', filterCards);
+        // Override original filterCards to support both
+        window.filterCards = function() {
+            const activeFilter = dropdown.querySelector('.career-dropdown-item.active')?.dataset.filter || 'all';
+            filterDropdown(activeFilter);
+        };
 
         // Share Vacancy
         document.addEventListener('click', (e) => {
