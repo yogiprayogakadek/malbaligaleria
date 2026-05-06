@@ -460,8 +460,7 @@
         }, { threshold: 0.1 });
         reveals.forEach(el => observer.observe(el));
 
-        // Filter pills
-        const pills = document.querySelectorAll('.filter-pill');
+        // Filter logic
         const cards = document.querySelectorAll('.vacancy-card');
         const noMatch = document.getElementById('noMatchState');
         const searchInput = document.getElementById('vacancySearch');
@@ -514,11 +513,11 @@
             noMatch.style.display = visible === 0 ? 'block' : 'none';
         }
 
-        // Override original filterCards to support both
-        window.filterCards = function() {
+        function filterCards() {
             const activeFilter = dropdown.querySelector('.career-dropdown-item.active')?.dataset.filter || 'all';
             filterDropdown(activeFilter);
-        };
+        }
+        window.filterCards = filterCards;
 
         // Share Vacancy
         document.addEventListener('click', (e) => {
