@@ -117,7 +117,7 @@
         <div class="col-12">
             <div class="card bg-light-primary border-0">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">HR Quick Links</h5>
+                    <h5 class="card-title mb-3">HR Menu</h5>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="{{ route('admin.career.vacancy.index') }}" class="btn btn-white px-4 py-2 shadow-sm d-flex align-items-center gap-2">
                             <i class="ti ti-list-details fs-5"></i> Manage Vacancies

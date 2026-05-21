@@ -1822,7 +1822,7 @@
                 </div>
 
                 <div class="footer-column">
-                    <h3>Quick Links</h3>
+                    <h3>Menu</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('frontend.landing') }}#about">About Us</a></li>
                         <li><a href="#tenants">Store Directory</a></li>

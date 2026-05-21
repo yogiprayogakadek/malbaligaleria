@@ -39,6 +39,7 @@
                                     <th>Name</th>
                                     <th>Tenant</th>
                                     <th>Email</th>
+                                    <th>Email Verified</th>
                                     <th>Phone</th>
                                     <th>Approval Status</th>
                                     <th>Account Status</th>
@@ -85,6 +86,12 @@
                         name: 'email'
                     },
                     {
+                        data: 'email_verified',
+                        name: 'email_verified',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'phone',
                         name: 'phone',
                         defaultContent: '-'
@@ -114,6 +121,46 @@
             $('body').on('click', '.btn-reject', function(e) {
                 let userId = $(this).data('user-id');
                 confirmAction(userId, 'rejected', 'Data will rejected!', '#d63939');
+            });
+
+            $('body').on('click', '.btn-toggle-verify', function(e) {
+                let userId = $(this).data('user-id');
+                let verified = $(this).data('verified');
+                let actionText = verified == 1 ? 'unverify' : 'verify';
+                let message = verified == 1 ? 'User email will be marked as unverified!' : 'User email will be marked as verified!';
+                let color = verified == 1 ? '#d63939' : '#2fb344';
+
+                let url = "{{ route('admin.user.toggle-verify', ':id') }}";
+                url = url.replace(':id', userId);
+
+                Swal.fire({
+                    title: 'Confirm ' + actionText + '?',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: color,
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                _method: "PUT"
+                            },
+                            success: function(response) {
+                                toastr.success(response.message, "Success");
+                                $('#table').DataTable().ajax.reload(null, false);
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Error!', 'Something went wrong.', 'error');
+                            }
+                        });
+                    }
+                });
             });
 
             function confirmAction(userId, action, message, color) {

@@ -38,6 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'status',
         'status_note',
         'is_active',
+        'email_verified_at',
     ];
     
     public function getActivitylogOptions(): LogOptions

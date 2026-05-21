@@ -90,6 +90,21 @@
                             </div>
                         </div>
 
+                        {{-- Email Verified --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="email_verified" class="form-label col-sm-3 col-form-label">Email Verified</label>
+                            <div class="col-sm-9">
+                                <select class="form-control @error('email_verified') is-invalid @enderror" id="email_verified"
+                                    name="email_verified">
+                                    <option value="1" {{ old('email_verified', $user->email_verified_at ? '1' : '0') == '1' ? 'selected' : '' }}>Verified</option>
+                                    <option value="0" {{ old('email_verified', $user->email_verified_at ? '1' : '0') == '0' ? 'selected' : '' }}>Unverified</option>
+                                </select>
+                                @error('email_verified')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         {{-- Password --}}
                         <div class="mb-4 row align-items-center">
                             <label for="password" class="form-label col-sm-3 col-form-label">Password</label>

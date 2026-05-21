@@ -135,6 +135,7 @@
                     <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
                     <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
                     <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
+                    <li><a href="{{ route('frontend.gallery.index') }}">Gallery</a></li>
 
                     <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
                     @role(['admin', 'superuser'])

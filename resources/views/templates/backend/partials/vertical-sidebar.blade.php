@@ -65,6 +65,16 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <!-- ---------------------------------- -->
+                            <!-- Frontend Menu Visibility -->
+                            <!-- ---------------------------------- -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.menu.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:menu-dots-bold-duotone"></iconify-icon>
+                                    <span class="hide-menu">Frontend Menus</span>
+                                </a>
+                            </li>
                         @endrole
 
                         @role(['admin', 'superuser'])
@@ -217,6 +227,30 @@
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
 
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- ---------------------------------- -->
+                        <!-- Gallery -->
+                        <!-- ---------------------------------- -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Gallery</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.gallery.index') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">List</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.gallery.create') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
                             </ul>

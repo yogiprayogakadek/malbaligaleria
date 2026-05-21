@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             TenantSeederV3::class,
             SettingSeeder::class,
+            FrontendMenuSeeder::class,
         ]);
     }
 }

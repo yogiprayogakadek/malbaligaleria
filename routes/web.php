@@ -33,8 +33,11 @@ use App\Http\Controllers\Backend\Admin\JobVacancyController;
 use App\Http\Controllers\Backend\Admin\JobApplicationController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\FrontendMenuController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Backend\Tenant\PromoController as TenantPromoController;
+use App\Http\Controllers\Backend\Admin\GalleryController;
+use App\Http\Controllers\Frontend\GalleryController as FrontendGalleryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\StatusUserController;
@@ -74,6 +77,10 @@ Route::name('frontend.')->group(function () {
         Route::get('/{uuid}', [CareerController::class, 'show'])->name('show');
         Route::post('/{uuid}/apply', [CareerController::class, 'apply'])->name('apply');
     });
+
+    Route::prefix('/gallery')->name('gallery.')->group(function () {
+        Route::get('/', [FrontendGalleryController::class, 'index'])->name('index');
+    });
 });
 
 // ADMIN & SUPERUSER COMMON ROUTES
@@ -109,6 +116,19 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/{id}/edit', 'edit')->name('edit');
                     Route::put('/{id}/update', 'update')->name('update');
                     Route::put('/{id}/activate', 'activate')->name('activate');
+                    Route::put('/{id}/toggle-verify', 'toggleVerify')->name('toggle-verify');
+                });
+
+            // Frontend Menu Visibility Management (RESTRICTED TO SUPERUSER)
+            Route::controller(FrontendMenuController::class)
+                ->middleware('superuser')
+                ->prefix('/menu')
+                ->name('menu.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/{id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::put('/{id}/toggle-active', 'toggleActive')->name('toggle-active');
                 });
 
             // CATEGORY
@@ -167,6 +187,18 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/create', 'create')->name('create');
                     Route::post('/store', 'store')->name('store');
                     Route::get('/{event_id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::delete('/delete/{id}', 'delete')->name('delete');
+                });
+
+            // GALLERY
+            Route::controller(GalleryController::class)->prefix('/gallery')
+                ->name('gallery.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{id}/edit', 'edit')->name('edit');
                     Route::put('/{id}/update', 'update')->name('update');
                     Route::delete('/delete/{id}', 'delete')->name('delete');
                 });

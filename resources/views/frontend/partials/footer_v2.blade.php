@@ -38,15 +38,13 @@
             </div>
 
             <div class="footer-column">
-                <h3>Quick Links</h3>
+                <h3>Menu</h3>
                 <ul class="footer-links">
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#regular-shows">Events</a></li>
-                    <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
-                    <li><a href="{{ route('frontend.new-store.index') }}">New Store</a></li>
-                    <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
-                    <li><a href="{{ route('frontend.career.index') }}">Careers</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    @foreach ($frontendMenus as $menu)
+                        @if ($menu->name !== 'Dashboard')
+                            <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
+                        @endif
+                    @endforeach
                 </ul>
             </div>
 

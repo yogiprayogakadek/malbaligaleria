@@ -200,9 +200,9 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
+                <!-- Menu -->
                 <div class="footer-column">
-                    <h3>Quick Links</h3>
+                    <h3>Menu</h3>
                     <ul class="footer-links">
                         <li><a href="{{ url('/') }}#about">About Us</a></li>
                         <li><a href="{{ route('frontend.directory.index') }}">Store Directory</a></li>

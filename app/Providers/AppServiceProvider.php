@@ -44,5 +44,20 @@ class AppServiceProvider extends ServiceProvider
             ],
             \App\Http\View\Composers\StatsComposer::class
         );
+
+        \Illuminate\Support\Facades\View::composer(
+            [
+                'landing_v2',
+                'frontend.gallery.index',
+                'frontend.career.index',
+                'frontend.career.show',
+                'frontend.directory.index',
+                'frontend.promotion.index',
+                'frontend.new-store.index',
+                'frontend.partials._sidebar',
+                'frontend.partials.footer_v2'
+            ],
+            \App\Http\View\Composers\FrontendMenuComposer::class
+        );
     }
 }

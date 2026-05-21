@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $users = $this->userService->getUsersWithRelationship(
-                ['id', 'name', 'tenant_id', 'email', 'phone', 'status', 'is_active'],
+                ['id', 'name', 'tenant_id', 'email', 'phone', 'status', 'is_active', 'email_verified_at'],
                 [
                     'tenant:id,name'
                 ]
@@ -32,6 +32,16 @@ class UserController extends Controller
 
             return DataTables::of($users)
                 ->addIndexColumn()
+                ->addColumn('email_verified', function ($row) {
+                    if ($row->email_verified_at) {
+                        return '<button type="button" class="btn btn-sm bg-success-subtle text-success border border-success btn-toggle-verify" data-user-id="' . $row->id . '" data-verified="1" title="Click to unverify">
+                            <i class="ti ti-circle-check fs-4 me-1 align-middle"></i> Verified
+                        </button>';
+                    }
+                    return '<button type="button" class="btn btn-sm bg-danger-subtle text-danger border border-danger btn-toggle-verify" data-user-id="' . $row->id . '" data-verified="0" title="Click to verify">
+                        <i class="ti ti-alert-circle fs-4 me-1 align-middle"></i> Unverified
+                    </button>';
+                })
                 ->addColumn('status', function ($row) {
                     return $row->status == 'pending'
                         ? '<span class="badge bg-info">Pending</span>'
@@ -71,7 +81,7 @@ class UserController extends Controller
 
                     return $button;
                 })
-                ->rawColumns(['action', 'status', 'is_active'])
+                ->rawColumns(['action', 'status', 'is_active', 'email_verified'])
                 ->make(true);
         }
 
@@ -136,11 +146,14 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
             'tenant_id' => 'nullable|exists:tenants,id',
             'password' => 'nullable|min:8|confirmed',
-            'is_active' => 'nullable|in:0,1'
+            'is_active' => 'nullable|in:0,1',
+            'email_verified' => 'required|in:0,1',
         ]);
 
         DB::beginTransaction();
         try {
+            $user = $this->userService->findById($id);
+
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
@@ -152,8 +165,15 @@ class UserController extends Controller
                 $data['password'] = Hash::make($request->password);
             }
 
+            if ($request->email_verified == 1) {
+                if (!$user->email_verified_at) {
+                    $data['email_verified_at'] = now();
+                }
+            } else {
+                $data['email_verified_at'] = null;
+            }
+
             // Secure status update: Only allow changing is_active if user is approved
-            $user = $this->userService->findById($id);
             if ($user->status == 'approved') {
                 $data['is_active'] = $request->is_active;
             }
@@ -176,5 +196,23 @@ class UserController extends Controller
         ];
 
         $this->userService->update($data, $id);
+    }
+
+    public function toggleVerify(Request $request, $id)
+    {
+        $user = $this->userService->findById($id);
+        if ($user->email_verified_at) {
+            $user->email_verified_at = null;
+        } else {
+            $user->email_verified_at = now();
+        }
+        
+        // Use save directly to bypass repository pattern if needed, or update via repository
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Email verification status toggled successfully.'
+        ]);
     }
 }
