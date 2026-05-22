@@ -17,3 +17,8 @@ Schedule::command('app:check-expiring-promos')->dailyAt('01:20')->timezone('Asia
 Schedule::call(function () {
     \App\Models\VisitorLog::where('created_at', '<', now()->subDays(30))->delete();
 })->dailyAt('01:30')->timezone('Asia/Makassar');
+
+// Clean up activity logs older than 90 days to optimize database size
+Schedule::call(function () {
+    \Spatie\Activitylog\Models\Activity::where('created_at', '<', now()->subDays(90))->delete();
+})->dailyAt('01:40')->timezone('Asia/Makassar');
