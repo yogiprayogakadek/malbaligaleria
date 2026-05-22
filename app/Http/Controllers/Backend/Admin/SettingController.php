@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Services\SettingService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class SettingController extends Controller
@@ -55,7 +56,11 @@ class SettingController extends Controller
     public function store(Request $request)
     {
         $validate = [
-            'name' => 'required|string|unique:settings,name',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('settings', 'name')->where('pages', $request->pages)
+            ],
             'description' => 'required|string',
         ];
 
@@ -181,14 +186,19 @@ class SettingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $setting = Setting::findOrFail($id);
+
         $request->validate([
-            'name' => 'required|string|unique:settings,name,' . $id,
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('settings', 'name')->where('pages', $setting->pages)->ignore($id)
+            ],
             'description' => 'required|string',
             'payload_key' => 'required|array',
             'payload_value' => 'required|array',
         ]);
 
-        $setting = Setting::findOrFail($id);
         $isActive = $request->has('is_active');
 
         // Logic check
