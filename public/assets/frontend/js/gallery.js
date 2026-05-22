@@ -119,6 +119,17 @@
             const path = item.getAttribute("data-path") || img.src;
             photos.push({ path, title });
 
+            // Handle image load state for shimmer removal
+            if (img) {
+                if (img.complete) {
+                    item.classList.add("img-loaded");
+                } else {
+                    img.addEventListener("load", () => {
+                        item.classList.add("img-loaded");
+                    });
+                }
+            }
+
             // Remove existing listener if any to prevent duplicates
             if (item._clickhandler) {
                 item.removeEventListener("click", item._clickhandler);
@@ -250,6 +261,70 @@
             showPrev();
         }
     });
+
+    // Touch/Swipe Gestures for Lightbox
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    if (lightboxModal) {
+        lightboxModal.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lightboxModal.addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
+
+    function handleSwipe() {
+        const threshold = 50;
+        if (touchEndX < touchStartX - threshold) {
+            showNext();
+        } else if (touchEndX > touchStartX + threshold) {
+            showPrev();
+        }
+    }
+
+    // Share Button Event Listener
+    const btnShare = document.getElementById("lightboxShare");
+    if (btnShare) {
+        btnShare.addEventListener("click", async () => {
+            const photo = photos[currentIndex];
+            if (!photo) return;
+
+            const shareData = {
+                title: photo.title || 'Gallery Photo - Mal Bali Galeria',
+                text: 'Check out this photo from Mal Bali Galeria!',
+                url: photo.path
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // Fallback: Copy path to clipboard
+                    await navigator.clipboard.writeText(photo.path);
+
+                    // Show temporary checkmark success state
+                    const originalHTML = btnShare.innerHTML;
+                    btnShare.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2ac5b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    `;
+                    btnShare.style.borderColor = "#2ac5b5";
+
+                    setTimeout(() => {
+                        btnShare.innerHTML = originalHTML;
+                        btnShare.style.borderColor = "";
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error("Error sharing or copying path: ", err);
+            }
+        });
+    }
 
     // Initialize Global UI Elements
     initLoader();

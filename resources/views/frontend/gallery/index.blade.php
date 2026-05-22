@@ -215,6 +215,15 @@
     <!-- Custom Lightbox Modal -->
     <div class="lightbox-modal" id="lightboxModal">
         <button class="lightbox-btn lightbox-btn-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+        <button class="lightbox-btn lightbox-btn-share" id="lightboxShare" aria-label="Share image" title="Share Photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+        </button>
         <a href="#" download class="lightbox-btn lightbox-btn-download" id="lightboxDownload" aria-label="Download image" target="_blank">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
