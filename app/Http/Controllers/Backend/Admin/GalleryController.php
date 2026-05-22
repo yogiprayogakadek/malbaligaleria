@@ -31,6 +31,9 @@ class GalleryController extends Controller
                     alt="' . ($row->title ?? 'Gallery Photo') . '" class="rounded-1"
                     style="max-width: 150px; max-height: 150px; object-fit: cover;">';
                 })
+                ->editColumn('sort_order', function ($row) {
+                    return '<input type="number" class="form-control form-control-sm text-center input-sort-order" value="' . $row->sort_order . '" data-id="' . $row->id . '" style="width: 80px; margin: 0 auto;" min="0">';
+                })
                 ->addColumn('status', function ($row) {
                     $activeClass = $row->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
                     $activeLabel = $row->is_active ? 'Active' : 'Inactive';
@@ -53,7 +56,7 @@ class GalleryController extends Controller
                     </button>
                     ';
                 })
-                ->rawColumns(['checkbox', 'photo', 'status', 'action'])
+                ->rawColumns(['checkbox', 'photo', 'sort_order', 'status', 'action'])
                 ->make(true);
         }
 
@@ -193,6 +196,20 @@ class GalleryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Successfully reset sort order to 0 for selected photos.'
+        ]);
+    }
+
+    public function updateSort(Request $request, $id)
+    {
+        $request->validate([
+            'sort_order' => 'required|integer|min:0'
+        ]);
+
+        $this->galleryService->update(['sort_order' => (int) $request->sort_order], $id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sort order updated successfully.'
         ]);
     }
 

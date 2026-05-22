@@ -258,6 +258,55 @@
                 });
             });
 
+            // Inline update for Sort Order
+            let originalValue = null;
+            $('#table').on('focus', '.input-sort-order', function() {
+                originalValue = $(this).val();
+            });
+
+            $('#table').on('blur', '.input-sort-order', function() {
+                let input = $(this);
+                let photoId = input.data('id');
+                let newValue = input.val();
+
+                if (newValue === "" || isNaN(newValue) || parseInt(newValue) < 0) {
+                    toastr.error("Please enter a valid sort order number.", "Error");
+                    input.val(originalValue);
+                    return;
+                }
+
+                if (newValue == originalValue) {
+                    return;
+                }
+
+                let url = "{{ route('admin.gallery.update-sort', ':id') }}".replace(':id', photoId);
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: "PUT",
+                        sort_order: newValue
+                    },
+                    success: function(response) {
+                        toastr.success(response.message, "Success");
+                        originalValue = newValue; // Update stored original value
+                    },
+                    error: function(xhr) {
+                        toastr.error("Failed to update sort order.", "Error");
+                        input.val(originalValue);
+                    }
+                });
+            });
+
+            // If user presses enter key, trigger blur to save
+            $('#table').on('keypress', '.input-sort-order', function(e) {
+                if (e.which == 13) {
+                    $(this).trigger('blur');
+                }
+            });
+
             // Toggle individual status
             $('#table').on('click', '.btn-toggle-status', function() {
                 let photoId = $(this).data('id');

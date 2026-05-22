@@ -216,6 +216,7 @@ Route::controller(AdminDashboardController::class)
                     Route::post('/batch-status', 'batchStatus')->name('batch-status');
                     Route::post('/batch-clear-title', 'batchClearTitle')->name('batch-clear-title');
                     Route::post('/batch-clear-sort', 'batchClearSort')->name('batch-clear-sort');
+                    Route::put('/{id}/update-sort', 'updateSort')->name('update-sort');
                 });
 
             // PROMO
