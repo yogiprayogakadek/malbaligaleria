@@ -67,6 +67,17 @@ class SettingService
                 'page_title' => 'text',
                 'page_subtitle' => 'text'
             ],
+            'gallery' => [
+                'site_title' => 'text',
+                'page_title' => 'text',
+                'page_subtitle' => 'text',
+                'grid_columns' => 'number',
+                'initial_images' => 'number',
+                'load_more_increment' => 'number',
+                'enable_zoom' => 'select',
+                'enable_download' => 'select',
+                'enable_share' => 'select',
+            ],
             'others' => [
                 'company_address' => 'text',
                 'contact_email' => 'email',

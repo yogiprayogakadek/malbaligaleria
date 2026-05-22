@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery | Mal Bali Galeria</title>
+    <title>{{ $gallerySettings['site_title'] ?? 'Gallery | Mal Bali Galeria' }}</title>
     <meta name="description"
         content="Explore the gallery of Mal Bali Galeria. See the vibrant shopping center, beautiful plazas, cozy dining areas, and upcoming events.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="Gallery | Mal Bali Galeria">
+    <meta property="og:title" content="{{ $gallerySettings['site_title'] ?? 'Gallery | Mal Bali Galeria' }}">
     <meta property="og:description" content="Explore the gallery of Mal Bali Galeria.">
     <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
 
@@ -150,8 +150,8 @@
         <section class="promo-hero-banner">
             <div class="promo-hero-content reveal">
                 <span class="promo-hero-eyebrow">Visual Tour</span>
-                <h1 class="promo-hero-title">Mall Gallery</h1>
-                <p class="promo-hero-subtitle">Capture the vibrant moments, events, and shopping experiences at Mal Bali Galeria.</p>
+                <h1 class="promo-hero-title">{{ $gallerySettings['page_title'] ?? 'Mall Gallery' }}</h1>
+                <p class="promo-hero-subtitle">{{ $gallerySettings['page_subtitle'] ?? 'Capture the vibrant moments, events, and shopping experiences at Mal Bali Galeria.' }}</p>
                 <a href="{{ route('frontend.landing') }}" class="promo-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -164,15 +164,16 @@
 
         <!-- Gallery Grid Section -->
         <section class="gallery-grid-container">
-            <div class="gallery-grid">
+            <div class="gallery-grid" style="--desktop-columns: {{ $gallerySettings['grid_columns'] ?? 4 }};" data-enable-zoom="{{ $gallerySettings['enable_zoom'] ?? '1' }}">
                 @forelse ($photos as $photo)
                     @php
                         $imagePath = str_starts_with($photo->path, 'http') ? $photo->path : asset('storage/' . $photo->path);
                     @endphp
-                    <div class="gallery-item reveal @if($loop->index >= 8) gallery-hidden d-none @endif" data-path="{{ $imagePath }}" data-title="{{ $photo->title }}">
+                    <div class="gallery-item reveal @if($loop->index >= ($gallerySettings['initial_images'] ?? 8)) gallery-hidden d-none @endif" data-path="{{ $imagePath }}" data-title="{{ $photo->title }}">
                         <img src="{{ $imagePath }}" alt="{{ $photo->title ?? 'Gallery Photo' }}" loading="lazy">
                         <div class="gallery-overlay">
                             <div class="gallery-actions">
+                                @if(($gallerySettings['enable_zoom'] ?? '1') !== '0')
                                 <div class="gallery-action-btn btn-zoom" title="Zoom Photo">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
@@ -181,6 +182,8 @@
                                         <line x1="8" y1="11" x2="14" y2="11"></line>
                                     </svg>
                                 </div>
+                                @endif
+                                @if(($gallerySettings['enable_download'] ?? '1') !== '0')
                                 <a href="{{ $imagePath }}" download="{{ $photo->title ?? 'photo' }}" class="gallery-action-btn btn-download" title="Download Photo" target="_blank">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -188,6 +191,7 @@
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </a>
+                                @endif
                             </div>
                             <div class="gallery-caption">
                                 <h4>{{ $photo->title ?? 'Gallery Photo' }}</h4>
@@ -200,9 +204,9 @@
                     </div>
                 @endforelse
             </div>
-            @if ($photos->count() > 8)
+            @if ($photos->count() > ($gallerySettings['initial_images'] ?? 8))
                 <div class="load-more-container">
-                    <button id="btnLoadMore" class="btn-load-more">
+                    <button id="btnLoadMore" class="btn-load-more" data-increment="{{ $gallerySettings['load_more_increment'] ?? 4 }}">
                         <span>Load More</span>
                         <iconify-icon icon="solar:round-alt-arrow-down-bold-duotone" class="fs-5 align-middle ms-1"></iconify-icon>
                     </button>
@@ -214,23 +218,29 @@
 
     <!-- Custom Lightbox Modal -->
     <div class="lightbox-modal" id="lightboxModal">
-        <button class="lightbox-btn lightbox-btn-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
-        <button class="lightbox-btn lightbox-btn-share" id="lightboxShare" aria-label="Share image" title="Share Photo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
-                <circle cx="18" cy="5" r="3"></circle>
-                <circle cx="6" cy="12" r="3"></circle>
-                <circle cx="18" cy="19" r="3"></circle>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-            </svg>
-        </button>
-        <a href="#" download class="lightbox-btn lightbox-btn-download" id="lightboxDownload" aria-label="Download image" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-        </a>
+        <div class="lightbox-controls-top">
+            @if(($gallerySettings['enable_share'] ?? '1') !== '0')
+            <button class="lightbox-btn lightbox-btn-share" id="lightboxShare" aria-label="Share image" title="Share Photo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
+            @endif
+            @if(($gallerySettings['enable_download'] ?? '1') !== '0')
+            <a href="#" download class="lightbox-btn lightbox-btn-download" id="lightboxDownload" aria-label="Download image" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </a>
+            @endif
+            <button class="lightbox-btn lightbox-btn-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+        </div>
         <button class="lightbox-btn lightbox-btn-prev" id="lightboxPrev" aria-label="Previous image">&#10094;</button>
         <button class="lightbox-btn lightbox-btn-next" id="lightboxNext" aria-label="Next image">&#10095;</button>
 

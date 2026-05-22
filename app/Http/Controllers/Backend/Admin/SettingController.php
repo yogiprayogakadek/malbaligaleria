@@ -81,6 +81,18 @@ class SettingController extends Controller
                 'page_title' => 'nullable|string',
                 'page_subtitle' => 'nullable|string',
             ]);
+        } elseif ($request->pages == 'gallery') {
+            $validate = array_merge($validate, [
+                'site_title' => 'nullable|string',
+                'page_title' => 'nullable|string',
+                'page_subtitle' => 'nullable|string',
+                'grid_columns' => 'required|integer|min:1|max:12',
+                'initial_images' => 'required|integer|min:1',
+                'load_more_increment' => 'required|integer|min:1',
+                'enable_zoom' => 'required|in:0,1',
+                'enable_download' => 'required|in:0,1',
+                'enable_share' => 'required|in:0,1',
+            ]);
         }
 
         $request->validate($validate);
@@ -160,6 +172,9 @@ class SettingController extends Controller
         if (is_array($payloadVal) || is_object($payloadVal)) {
             $payloadVal = json_encode($payloadVal, JSON_PRETTY_PRINT);
         }
+
+        $availablePages = $this->settingService->availablePages();
+        $availableKeys = isset($availablePages[$setting->pages]) ? array_keys($availablePages[$setting->pages]) : [];
 
         return view('backend.admin.setting.edit', compact('setting', 'payloadVal', 'availableKeys'));
     }

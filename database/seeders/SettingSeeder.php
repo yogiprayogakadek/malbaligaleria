@@ -88,6 +88,26 @@ class SettingSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
+            [
+                'pages' => 'gallery',
+                'name' => 'default',
+                'payload' => json_encode([
+                    'site_title' => 'Mal Bali Galeria | Gallery',
+                    'page_title' => 'Mall Gallery',
+                    'page_subtitle' => 'Capture the vibrant moments, events, and shopping experiences at Mal Bali Galeria.',
+                    'grid_columns' => '4',
+                    'initial_images' => '8',
+                    'load_more_increment' => '4',
+                    'enable_zoom' => '1',
+                    'enable_download' => '1',
+                    'enable_share' => '1',
+                ]),
+                'description' => 'default setting for gallery',
+                'type' => 'default',
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
         ];
 
         Setting::insert($settings);

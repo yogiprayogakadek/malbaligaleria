@@ -112,6 +112,8 @@
 
     function initGalleryItems() {
         photos = [];
+        const grid = document.querySelector(".gallery-grid");
+        const enableZoom = grid ? grid.getAttribute("data-enable-zoom") !== "0" : true;
         const activeItems = document.querySelectorAll(".gallery-item:not(.gallery-hidden)");
         activeItems.forEach((item, index) => {
             const img = item.querySelector("img");
@@ -139,7 +141,9 @@
                 if (e.target.closest('.btn-download')) {
                     return;
                 }
-                openLightbox(index);
+                if (enableZoom) {
+                    openLightbox(index);
+                }
             };
             item._clickhandler = handler;
             item.addEventListener("click", handler);
@@ -154,7 +158,7 @@
     if (btnLoadMore) {
         btnLoadMore.addEventListener("click", () => {
             const hiddenItems = document.querySelectorAll(".gallery-item.gallery-hidden");
-            const limit = 4;
+            const limit = parseInt(btnLoadMore.getAttribute("data-increment")) || 4;
             let revealedCount = 0;
 
             hiddenItems.forEach((item) => {

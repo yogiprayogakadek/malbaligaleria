@@ -68,10 +68,21 @@
                 }
 
                 Object.keys(availableKeys[selected]).forEach(function(key) {
-                    input += `<div class="mb-3">
-                                <label class="form-label">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
-                                <input type="${availableKeys[selected][key]}" class="form-control" name="${key}">
-                            </div>`;
+                    var type = availableKeys[selected][key];
+                    if (type === 'select') {
+                        input += `<div class="mb-3">
+                                    <label class="form-label">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
+                                    <select class="form-select" name="${key}">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>`;
+                    } else {
+                        input += `<div class="mb-3">
+                                    <label class="form-label">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</label>
+                                    <input type="${type}" class="form-control" name="${key}">
+                                </div>`;
+                    }
                 });
 
                 var newRow = `
