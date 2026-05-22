@@ -74,6 +74,13 @@
                                 <span class="hide-menu">Media Cleanup</span>
                             </a>
                         </li>
+                        <!-- Image Compressor -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.image-compression.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:gallery-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Image Compressor</span>
+                            </a>
+                        </li>
                         <!-- User -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">

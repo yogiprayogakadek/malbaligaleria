@@ -45,6 +45,7 @@ use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Admin\LogViewerController;
 use App\Http\Controllers\Backend\Admin\BackupController;
 use App\Http\Controllers\Backend\Admin\MediaCleanupController;
+use App\Http\Controllers\Backend\Admin\ImageCompressionController;
 
 // FRONTEND
 Route::controller(LandingPageController::class)->name('frontend.')->group(function () {
@@ -276,6 +277,17 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/', 'index')->name('index');
                     Route::delete('/destroy', 'destroy')->name('destroy');
                     Route::delete('/destroy-mass', 'destroyMass')->name('destroy-mass');
+                });
+
+            // Image Compressor (RESTRICTED TO SUPERUSER)
+            Route::controller(ImageCompressionController::class)
+                ->middleware('superuser')
+                ->prefix('/image-compression')
+                ->name('image-compression.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/compress', 'compress')->name('compress');
+                    Route::post('/compress-selected', 'compressSelected')->name('compress-selected');
                 });
 
             // Setting (RESTRICTED TO SUPERUSER)
