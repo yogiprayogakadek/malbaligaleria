@@ -119,7 +119,10 @@
         const path = item.getAttribute("data-path") || img.src;
         photos.push({ path, title });
 
-        item.addEventListener("click", () => {
+        item.addEventListener("click", (e) => {
+            if (e.target.closest('.btn-download')) {
+                return;
+            }
             openLightbox(index);
         });
     });
@@ -154,6 +157,12 @@
             lightboxImage.src = photo.path;
             if (lightboxCaption) {
                 lightboxCaption.textContent = photo.title || "Gallery Photo";
+            }
+
+            const lightboxDownload = document.getElementById("lightboxDownload");
+            if (lightboxDownload) {
+                lightboxDownload.href = photo.path;
+                lightboxDownload.setAttribute("download", photo.title || "download");
             }
 
             lightboxImage.onload = () => {

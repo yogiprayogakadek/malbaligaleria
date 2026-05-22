@@ -226,27 +226,42 @@ body.dark-mode .gallery-item {
     z-index: 2;
 }
 
-.gallery-zoom-icon {
+.gallery-actions {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+    z-index: 5;
+}
+
+.gallery-action-btn {
     width: 48px;
     height: 48px;
     background: rgba(255, 255, 255, 0.9);
+    border: none;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #2c5f5d;
-    opacity: 0;
+    cursor: pointer;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.gallery-zoom-icon svg {
-    width: 24px;
-    height: 24px;
+.gallery-action-btn:hover {
+    background: #2c5f5d;
+    color: white;
+    transform: scale(1.1);
+}
+
+.gallery-action-btn svg {
+    width: 20px;
+    height: 20px;
 }
 
 .gallery-caption {
@@ -287,7 +302,7 @@ body.dark-mode .gallery-item {
     opacity: 1;
 }
 
-.gallery-item:hover .gallery-zoom-icon {
+.gallery-item:hover .gallery-actions {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
@@ -400,6 +415,11 @@ body.dark-mode .gallery-item {
     right: 20px;
 }
 
+.lightbox-btn-download {
+    top: 20px;
+    right: 90px;
+}
+
 .lightbox-btn-prev {
     left: 20px;
     top: 50%;
@@ -426,6 +446,14 @@ body.dark-mode .gallery-item {
     .lightbox-btn {
         width: 44px;
         height: 44px;
+    }
+    .lightbox-btn-close {
+        top: 20px;
+        right: 15px;
+    }
+    .lightbox-btn-download {
+        top: 20px;
+        right: 75px;
     }
     .lightbox-btn-prev {
         left: 10px;

@@ -172,13 +172,22 @@
                     <div class="gallery-item reveal" data-path="{{ $imagePath }}" data-title="{{ $photo->title }}">
                         <img src="{{ $imagePath }}" alt="{{ $photo->title ?? 'Gallery Photo' }}" loading="lazy">
                         <div class="gallery-overlay">
-                            <div class="gallery-zoom-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                    <line x1="11" y1="8" x2="11" y2="14"></line>
-                                    <line x1="8" y1="11" x2="14" y2="11"></line>
-                                </svg>
+                            <div class="gallery-actions">
+                                <div class="gallery-action-btn btn-zoom" title="Zoom Photo">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        <line x1="11" y1="8" x2="11" y2="14"></line>
+                                        <line x1="8" y1="11" x2="14" y2="11"></line>
+                                    </svg>
+                                </div>
+                                <a href="{{ $imagePath }}" download="{{ $photo->title ?? 'photo' }}" class="gallery-action-btn btn-download" title="Download Photo" target="_blank">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </a>
                             </div>
                             <div class="gallery-caption">
                                 <h4>{{ $photo->title ?? 'Gallery Photo' }}</h4>
@@ -198,6 +207,13 @@
     <!-- Custom Lightbox Modal -->
     <div class="lightbox-modal" id="lightboxModal">
         <button class="lightbox-btn lightbox-btn-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+        <a href="#" download class="lightbox-btn lightbox-btn-download" id="lightboxDownload" aria-label="Download image" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </a>
         <button class="lightbox-btn lightbox-btn-prev" id="lightboxPrev" aria-label="Previous image">&#10094;</button>
         <button class="lightbox-btn lightbox-btn-next" id="lightboxNext" aria-label="Next image">&#10095;</button>
 
