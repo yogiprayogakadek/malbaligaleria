@@ -75,6 +75,16 @@
                                     <span class="hide-menu">Frontend Menus</span>
                                 </a>
                             </li>
+
+                            <!-- ---------------------------------- -->
+                            <!-- Visitor Logs -->
+                            <!-- ---------------------------------- -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.visitors.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:graph-up-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Visitor Logs</span>
+                                </a>
+                            </li>
                         @endrole
 
                         @role(['admin', 'superuser'])

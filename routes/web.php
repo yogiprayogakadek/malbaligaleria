@@ -34,6 +34,7 @@ use App\Http\Controllers\Backend\Admin\JobApplicationController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\FrontendMenuController;
+use App\Http\Controllers\Backend\Admin\VisitorController;
 use App\Http\Controllers\Backend\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Backend\Tenant\PromoController as TenantPromoController;
 use App\Http\Controllers\Backend\Admin\GalleryController;
@@ -129,6 +130,16 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/{id}/edit', 'edit')->name('edit');
                     Route::put('/{id}/update', 'update')->name('update');
                     Route::put('/{id}/toggle-active', 'toggleActive')->name('toggle-active');
+                });
+
+            // Visitor Logs (RESTRICTED TO SUPERUSER)
+            Route::controller(VisitorController::class)
+                ->middleware('superuser')
+                ->prefix('/visitors')
+                ->name('visitors.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/{year}/{month}', 'detail')->name('detail');
                 });
 
             // CATEGORY
