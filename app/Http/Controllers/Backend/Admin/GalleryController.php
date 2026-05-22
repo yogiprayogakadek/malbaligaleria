@@ -68,22 +68,42 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image_file' => 'required|image|mimes:jpeg,png,jpg,webp,gif|max:2048',
+            'image_files' => 'required|array',
+            'image_files.*' => 'image|mimes:jpeg,png,jpg,webp,gif|max:2048',
             'title' => 'nullable|string|max:255',
             'is_active' => 'required|boolean',
-            'sort_order' => 'required|integer|min:0',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
-        $data = [
-            'image_file' => $request->file('image_file'),
-            'title' => $request->title,
-            'is_active' => (bool) $request->is_active,
-            'sort_order' => (int) $request->sort_order,
-        ];
+        $files = $request->file('image_files');
+        $isActive = (bool) $request->is_active;
 
-        $this->galleryService->create($data);
+        // If a sort order is specified, use it as starting value, otherwise start from max + 1
+        $startSortOrder = $request->sort_order;
+        if (is_null($startSortOrder)) {
+            $startSortOrder = (\App\Models\Gallery::max('sort_order') ?? 0) + 1;
+        }
 
-        return redirect()->route('admin.gallery.index')->with('success', 'Gallery photo saved successfully.');
+        foreach ($files as $index => $file) {
+            $currentSortOrder = $startSortOrder + $index;
+
+            if ($request->title) {
+                $currentTitle = count($files) > 1 ? $request->title . ' - ' . ($index + 1) : $request->title;
+            } else {
+                $currentTitle = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+
+            $data = [
+                'image_file' => $file,
+                'title' => $currentTitle,
+                'is_active' => $isActive,
+                'sort_order' => $currentSortOrder,
+            ];
+
+            $this->galleryService->create($data);
+        }
+
+        return redirect()->route('admin.gallery.index')->with('success', 'Gallery photo(s) saved successfully.');
     }
 
     public function edit($id)

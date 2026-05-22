@@ -13,11 +13,15 @@
 
                         {{-- Image File --}}
                         <div class="mb-4 row align-items-center">
-                            <label for="image_file" class="form-label col-sm-3 col-form-label">Upload Image</label>
+                            <label for="image_files" class="form-label col-sm-3 col-form-label">Upload Image(s)</label>
                             <div class="col-sm-12">
-                                <input type="file" class="form-control @error('image_file') is-invalid @enderror"
-                                    id="image_file" name="image_file" accept="image/*">
-                                @error('image_file')
+                                <input type="file" class="form-control @error('image_files') is-invalid @enderror @error('image_files.*') is-invalid @enderror"
+                                    id="image_files" name="image_files[]" accept="image/*" multiple required>
+                                <small class="text-muted d-block mt-1">You can select multiple images to perform a batch upload. File names will be used as default titles if custom title is not specified.</small>
+                                @error('image_files')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                @error('image_files.*')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -38,11 +42,11 @@
 
                         {{-- Sort Order --}}
                         <div class="mb-4 row align-items-center">
-                            <label for="sort_order" class="form-label col-sm-3 col-form-label">Sort Order</label>
+                            <label for="sort_order" class="form-label col-sm-3 col-form-label">Sort Order (Optional)</label>
                             <div class="col-sm-12">
                                 <input type="number" class="form-control @error('sort_order') is-invalid @enderror"
-                                    id="sort_order" name="sort_order" placeholder="Enter sort order (e.g. 0, 1, 2)"
-                                    value="{{ old('sort_order', 0) }}" min="0">
+                                    id="sort_order" name="sort_order" placeholder="Leave empty to auto-increment from last value present"
+                                    value="{{ old('sort_order') }}" min="0">
                                 @error('sort_order')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
