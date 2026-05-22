@@ -10,12 +10,12 @@ class GalleryRepository
 
     public function getAll(array $fields = ['*'])
     {
-        return $this->model::select($fields)->get();
+        return $this->model::select($fields)->orderBy('sort_order', 'asc')->orderBy('id', 'desc')->get();
     }
 
     public function getActive(array $fields = ['*'])
     {
-        return $this->model::select($fields)->where('is_active', true)->orderBy('sort_order', 'asc')->get();
+        return $this->model::select($fields)->where('is_active', true)->orderBy('sort_order', 'asc')->orderBy('id', 'desc')->get();
     }
 
     public function findById(int $id, array $fields = ['*'])
