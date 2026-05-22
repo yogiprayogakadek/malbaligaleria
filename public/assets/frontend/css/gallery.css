@@ -249,9 +249,29 @@ body.dark-mode .gallery-item {
     height: 24px;
 }
 
-/* .gallery-caption {
-    display: none !important;
-} */
+.gallery-caption {
+    width: 100%;
+    text-align: center;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+    transform: translateY(10px);
+    opacity: 0;
+}
+
+.gallery-caption h4 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.gallery-item:hover .gallery-caption {
+    transform: translateY(0);
+    opacity: 1;
+}
 
 /* Hover triggers */
 .gallery-item:hover {
@@ -334,7 +354,20 @@ body.dark-mode .gallery-item {
 }
 
 .lightbox-info {
-    display: none !important;
+    margin-top: 1.5rem;
+    text-align: center;
+    width: 100%;
+    z-index: 10010;
+}
+
+.lightbox-info h3 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
 }
 
 /* Lightbox Action buttons */
