@@ -249,9 +249,9 @@ body.dark-mode .gallery-item {
     height: 24px;
 }
 
-.gallery-caption {
+/* .gallery-caption {
     display: none !important;
-}
+} */
 
 /* Hover triggers */
 .gallery-item:hover {
