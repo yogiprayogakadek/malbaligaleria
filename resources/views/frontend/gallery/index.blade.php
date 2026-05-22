@@ -201,7 +201,7 @@
                 @endforelse
             </div>
             @if ($photos->count() > 8)
-                <div class="text-center mt-5">
+                <div class="load-more-container">
                     <button id="btnLoadMore" class="btn-load-more">
                         <span>Load More</span>
                         <iconify-icon icon="solar:round-alt-arrow-down-bold-duotone" class="fs-5 align-middle ms-1"></iconify-icon>
