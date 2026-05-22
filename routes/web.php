@@ -42,6 +42,8 @@ use App\Http\Controllers\Frontend\GalleryController as FrontendGalleryController
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\StatusUserController;
+use App\Http\Controllers\Backend\Admin\LogViewerController;
+use App\Http\Controllers\Backend\Admin\BackupController;
 
 // FRONTEND
 Route::controller(LandingPageController::class)->name('frontend.')->group(function () {
@@ -240,6 +242,28 @@ Route::controller(AdminDashboardController::class)
                     Route::delete('/destroy-all', 'destroyAll')->name('destroyAll');
                     Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
                     Route::delete('/{id}', 'destroy')->name('destroy');
+                });
+
+            // Log Viewer (RESTRICTED TO SUPERUSER)
+            Route::controller(LogViewerController::class)
+                ->middleware('superuser')
+                ->prefix('/logs')
+                ->name('logs.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::delete('/clear', 'clear')->name('clear');
+                });
+
+            // Backup (RESTRICTED TO SUPERUSER)
+            Route::controller(BackupController::class)
+                ->middleware('superuser')
+                ->prefix('/backup')
+                ->name('backup.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/run', 'run')->name('run');
+                    Route::get('/download/{filename}', 'download')->name('download');
+                    Route::delete('/delete/{filename}', 'delete')->name('delete');
                 });
 
             // Setting (RESTRICTED TO SUPERUSER)

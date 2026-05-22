@@ -46,6 +46,20 @@
                                 <span class="hide-menu">Activity Logs</span>
                             </a>
                         </li>
+                        <!-- Database Backups -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.backup.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:database-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Database Backups</span>
+                            </a>
+                        </li>
+                        <!-- Error Logs -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.logs.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:document-text-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Error Logs</span>
+                            </a>
+                        </li>
                         <!-- Frontend Menu Visibility -->
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="{{ route('admin.menu.index') }}" aria-expanded="false">
