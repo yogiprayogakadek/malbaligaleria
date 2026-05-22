@@ -36,6 +36,9 @@
                             <button type="button" class="btn btn-warning-subtle text-warning btn-batch-clear-title" disabled>
                                 <i class="ti ti-trash-x me-1"></i> Batch Clear Title
                             </button>
+                            <button type="button" class="btn btn-info-subtle text-info btn-batch-clear-sort" disabled>
+                                <i class="ti ti-arrows-sort me-1"></i> Batch Reset Sort Order
+                            </button>
                         </div>
                         <a href="{{ route('admin.gallery.create') }}" class="btn btn-primary">
                             <i class="ti ti-plus me-1"></i> Add New Photo
@@ -134,9 +137,9 @@
             function toggleBatchButtons() {
                 let selectedCount = $('.select-photo:checked').length;
                 if (selectedCount > 0) {
-                    $('.btn-batch-action, .btn-batch-clear-title').prop('disabled', false);
+                    $('.btn-batch-action, .btn-batch-clear-title, .btn-batch-clear-sort').prop('disabled', false);
                 } else {
-                    $('.btn-batch-action, .btn-batch-clear-title').prop('disabled', true);
+                    $('.btn-batch-action, .btn-batch-clear-title, .btn-batch-clear-sort').prop('disabled', true);
                     $('#select-all').prop('checked', false);
                 }
             }
@@ -203,6 +206,41 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: "{{ route('admin.gallery.batch-clear-title') }}",
+                            type: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                ids: selectedIds
+                            },
+                            success: function(response) {
+                                toastr.success(response.message, "Success");
+                                table.ajax.reload(null, false);
+                            },
+                            error: function(xhr) {
+                                toastr.error("Failed to perform batch update.", "Error");
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Batch clear sort action
+            $('.btn-batch-clear-sort').on('click', function() {
+                let selectedIds = [];
+
+                $('.select-photo:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                Swal.fire({
+                    title: 'Reset sort order?',
+                    text: 'You are going to reset the sort order to 0 for ' + selectedIds.length + ' selected photos.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, reset them!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('admin.gallery.batch-clear-sort') }}",
                             type: "POST",
                             data: {
                                 _token: "{{ csrf_token() }}",

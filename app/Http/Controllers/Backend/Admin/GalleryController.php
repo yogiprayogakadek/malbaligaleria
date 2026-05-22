@@ -181,6 +181,21 @@ class GalleryController extends Controller
         ]);
     }
 
+    public function batchClearSort(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:galleries,id',
+        ]);
+
+        \App\Models\Gallery::whereIn('id', $request->ids)->update(['sort_order' => 0]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully reset sort order to 0 for selected photos.'
+        ]);
+    }
+
     public function delete($id)
     {
         $this->galleryService->delete($id);

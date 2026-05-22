@@ -215,6 +215,7 @@ Route::controller(AdminDashboardController::class)
                     Route::put('/{id}/toggle-active', 'toggleActive')->name('toggle-active');
                     Route::post('/batch-status', 'batchStatus')->name('batch-status');
                     Route::post('/batch-clear-title', 'batchClearTitle')->name('batch-clear-title');
+                    Route::post('/batch-clear-sort', 'batchClearSort')->name('batch-clear-sort');
                 });
 
             // PROMO
