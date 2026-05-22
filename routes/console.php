@@ -12,3 +12,4 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::command('app:check-expiring-promos')->dailyAt('09:00');
 Schedule::command('app:deactivate-expired-events')->dailyAt('06:00')->timezone('Asia/Makassar');
 Schedule::command('app:promote-upcoming-events')->dailyAt('00:01')->timezone('Asia/Makassar');
+Schedule::command('visitor:archive-monthly')->monthlyOn(1, '00:05')->timezone('Asia/Makassar');

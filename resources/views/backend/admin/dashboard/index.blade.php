@@ -55,7 +55,7 @@
 
     {{-- === MAIN STATS === --}}
     <div class="row">
-        <div class="col-lg-3 col-md-6">
+        <div class="col-xxl-2 col-md-4 col-sm-6">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-xxl-2 col-md-4 col-sm-6">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -103,7 +103,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-xxl-2 col-md-4 col-sm-6">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-xxl-2 col-md-4 col-sm-6">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -131,6 +131,29 @@
                             <h6 class="mb-0 text-muted">Total Users</h6>
                             <h3 class="mb-0 fw-semibold">{{ $totalUsers }}</h3>
                             <small class="text-muted">{{ $adminUsers }} Admin, {{ $tenantUsers }} Tenant</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xxl-4 col-md-8 col-sm-12">
+            <div class="card bg-primary-subtle border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="round-40 rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0">
+                            <i class="ti ti-users fs-6"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-1 text-primary fw-semibold">Visitor Statistics</h6>
+                            <div class="d-flex align-items-baseline gap-3">
+                                <h3 class="mb-0 fw-bold text-dark">{{ number_format($totalVisitors) }}</h3>
+                                <span class="small text-muted">Total Visits</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-3 mt-1 small">
+                                <span class="text-success fw-medium"><i class="ti ti-arrow-up-right"></i> {{ number_format($todayVisitors) }} Today</span>
+                                <span class="text-info fw-medium"><i class="ti ti-circle-filled fs-2 me-1"></i> {{ number_format($onlineVisitors) }} Online</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -494,6 +517,52 @@
         </div>
     </div>
 
+    {{-- === VISITOR HISTORY === --}}
+    <div class="row mt-4">
+        <div class="col-md-6 col-12 mb-3 mb-md-0">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Visitor History (Monthly Summary)</h5>
+                    <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                        <table class="table table-striped table-hover align-middle mb-0">
+                            <thead class="table-light sticky-top" style="z-index: 1;">
+                                <tr>
+                                    <th>Period</th>
+                                    <th class="text-end">Visits Count</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($monthlyVisitorsList as $item)
+                                <tr>
+                                    <td><strong>{{ $item->period }}</strong></td>
+                                    <td class="text-end font-monospace fw-semibold">{{ number_format($item->visit_count) }}</td>
+                                    <td class="text-center">
+                                        @if($item->status == 'Active')
+                                            <span class="badge bg-success-subtle text-success">Running</span>
+                                        @else
+                                            <span class="badge bg-secondary-subtle text-secondary">Archived</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Monthly Visitor Trends</h5>
+                    <canvas id="visitorTrendsChart" height="135"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @push('scripts')
@@ -575,6 +644,35 @@
                         }
                     }
                 }
+            }
+        }
+    });
+
+    const visitorTrendsCtx = document.getElementById('visitorTrendsChart').getContext('2d');
+    new Chart(visitorTrendsCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($monthlyData['labels']) !!},
+            datasets: [
+                {
+                    label: 'Visits',
+                    data: {!! json_encode($monthlyData['visitors']) !!},
+                    borderColor: 'rgb(0, 133, 219)',
+                    backgroundColor: 'rgba(0, 133, 219, 0.2)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
             }
         }
     });

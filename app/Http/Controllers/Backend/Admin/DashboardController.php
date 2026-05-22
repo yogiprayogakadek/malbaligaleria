@@ -36,6 +36,31 @@ class DashboardController extends Controller
         }
 
         // 2. ADMIN & SUPERUSER (MALL DATA)
+        // Self-healing visitor log archiving
+        $firstLog = \App\Models\VisitorLog::orderBy('created_at', 'asc')->first();
+        if ($firstLog) {
+            $start = Carbon::parse($firstLog->created_at)->startOfMonth();
+            $end = Carbon::now()->subMonth()->startOfMonth();
+            $current = $start->copy();
+            while ($current->lessThanOrEqualTo($end)) {
+                $year = $current->year;
+                $month = $current->month;
+                
+                $exists = \App\Models\MonthlyVisitor::where('year', $year)->where('month', $month)->exists();
+                if (!$exists) {
+                    $count = \App\Models\VisitorLog::whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month)
+                        ->count();
+                    \App\Models\MonthlyVisitor::create([
+                        'year' => $year,
+                        'month' => $month,
+                        'visit_count' => $count
+                    ]);
+                }
+                $current->addMonth();
+            }
+        }
+
         // Statistics
         $totalTenants  = Tenant::count();
         $activeTenants = Tenant::where('is_active', true)->count();
@@ -62,7 +87,32 @@ class DashboardController extends Controller
             $monthlyData['tenants'][] = Tenant::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             $monthlyData['events'][]  = Event::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             $monthlyData['promos'][]  = Promo::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
+            
+            // Get visitor count (historical from table, or live if current month)
+            if ($month->year === $now->year && $month->month === $now->month) {
+                $monthlyData['visitors'][] = \App\Models\VisitorLog::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
+            } else {
+                $monthlyVisitor = \App\Models\MonthlyVisitor::where('year', $month->year)->where('month', $month->month)->first();
+                $monthlyData['visitors'][] = $monthlyVisitor ? $monthlyVisitor->visit_count : 0;
+            }
         }
+
+        // Build a complete monthly visitor list including the running total of the current month
+        $monthlyVisitorsList = \App\Models\MonthlyVisitor::orderBy('year', 'desc')->orderBy('month', 'desc')->get()->map(function($item) {
+            return (object) [
+                'period' => Carbon::createFromDate($item->year, $item->month, 1)->format('F Y'),
+                'visit_count' => $item->visit_count,
+                'status' => 'Archived'
+            ];
+        })->toArray();
+
+        // Prepend current month running total
+        $currentMonthCount = \App\Models\VisitorLog::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->count();
+        array_unshift($monthlyVisitorsList, (object) [
+            'period' => $now->format('F Y') . ' (Current)',
+            'visit_count' => $currentMonthCount,
+            'status' => 'Active'
+        ]);
 
         // Growth
         $lastMonth = Carbon::now()->subMonth();
@@ -104,7 +154,7 @@ class DashboardController extends Controller
             'totalUsers', 'adminUsers', 'tenantUsers',
             'totalVacancies', 'activeVacancies', 'totalApplications', 'newApplications',
             'recentTenants', 'recentEvents', 'recentPromos',
-            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth'
+            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'monthlyVisitorsList'
         ));
     }
 }

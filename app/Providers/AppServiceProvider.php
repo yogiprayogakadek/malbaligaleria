@@ -40,7 +40,8 @@ class AppServiceProvider extends ServiceProvider
                 'frontend.partials.footer_v2',
                 'frontend.directory.index',
                 'frontend.promotion.index',
-                'frontend.new-store.index'
+                'frontend.new-store.index',
+                'backend.admin.dashboard.index'
             ],
             \App\Http\View\Composers\StatsComposer::class
         );
