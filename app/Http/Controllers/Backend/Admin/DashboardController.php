@@ -100,12 +100,22 @@ class DashboardController extends Controller
             $monthlyData['events'][]  = Event::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             $monthlyData['promos'][]  = Promo::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             
-            // Get visitor count (historical from daily table, or live if current month)
-            if ($month->year === $now->year && $month->month === $now->month) {
-                $monthlyData['visitors'][] = \App\Models\VisitorLog::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
+            // Get visitor count robustly (archived monthly sum + active logs for that month since last archive)
+            $archivedMonthSum = (int) \App\Models\DailyVisitor::whereYear('date', $month->year)->whereMonth('date', $month->month)->sum('visit_count');
+            $lastArchivedDate = \App\Models\DailyVisitor::max('date');
+            
+            if ($lastArchivedDate) {
+                $activeMonthLogs = \App\Models\VisitorLog::whereYear('created_at', $month->year)
+                    ->whereMonth('created_at', $month->month)
+                    ->where('created_at', '>', Carbon::parse($lastArchivedDate)->endOfDay())
+                    ->count();
             } else {
-                $monthlyData['visitors'][] = (int) \App\Models\DailyVisitor::whereYear('date', $month->year)->whereMonth('date', $month->month)->sum('visit_count');
+                $activeMonthLogs = \App\Models\VisitorLog::whereYear('created_at', $month->year)
+                    ->whereMonth('created_at', $month->month)
+                    ->count();
             }
+            
+            $monthlyData['visitors'][] = $archivedMonthSum + $activeMonthLogs;
         }
 
         // Fetch all daily visits ordered by date desc

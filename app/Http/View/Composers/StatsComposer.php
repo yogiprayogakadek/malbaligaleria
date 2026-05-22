@@ -12,7 +12,16 @@ class StatsComposer
      */
     public function compose(View $view): void
     {
-        $totalVisitors = VisitorLog::count();
+        // Calculate total visitors robustly (archived history + active logs since last archive)
+        $lastArchivedDate = \App\Models\DailyVisitor::max('date');
+        if ($lastArchivedDate) {
+            $archivedSum = (int) \App\Models\DailyVisitor::sum('visit_count');
+            $activeLogsCount = VisitorLog::where('created_at', '>', \Carbon\Carbon::parse($lastArchivedDate)->endOfDay())->count();
+            $totalVisitors = $archivedSum + $activeLogsCount;
+        } else {
+            $totalVisitors = VisitorLog::count();
+        }
+
         $todayVisitors = VisitorLog::where('created_at', '>=', now()->startOfDay())->count();
         
         $onlineVisitors = VisitorLog::where('updated_at', '>=', now()->subMinutes(5))
