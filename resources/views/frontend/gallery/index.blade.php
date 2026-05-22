@@ -169,7 +169,7 @@
                     @php
                         $imagePath = str_starts_with($photo->path, 'http') ? $photo->path : asset('storage/' . $photo->path);
                     @endphp
-                    <div class="gallery-item reveal" data-path="{{ $imagePath }}" data-title="{{ $photo->title }}">
+                    <div class="gallery-item reveal @if($loop->index >= 8) gallery-hidden d-none @endif" data-path="{{ $imagePath }}" data-title="{{ $photo->title }}">
                         <img src="{{ $imagePath }}" alt="{{ $photo->title ?? 'Gallery Photo' }}" loading="lazy">
                         <div class="gallery-overlay">
                             <div class="gallery-actions">
@@ -200,6 +200,14 @@
                     </div>
                 @endforelse
             </div>
+            @if ($photos->count() > 8)
+                <div class="text-center mt-5">
+                    <button id="btnLoadMore" class="btn-load-more">
+                        <span>Load More</span>
+                        <iconify-icon icon="solar:round-alt-arrow-down-bold-duotone" class="fs-5 align-middle ms-1"></iconify-icon>
+                    </button>
+                </div>
+            @endif
         </section>
 
     </div> {{-- End .gallery-main --}}

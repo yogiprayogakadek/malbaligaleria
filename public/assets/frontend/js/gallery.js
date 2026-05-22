@@ -107,25 +107,66 @@
     const btnClose = document.getElementById("lightboxClose");
     const btnPrev = document.getElementById("lightboxPrev");
     const btnNext = document.getElementById("lightboxNext");
-    const galleryItems = document.querySelectorAll(".gallery-item");
-
     let photos = [];
     let currentIndex = 0;
 
-    // Collect all photos
-    galleryItems.forEach((item, index) => {
-        const img = item.querySelector("img");
-        const title = item.getAttribute("data-title") || "";
-        const path = item.getAttribute("data-path") || img.src;
-        photos.push({ path, title });
+    function initGalleryItems() {
+        photos = [];
+        const activeItems = document.querySelectorAll(".gallery-item:not(.gallery-hidden)");
+        activeItems.forEach((item, index) => {
+            const img = item.querySelector("img");
+            const title = item.getAttribute("data-title") || "";
+            const path = item.getAttribute("data-path") || img.src;
+            photos.push({ path, title });
 
-        item.addEventListener("click", (e) => {
-            if (e.target.closest('.btn-download')) {
-                return;
+            // Remove existing listener if any to prevent duplicates
+            if (item._clickhandler) {
+                item.removeEventListener("click", item._clickhandler);
             }
-            openLightbox(index);
+
+            const handler = (e) => {
+                if (e.target.closest('.btn-download')) {
+                    return;
+                }
+                openLightbox(index);
+            };
+            item._clickhandler = handler;
+            item.addEventListener("click", handler);
         });
-    });
+    }
+
+    // Initialize visible gallery items
+    initGalleryItems();
+
+    // Load More Logic
+    const btnLoadMore = document.getElementById("btnLoadMore");
+    if (btnLoadMore) {
+        btnLoadMore.addEventListener("click", () => {
+            const hiddenItems = document.querySelectorAll(".gallery-item.gallery-hidden");
+            const limit = 4;
+            let revealedCount = 0;
+
+            hiddenItems.forEach((item) => {
+                if (revealedCount < limit) {
+                    item.classList.remove("gallery-hidden", "d-none");
+                    // Trigger scroll reveal animation smoothly
+                    setTimeout(() => {
+                        item.classList.add("active");
+                    }, 50 * revealedCount);
+                    revealedCount++;
+                }
+            });
+
+            // Re-initialize the active items list and their lightbox bindings
+            initGalleryItems();
+
+            // Check if we still have hidden items left
+            const remainingHidden = document.querySelectorAll(".gallery-item.gallery-hidden");
+            if (remainingHidden.length === 0) {
+                btnLoadMore.parentElement.style.display = "none";
+            }
+        });
+    }
 
     function openLightbox(index) {
         if (!lightboxModal) return;

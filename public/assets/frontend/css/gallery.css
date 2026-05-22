@@ -465,3 +465,63 @@ body.dark-mode .gallery-item {
         font-size: 1.1rem;
     }
 }
+
+/* Load More Button Styling */
+.btn-load-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 2px solid #2c5f5d;
+    color: #2c5f5d;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.8rem 2.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 12px rgba(44, 95, 93, 0.1);
+}
+
+.btn-load-more:hover {
+    background: #2c5f5d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(44, 95, 93, 0.2);
+}
+
+.btn-load-more iconify-icon {
+    transition: transform 0.3s ease;
+}
+
+.btn-load-more:hover iconify-icon {
+    transform: translateY(2px);
+}
+
+body.dark-mode .btn-load-more {
+    border-color: #4a9e9a;
+    color: #4a9e9a;
+    box-shadow: 0 4px 12px rgba(74, 158, 154, 0.1);
+}
+
+body.dark-mode .btn-load-more:hover {
+    background: #4a9e9a;
+    color: #121212;
+    box-shadow: 0 8px 20px rgba(74, 158, 154, 0.25);
+}
+
+/* Gallery Hidden items helper */
+.gallery-item.gallery-hidden {
+    display: none !important;
+}
+
+@media (max-width: 576px) {
+    .btn-load-more {
+        width: 100%;
+        max-width: 280px;
+        padding: 0.75rem 1.8rem;
+        font-size: 0.9rem;
+    }
+}
+
