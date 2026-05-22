@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ImageCompressionController extends Controller
@@ -21,6 +22,13 @@ class ImageCompressionController extends Controller
         if ($request->ajax()) {
             $images = $this->scanImages();
 
+            if ($request->filled('status') && in_array($request->status, ['active', 'inactive'])) {
+                $wantActive = ($request->status === 'active');
+                $images = array_filter($images, function ($img) use ($wantActive) {
+                    return $img['is_active_status'] === $wantActive;
+                });
+            }
+
             return \Yajra\DataTables\DataTables::of($images)
                 ->addIndexColumn()
                 ->addColumn('checkbox', function ($row) {
@@ -30,10 +38,17 @@ class ImageCompressionController extends Controller
                     $url = asset('storage/' . $row['path']);
                     return '<img src="' . $url . '" alt="Preview" class="img-thumbnail img-fluid" style="max-height: 50px; cursor: zoom-in;" onclick="zoomImage(\'' . $url . '\')">';
                 })
+                ->addColumn('status', function ($row) {
+                    if ($row['is_active_status']) {
+                        return '<span class="badge bg-success">Active</span>';
+                    } else {
+                        return '<span class="badge bg-secondary">Inactive</span>';
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     return '<button type="button" class="btn btn-sm btn-primary btn-compress" data-path="' . e($row['path']) . '"><i class="ti ti-minimize"></i> Compress</button>';
                 })
-                ->rawColumns(['checkbox', 'thumbnail', 'action'])
+                ->rawColumns(['checkbox', 'thumbnail', 'status', 'action'])
                 ->make(true);
         }
 
@@ -192,12 +207,81 @@ class ImageCompressionController extends Controller
         $disk = Storage::disk('public');
         $images = [];
 
+        // Fetch active/inactive mappings from database
+        // 1. Tenant Photos
+        $tenantPhotos = DB::table('tenant_photos')
+            ->join('tenants', 'tenant_photos.tenant_id', '=', 'tenants.id')
+            ->whereNull('tenants.deleted_at')
+            ->select('tenant_photos.path', 'tenants.is_active')
+            ->get();
+
+        // 2. Tenant Logos
+        $tenantLogos = DB::table('tenants')
+            ->whereNull('deleted_at')
+            ->whereNotNull('logo')
+            ->select('logo', 'is_active')
+            ->get();
+
+        // 3. Event Photos
+        $eventPhotos = DB::table('event_photos')
+            ->join('events', 'event_photos.event_id', '=', 'events.id')
+            ->whereNull('events.deleted_at')
+            ->select('event_photos.path', 'events.is_active')
+            ->get();
+
+        // 4. Galleries
+        $galleries = DB::table('galleries')
+            ->select('path', 'is_active')
+            ->get();
+
+        // 5. Promos
+        $promos = DB::table('promos')
+            ->whereNull('deleted_at')
+            ->whereNotNull('banner')
+            ->select('banner', 'is_active')
+            ->get();
+
+        // Build status lookup map
+        $activeMap = [];
+
+        foreach ($tenantPhotos as $p) {
+            if (!empty($p->path)) {
+                $activeMap[strtolower($p->path)] = (bool)$p->is_active;
+                $activeMap[strtolower(basename($p->path))] = (bool)$p->is_active;
+            }
+        }
+        foreach ($tenantLogos as $l) {
+            if (!empty($l->logo)) {
+                $activeMap[strtolower($l->logo)] = (bool)$l->is_active;
+                $activeMap[strtolower(basename($l->logo))] = (bool)$l->is_active;
+            }
+        }
+        foreach ($eventPhotos as $ep) {
+            if (!empty($ep->path)) {
+                $activeMap[strtolower($ep->path)] = (bool)$ep->is_active;
+                $activeMap[strtolower(basename($ep->path))] = (bool)$ep->is_active;
+            }
+        }
+        foreach ($galleries as $g) {
+            if (!empty($g->path)) {
+                $activeMap[strtolower($g->path)] = (bool)$g->is_active;
+                $activeMap[strtolower(basename($g->path))] = (bool)$g->is_active;
+            }
+        }
+        foreach ($promos as $pr) {
+            if (!empty($pr->banner)) {
+                $activeMap[strtolower($pr->banner)] = (bool)$pr->is_active;
+                $activeMap[strtolower(basename($pr->banner))] = (bool)$pr->is_active;
+            }
+        }
+
         foreach ($this->directories as $folder => $label) {
             if ($disk->exists($folder)) {
                 $files = $disk->allFiles($folder);
 
                 foreach ($files as $file) {
                     $fileBaseLower = strtolower(basename($file));
+                    $fileLower = strtolower($file);
                     $ext = pathinfo($fileBaseLower, PATHINFO_EXTENSION);
 
                     if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
@@ -212,6 +296,14 @@ class ImageCompressionController extends Controller
                                 $resolution = $dimensions[0] . ' x ' . $dimensions[1];
                             }
 
+                            // Determine status
+                            $isActive = false;
+                            if (isset($activeMap[$fileLower])) {
+                                $isActive = $activeMap[$fileLower];
+                            } elseif (isset($activeMap[$fileBaseLower])) {
+                                $isActive = $activeMap[$fileBaseLower];
+                            }
+
                             $images[] = [
                                 'path' => $file,
                                 'filename' => basename($file),
@@ -220,7 +312,8 @@ class ImageCompressionController extends Controller
                                 'raw_size' => $size,
                                 'resolution' => $resolution,
                                 'modified_at' => Carbon::createFromTimestamp($lastModified)->format('Y-m-d H:i:s'),
-                                'raw_time' => $lastModified
+                                'raw_time' => $lastModified,
+                                'is_active_status' => $isActive
                             ];
                         }
                     }

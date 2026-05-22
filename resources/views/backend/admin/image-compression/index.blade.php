@@ -54,8 +54,13 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title">All Uploaded Website Images</h4>
-                    <div>
-                        <button id="compress_selected" class="btn btn-warning me-2" style="display: none;">
+                    <div class="d-flex align-items-center">
+                        <select id="status_filter" class="form-select me-3" style="width: 180px;">
+                            <option value="all">All Status</option>
+                            <option value="active">Active Only</option>
+                            <option value="inactive">Inactive/Orphaned Only</option>
+                        </select>
+                        <button id="compress_selected" class="btn btn-warning" style="display: none;">
                             <i class="ti ti-minimize me-1"></i> Compress Selected
                         </button>
                     </div>
@@ -78,6 +83,7 @@
                                     <th>Category</th>
                                     <th>Resolution</th>
                                     <th>File Size</th>
+                                    <th>Status</th>
                                     <th width="100">Action</th>
                                 </tr>
                             </thead>
@@ -110,7 +116,12 @@
             var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.image-compression.index') }}",
+                ajax: {
+                    url: "{{ route('admin.image-compression.index') }}",
+                    data: function(d) {
+                        d.status = $('#status_filter').val();
+                    }
+                },
                 columns: [
                     {
                         data: 'checkbox',
@@ -147,6 +158,12 @@
                         name: 'raw_size'
                     },
                     {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -154,6 +171,13 @@
                     }
                 ],
                 order: [[6, 'desc']] // Sort by raw size descending
+            });
+
+            // Reload table on filter change
+            $('#status_filter').on('change', function() {
+                table.draw();
+                $('#select_all').prop('checked', false);
+                toggleCompressSelectedButton();
             });
 
             // Select All Checkbox
