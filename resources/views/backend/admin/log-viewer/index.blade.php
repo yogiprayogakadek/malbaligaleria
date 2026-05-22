@@ -171,7 +171,12 @@
 </div>
 @endsection
 
-@push('scripts')
+@push('css')
+<link rel="stylesheet" href="{{ asset('assets/backend/css/sweetalert2.min.css') }}">
+@endpush
+
+@push('script')
+<script src="{{ asset('assets/backend/js/sweetalert2.min.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('#btn-clear-logs').on('click', function() {
