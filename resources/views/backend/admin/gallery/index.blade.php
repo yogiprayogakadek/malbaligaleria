@@ -25,7 +25,15 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="mb-3 d-flex justify-content-end">
+                    <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-danger-subtle text-danger btn-batch-action" data-active="0" disabled>
+                                <i class="ti ti-x me-1"></i> Batch Disable
+                            </button>
+                            <button type="button" class="btn btn-success-subtle text-success btn-batch-action" data-active="1" disabled>
+                                <i class="ti ti-check me-1"></i> Batch Enable
+                            </button>
+                        </div>
                         <a href="{{ route('admin.gallery.create') }}" class="btn btn-primary">
                             <i class="ti ti-plus me-1"></i> Add New Photo
                         </a>
@@ -34,6 +42,9 @@
                         <table id="table" class="table table-striped table-bordered text-nowrap align-middle">
                             <thead>
                                 <tr>
+                                    <th style="width: 30px;" class="text-center">
+                                        <input type="checkbox" id="select-all" class="form-check-input">
+                                    </th>
                                     <th>No.</th>
                                     <th>Image</th>
                                     <th>Title</th>
@@ -56,12 +67,20 @@
     <script src="{{ asset('assets/backend/js/sweetalert2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#table').DataTable({
+            let table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
                 ajax: "{{ route('admin.gallery.index') }}",
-                columns: [{
+                columns: [
+                    {
+                        data: 'checkbox',
+                        name: 'checkbox',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    },
+                    {
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
@@ -92,6 +111,97 @@
                         searchable: false
                     },
                 ]
+            });
+
+            // Handle check/uncheck all
+            $('#select-all').on('click', function() {
+                let checked = this.checked;
+                $('.select-photo').prop('checked', checked);
+                toggleBatchButtons();
+            });
+
+            // Handle individual check/uncheck
+            $('#table').on('change', '.select-photo', function() {
+                let allChecked = $('.select-photo:checked').length === $('.select-photo').length;
+                $('#select-all').prop('checked', allChecked);
+                toggleBatchButtons();
+            });
+
+            // Enable or disable batch buttons
+            function toggleBatchButtons() {
+                let selectedCount = $('.select-photo:checked').length;
+                if (selectedCount > 0) {
+                    $('.btn-batch-action').prop('disabled', false);
+                } else {
+                    $('.btn-batch-action').prop('disabled', true);
+                    $('#select-all').prop('checked', false);
+                }
+            }
+
+            // On redraw table, reset checkboxes
+            table.on('draw', function() {
+                $('#select-all').prop('checked', false);
+                toggleBatchButtons();
+            });
+
+            // Batch disable/enable action
+            $('.btn-batch-action').on('click', function() {
+                let isActive = $(this).data('active');
+                let actionText = isActive == 1 ? 'enable' : 'disable';
+                let selectedIds = [];
+
+                $('.select-photo:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                Swal.fire({
+                    title: 'Confirm batch ' + actionText + '?',
+                    text: 'You are going to update ' + selectedIds.length + ' photos.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, update them!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('admin.gallery.batch-status') }}",
+                            type: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                ids: selectedIds,
+                                is_active: isActive
+                            },
+                            success: function(response) {
+                                toastr.success(response.message, "Success");
+                                table.ajax.reload(null, false);
+                            },
+                            error: function(xhr) {
+                                toastr.error("Failed to perform batch update.", "Error");
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Toggle individual status
+            $('#table').on('click', '.btn-toggle-status', function() {
+                let photoId = $(this).data('id');
+                let url = "{{ route('admin.gallery.toggle-active', ':id') }}".replace(':id', photoId);
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: "PUT"
+                    },
+                    success: function(response) {
+                        toastr.success(response.message, "Success");
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        toastr.error("Failed to update status.", "Error");
+                    }
+                });
             });
         });
 

@@ -212,6 +212,8 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/{id}/edit', 'edit')->name('edit');
                     Route::put('/{id}/update', 'update')->name('update');
                     Route::delete('/delete/{id}', 'delete')->name('delete');
+                    Route::put('/{id}/toggle-active', 'toggleActive')->name('toggle-active');
+                    Route::post('/batch-status', 'batchStatus')->name('batch-status');
                 });
 
             // PROMO

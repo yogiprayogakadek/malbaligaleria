@@ -23,16 +23,18 @@ class GalleryController extends Controller
 
             return DataTables::of($galleries)
                 ->addIndexColumn()
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="form-check-input select-photo" value="' . $row->id . '">';
+                })
                 ->addColumn('photo', function ($row) {
                     return '<img src="' . asset("storage/" . $row->path) . '"
                     alt="' . ($row->title ?? 'Gallery Photo') . '" class="rounded-1"
                     style="max-width: 150px; max-height: 150px; object-fit: cover;">';
                 })
                 ->addColumn('status', function ($row) {
-                    if ($row->is_active) {
-                        return '<span class="badge bg-success-subtle text-success">Active</span>';
-                    }
-                    return '<span class="badge bg-danger-subtle text-danger">Inactive</span>';
+                    $activeClass = $row->is_active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+                    $activeLabel = $row->is_active ? 'Active' : 'Inactive';
+                    return '<button type="button" class="btn-toggle-status badge ' . $activeClass . ' border-0 py-1 px-2" data-id="' . $row->id . '" style="cursor: pointer;">' . $activeLabel . '</button>';
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('admin.gallery.edit', $row->id) . '">
@@ -51,7 +53,7 @@ class GalleryController extends Controller
                     </button>
                     ';
                 })
-                ->rawColumns(['photo', 'status', 'action'])
+                ->rawColumns(['checkbox', 'photo', 'status', 'action'])
                 ->make(true);
         }
 
@@ -112,6 +114,36 @@ class GalleryController extends Controller
         $this->galleryService->update($data, $id);
 
         return redirect()->route('admin.gallery.index')->with('success', 'Gallery photo updated successfully.');
+    }
+
+    public function toggleActive($id)
+    {
+        $gallery = $this->galleryService->findById($id);
+        $newStatus = !$gallery->is_active;
+        $this->galleryService->update(['is_active' => $newStatus], $id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Gallery photo status updated successfully.',
+            'is_active' => $newStatus
+        ]);
+    }
+
+    public function batchStatus(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:galleries,id',
+            'is_active' => 'required|boolean'
+        ]);
+
+        \App\Models\Gallery::whereIn('id', $request->ids)->update(['is_active' => $request->is_active]);
+
+        $statusText = $request->is_active ? 'enabled' : 'disabled';
+        return response()->json([
+            'success' => true,
+            'message' => "Successfully {$statusText} selected photos."
+        ]);
     }
 
     public function delete($id)
