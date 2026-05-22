@@ -74,6 +74,18 @@
 @endsection
 
 @push('script')
+    @if (session('error'))
+        <script>
+            toastr.error("{{ session('error') }}", "Error", { timeOut: 3000 });
+        </script>
+    @endif
+    @if ($errors->any())
+        <script>
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}", "Validation Error", { timeOut: 3000 });
+            @endforeach
+        </script>
+    @endif
     <script>
         $(document).ready(function() {
             var allKeys = @json($availableKeys);

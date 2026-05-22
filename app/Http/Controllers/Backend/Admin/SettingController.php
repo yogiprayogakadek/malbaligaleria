@@ -193,20 +193,17 @@ class SettingController extends Controller
 
         // Logic check
         if ($isActive) {
-            // Setting this to active -> Deactivate others
+            // Setting this to active -> Deactivate others of the SAME page type
             if (!$setting->is_active) {
-                Setting::where('id', '!=', $id)->update(['is_active' => false]);
+                Setting::where('pages', $setting->pages)->where('id', '!=', $id)->update(['is_active' => false]);
             }
         } else {
             // Setting this to inactive
             if ($setting->is_active) {
-                // Check if any other is active? The requirement is "Only 1 setting active".
-                // So if this IS the active one, and we turn it off, then 0 will be active.
-                // Requirement: "ketika hanya ada 1 setting yang aktif yang user ingin menonaktifkan semuanya maka tampilkan notifikasi tidak bisa"
-                // So if this is the ONLY active one, we prevent it.
-                $otherActiveCount = Setting::where('is_active', true)->where('id', '!=', $id)->count();
+                // Check if any other is active for the SAME page type?
+                $otherActiveCount = Setting::where('pages', $setting->pages)->where('is_active', true)->where('id', '!=', $id)->count();
                 if ($otherActiveCount === 0) {
-                    return back()->with('error', 'Cannot deactivate the only active setting (Cannot disable all settings). One must be active.');
+                    return back()->with('error', 'Cannot deactivate the only active setting for ' . $setting->pages . '. At least one setting must be active.');
                 }
             }
         }
