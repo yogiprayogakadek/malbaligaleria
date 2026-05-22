@@ -67,6 +67,13 @@
                                 <span class="hide-menu">Frontend Menus</span>
                             </a>
                         </li>
+                        <!-- Media Cleanup -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.media-cleanup.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:folder-error-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Media Cleanup</span>
+                            </a>
+                        </li>
                         <!-- User -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">

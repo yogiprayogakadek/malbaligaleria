@@ -22,3 +22,26 @@ Schedule::call(function () {
 Schedule::call(function () {
     \Spatie\Activitylog\Models\Activity::where('created_at', '<', now()->subDays(90))->delete();
 })->dailyAt('01:40')->timezone('Asia/Makassar');
+
+// Weekly database backup and pruning backup files older than 30 days
+Schedule::call(function () {
+    try {
+        app(\App\Http\Controllers\Backend\Admin\BackupController::class)->run();
+    } catch (\Exception $e) {
+        logger()->error('Auto-backup failed: ' . $e->getMessage());
+    }
+
+    $disk = \Illuminate\Support\Facades\Storage::disk('local');
+    $backupPath = 'backups';
+    if ($disk->exists($backupPath)) {
+        $files = $disk->files($backupPath);
+        foreach ($files as $file) {
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'sql') {
+                $lastModified = $disk->lastModified($file);
+                if (time() - $lastModified > 30 * 24 * 60 * 60) {
+                    $disk->delete($file);
+                }
+            }
+        }
+    }
+})->weeklyOn(7, '02:00')->timezone('Asia/Makassar');

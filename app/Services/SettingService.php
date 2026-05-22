@@ -84,7 +84,10 @@ class SettingService
                 'contact_phone' => 'telp',
                 'social_facebook' => 'text',
                 'social_instagram' => 'text',
-                'logo' => 'file'
+                'logo' => 'file',
+                'announcement_active' => 'select',
+                'announcement_text' => 'text',
+                'announcement_type' => 'select'
             ]
         ];
     }

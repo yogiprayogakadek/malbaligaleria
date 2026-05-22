@@ -229,6 +229,7 @@
     </button>
 
     {{-- Header --}}
+    @include('frontend.partials.announcement_banner')
     <header>
         <div class="header-left">
             <a href="{{ url('/') }}" class="header-logo-link header-logo-circle">

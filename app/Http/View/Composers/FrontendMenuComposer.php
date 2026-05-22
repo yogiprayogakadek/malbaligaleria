@@ -34,5 +34,21 @@ class FrontendMenuComposer
             });
 
         $view->with('frontendMenus', $menus);
+
+        // Fetch active announcement settings
+        $othersSetting = \App\Models\Setting::where('pages', 'others')->where('is_active', true)->first();
+        $announcement = $othersSetting && isset($othersSetting->payload['announcement_active']) && $othersSetting->payload['announcement_active'] == '1'
+            ? [
+                'active' => true,
+                'text' => $othersSetting->payload['announcement_text'] ?? '',
+                'type' => $othersSetting->payload['announcement_type'] ?? 'info',
+            ]
+            : [
+                'active' => false,
+                'text' => '',
+                'type' => 'info',
+            ];
+
+        $view->with('globalAnnouncement', $announcement);
     }
 }

@@ -44,6 +44,7 @@ use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\StatusUserController;
 use App\Http\Controllers\Backend\Admin\LogViewerController;
 use App\Http\Controllers\Backend\Admin\BackupController;
+use App\Http\Controllers\Backend\Admin\MediaCleanupController;
 
 // FRONTEND
 Route::controller(LandingPageController::class)->name('frontend.')->group(function () {
@@ -264,6 +265,17 @@ Route::controller(AdminDashboardController::class)
                     Route::post('/run', 'run')->name('run');
                     Route::get('/download/{filename}', 'download')->name('download');
                     Route::delete('/delete/{filename}', 'delete')->name('delete');
+                });
+
+            // Media Cleanup (RESTRICTED TO SUPERUSER)
+            Route::controller(MediaCleanupController::class)
+                ->middleware('superuser')
+                ->prefix('/media-cleanup')
+                ->name('media-cleanup.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::delete('/destroy', 'destroy')->name('destroy');
+                    Route::delete('/destroy-mass', 'destroyMass')->name('destroy-mass');
                 });
 
             // Setting (RESTRICTED TO SUPERUSER)

@@ -79,6 +79,9 @@ class SettingController extends Controller
                 'social_facebook' => 'nullable|url',
                 'social_instagram' => 'nullable|url',
                 'logo' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048',
+                'announcement_active' => 'nullable|in:0,1',
+                'announcement_text' => 'nullable|string',
+                'announcement_type' => 'nullable|string|in:info,warning,danger,success,primary',
             ]);
         } elseif (in_array($request->pages, ['mal directory', 'event', 'promo'])) {
             $validate = array_merge($validate, [
