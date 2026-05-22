@@ -39,7 +39,21 @@
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
                             <span class="hide-menu">System Admin</span>
                         </li>
-                        <!-- Users -->
+                        <!-- Activity Logs -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.activity.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:history-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Activity Logs</span>
+                            </a>
+                        </li>
+                        <!-- Frontend Menu Visibility -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.menu.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:menu-dots-bold-duotone"></iconify-icon>
+                                <span class="hide-menu">Frontend Menus</span>
+                            </a>
+                        </li>
+                        <!-- User -->
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:user-circle-line-duotone"></iconify-icon>
@@ -60,25 +74,11 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Frontend Menu Visibility -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ route('admin.menu.index') }}" aria-expanded="false">
-                                <iconify-icon icon="solar:menu-dots-bold-duotone"></iconify-icon>
-                                <span class="hide-menu">Frontend Menus</span>
-                            </a>
-                        </li>
                         <!-- Visitor Logs -->
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="{{ route('admin.visitors.index') }}" aria-expanded="false">
                                 <iconify-icon icon="solar:graph-up-line-duotone"></iconify-icon>
                                 <span class="hide-menu">Visitor Logs</span>
-                            </a>
-                        </li>
-                        <!-- Activity Logs -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ route('admin.activity.index') }}" aria-expanded="false">
-                                <iconify-icon icon="solar:history-line-duotone"></iconify-icon>
-                                <span class="hide-menu">Activity Logs</span>
                             </a>
                         </li>
                     @endrole
@@ -104,6 +104,90 @@
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.category.create') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">Create</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Events -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Events</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.event.index') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">List</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.event.create') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">Create</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link has-arrow {{ request()->routeIs('admin.event.photo*') ? 'active' : '' }}"
+                                        href="javascript:void(0)" aria-expanded="false">
+                                        <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
+                                        <span class="hide-menu">Photo</span>
+                                    </a>
+                                    <ul aria-expanded="false" class="collapse two-level">
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('admin.event.photo.index') }}">
+                                                <span class="icon-small"></span>
+                                                <span class="hide-menu">List</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('admin.event.photo.create') }}">
+                                                <span class="icon-small"></span>
+                                                <span class="hide-menu">Create</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Gallery -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Gallery</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.gallery.index') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">List</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.gallery.create') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">Create</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Promo -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:tag-price-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Promo</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.promo.index') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">List</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.promo.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
@@ -155,90 +239,6 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- Events -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
-                                <span class="hide-menu">Events</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.event.index') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">List</span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.event.create') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">Create</span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link has-arrow {{ request()->routeIs('admin.event.photo*') ? 'active' : '' }}"
-                                        href="javascript:void(0)" aria-expanded="false">
-                                        <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
-                                        <span class="hide-menu">Photo</span>
-                                    </a>
-                                    <ul aria-expanded="false" class="collapse two-level">
-                                        <li class="sidebar-item">
-                                            <a class="sidebar-link" href="{{ route('admin.event.photo.index') }}">
-                                                <span class="icon-small"></span>
-                                                <span class="hide-menu">List</span>
-                                            </a>
-                                        </li>
-                                        <li class="sidebar-item">
-                                            <a class="sidebar-link" href="{{ route('admin.event.photo.create') }}">
-                                                <span class="icon-small"></span>
-                                                <span class="hide-menu">Create</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- Promo -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:tag-price-line-duotone"></iconify-icon>
-                                <span class="hide-menu">Promo</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.promo.index') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">List</span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.promo.create') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">Create</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- Gallery -->
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
-                                <span class="hide-menu">Gallery</span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.gallery.index') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">List</span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="{{ route('admin.gallery.create') }}">
-                                        <span class="icon-small"></span>
-                                        <span class="hide-menu">Create</span>
-                                    </a>
                                 </li>
                             </ul>
                         </li>
