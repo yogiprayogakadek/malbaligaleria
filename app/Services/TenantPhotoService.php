@@ -119,8 +119,8 @@ class TenantPhotoService
             if (!empty($t->path)) {
                 $this->deleteImage($t->path);
             }
-            return $this->tenantPhotoRepository->delete($tenantId);
         }
+        return $this->tenantPhotoRepository->delete($tenantId);
     }
 
     public function uploadImage(UploadedFile $file)
