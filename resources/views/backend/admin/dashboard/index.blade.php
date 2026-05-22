@@ -523,26 +523,57 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title mb-3">Visitor History (Monthly Summary)</h5>
-                    <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-                        <table class="table table-striped table-hover align-middle mb-0">
-                            <thead class="table-light sticky-top" style="z-index: 1;">
+                    <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light sticky-top" style="z-index: 2;">
                                 <tr>
                                     <th>Period</th>
-                                    <th class="text-end">Visits Count</th>
-                                    <th class="text-center">Status</th>
+                                    <th class="text-end">Total Visits</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($monthlyVisitorsList as $item)
-                                <tr>
-                                    <td><strong>{{ $item->period }}</strong></td>
-                                    <td class="text-end font-monospace fw-semibold">{{ number_format($item->visit_count) }}</td>
+                                @foreach($groupedVisits as $monthKey => $monthData)
+                                <tr class="table-light-subtle">
+                                    <td>
+                                        <strong>{{ $monthData['name'] }}</strong>
+                                    </td>
+                                    <td class="text-end font-monospace fw-bold text-primary">
+                                        {{ number_format($monthData['total']) }}
+                                    </td>
                                     <td class="text-center">
-                                        @if($item->status == 'Active')
-                                            <span class="badge bg-success-subtle text-success">Running</span>
-                                        @else
-                                            <span class="badge bg-secondary-subtle text-secondary">Archived</span>
-                                        @endif
+                                        <button class="btn btn-xs btn-outline-primary py-1 px-2 fs-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $monthKey }}" aria-expanded="false" style="font-size: 11px;">
+                                            <i class="ti ti-chevron-down"></i> Details
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="collapse" id="collapse-{{ $monthKey }}">
+                                    <td colspan="3" class="p-0 border-0">
+                                        <div class="p-3 bg-light-subtle rounded-3 my-2 border">
+                                            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                                <table class="table table-sm table-bordered mb-0 bg-white">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th class="text-end">Visits</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($monthData['days'] as $day)
+                                                        <tr class="{{ isset($day->is_today) && $day->is_today ? 'table-warning text-dark' : '' }}">
+                                                            <td class="small py-1">
+                                                                @if(isset($day->is_today) && $day->is_today)
+                                                                    <span class="badge bg-danger py-1 px-1 me-1 text-white" style="font-size: 9px;">LIVE</span>
+                                                                @endif
+                                                                {{ $day->date }}
+                                                            </td>
+                                                            <td class="text-end font-monospace small py-1">{{ number_format($day->count) }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach

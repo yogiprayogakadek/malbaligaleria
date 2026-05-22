@@ -39,25 +39,37 @@ class DashboardController extends Controller
         // Self-healing visitor log archiving
         $firstLog = \App\Models\VisitorLog::orderBy('created_at', 'asc')->first();
         if ($firstLog) {
-            $start = Carbon::parse($firstLog->created_at)->startOfMonth();
-            $end = Carbon::now()->subMonth()->startOfMonth();
-            $current = $start->copy();
-            while ($current->lessThanOrEqualTo($end)) {
-                $year = $current->year;
-                $month = $current->month;
-                
-                $exists = \App\Models\MonthlyVisitor::where('year', $year)->where('month', $month)->exists();
-                if (!$exists) {
-                    $count = \App\Models\VisitorLog::whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month)
-                        ->count();
-                    \App\Models\MonthlyVisitor::create([
-                        'year' => $year,
-                        'month' => $month,
-                        'visit_count' => $count
-                    ]);
+            $start = Carbon::parse($firstLog->created_at)->startOfDay();
+            $end = Carbon::yesterday()->startOfDay();
+
+            // Only run self-healing if there are days to archive
+            if ($start->lessThanOrEqualTo($end)) {
+                // Get all existing dates in the daily_visitors table
+                $existingDates = \App\Models\DailyVisitor::whereBetween('date', [$start->toDateString(), $end->toDateString()])
+                    ->pluck('date')
+                    ->map(fn($d) => Carbon::parse($d)->toDateString())
+                    ->toArray();
+
+                $current = $start->copy();
+                $insertData = [];
+
+                while ($current->lessThanOrEqualTo($end)) {
+                    $dateStr = $current->toDateString();
+                    if (!in_array($dateStr, $existingDates)) {
+                        $count = \App\Models\VisitorLog::whereDate('created_at', $dateStr)->count();
+                        $insertData[] = [
+                            'date' => $dateStr,
+                            'visit_count' => $count,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                    $current->addDay();
                 }
-                $current->addMonth();
+
+                if (!empty($insertData)) {
+                    \App\Models\DailyVisitor::insert($insertData);
+                }
             }
         }
 
@@ -88,30 +100,62 @@ class DashboardController extends Controller
             $monthlyData['events'][]  = Event::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             $monthlyData['promos'][]  = Promo::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             
-            // Get visitor count (historical from table, or live if current month)
+            // Get visitor count (historical from daily table, or live if current month)
             if ($month->year === $now->year && $month->month === $now->month) {
                 $monthlyData['visitors'][] = \App\Models\VisitorLog::whereYear('created_at', $month->year)->whereMonth('created_at', $month->month)->count();
             } else {
-                $monthlyVisitor = \App\Models\MonthlyVisitor::where('year', $month->year)->where('month', $month->month)->first();
-                $monthlyData['visitors'][] = $monthlyVisitor ? $monthlyVisitor->visit_count : 0;
+                $monthlyData['visitors'][] = (int) \App\Models\DailyVisitor::whereYear('date', $month->year)->whereMonth('date', $month->month)->sum('visit_count');
             }
         }
 
-        // Build a complete monthly visitor list including the running total of the current month
-        $monthlyVisitorsList = \App\Models\MonthlyVisitor::orderBy('year', 'desc')->orderBy('month', 'desc')->get()->map(function($item) {
-            return (object) [
-                'period' => Carbon::createFromDate($item->year, $item->month, 1)->format('F Y'),
-                'visit_count' => $item->visit_count,
-                'status' => 'Archived'
-            ];
-        })->toArray();
+        // Fetch all daily visits ordered by date desc
+        $dailyVisits = \App\Models\DailyVisitor::orderBy('date', 'desc')->get();
 
-        // Prepend current month running total
-        $currentMonthCount = \App\Models\VisitorLog::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->count();
-        array_unshift($monthlyVisitorsList, (object) [
-            'period' => $now->format('F Y') . ' (Current)',
-            'visit_count' => $currentMonthCount,
-            'status' => 'Active'
+        // Also get today's live visitor count to include
+        $todayDate = $now->toDateString();
+        $todayCount = \App\Models\VisitorLog::whereDate('created_at', $todayDate)->count();
+
+        // Group daily visits by year and month
+        $groupedVisits = [];
+        foreach ($dailyVisits as $visit) {
+            $carbonDate = Carbon::parse($visit->date);
+            $monthKey = $carbonDate->format('Y-m');
+            $monthName = $carbonDate->format('F Y');
+
+            if (!isset($groupedVisits[$monthKey])) {
+                $groupedVisits[$monthKey] = [
+                    'name' => $monthName,
+                    'total' => 0,
+                    'days' => []
+                ];
+            }
+
+            $groupedVisits[$monthKey]['total'] += $visit->visit_count;
+            $groupedVisits[$monthKey]['days'][] = (object) [
+                'date' => $carbonDate->format('d M Y'),
+                'count' => $visit->visit_count,
+                'is_today' => false
+            ];
+        }
+
+        // Add today's live counts to the current month group
+        $todayCarbon = Carbon::today();
+        $currentMonthKey = $todayCarbon->format('Y-m');
+        $currentMonthName = $todayCarbon->format('F Y');
+        
+        if (!isset($groupedVisits[$currentMonthKey])) {
+            $groupedVisits[$currentMonthKey] = [
+                'name' => $currentMonthName,
+                'total' => 0,
+                'days' => []
+            ];
+        }
+        
+        $groupedVisits[$currentMonthKey]['total'] += $todayCount;
+        array_unshift($groupedVisits[$currentMonthKey]['days'], (object) [
+            'date' => $todayCarbon->format('d M Y') . ' (Today)',
+            'count' => $todayCount,
+            'is_today' => true
         ]);
 
         // Growth
@@ -154,7 +198,7 @@ class DashboardController extends Controller
             'totalUsers', 'adminUsers', 'tenantUsers',
             'totalVacancies', 'activeVacancies', 'totalApplications', 'newApplications',
             'recentTenants', 'recentEvents', 'recentPromos',
-            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'monthlyVisitorsList'
+            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'groupedVisits'
         ));
     }
 }

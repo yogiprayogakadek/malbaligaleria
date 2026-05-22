@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MonthlyVisitor extends Model
+class DailyVisitor extends Model
 {
     protected $fillable = [
-        'year',
-        'month',
+        'date',
         'visit_count',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
     ];
 }
