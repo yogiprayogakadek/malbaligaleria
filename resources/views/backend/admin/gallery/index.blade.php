@@ -33,6 +33,9 @@
                             <button type="button" class="btn btn-success-subtle text-success btn-batch-action" data-active="1" disabled>
                                 <i class="ti ti-check me-1"></i> Batch Enable
                             </button>
+                            <button type="button" class="btn btn-warning-subtle text-warning btn-batch-clear-title" disabled>
+                                <i class="ti ti-trash-x me-1"></i> Batch Clear Title
+                            </button>
                         </div>
                         <a href="{{ route('admin.gallery.create') }}" class="btn btn-primary">
                             <i class="ti ti-plus me-1"></i> Add New Photo
@@ -131,9 +134,9 @@
             function toggleBatchButtons() {
                 let selectedCount = $('.select-photo:checked').length;
                 if (selectedCount > 0) {
-                    $('.btn-batch-action').prop('disabled', false);
+                    $('.btn-batch-action, .btn-batch-clear-title').prop('disabled', false);
                 } else {
-                    $('.btn-batch-action').prop('disabled', true);
+                    $('.btn-batch-action, .btn-batch-clear-title').prop('disabled', true);
                     $('#select-all').prop('checked', false);
                 }
             }
@@ -169,6 +172,41 @@
                                 _token: "{{ csrf_token() }}",
                                 ids: selectedIds,
                                 is_active: isActive
+                            },
+                            success: function(response) {
+                                toastr.success(response.message, "Success");
+                                table.ajax.reload(null, false);
+                            },
+                            error: function(xhr) {
+                                toastr.error("Failed to perform batch update.", "Error");
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Batch clear title action
+            $('.btn-batch-clear-title').on('click', function() {
+                let selectedIds = [];
+
+                $('.select-photo:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                Swal.fire({
+                    title: 'Clear all titles?',
+                    text: 'You are going to clear the title/caption of ' + selectedIds.length + ' selected photos.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, clear them!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('admin.gallery.batch-clear-title') }}",
+                            type: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                ids: selectedIds
                             },
                             success: function(response) {
                                 toastr.success(response.message, "Success");

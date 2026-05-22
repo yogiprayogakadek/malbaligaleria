@@ -90,7 +90,7 @@ class GalleryController extends Controller
             if ($request->title) {
                 $currentTitle = count($files) > 1 ? $request->title . ' - ' . ($index + 1) : $request->title;
             } else {
-                $currentTitle = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $currentTitle = null;
             }
 
             $data = [
@@ -163,6 +163,21 @@ class GalleryController extends Controller
         return response()->json([
             'success' => true,
             'message' => "Successfully {$statusText} selected photos."
+        ]);
+    }
+
+    public function batchClearTitle(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:galleries,id',
+        ]);
+
+        \App\Models\Gallery::whereIn('id', $request->ids)->update(['title' => null]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully cleared titles for selected photos.'
         ]);
     }
 
