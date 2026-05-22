@@ -19,9 +19,19 @@ class GalleryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $galleries = $this->galleryService->getAll();
+            $query = \App\Models\Gallery::query();
 
-            return DataTables::of($galleries)
+            if ($request->filled('status')) {
+                if ($request->status === 'active') {
+                    $query->where('is_active', true);
+                } elseif ($request->status === 'inactive') {
+                    $query->where('is_active', false);
+                }
+            }
+
+            $query->orderBy('sort_order', 'asc')->orderBy('id', 'desc');
+
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="form-check-input select-photo" value="' . $row->id . '">';

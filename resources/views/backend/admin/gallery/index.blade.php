@@ -26,7 +26,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 align-items-center flex-wrap">
                             <button type="button" class="btn btn-danger-subtle text-danger btn-batch-action" data-active="0" disabled>
                                 <i class="ti ti-x me-1"></i> Batch Disable
                             </button>
@@ -39,6 +39,15 @@
                             <button type="button" class="btn btn-info-subtle text-info btn-batch-clear-sort" disabled>
                                 <i class="ti ti-arrows-sort me-1"></i> Batch Reset Sort Order
                             </button>
+
+                            <div class="ms-md-3 d-flex align-items-center gap-2">
+                                <label for="filter-status" class="form-label mb-0 text-nowrap fw-semibold fs-2">Filter Status:</label>
+                                <select id="filter-status" class="form-select form-select-sm" style="width: 140px; cursor: pointer;">
+                                    <option value="all">All / Semua</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
                         </div>
                         <a href="{{ route('admin.gallery.create') }}" class="btn btn-primary">
                             <i class="ti ti-plus me-1"></i> Add New Photo
@@ -77,7 +86,12 @@
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
-                ajax: "{{ route('admin.gallery.index') }}",
+                ajax: {
+                    url: "{{ route('admin.gallery.index') }}",
+                    data: function(d) {
+                        d.status = $('#filter-status').val();
+                    }
+                },
                 columns: [
                     {
                         data: 'checkbox',
@@ -117,6 +131,11 @@
                         searchable: false
                     },
                 ]
+            });
+
+            // Trigger table reload on filter status change
+            $('#filter-status').on('change', function() {
+                table.ajax.reload();
             });
 
             // Handle check/uncheck all
