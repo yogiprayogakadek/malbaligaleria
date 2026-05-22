@@ -25,6 +25,9 @@ class SettingController extends Controller
 
             return DataTables::of($settings)
                 ->addIndexColumn()
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="checkbox" data-id="' . $row->id . '">';
+                })
                 ->editColumn('payload', function ($row) {
                     return \Illuminate\Support\Str::limit(json_encode($row->payload), 50);
                 })
@@ -40,7 +43,7 @@ class SettingController extends Controller
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-delete" data-id="' . $row->id . '"><i class="ti ti-trash"></i></button>';
                     return $btn;
                 })
-                ->rawColumns(['is_active', 'action'])
+                ->rawColumns(['checkbox', 'is_active', 'action'])
                 ->make(true);
         }
 
@@ -244,5 +247,17 @@ class SettingController extends Controller
     {
         Setting::findOrFail($id)->delete();
         return response()->json(['success' => 'Setting deleted successfully.']);
+    }
+
+    public function destroySelected(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer'
+        ]);
+
+        Setting::whereIn('id', $request->ids)->delete();
+
+        return response()->json(['success' => 'Selected settings deleted successfully.']);
     }
 }
