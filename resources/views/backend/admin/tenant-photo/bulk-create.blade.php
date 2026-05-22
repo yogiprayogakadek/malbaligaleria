@@ -87,6 +87,15 @@
                         id="bulkForm">
                         @csrf
 
+                        {{-- Compress Checkbox --}}
+                        <div class="mb-3">
+                            <input type="hidden" name="compress_image_submitted" value="1">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="compress_image" id="compress_image" value="1" checked>
+                                <label class="form-check-label fw-bold" for="compress_image">Compress images on upload</label>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle" id="bulkTable">
                                 <thead class="table-light">

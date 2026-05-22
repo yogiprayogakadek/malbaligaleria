@@ -168,6 +168,23 @@ class DashboardController extends Controller
             'is_today' => true
         ]);
 
+        // Daily visits for last 15 days (line chart)
+        $last15Days = ['labels' => [], 'data' => []];
+        for ($i = 14; $i >= 0; $i--) {
+            $targetDate = Carbon::today()->subDays($i);
+            $targetDateStr = $targetDate->toDateString();
+            
+            $archived = \App\Models\DailyVisitor::where('date', $targetDateStr)->first();
+            if ($archived) {
+                $count = $archived->visit_count;
+            } else {
+                $count = \App\Models\VisitorLog::whereDate('created_at', $targetDateStr)->count();
+            }
+            
+            $last15Days['labels'][] = $targetDate->format('d M');
+            $last15Days['data'][] = $count;
+        }
+
         // Growth
         $lastMonth = Carbon::now()->subMonth();
         $thisMonthEvents = Event::whereYear('created_at', $now->year)->whereMonth('created_at', $now->month)->count();
@@ -208,7 +225,7 @@ class DashboardController extends Controller
             'totalUsers', 'adminUsers', 'tenantUsers',
             'totalVacancies', 'activeVacancies', 'totalApplications', 'newApplications',
             'recentTenants', 'recentEvents', 'recentPromos',
-            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'groupedVisits'
+            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'groupedVisits', 'last15Days'
         ));
     }
 }

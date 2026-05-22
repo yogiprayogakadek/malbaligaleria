@@ -87,7 +87,7 @@ class CareerController extends Controller
         try {
             Mail::to($application->email)->send(new JobApplicationConfirmation($application));
             
-            $hrEmail = env('HR_NOTIFICATION_EMAIL', config('mail.from.address'));
+            $hrEmail = config('mail.hr_notification_email', env('HR_NOTIFICATION_EMAIL', config('mail.from.address')));
             Mail::to($hrEmail)->send(new NewJobApplicationNotification($application));
         } catch (\Exception $e) {
             // Log email failure but don't fail the application

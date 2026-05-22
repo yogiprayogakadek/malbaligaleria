@@ -35,6 +35,24 @@ class AppServiceProvider extends ServiceProvider
         );
         Schema::defaultStringLength(191);
 
+        if (app()->bound('db') && Schema::hasTable('settings')) {
+            $mailSetting = \App\Models\Setting::where('pages', 'mail')->where('is_active', true)->first();
+            if ($mailSetting && is_array($mailSetting->payload)) {
+                $payload = $mailSetting->payload;
+                config([
+                    'mail.mailers.smtp.transport' => $payload['mail_mailer'] ?? config('mail.mailers.smtp.transport'),
+                    'mail.mailers.smtp.host'      => $payload['mail_host'] ?? config('mail.mailers.smtp.host'),
+                    'mail.mailers.smtp.port'      => $payload['mail_port'] ?? config('mail.mailers.smtp.port'),
+                    'mail.mailers.smtp.username'  => $payload['mail_username'] ?? config('mail.mailers.smtp.username'),
+                    'mail.mailers.smtp.password'  => $payload['mail_password'] ?? config('mail.mailers.smtp.password'),
+                    'mail.mailers.smtp.encryption'=> $payload['mail_encryption'] ?? config('mail.mailers.smtp.encryption'),
+                    'mail.from.address'           => $payload['mail_from_address'] ?? config('mail.from.address'),
+                    'mail.from.name'              => $payload['mail_from_name'] ?? config('mail.from.name'),
+                    'mail.hr_notification_email'  => $payload['hr_notification_email'] ?? env('HR_NOTIFICATION_EMAIL'),
+                ]);
+            }
+        }
+
         \Illuminate\Support\Facades\View::composer(
             [
                 'frontend.partials.footer_v2',

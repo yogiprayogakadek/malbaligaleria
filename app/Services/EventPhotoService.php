@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\EventPhotoRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageOptimizer;
 
 class EventPhotoService
 {
@@ -122,6 +123,7 @@ class EventPhotoService
     public function uploadImage(UploadedFile $file)
     {
         $path = $file->store('event_images', 'public');
+        ImageOptimizer::optimize($path);
         return $path;
     }
 

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\PromoRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageOptimizer;
 
 class PromoService
 {
@@ -81,6 +82,7 @@ class PromoService
     public function uploadImage(UploadedFile $file)
     {
         $path = $file->store('promo_images', 'public');
+        ImageOptimizer::optimize($path);
         return $path;
     }
 

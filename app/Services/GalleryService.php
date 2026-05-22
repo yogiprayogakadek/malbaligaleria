@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\GalleryRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageOptimizer;
 
 class GalleryService
 {
@@ -66,7 +67,9 @@ class GalleryService
 
     public function uploadImage(UploadedFile $file)
     {
-        return $file->store('gallery_images', 'public');
+        $path = $file->store('gallery_images', 'public');
+        ImageOptimizer::optimize($path);
+        return $path;
     }
 
     public function deleteImage(string $imagePath)

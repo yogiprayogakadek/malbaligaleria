@@ -45,3 +45,34 @@ Schedule::call(function () {
         }
     }
 })->weeklyOn(7, '02:00')->timezone('Asia/Makassar');
+
+// Clean up orphaned storage media files weekly
+Schedule::call(function () {
+    $usedFiles = collect();
+    
+    \App\Models\Tenant::whereNotNull('logo')->pluck('logo')->each(fn($p) => $usedFiles->push($p));
+    \App\Models\TenantPhoto::pluck('path')->each(fn($p) => $usedFiles->push($p));
+    \App\Models\Event::whereNotNull('banner')->pluck('banner')->each(fn($p) => $usedFiles->push($p));
+    \App\Models\EventPhoto::pluck('path')->each(fn($p) => $usedFiles->push($p));
+    \App\Models\Promo::whereNotNull('banner')->pluck('banner')->each(fn($p) => $usedFiles->push($p));
+    \App\Models\Gallery::pluck('path')->each(fn($p) => $usedFiles->push($p));
+    
+    $usedFiles = $usedFiles->map(fn($p) => strtolower(trim($p)))->unique()->filter()->toArray();
+    
+    $disk = \Illuminate\Support\Facades\Storage::disk('public');
+    $directories = ['tenants', 'tenant_photos', 'events', 'event_photos', 'promos', 'galleries'];
+    
+    foreach ($directories as $dir) {
+        if ($disk->exists($dir)) {
+            $files = $disk->allFiles($dir);
+            foreach ($files as $file) {
+                $normalized = strtolower(trim($file));
+                if (!in_array($normalized, $usedFiles)) {
+                    $disk->delete($file);
+                    logger()->info("Scheduled Cleanup: Deleted orphaned file: " . $file);
+                }
+            }
+        }
+    }
+})->weeklyOn(7, '02:30')->timezone('Asia/Makassar');
+

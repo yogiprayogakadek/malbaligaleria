@@ -34,6 +34,17 @@
                             </div>
                         </div>
 
+                        {{-- Compress Checkbox --}}
+                        <div class="mb-4 row align-items-center">
+                            <div class="col-sm-12">
+                                <input type="hidden" name="compress_image_submitted" value="1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="compress_image" id="compress_image" value="1" checked>
+                                    <label class="form-check-label" for="compress_image">Compress image on upload</label>
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Title --}}
                         <div class="mb-4 row align-items-center">
                             <label for="title" class="form-label col-sm-3 col-form-label">Title / Caption (Optional)</label>

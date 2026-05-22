@@ -88,6 +88,17 @@ class SettingService
                 'announcement_active' => 'select',
                 'announcement_text' => 'text',
                 'announcement_type' => 'select'
+            ],
+            'mail' => [
+                'mail_mailer' => 'text',
+                'mail_host' => 'text',
+                'mail_port' => 'number',
+                'mail_username' => 'text',
+                'mail_password' => 'text',
+                'mail_encryption' => 'text',
+                'mail_from_address' => 'email',
+                'mail_from_name' => 'text',
+                'hr_notification_email' => 'email',
             ]
         ];
     }

@@ -104,6 +104,18 @@ class SettingController extends Controller
                 'enable_download' => 'required|in:0,1',
                 'enable_share' => 'required|in:0,1',
             ]);
+        } elseif ($request->pages == 'mail') {
+            $validate = array_merge($validate, [
+                'mail_mailer' => 'required|string',
+                'mail_host' => 'required|string',
+                'mail_port' => 'required|integer',
+                'mail_username' => 'required|string',
+                'mail_password' => 'required|string',
+                'mail_encryption' => 'nullable|string',
+                'mail_from_address' => 'required|email',
+                'mail_from_name' => 'required|string',
+                'hr_notification_email' => 'required|email',
+            ]);
         }
 
         $request->validate($validate);

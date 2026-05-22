@@ -517,6 +517,18 @@
         </div>
     </div>
 
+    {{-- === DAILY VISITOR ANALYTICS === --}}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Daily Visitor Analytics (Last 15 Days)</h5>
+                    <canvas id="dailyVisitorChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- === VISITOR HISTORY === --}}
     <div class="row mt-4">
         <div class="col-md-6 col-12 mb-3 mb-md-0">
@@ -692,6 +704,38 @@
                     backgroundColor: 'rgba(0, 133, 219, 0.2)',
                     borderWidth: 2,
                     borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+
+    const dailyVisitorCtx = document.getElementById('dailyVisitorChart').getContext('2d');
+    new Chart(dailyVisitorCtx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($last15Days['labels']) !!},
+            datasets: [
+                {
+                    label: 'Visits',
+                    data: {!! json_encode($last15Days['data']) !!},
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgb(59, 130, 246)',
+                    pointRadius: 4
                 }
             ]
         },

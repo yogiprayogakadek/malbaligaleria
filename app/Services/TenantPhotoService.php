@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\TenantPhotoRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageOptimizer;
 
 class TenantPhotoService
 {
@@ -126,6 +127,7 @@ class TenantPhotoService
     public function uploadImage(UploadedFile $file)
     {
         $path = $file->store('tenant_images', 'public');
+        ImageOptimizer::optimize($path);
         return $path;
     }
 
