@@ -296,6 +296,12 @@
                                         <span class="hide-menu">Applications</span>
                                     </a>
                                 </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.career.email-logs.index') }}">
+                                        <iconify-icon icon="solar:letter-line-duotone" class="fs-4 me-1"></iconify-icon>
+                                        <span class="hide-menu">Email Logs</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endrole

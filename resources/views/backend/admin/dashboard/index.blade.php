@@ -53,6 +53,34 @@
         </div>
     </div>
 
+    {{-- === DATE RANGE FILTER === --}}
+    <div class="card mb-4 border-0 shadow-sm bg-light-subtle" style="border-radius:12px;">
+        <div class="card-body p-3">
+            <form action="{{ route('admin.dashboard') }}" method="GET" class="row g-2 align-items-center">
+                <div class="col-12 col-md-auto d-flex align-items-center">
+                    <span class="fw-semibold text-dark me-2 small"><i class="ti ti-filter me-1 text-primary"></i>Filter Date Range:</span>
+                </div>
+                <div class="col-6 col-md-auto">
+                    <input type="date" name="start_date" class="form-control form-control-sm" value="{{ request('start_date') }}">
+                </div>
+                <div class="col-6 col-md-auto">
+                    <span class="text-muted mx-1 small d-none d-md-inline">to</span>
+                    <input type="date" name="end_date" class="form-control form-control-sm" value="{{ request('end_date') }}">
+                </div>
+                <div class="col-12 col-md-auto d-flex gap-2 mt-2 mt-md-0">
+                    <button type="submit" class="btn btn-sm btn-primary px-3">
+                        <i class="ti ti-search me-1"></i> Apply
+                    </button>
+                    @if(request()->anyFilled(['start_date', 'end_date']))
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-secondary px-3">
+                            <i class="ti ti-rotate me-1"></i> Reset
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+
     {{-- === MAIN STATS === --}}
     <div class="row">
         <div class="col-xxl-2 col-md-4 col-sm-6">
@@ -522,7 +550,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Daily Visitor Analytics (Last 15 Days)</h5>
+                    <h5 class="card-title mb-3">
+                        @if(request()->anyFilled(['start_date', 'end_date']))
+                            Daily Visitor Analytics (Range: {{ \Carbon\Carbon::parse(request('start_date'))->format('d M Y') }} - {{ \Carbon\Carbon::parse(request('end_date'))->format('d M Y') }})
+                        @else
+                            Daily Visitor Analytics (Last 15 Days)
+                        @endif
+                    </h5>
                     <canvas id="dailyVisitorChart" height="80"></canvas>
                 </div>
             </div>

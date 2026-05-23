@@ -61,4 +61,15 @@ class JobApplication extends Model
             default     => 'bg-secondary',
         };
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(JobApplicationReview::class, 'job_application_id')->latest();
+    }
+
+    public function getAverageRatingAttribute(): ?float
+    {
+        $avg = $this->reviews()->whereNotNull('rating')->avg('rating');
+        return $avg ? round($avg, 1) : null;
+    }
 }

@@ -78,5 +78,26 @@ class AppServiceProvider extends ServiceProvider
             ],
             \App\Http\View\Composers\FrontendMenuComposer::class
         );
+
+        // Global listener to log all sent emails
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Mail\Events\MessageSent::class,
+            function (\Illuminate\Mail\Events\MessageSent $event) {
+                try {
+                    $recipients = collect($event->message->getTo())->map(fn($addr) => $addr->toString())->implode(', ');
+                    $subject = $event->message->getSubject();
+                    $body = $event->message->getHtmlBody() ?: $event->message->getTextBody();
+                    
+                    \App\Models\EmailLog::create([
+                        'recipient' => $recipients,
+                        'subject' => $subject,
+                        'body' => $body,
+                        'status' => 'sent',
+                    ]);
+                } catch (\Exception $e) {
+                    logger()->error('Failed to log sent email: ' . $e->getMessage());
+                }
+            }
+        );
     }
 }

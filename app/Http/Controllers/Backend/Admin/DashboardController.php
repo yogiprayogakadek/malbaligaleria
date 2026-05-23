@@ -13,22 +13,42 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $now = Carbon::now();
 
+        $startDate = null;
+        $endDate = null;
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            try {
+                $startDate = Carbon::parse($request->start_date)->startOfDay();
+                $endDate = Carbon::parse($request->end_date)->endOfDay();
+            } catch (\Exception $e) {
+                // Ignore parsing errors
+            }
+        }
+
         // 1. HR DASHBOARD (ONLY CAREER DATA)
         if ($user->hasRole('hr')) {
-            $totalVacancies    = \App\Models\JobVacancy::count();
-            $activeVacancies   = \App\Models\JobVacancy::where('is_active', true)->count();
-            $totalApplications = \App\Models\JobApplication::count();
-            $newApplications   = \App\Models\JobApplication::where('status', 'new')->count();
+            $vacancyQuery = \App\Models\JobVacancy::query();
+            $applicationQuery = \App\Models\JobApplication::query();
+            
+            if ($startDate && $endDate) {
+                $vacancyQuery->whereBetween('created_at', [$startDate, $endDate]);
+                $applicationQuery->whereBetween('created_at', [$startDate, $endDate]);
+            }
+            
+            $totalVacancies    = $vacancyQuery->count();
+            $activeVacancies   = (clone $vacancyQuery)->where('is_active', true)->count();
+            $totalApplications = $applicationQuery->count();
+            $newApplications   = (clone $applicationQuery)->where('status', 'new')->count();
 
-            $recentApplications = \App\Models\JobApplication::with('vacancy')
-                ->latest()
-                ->take(10)
-                ->get();
+            $recentApplicationsQuery = \App\Models\JobApplication::with('vacancy');
+            if ($startDate && $endDate) {
+                $recentApplicationsQuery->whereBetween('created_at', [$startDate, $endDate]);
+            }
+            $recentApplications = $recentApplicationsQuery->latest()->take(10)->get();
 
             return view('backend.admin.dashboard.hr', compact(
                 'totalVacancies', 'activeVacancies', 'totalApplications', 'newApplications', 'recentApplications'
@@ -74,17 +94,41 @@ class DashboardController extends Controller
         }
 
         // Statistics
-        $totalTenants  = Tenant::count();
-        $activeTenants = Tenant::where('is_active', true)->count();
+        $tenantQuery = Tenant::query();
+        $eventQuery = Event::query();
+        $promoQuery = Promo::query();
+
+        if ($startDate && $endDate) {
+            $tenantQuery->whereBetween('created_at', [$startDate, $endDate]);
+            $eventQuery->where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('start_date', [$startDate->toDateString(), $endDate->toDateString()])
+                  ->orWhereBetween('end_date', [$startDate->toDateString(), $endDate->toDateString()])
+                  ->orWhere(function($sub) use ($startDate, $endDate) {
+                      $sub->where('start_date', '<=', $startDate->toDateString())
+                          ->where('end_date', '>=', $endDate->toDateString());
+                  });
+            });
+            $promoQuery->where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('start_date', [$startDate->toDateString(), $endDate->toDateString()])
+                  ->orWhereBetween('end_date', [$startDate->toDateString(), $endDate->toDateString()])
+                  ->orWhere(function($sub) use ($startDate, $endDate) {
+                      $sub->where('start_date', '<=', $startDate->toDateString())
+                          ->where('end_date', '>=', $endDate->toDateString());
+                  });
+            });
+        }
+
+        $totalTenants  = $tenantQuery->count();
+        $activeTenants = (clone $tenantQuery)->where('is_active', true)->count();
         $totalCategories = Category::count();
-        $totalEvents   = Event::count();
-        $activeEvents  = Event::where('start_date', '<=', $now)->where('end_date', '>=', $now)->count();
-        $upcomingEvents = Event::where('start_date', '>', $now)->where('is_active', true)->count();
-        $expiredEvents  = Event::where('end_date', '<', $now)->count();
-        $eventsWithoutPhoto = Event::whereDoesntHave('photos')->count();
-        $totalPromos  = Promo::count();
-        $activePromos = Promo::where('is_active', true)->where('start_date', '<=', $now)->where('end_date', '>=', $now)->count();
-        $expiringPromos = Promo::where('is_active', true)->whereBetween('end_date', [$now->toDateString(), $now->copy()->addDays(7)->toDateString()])->count();
+        $totalEvents   = $eventQuery->count();
+        $activeEvents  = (clone $eventQuery)->where('start_date', '<=', $now)->where('end_date', '>=', $now)->count();
+        $upcomingEvents = (clone $eventQuery)->where('start_date', '>', $now)->where('is_active', true)->count();
+        $expiredEvents  = (clone $eventQuery)->where('end_date', '<', $now)->count();
+        $eventsWithoutPhoto = (clone $eventQuery)->whereDoesntHave('photos')->count();
+        $totalPromos  = $promoQuery->count();
+        $activePromos = (clone $promoQuery)->where('is_active', true)->where('start_date', '<=', $now)->where('end_date', '>=', $now)->count();
+        $expiringPromos = (clone $promoQuery)->where('is_active', true)->whereBetween('end_date', [$now->toDateString(), $now->copy()->addDays(7)->toDateString()])->count();
 
         // Admin & Superuser shared collections
         $recentTenants = Tenant::with(['category', 'primaryPhoto'])->latest()->take(5)->get();
@@ -168,10 +212,24 @@ class DashboardController extends Controller
             'is_today' => true
         ]);
 
-        // Daily visits for last 15 days (line chart)
+        // Daily visits dynamic line chart (filtered or last 15 days)
+        if ($startDate && $endDate) {
+            $daysCount = $startDate->diffInDays($endDate);
+            if ($daysCount > 90) {
+                // Limit to max 90 days to avoid overloading chart JS labels
+                $chartStart = $endDate->copy()->subDays(90);
+                $daysCount = 90;
+            } else {
+                $chartStart = $startDate->copy();
+            }
+        } else {
+            $chartStart = Carbon::today()->subDays(14);
+            $daysCount = 14;
+        }
+
         $last15Days = ['labels' => [], 'data' => []];
-        for ($i = 14; $i >= 0; $i--) {
-            $targetDate = Carbon::today()->subDays($i);
+        for ($i = 0; $i <= $daysCount; $i++) {
+            $targetDate = $chartStart->copy()->addDays($i);
             $targetDateStr = $targetDate->toDateString();
             
             $archived = \App\Models\DailyVisitor::where('date', $targetDateStr)->first();
@@ -219,17 +277,23 @@ class DashboardController extends Controller
         }
 
         // Top Countries and Cities visitor demographics
-        $topCountries = \App\Models\VisitorLog::select('country', \DB::raw('count(*) as count'))
+        $topCountriesQuery = \App\Models\VisitorLog::select('country', \DB::raw('count(*) as count'))
             ->groupBy('country')
             ->orderBy('count', 'desc')
-            ->take(5)
-            ->get();
+            ->take(5);
 
-        $topCities = \App\Models\VisitorLog::select('city', \DB::raw('count(*) as count'))
+        $topCitiesQuery = \App\Models\VisitorLog::select('city', \DB::raw('count(*) as count'))
             ->groupBy('city')
             ->orderBy('count', 'desc')
-            ->take(5)
-            ->get();
+            ->take(5);
+
+        if ($startDate && $endDate) {
+            $topCountriesQuery->whereBetween('created_at', [$startDate, $endDate]);
+            $topCitiesQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $topCountries = $topCountriesQuery->get();
+        $topCities = $topCitiesQuery->get();
 
         $countryChart = [
             'labels' => $topCountries->pluck('country')->map(fn($c) => $c ?: 'Unknown')->toArray(),

@@ -83,15 +83,41 @@ class CareerController extends Controller
 
         $application = $this->applicationService->create($data, $request->file('cv'));
 
-        // Send emails
+        // Send applicant confirmation email
         try {
             Mail::to($application->email)->send(new JobApplicationConfirmation($application));
-            
-            $hrEmail = config('mail.hr_notification_email', env('HR_NOTIFICATION_EMAIL', config('mail.from.address')));
+        } catch (\Exception $e) {
+            logger()->error('Failed to send applicant confirmation email: ' . $e->getMessage());
+            try {
+                \App\Models\EmailLog::create([
+                    'recipient' => $application->email,
+                    'subject' => 'Job Application Confirmation',
+                    'body' => 'Failed to send confirmation email to candidate.',
+                    'status' => 'failed',
+                    'error_message' => $e->getMessage(),
+                ]);
+            } catch (\Exception $dbEx) {
+                // Ignore DB logging failure
+            }
+        }
+
+        // Send HR notification email
+        $hrEmail = config('mail.hr_notification_email', env('HR_NOTIFICATION_EMAIL', config('mail.from.address')));
+        try {
             Mail::to($hrEmail)->send(new NewJobApplicationNotification($application));
         } catch (\Exception $e) {
-            // Log email failure but don't fail the application
-            logger()->error('Failed to send career emails: ' . $e->getMessage());
+            logger()->error('Failed to send HR notification email: ' . $e->getMessage());
+            try {
+                \App\Models\EmailLog::create([
+                    'recipient' => $hrEmail,
+                    'subject' => 'New Job Application Received',
+                    'body' => 'Failed to send notification email to HR team.',
+                    'status' => 'failed',
+                    'error_message' => $e->getMessage(),
+                ]);
+            } catch (\Exception $dbEx) {
+                // Ignore DB logging failure
+            }
         }
 
         return redirect()->route('frontend.career.show', $uuid)

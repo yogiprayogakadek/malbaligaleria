@@ -89,6 +89,102 @@
                     </a>
                 </div>
             </div>
+
+            {{-- Review & Timeline Evaluasi --}}
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-dark"><i class="ti ti-checklist me-2"></i>HR Evaluation & Reviews</h6>
+                    @if($application->average_rating)
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="fw-bold text-dark me-1">{{ $application->average_rating }}</span>
+                            <div class="text-warning">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= round($application->average_rating))
+                                        <i class="ti ti-star-filled"></i>
+                                    @else
+                                        <i class="ti ti-star"></i>
+                                    @endif
+                                @endfor
+                            </div>
+                            <span class="text-muted small">({{ $application->reviews->count() }} reviews)</span>
+                        </div>
+                    @endif
+                </div>
+                <div class="card-body">
+                    {{-- Form Tambah Review --}}
+                    <form action="{{ route('admin.career.application.storeReview', $application->uuid) }}" method="POST" class="mb-4">
+                        @csrf
+                        <div class="bg-light rounded p-3 mb-3">
+                            <h6 class="fs-7 fw-semibold mb-2 text-dark">Add Review & Rating</h6>
+                            
+                            <div class="mb-2">
+                                <label class="form-label d-block fw-semibold text-muted small mb-1">Rating</label>
+                                <div class="d-flex gap-2 fs-5" id="star-rating-picker">
+                                    <i class="ti ti-star text-muted cursor-pointer" data-value="1" style="transition: transform 0.2s;"></i>
+                                    <i class="ti ti-star text-muted cursor-pointer" data-value="2" style="transition: transform 0.2s;"></i>
+                                    <i class="ti ti-star text-muted cursor-pointer" data-value="3" style="transition: transform 0.2s;"></i>
+                                    <i class="ti ti-star text-muted cursor-pointer" data-value="4" style="transition: transform 0.2s;"></i>
+                                    <i class="ti ti-star text-muted cursor-pointer" data-value="5" style="transition: transform 0.2s;"></i>
+                                </div>
+                                <input type="hidden" name="rating" id="rating-input" value="">
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="review_notes" class="form-label fw-semibold text-muted small mb-1">Evaluation Notes / Comments</label>
+                                <textarea name="notes" id="review_notes" rows="3" class="form-control form-control-sm" placeholder="Write internal HR assessment..." required></textarea>
+                            </div>
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary btn-sm py-1 px-3">
+                                    <i class="ti ti-plus me-1"></i> Submit Review
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    {{-- Timeline Review --}}
+                    <h6 class="fw-semibold mb-3 text-dark"><i class="ti ti-history me-1"></i>History Timeline</h6>
+                    
+                    <div class="position-relative ps-2">
+                        @forelse($application->reviews as $review)
+                            <div class="d-flex mb-4 position-relative">
+                                {{-- Bulatan Timeline --}}
+                                <div class="me-3 text-center position-relative" style="z-index: 2;">
+                                    <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                                        <i class="ti ti-user fs-5"></i>
+                                    </div>
+                                </div>
+                                
+                                {{-- Isi Chat --}}
+                                <div class="flex-grow-1 bg-light rounded p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-semibold text-dark">{{ $review->user->name ?? 'Deleted User' }}</span>
+                                        <span class="small text-muted">{{ $review->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    
+                                    @if($review->rating)
+                                        <div class="text-warning mb-2 fs-7">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= $review->rating)
+                                                    <i class="ti ti-star-filled"></i>
+                                                @else
+                                                    <i class="ti ti-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                    @endif
+                                    
+                                    <p class="mb-0 text-secondary" style="white-space: pre-wrap; font-size: 13.5px;">{{ $review->notes }}</p>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-muted text-center py-3">No evaluation history yet.</div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- Info Posisi + Update Status --}}
@@ -184,3 +280,40 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+<script>
+    document.querySelectorAll('#star-rating-picker i').forEach(star => {
+        star.addEventListener('mouseenter', function() {
+            const val = this.getAttribute('data-value');
+            highlightStars(val);
+        });
+
+        star.addEventListener('mouseleave', function() {
+            const currentVal = document.getElementById('rating-input').value;
+            highlightStars(currentVal);
+        });
+
+        star.addEventListener('click', function() {
+            const val = this.getAttribute('data-value');
+            document.getElementById('rating-input').value = val;
+            highlightStars(val);
+        });
+    });
+
+    function highlightStars(val) {
+        document.querySelectorAll('#star-rating-picker i').forEach(s => {
+            const sVal = s.getAttribute('data-value');
+            if (val && parseInt(sVal) <= parseInt(val)) {
+                s.classList.remove('ti-star', 'text-muted');
+                s.classList.add('ti-star-filled', 'text-warning');
+                s.style.transform = 'scale(1.2)';
+            } else {
+                s.classList.remove('ti-star-filled', 'text-warning');
+                s.classList.add('ti-star', 'text-muted');
+                s.style.transform = 'scale(1)';
+            }
+        });
+    }
+</script>
+@endpush

@@ -322,6 +322,12 @@ Route::controller(AdminDashboardController::class)
             Route::get('/{uuid}/print', 'print')->name('print');
             Route::put('/{uuid}/status', 'updateStatus')->name('updateStatus');
             Route::get('/{uuid}/download-cv', 'downloadCv')->name('downloadCv');
+            Route::post('/{uuid}/review', 'storeReview')->name('storeReview');
+        });
+
+        Route::controller(\App\Http\Controllers\Backend\Admin\EmailLogController::class)->prefix('/career/email-logs')->name('career.email-logs.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/{id}', 'show')->name('show');
         });
     });
 

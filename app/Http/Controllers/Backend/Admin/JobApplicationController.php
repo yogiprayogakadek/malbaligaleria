@@ -45,6 +45,7 @@ class JobApplicationController extends Controller
     public function show(string $uuid)
     {
         $application = $this->applicationService->findByUuid($uuid);
+        $application->load(['reviews.user']);
         return view('backend.admin.career.application.show', compact('application'));
     }
 
@@ -64,6 +65,17 @@ class JobApplicationController extends Controller
                     ->send(new \App\Mail\JobStatusUpdated($application));
             } catch (\Exception $e) {
                 logger()->error('Failed to send status update email: ' . $e->getMessage());
+                try {
+                    \App\Models\EmailLog::create([
+                        'recipient' => $application->email,
+                        'subject' => 'Job Status Updated',
+                        'body' => 'Failed to send status update notification: ' . ($request->notes ?? ''),
+                        'status' => 'failed',
+                        'error_message' => $e->getMessage(),
+                    ]);
+                } catch (\Exception $dbEx) {
+                    // Ignore DB logging failure
+                }
             }
         }
 
@@ -88,5 +100,25 @@ class JobApplicationController extends Controller
 
         $filename = 'CV_' . str_replace(' ', '_', $application->name) . '_' . $application->vacancy->title . '.' . pathinfo($path, PATHINFO_EXTENSION);
         return response()->download($path, $filename);
+    }
+
+    public function storeReview(Request $request, string $uuid)
+    {
+        $request->validate([
+            'rating' => 'nullable|integer|min:1|max:5',
+            'notes'  => 'required|string|max:2000',
+        ]);
+
+        $application = $this->applicationService->findByUuid($uuid);
+
+        \App\Models\JobApplicationReview::create([
+            'job_application_id' => $application->id,
+            'user_id'            => auth()->id(),
+            'rating'             => $request->rating,
+            'notes'              => $request->notes,
+        ]);
+
+        return redirect()->route('admin.career.application.show', $uuid)
+            ->with('success', 'Review and notes successfully added.');
     }
 }
