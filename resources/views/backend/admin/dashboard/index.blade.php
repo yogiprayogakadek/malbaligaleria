@@ -837,6 +837,7 @@
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0 } }
             }
+        }
     });
 
     const countryCtx = document.getElementById('countryChart').getContext('2d');
