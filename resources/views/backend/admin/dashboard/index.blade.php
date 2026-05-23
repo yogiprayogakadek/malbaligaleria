@@ -606,6 +606,94 @@
         </div>
     </div>
 
+    {{-- === VISITOR DEMOGRAPHICS === --}}
+    <div class="row mt-4">
+        <div class="col-md-6 col-12 mb-3 mb-md-0">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Visitor Demographics: Top Countries</h5>
+                    <div class="row align-items-center">
+                        <div class="col-sm-6 text-center">
+                            <div style="max-height: 200px; max-width: 200px; margin: 0 auto;">
+                                <canvas id="countryChart" height="200" width="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-borderless align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Country</th>
+                                            <th class="text-end">Visits</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($topCountries as $country)
+                                        <tr>
+                                            <td>
+                                                <i class="ti ti-map-pin-filled text-primary me-1"></i>
+                                                {{ $country->country ?: 'Unknown' }}
+                                            </td>
+                                            <td class="text-end font-monospace fw-bold text-dark">{{ number_format($country->count) }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @if($topCountries->isEmpty())
+                                        <tr>
+                                            <td colspan="2" class="text-muted text-center py-3">No data recorded</td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Visitor Demographics: Top Cities</h5>
+                    <div class="row align-items-center">
+                        <div class="col-sm-6 text-center">
+                            <div style="max-height: 200px; max-width: 200px; margin: 0 auto;">
+                                <canvas id="cityChart" height="200" width="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-borderless align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>City</th>
+                                            <th class="text-end">Visits</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($topCities as $city)
+                                        <tr>
+                                            <td>
+                                                <i class="ti ti-map-pin text-info me-1"></i>
+                                                {{ $city->city ?: 'Unknown' }}
+                                            </td>
+                                            <td class="text-end font-monospace fw-bold text-dark">{{ number_format($city->count) }}</td>
+                                        </tr>
+                                        @endforeach
+                                        @if($topCities->isEmpty())
+                                        <tr>
+                                            <td colspan="2" class="text-muted text-center py-3">No data recorded</td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @push('scripts')
@@ -748,6 +836,59 @@
             },
             scales: {
                 y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+    });
+
+    const countryCtx = document.getElementById('countryChart').getContext('2d');
+    new Chart(countryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($countryChart['labels']) !!},
+            datasets: [{
+                data: {!! json_encode($countryChart['data']) !!},
+                backgroundColor: [
+                    'rgba(44, 95, 93, 0.8)',
+                    'rgba(212, 175, 55, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(231, 76, 60, 0.8)',
+                    'rgba(155, 89, 182, 0.8)'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    const cityCtx = document.getElementById('cityChart').getContext('2d');
+    new Chart(cityCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($cityChart['labels']) !!},
+            datasets: [{
+                data: {!! json_encode($cityChart['data']) !!},
+                backgroundColor: [
+                    'rgba(44, 95, 93, 0.8)',
+                    'rgba(212, 175, 55, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(231, 76, 60, 0.8)',
+                    'rgba(155, 89, 182, 0.8)'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false }
             }
         }
     });

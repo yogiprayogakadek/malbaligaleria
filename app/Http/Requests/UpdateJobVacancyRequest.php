@@ -23,6 +23,7 @@ class UpdateJobVacancyRequest extends FormRequest
             'responsibilities' => 'nullable|string',
             'salary_range'     => 'nullable|string|max:100',
             'deadline'         => 'nullable|date',
+            'closing_date'     => 'nullable|date',
             'is_active'        => 'boolean',
             'sort_order'       => 'integer|min:0',
         ];

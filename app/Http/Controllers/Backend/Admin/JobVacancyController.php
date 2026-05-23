@@ -22,17 +22,24 @@ class JobVacancyController extends Controller
     {
         if ($request->ajax()) {
             $vacancies = $this->vacancyService->getAllWithRelationship(
-                ['id', 'uuid', 'title', 'department', 'type', 'deadline', 'is_active', 'created_at']
+                ['id', 'uuid', 'title', 'department', 'type', 'deadline', 'closing_date', 'is_active', 'created_at']
             );
 
             return DataTables::of($vacancies)
                 ->addIndexColumn()
                 ->editColumn('type', fn($row) => $row->type_label)
-                ->editColumn('deadline', fn($row) => $row->deadline
-                    ? $row->deadline->format('d M Y')
-                    : '<span class="text-muted fst-italic">No Deadline</span>')
+                ->editColumn('deadline', function($row) {
+                    $out = '';
+                    if ($row->deadline) {
+                        $out .= '<div class="small text-muted">DL: ' . $row->deadline->format('d M Y') . '</div>';
+                    }
+                    if ($row->closing_date) {
+                        $out .= '<div class="small text-danger fw-semibold">Close: ' . $row->closing_date->format('d M Y') . '</div>';
+                    }
+                    return $out ?: '<span class="text-muted fst-italic">No Limit</span>';
+                })
                 ->editColumn('is_active', fn($row) => $row->is_active
-                    ? '<span class="badge bg-success">Active</span>'
+                    ? ($row->isExpired() ? '<span class="badge bg-warning text-dark">Expired</span>' : '<span class="badge bg-success">Active</span>')
                     : '<span class="badge bg-danger">Inactive</span>')
                 ->addColumn('applications_count', fn($row) => '<span class="badge bg-info">' . $row->applications_count . ' applicants</span>')
                 ->addColumn('action', fn($row) =>

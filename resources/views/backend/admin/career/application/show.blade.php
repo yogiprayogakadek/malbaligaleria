@@ -18,9 +18,14 @@
                 <h5 class="mb-1">Applicant Detail</h5>
                 <p class="text-muted small mb-0">{{ $application->vacancy->title }} — {{ $application->vacancy->department }}</p>
             </div>
-            <a href="{{ route('admin.career.application.index') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="ti ti-arrow-left me-1"></i> Back
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.career.application.print', $application->uuid) }}" target="_blank" class="btn btn-info btn-sm">
+                    <i class="ti ti-printer me-1"></i> Print / Export PDF
+                </a>
+                <a href="{{ route('admin.career.application.index') }}" class="btn btn-outline-secondary btn-sm">
+                    <i class="ti ti-arrow-left me-1"></i> Back
+                </a>
+            </div>
         </div>
     </div>
 

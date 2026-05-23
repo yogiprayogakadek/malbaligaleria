@@ -76,3 +76,19 @@ Schedule::call(function () {
     }
 })->weeklyOn(7, '02:30')->timezone('Asia/Makassar');
 
+// Auto-deactivate expired job vacancies daily
+Schedule::call(function () {
+    $today = \Carbon\Carbon::today()->toDateString();
+    
+    // Disable active vacancies where closing_date is past
+    \App\Models\JobVacancy::where('is_active', true)
+        ->whereNotNull('closing_date')
+        ->where('closing_date', '<', $today)
+        ->update(['is_active' => false]);
+
+    // Disable active vacancies where deadline is past
+    \App\Models\JobVacancy::where('is_active', true)
+        ->whereNotNull('deadline')
+        ->where('deadline', '<', $today)
+        ->update(['is_active' => false]);
+})->dailyAt('00:05')->timezone('Asia/Makassar');

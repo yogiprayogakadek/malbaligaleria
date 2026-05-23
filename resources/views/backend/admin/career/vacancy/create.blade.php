@@ -66,7 +66,7 @@
                             </div>
 
                             {{-- Rentang Gaji --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="salary_range" class="form-label fw-semibold">Salary Range <small class="text-muted">(optional)</small></label>
                                 <input type="text" name="salary_range" id="salary_range" class="form-control @error('salary_range') is-invalid @enderror"
                                     value="{{ old('salary_range') }}" placeholder="Example: Rp 4,000,000 – Rp 6,000,000">
@@ -76,11 +76,21 @@
                             </div>
 
                             {{-- Deadline --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="deadline" class="form-label fw-semibold">Application Deadline <small class="text-muted">(optional)</small></label>
                                 <input type="date" name="deadline" id="deadline" class="form-control @error('deadline') is-invalid @enderror"
                                     value="{{ old('deadline') }}">
                                 @error('deadline')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Closing Date --}}
+                            <div class="col-md-4">
+                                <label for="closing_date" class="form-label fw-semibold">Closing Date <small class="text-muted">(optional)</small></label>
+                                <input type="date" name="closing_date" id="closing_date" class="form-control @error('closing_date') is-invalid @enderror"
+                                    value="{{ old('closing_date') }}">
+                                @error('closing_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

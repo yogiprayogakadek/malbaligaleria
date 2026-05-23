@@ -319,6 +319,7 @@ Route::controller(AdminDashboardController::class)
         Route::controller(JobApplicationController::class)->prefix('/career/application')->name('career.application.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/{uuid}', 'show')->name('show');
+            Route::get('/{uuid}/print', 'print')->name('print');
             Route::put('/{uuid}/status', 'updateStatus')->name('updateStatus');
             Route::get('/{uuid}/download-cv', 'downloadCv')->name('downloadCv');
         });

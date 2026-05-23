@@ -27,10 +27,37 @@ class TrackVisitors
             ->first();
 
         if (!$visitor) {
+            $country = null;
+            $city = null;
+
+            if ($ipAddress !== '127.0.0.1' && $ipAddress !== '::1') {
+                try {
+                    $response = \Illuminate\Support\Facades\Http::timeout(2)->get("http://ip-api.com/json/{$ipAddress}");
+                    if ($response->successful()) {
+                        $data = $response->json();
+                        if (($data['status'] ?? '') === 'success') {
+                            $country = $data['country'] ?? null;
+                            $city = $data['city'] ?? null;
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Fail silently to not impact user experience
+                }
+            }
+
+            if (!$country) {
+                $country = ($ipAddress === '127.0.0.1' || $ipAddress === '::1') ? 'Localhost' : 'Unknown';
+            }
+            if (!$city) {
+                $city = ($ipAddress === '127.0.0.1' || $ipAddress === '::1') ? 'Localhost' : 'Unknown';
+            }
+
             VisitorLog::create([
                 'ip_address' => $ipAddress,
                 'session_id' => $sessionId,
                 'user_agent' => $userAgent,
+                'country'    => $country,
+                'city'       => $city,
             ]);
         } else {
             // Update updated_at to track "Online" status without Redis

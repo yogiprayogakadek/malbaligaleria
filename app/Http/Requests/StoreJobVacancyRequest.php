@@ -23,6 +23,7 @@ class StoreJobVacancyRequest extends FormRequest
             'responsibilities' => 'nullable|string',
             'salary_range'     => 'nullable|string|max:100',
             'deadline'         => 'nullable|date|after:today',
+            'closing_date'     => 'nullable|date|after:today',
             'is_active'        => 'boolean',
             'sort_order'       => 'integer|min:0',
         ];

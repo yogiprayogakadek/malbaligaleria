@@ -10,5 +10,7 @@ class VisitorLog extends Model
         'ip_address',
         'session_id',
         'user_agent',
+        'country',
+        'city',
     ];
 }

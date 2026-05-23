@@ -87,7 +87,9 @@ class SettingService
                 'logo' => 'file',
                 'announcement_active' => 'select',
                 'announcement_text' => 'text',
-                'announcement_type' => 'select'
+                'announcement_type' => 'select',
+                'maintenance_mode' => 'select',
+                'maintenance_message' => 'text',
             ],
             'mail' => [
                 'mail_mailer' => 'text',

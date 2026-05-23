@@ -21,6 +21,7 @@ class JobVacancy extends Model
         'responsibilities',
         'salary_range',
         'deadline',
+        'closing_date',
         'is_active',
         'sort_order',
     ];
@@ -28,6 +29,7 @@ class JobVacancy extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'deadline'  => 'date',
+        'closing_date' => 'date',
     ];
 
     protected static function boot()
@@ -64,7 +66,12 @@ class JobVacancy extends Model
 
     public function isExpired(): bool
     {
-        if (!$this->deadline) return false;
-        return $this->deadline->isPast();
+        if ($this->closing_date) {
+            return $this->closing_date->isPast() && !$this->closing_date->isToday();
+        }
+        if ($this->deadline) {
+            return $this->deadline->isPast() && !$this->deadline->isToday();
+        }
+        return false;
     }
 }

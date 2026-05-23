@@ -218,6 +218,29 @@ class DashboardController extends Controller
             $newApplications   = \App\Models\JobApplication::where('status', 'new')->count();
         }
 
+        // Top Countries and Cities visitor demographics
+        $topCountries = \App\Models\VisitorLog::select('country', \DB::raw('count(*) as count'))
+            ->groupBy('country')
+            ->orderBy('count', 'desc')
+            ->take(5)
+            ->get();
+
+        $topCities = \App\Models\VisitorLog::select('city', \DB::raw('count(*) as count'))
+            ->groupBy('city')
+            ->orderBy('count', 'desc')
+            ->take(5)
+            ->get();
+
+        $countryChart = [
+            'labels' => $topCountries->pluck('country')->map(fn($c) => $c ?: 'Unknown')->toArray(),
+            'data' => $topCountries->pluck('count')->toArray(),
+        ];
+
+        $cityChart = [
+            'labels' => $topCities->pluck('city')->map(fn($c) => $c ?: 'Unknown')->toArray(),
+            'data' => $topCities->pluck('count')->toArray(),
+        ];
+
         return view('backend.admin.dashboard.index', compact(
             'totalTenants', 'activeTenants', 'totalCategories',
             'totalEvents', 'activeEvents', 'upcomingEvents', 'expiredEvents', 'eventsWithoutPhoto',
@@ -225,7 +248,8 @@ class DashboardController extends Controller
             'totalUsers', 'adminUsers', 'tenantUsers',
             'totalVacancies', 'activeVacancies', 'totalApplications', 'newApplications',
             'recentTenants', 'recentEvents', 'recentPromos',
-            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'groupedVisits', 'last15Days'
+            'monthlyData', 'categoryData', 'eventGrowth', 'tenantGrowth', 'groupedVisits', 'last15Days',
+            'topCountries', 'topCities', 'countryChart', 'cityChart'
         ));
     }
 }

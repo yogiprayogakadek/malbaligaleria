@@ -71,6 +71,12 @@ class JobApplicationController extends Controller
             ->with('success', 'Applicant status successfully updated.');
     }
 
+    public function print(string $uuid)
+    {
+        $application = $this->applicationService->findByUuid($uuid);
+        return view('backend.admin.career.application.print', compact('application'));
+    }
+
     public function downloadCv(string $uuid)
     {
         $application = $this->applicationService->findByUuid($uuid);
