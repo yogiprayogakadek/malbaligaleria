@@ -18,7 +18,9 @@ class Announcement extends Model
         'start_date',
         'end_date',
         'is_active',
-        'link'
+        'link',
+        'target_page',
+        'frequency'
     ];
 
     protected $casts = [
@@ -30,7 +32,7 @@ class Announcement extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['title', 'message', 'image', 'type', 'start_date', 'end_date', 'is_active', 'link'])
+            ->logOnly(['title', 'message', 'image', 'type', 'start_date', 'end_date', 'is_active', 'link', 'target_page', 'frequency'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }

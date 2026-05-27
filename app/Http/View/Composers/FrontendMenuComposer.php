@@ -35,8 +35,8 @@ class FrontendMenuComposer
 
         $view->with('frontendMenus', $menus);
 
-        // Fetch active announcement from DB
-        $activeAnnouncement = \App\Models\Announcement::where('is_active', true)
+        // Fetch active announcements (latest first)
+        $announcements = \App\Models\Announcement::where('is_active', true)
             ->where(function($q) {
                 $now = now('Asia/Makassar');
                 $q->whereNull('start_date')->orWhere('start_date', '<=', $now);
@@ -46,7 +46,32 @@ class FrontendMenuComposer
                 $q->whereNull('end_date')->orWhere('end_date', '>=', $now);
             })
             ->latest()
-            ->first();
+            ->get();
+
+        $activeAnnouncement = null;
+        $currentRouteName = request()->route() ? request()->route()->getName() : '';
+
+        foreach ($announcements as $ann) {
+            $target = $ann->target_page ?? 'all';
+            $matches = false;
+            
+            if ($target === 'all') {
+                $matches = true;
+            } elseif ($target === 'homepage' && $currentRouteName === 'frontend.landing') {
+                $matches = true;
+            } elseif ($target === 'career' && str_starts_with($currentRouteName, 'frontend.career.')) {
+                $matches = true;
+            } elseif ($target === 'promo' && str_starts_with($currentRouteName, 'frontend.promotion.')) {
+                $matches = true;
+            } elseif ($target === 'event' && str_starts_with($currentRouteName, 'frontend.event.')) {
+                $matches = true;
+            }
+
+            if ($matches) {
+                $activeAnnouncement = $ann;
+                break;
+            }
+        }
 
         $announcement = $activeAnnouncement
             ? [
@@ -58,6 +83,7 @@ class FrontendMenuComposer
                 'image' => $activeAnnouncement->image,
                 'type' => $activeAnnouncement->type,
                 'link' => $activeAnnouncement->link,
+                'frequency' => $activeAnnouncement->frequency ?? 'always',
             ]
             : [
                 'id' => null,
@@ -68,6 +94,7 @@ class FrontendMenuComposer
                 'image' => null,
                 'type' => 'info',
                 'link' => null,
+                'frequency' => 'always',
             ];
 
         $view->with('globalAnnouncement', $announcement);

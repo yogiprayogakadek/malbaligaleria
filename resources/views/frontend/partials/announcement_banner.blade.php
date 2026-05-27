@@ -34,13 +34,21 @@
                 @endif
             </div>
             <!-- Footer -->
-            <div style="padding: 16px 24px; border-top: 1px solid #edf2f7; display: flex; justify-content: flex-end; gap: 12px; background: #f7fafc;">
-                @if($hasLink)
-                    <a href="{{ $globalAnnouncement['link'] }}" target="_blank" style="background: {{ $bgColor }}; color: {{ $textColor }}; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                        Kunjungi Tautan
-                    </a>
-                @endif
-                <button onclick="closeAnnouncementModal(event)" style="background: #4a5568; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#2d3748'" onmouseout="this.style.background='#4a5568'">Tutup</button>
+            <div style="padding: 16px 24px; border-top: 1px solid #edf2f7; display: flex; align-items: center; justify-content: space-between; background: #f7fafc;">
+                <!-- Left side: Don't show again checkbox -->
+                <div style="display: flex; align-items: center;">
+                    <input type="checkbox" id="announcementDismissForever" style="width: 16px; height: 16px; cursor: pointer; margin-right: 8px;">
+                    <label for="announcementDismissForever" style="font-size: 13px; color: #4a5568; cursor: pointer; user-select: none; margin: 0; font-weight: 500;">Jangan tampilkan lagi</label>
+                </div>
+                <!-- Right side: CTA & Close button -->
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    @if($hasLink)
+                        <a href="{{ $globalAnnouncement['link'] }}" target="_blank" style="background: {{ $bgColor }}; color: {{ $textColor }}; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                            Kunjungi Tautan
+                        </a>
+                    @endif
+                    <button onclick="closeAnnouncementModal(event)" style="background: #4a5568; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#2d3748'" onmouseout="this.style.background='#4a5568'">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,10 +93,21 @@
             }
         }
 
+        function saveDismissState() {
+            var checkbox = document.getElementById('announcementDismissForever');
+            if (checkbox && checkbox.checked) {
+                var announcementId = "{{ $globalAnnouncement['id'] }}";
+                if (announcementId) {
+                    localStorage.setItem('announcement_dismissed_forever_' + announcementId, 'true');
+                }
+            }
+        }
+
         function closeAnnouncementModal(e) {
             if (e) {
                 e.stopPropagation();
             }
+            saveDismissState();
             var modal = document.getElementById('announcementModal');
             if (modal) {
                 modal.style.display = 'none';
@@ -104,12 +123,49 @@
             }
         });
 
-        // Auto popup handling
+        // Auto popup handling with frequency & dismissal logic
         function initAnnouncementPopup() {
-            // Slight delay for better UX
-            setTimeout(function() {
-                openAnnouncementModal();
-            }, 800);
+            var announcementId = "{{ $globalAnnouncement['id'] }}";
+            if (!announcementId) return;
+
+            // Check if permanently dismissed
+            if (localStorage.getItem('announcement_dismissed_forever_' + announcementId) === 'true') {
+                return;
+            }
+
+            var frequency = "{{ $globalAnnouncement['frequency'] }}";
+            var shouldShow = false;
+            var nowTime = new Date().getTime();
+
+            if (frequency === 'always') {
+                shouldShow = true;
+            } else if (frequency === 'once_session') {
+                var sessionKey = "announcement_seen_session_" + announcementId;
+                if (!sessionStorage.getItem(sessionKey)) {
+                    shouldShow = true;
+                    sessionStorage.setItem(sessionKey, "true");
+                }
+            } else if (frequency === 'once_day') {
+                var dayKey = "announcement_seen_day_" + announcementId;
+                var lastSeenDay = localStorage.getItem(dayKey);
+                if (!lastSeenDay || (nowTime - parseInt(lastSeenDay)) > (24 * 60 * 60 * 1000)) {
+                    shouldShow = true;
+                    localStorage.setItem(dayKey, nowTime.toString());
+                }
+            } else if (frequency === 'once_week') {
+                var weekKey = "announcement_seen_week_" + announcementId;
+                var lastSeenWeek = localStorage.getItem(weekKey);
+                if (!lastSeenWeek || (nowTime - parseInt(lastSeenWeek)) > (7 * 24 * 60 * 60 * 1000)) {
+                    shouldShow = true;
+                    localStorage.setItem(weekKey, nowTime.toString());
+                }
+            }
+
+            if (shouldShow) {
+                setTimeout(function() {
+                    openAnnouncementModal();
+                }, 800);
+            }
         }
 
         if (document.readyState === "complete" || document.readyState === "interactive") {

@@ -64,7 +64,9 @@ class AnnouncementController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'link' => 'nullable|url',
-            'is_active' => 'nullable|in:0,1'
+            'is_active' => 'nullable|in:0,1',
+            'target_page' => 'required|string|in:all,homepage,career,promo,event',
+            'frequency' => 'required|string|in:always,once_session,once_day,once_week',
         ]);
 
         $data = [
@@ -75,6 +77,8 @@ class AnnouncementController extends Controller
             'end_date' => $request->end_date,
             'link' => $request->link,
             'is_active' => $request->has('is_active') ? (bool)$request->is_active : false,
+            'target_page' => $request->target_page,
+            'frequency' => $request->frequency,
         ];
 
         if ($request->hasFile('image')) {
@@ -104,7 +108,9 @@ class AnnouncementController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'link' => 'nullable|url',
-            'is_active' => 'nullable|in:0,1'
+            'is_active' => 'nullable|in:0,1',
+            'target_page' => 'required|string|in:all,homepage,career,promo,event',
+            'frequency' => 'required|string|in:always,once_session,once_day,once_week',
         ]);
 
         $data = [
@@ -115,6 +121,8 @@ class AnnouncementController extends Controller
             'end_date' => $request->end_date,
             'link' => $request->link,
             'is_active' => $request->has('is_active') ? (bool)$request->is_active : false,
+            'target_page' => $request->target_page,
+            'frequency' => $request->frequency,
         ];
 
         if ($request->hasFile('image')) {
