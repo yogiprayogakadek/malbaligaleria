@@ -35,18 +35,39 @@ class FrontendMenuComposer
 
         $view->with('frontendMenus', $menus);
 
-        // Fetch active announcement settings
-        $othersSetting = \App\Models\Setting::where('pages', 'others')->where('is_active', true)->first();
-        $announcement = $othersSetting && isset($othersSetting->payload['announcement_active']) && $othersSetting->payload['announcement_active'] == '1'
+        // Fetch active announcement from DB
+        $activeAnnouncement = \App\Models\Announcement::where('is_active', true)
+            ->where(function($q) {
+                $now = now('Asia/Makassar');
+                $q->whereNull('start_date')->orWhere('start_date', '<=', $now);
+            })
+            ->where(function($q) {
+                $now = now('Asia/Makassar');
+                $q->whereNull('end_date')->orWhere('end_date', '>=', $now);
+            })
+            ->latest()
+            ->first();
+
+        $announcement = $activeAnnouncement
             ? [
+                'id' => $activeAnnouncement->id,
                 'active' => true,
-                'text' => $othersSetting->payload['announcement_text'] ?? '',
-                'type' => $othersSetting->payload['announcement_type'] ?? 'info',
+                'text' => $activeAnnouncement->title,
+                'title' => $activeAnnouncement->title,
+                'message' => $activeAnnouncement->message,
+                'image' => $activeAnnouncement->image,
+                'type' => $activeAnnouncement->type,
+                'link' => $activeAnnouncement->link,
             ]
             : [
+                'id' => null,
                 'active' => false,
                 'text' => '',
+                'title' => '',
+                'message' => '',
+                'image' => null,
                 'type' => 'info',
+                'link' => null,
             ];
 
         $view->with('globalAnnouncement', $announcement);

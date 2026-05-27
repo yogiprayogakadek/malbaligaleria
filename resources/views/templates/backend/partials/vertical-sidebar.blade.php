@@ -332,6 +332,26 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:volume-loud-linear"></iconify-icon>
+                                <span class="hide-menu">Announcement</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.announcement.index') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">List</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="{{ route('admin.announcement.create') }}">
+                                        <span class="icon-small"></span>
+                                        <span class="hide-menu">Create</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     @endrole
 
                 </ul>

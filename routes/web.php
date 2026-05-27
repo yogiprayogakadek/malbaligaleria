@@ -29,6 +29,7 @@ use App\Http\Controllers\Backend\Admin\EventPhotoController;
 use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\Admin\ActivityController;
 use App\Http\Controllers\Backend\Admin\SettingController;
+use App\Http\Controllers\Backend\Admin\AnnouncementController;
 use App\Http\Controllers\Backend\Admin\JobVacancyController;
 use App\Http\Controllers\Backend\Admin\JobApplicationController;
 use App\Http\Controllers\Backend\ProfileController;
@@ -295,6 +296,21 @@ Route::controller(AdminDashboardController::class)
                 ->middleware('superuser')
                 ->prefix('/setting')
                 ->name('setting.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
+                    Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                });
+
+            // Announcement (RESTRICTED TO SUPERUSER)
+            Route::controller(AnnouncementController::class)
+                ->middleware('superuser')
+                ->prefix('/announcement')
+                ->name('announcement.')
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::get('/create', 'create')->name('create');
