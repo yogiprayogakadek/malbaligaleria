@@ -28,7 +28,7 @@
                     </div>
                 @endif
                 @if($globalAnnouncement['message'])
-                    <div style="font-size: 15px; line-height: 1.6; color: #4a5568; white-space: pre-line;">
+                    <div class="announcement-content" style="font-size: 15px; line-height: 1.6; color: #4a5568;">
                         {!! $globalAnnouncement['message'] !!}
                     </div>
                 @endif
@@ -49,6 +49,30 @@
         @keyframes announcementPop {
             from { transform: scale(0.9); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
+        }
+        .announcement-content p {
+            margin-bottom: 12px;
+        }
+        .announcement-content ul, .announcement-content ol {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        .announcement-content ul {
+            list-style-type: disc !important;
+        }
+        .announcement-content ol {
+            list-style-type: decimal !important;
+        }
+        .announcement-content blockquote {
+            border-left: 4px solid #cbd5e1;
+            padding-left: 12px;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+        .announcement-content a {
+            color: #0d6efd;
+            text-decoration: underline;
         }
     </style>
 

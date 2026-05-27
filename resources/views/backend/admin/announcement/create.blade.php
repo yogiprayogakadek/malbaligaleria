@@ -5,6 +5,11 @@
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .ck-editor__editable {
+            min-height: 200px;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -150,6 +155,7 @@
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script>
         $(document).ready(function() {
             flatpickr("#start_date, #end_date", {
@@ -158,6 +164,14 @@
                 altInput: true,
                 altFormat: "F j, Y H:i",
             });
+
+            ClassicEditor
+                .create(document.querySelector('#message'), {
+                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         });
     </script>
 @endpush
