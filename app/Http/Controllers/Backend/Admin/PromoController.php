@@ -63,7 +63,7 @@ class PromoController extends Controller
 
     public function store(StorePromoRequest $request)
     {
-        $tenantId = $this->role == 'admin' ? $request->tenant_id : Auth::user()->tenant->id;
+        $tenantId = in_array($this->role, ['admin', 'superuser']) ? $request->tenant_id : Auth::user()->tenant->id;
 
         $data = [
             'tenant_id' => $tenantId,
@@ -89,7 +89,7 @@ class PromoController extends Controller
 
     public function update(UpdatePromoRequest $request, $uuid)
     {
-        $tenantId = $this->role == 'admin' ? $request->tenant_id : Auth::user()->tenant->id;
+        $tenantId = in_array($this->role, ['admin', 'superuser']) ? $request->tenant_id : Auth::user()->tenant->id;
 
         $data = [
             'tenant_id' => $tenantId,

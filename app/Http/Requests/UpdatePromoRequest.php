@@ -23,7 +23,7 @@ class UpdatePromoRequest extends FormRequest
     {
         return [
             'tenant_id' => [
-                auth()->user()->hasRole('admin') ? 'required' : 'nullable',
+                (auth()->user()->hasRole('admin') || auth()->user()->hasRole('superuser')) ? 'required' : 'nullable',
                 'exists:tenants,id',
                 'numeric'
             ],
