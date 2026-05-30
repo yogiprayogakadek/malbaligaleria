@@ -38,16 +38,16 @@
                 <!-- Left side: Don't show again checkbox -->
                 <div style="display: flex; align-items: center;">
                     <input type="checkbox" id="announcementDismissForever" style="width: 16px; height: 16px; cursor: pointer; margin-right: 8px;">
-                    <label for="announcementDismissForever" style="font-size: 13px; color: #4a5568; cursor: pointer; user-select: none; margin: 0; font-weight: 500;">Jangan tampilkan lagi</label>
+                    <label for="announcementDismissForever" style="font-size: 13px; color: #4a5568; cursor: pointer; user-select: none; margin: 0; font-weight: 500;">Don't show this again</label>
                 </div>
                 <!-- Right side: CTA & Close button -->
                 <div style="display: flex; gap: 12px; align-items: center;">
                     @if($hasLink)
                         <a href="{{ $globalAnnouncement['link'] }}" target="_blank" style="background: {{ $bgColor }}; color: {{ $textColor }}; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                            Kunjungi Tautan
+                            Visit Link
                         </a>
                     @endif
-                    <button onclick="closeAnnouncementModal(event)" style="background: #4a5568; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#2d3748'" onmouseout="this.style.background='#4a5568'">Tutup</button>
+                    <button onclick="closeAnnouncementModal(event)" style="background: #4a5568; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#2d3748'" onmouseout="this.style.background='#4a5568'">Close</button>
                 </div>
             </div>
         </div>

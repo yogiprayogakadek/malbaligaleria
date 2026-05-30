@@ -11,11 +11,15 @@ return new class extends Migration
     {
         // Update enum status to include 'interview' and 'on_hold'
         // For MySQL, we usually use DB::statement because change() on enum is tricky with Doctrine
-        DB::statement("ALTER TABLE job_applications MODIFY COLUMN status ENUM('new', 'reviewed', 'interview', 'accepted', 'rejected', 'on_hold') NOT NULL DEFAULT 'new'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE job_applications MODIFY COLUMN status ENUM('new', 'reviewed', 'interview', 'accepted', 'rejected', 'on_hold') NOT NULL DEFAULT 'new'");
+        }
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE job_applications MODIFY COLUMN status ENUM('new', 'reviewed', 'accepted', 'rejected') NOT NULL DEFAULT 'new'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE job_applications MODIFY COLUMN status ENUM('new', 'reviewed', 'accepted', 'rejected') NOT NULL DEFAULT 'new'");
+        }
     }
 };

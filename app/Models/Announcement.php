@@ -17,6 +17,9 @@ class Announcement extends Model
         'type',
         'start_date',
         'end_date',
+        'active_dates',
+        'start_time',
+        'end_time',
         'is_active',
         'link',
         'target_page',
@@ -27,12 +30,14 @@ class Announcement extends Model
         'is_active' => 'boolean',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'active_dates' => 'array',
+        'target_page' => 'array',
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['title', 'message', 'image', 'type', 'start_date', 'end_date', 'is_active', 'link', 'target_page', 'frequency'])
+            ->logOnly(['title', 'message', 'image', 'type', 'start_date', 'end_date', 'active_dates', 'start_time', 'end_time', 'is_active', 'link', 'target_page', 'frequency'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }

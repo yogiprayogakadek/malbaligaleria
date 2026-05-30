@@ -37,14 +37,6 @@ class FrontendMenuComposer
 
         // Fetch active announcements (latest first)
         $announcements = \App\Models\Announcement::where('is_active', true)
-            ->where(function($q) {
-                $now = now('Asia/Makassar');
-                $q->whereNull('start_date')->orWhere('start_date', '<=', $now);
-            })
-            ->where(function($q) {
-                $now = now('Asia/Makassar');
-                $q->whereNull('end_date')->orWhere('end_date', '>=', $now);
-            })
             ->latest()
             ->get();
 
@@ -52,19 +44,72 @@ class FrontendMenuComposer
         $currentRouteName = request()->route() ? request()->route()->getName() : '';
 
         foreach ($announcements as $ann) {
-            $target = $ann->target_page ?? 'all';
+            // Check if active on the current date
+            $now = now('Asia/Makassar');
+            $today = $now->toDateString();
+            
+            $dateMatches = false;
+            
+            if (!empty($ann->active_dates) && is_array($ann->active_dates)) {
+                foreach ($ann->active_dates as $range) {
+                    if (is_array($range) && isset($range['start']) && isset($range['end'])) {
+                        if ($today >= $range['start'] && $today <= $range['end']) {
+                            $dateMatches = true;
+                            break;
+                        }
+                    } elseif (is_string($range)) {
+                        if ($today === $range) {
+                            $dateMatches = true;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                $startOk = is_null($ann->start_date) || $ann->start_date <= $now;
+                $endOk = is_null($ann->end_date) || $ann->end_date >= $now;
+                if ($startOk && $endOk) {
+                    $dateMatches = true;
+                }
+            }
+            
+            if (!$dateMatches) {
+                continue;
+            }
+
+            // Check if active within daily display hours
+            if (!is_null($ann->start_time) && !is_null($ann->end_time)) {
+                $currentTime = $now->format('H:i:s');
+                if ($currentTime < $ann->start_time || $currentTime > $ann->end_time) {
+                    continue;
+                }
+            }
+
+            $targets = is_array($ann->target_page) ? $ann->target_page : [$ann->target_page];
             $matches = false;
             
-            if ($target === 'all') {
+            if (in_array('all', $targets)) {
                 $matches = true;
-            } elseif ($target === 'homepage' && $currentRouteName === 'frontend.landing') {
-                $matches = true;
-            } elseif ($target === 'career' && str_starts_with($currentRouteName, 'frontend.career.')) {
-                $matches = true;
-            } elseif ($target === 'promo' && str_starts_with($currentRouteName, 'frontend.promotion.')) {
-                $matches = true;
-            } elseif ($target === 'event' && str_starts_with($currentRouteName, 'frontend.event.')) {
-                $matches = true;
+            } else {
+                foreach ($targets as $target) {
+                    if ($target === 'homepage' && $currentRouteName === 'frontend.landing') {
+                        $matches = true;
+                    } elseif ($target === 'career' && str_starts_with($currentRouteName, 'frontend.career.')) {
+                        $matches = true;
+                    } elseif ($target === 'promo' && str_starts_with($currentRouteName, 'frontend.promotion.')) {
+                        $matches = true;
+                    } elseif ($target === 'event' && str_starts_with($currentRouteName, 'frontend.event.')) {
+                        $matches = true;
+                    } elseif ($target === 'directory' && str_starts_with($currentRouteName, 'frontend.directory.')) {
+                        $matches = true;
+                    } elseif ($target === 'new_store' && str_starts_with($currentRouteName, 'frontend.new-store.')) {
+                        $matches = true;
+                    } elseif ($target === 'gallery' && str_starts_with($currentRouteName, 'frontend.gallery.')) {
+                        $matches = true;
+                    }
+                    if ($matches) {
+                        break;
+                    }
+                }
             }
 
             if ($matches) {

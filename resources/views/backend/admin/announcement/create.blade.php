@@ -5,9 +5,18 @@
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/backend/css/select2.css') }}">
     <style>
         .ck-editor__editable {
             min-height: 200px;
+        }
+        /* Custom Select2 invalid styling to match Bootstrap 5 */
+        .select2-container--default .select2-selection--multiple {
+            border-color: #dee2e6;
+            min-height: 38px;
+        }
+        .is-invalid + .select2-container .select2-selection--multiple {
+            border-color: #dc3545;
         }
     </style>
 @endpush
@@ -55,13 +64,17 @@
                         <div class="mb-4 row">
                             <label for="target_page" class="form-label col-sm-3 col-form-label">Target Display Page</label>
                             <div class="col-sm-12">
-                                <select name="target_page" id="target_page" class="form-select @error('target_page') is-invalid @enderror" required>
-                                    <option value="all" {{ old('target_page') == 'all' ? 'selected' : '' }}>All Pages</option>
-                                    <option value="homepage" {{ old('target_page') == 'homepage' ? 'selected' : '' }}>Homepage Only (Landing 2)</option>
-                                    <option value="career" {{ old('target_page') == 'career' ? 'selected' : '' }}>Career Pages</option>
-                                    <option value="promo" {{ old('target_page') == 'promo' ? 'selected' : '' }}>Promotion Pages</option>
-                                    <option value="event" {{ old('target_page') == 'event' ? 'selected' : '' }}>Event Pages</option>
+                                <select name="target_page[]" id="target_page" class="form-select @error('target_page') is-invalid @enderror" multiple required>
+                                    <option value="all" {{ is_array(old('target_page')) && in_array('all', old('target_page')) ? 'selected' : (!old('target_page') ? 'selected' : '') }}>All Pages</option>
+                                    <option value="homepage" {{ is_array(old('target_page')) && in_array('homepage', old('target_page')) ? 'selected' : '' }}>Homepage Only (Landing 2)</option>
+                                    <option value="directory" {{ is_array(old('target_page')) && in_array('directory', old('target_page')) ? 'selected' : '' }}>Directory List Page</option>
+                                    <option value="promo" {{ is_array(old('target_page')) && in_array('promo', old('target_page')) ? 'selected' : '' }}>Promotion Pages</option>
+                                    <option value="new_store" {{ is_array(old('target_page')) && in_array('new_store', old('target_page')) ? 'selected' : '' }}>New Store Page</option>
+                                    <option value="event" {{ is_array(old('target_page')) && in_array('event', old('target_page')) ? 'selected' : '' }}>Event Pages</option>
+                                    <option value="career" {{ is_array(old('target_page')) && in_array('career', old('target_page')) ? 'selected' : '' }}>Career Pages</option>
+                                    <option value="gallery" {{ is_array(old('target_page')) && in_array('gallery', old('target_page')) ? 'selected' : '' }}>Gallery Page</option>
                                 </select>
+                                <span class="form-text text-muted">You can select one or more pages. If "All Pages" is selected, the announcement will be active globally.</span>
                                 @error('target_page')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -84,29 +97,99 @@
                             </div>
                         </div>
 
-                        {{-- Start Date --}}
+                        {{-- Date Configuration Type --}}
                         <div class="mb-4 row">
-                            <label for="start_date" class="form-label col-sm-3 col-form-label">Start Date & Time (Optional)</label>
+                            <label for="date_type" class="form-label col-sm-3 col-form-label">Date Schedule Type</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control @error('start_date') is-invalid @enderror"
-                                    id="start_date" name="start_date" placeholder="Select start date & time"
-                                    value="{{ old('start_date') }}">
-                                @error('start_date')
+                                <select name="date_type" id="date_type" class="form-select @error('date_type') is-invalid @enderror" required>
+                                    <option value="range" {{ old('date_type', 'range') == 'range' ? 'selected' : '' }}>Date Range (Rentang Tanggal)</option>
+                                    <option value="multiple" {{ old('date_type') == 'multiple' ? 'selected' : '' }}>Specific Dates (Beberapa Tanggal Pilihan)</option>
+                                </select>
+                                @error('date_type')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
 
-                        {{-- End Date --}}
+                        {{-- Range Dates Group --}}
+                        <div id="range-dates-group">
+                            {{-- Start Date --}}
+                            <div class="mb-4 row">
+                                <label for="start_date" class="form-label col-sm-3 col-form-label">Start Date & Time (Optional)</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control @error('start_date') is-invalid @enderror"
+                                        id="start_date" name="start_date" placeholder="Select start date & time"
+                                        value="{{ old('start_date') }}">
+                                    @error('start_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- End Date --}}
+                            <div class="mb-4 row">
+                                <label for="end_date" class="form-label col-sm-3 col-form-label">End Date & Time (Optional)</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control @error('end_date') is-invalid @enderror"
+                                        id="end_date" name="end_date" placeholder="Select end date & time"
+                                        value="{{ old('end_date') }}">
+                                    @error('end_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Multiple Dates Group --}}
+                        <div id="multiple-dates-group" style="display: none;">
+                            <div class="mb-4 row">
+                                <label class="form-label col-sm-3 col-form-label">Select Active Dates / Ranges</label>
+                                <div class="col-sm-12">
+                                    <div id="date-ranges-container">
+                                        <!-- Row template -->
+                                        <div class="date-range-row d-flex align-items-center mb-2">
+                                            <input type="text" name="active_date_ranges[]" class="form-control flatpickr-range me-2" placeholder="Select date range" required>
+                                            <button type="button" class="btn btn-danger btn-remove-date-range" style="display: none;">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-secondary mt-2" id="btn-add-date-range">
+                                        <i class="ti ti-plus"></i> Add Date / Range
+                                    </button>
+                                    <div class="form-text text-muted">Click start date and end date on calendar. Click twice for a single day. You can add multiple date ranges.</div>
+                                    @error('active_date_ranges')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Display Hours --}}
                         <div class="mb-4 row">
-                            <label for="end_date" class="form-label col-sm-3 col-form-label">End Date & Time (Optional)</label>
+                            <label class="form-label col-sm-3 col-form-label">Daily Display Hours (Optional)</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control @error('end_date') is-invalid @enderror"
-                                    id="end_date" name="end_date" placeholder="Select end date & time"
-                                    value="{{ old('end_date') }}">
-                                @error('end_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="start_time" class="form-label small text-muted">Start Time</label>
+                                        <input type="text" class="form-control @error('start_time') is-invalid @enderror"
+                                            id="start_time" name="start_time" placeholder="HH:MM"
+                                            value="{{ old('start_time') }}">
+                                        @error('start_time')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="end_time" class="form-label small text-muted">End Time</label>
+                                        <input type="text" class="form-control @error('end_time') is-invalid @enderror"
+                                            id="end_time" name="end_time" placeholder="HH:MM"
+                                            value="{{ old('end_time') }}">
+                                        @error('end_time')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <span class="form-text text-muted">Specify the daily active time window (e.g. 10:00 to 22:00). Leave empty to display all day.</span>
                             </div>
                         </div>
 
@@ -235,6 +318,8 @@
 @endsection
 
 @push('script')
+    <script src="{{ asset('assets/backend/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/select2.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script>
@@ -254,12 +339,98 @@
         });
 
         $(document).ready(function() {
+            // Initialize Select2 for multiple pages selection
+            $('#target_page').select2({
+                placeholder: "Select target display pages",
+                allowClear: true
+            });
+
+            // Prevent selecting other options when 'all' is selected
+            $('#target_page').on('change', function() {
+                var selected = $(this).val();
+                if (selected && selected.includes('all') && selected.length > 1) {
+                    $(this).val(['all']).trigger('change.select2');
+                }
+            });
+
+            // Initialize Flatpickr for range dates
             flatpickr("#start_date, #end_date", {
                 enableTime: true,
                 dateFormat: "Y-m-d H:i:S",
                 altInput: true,
                 altFormat: "F j, Y H:i",
             });
+
+            // Initialize Flatpickr for start_time & end_time
+            flatpickr("#start_time, #end_time", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true
+            });
+
+            // Initialize Flatpickr range helper
+            function initFlatpickrRange(element) {
+                flatpickr(element, {
+                    mode: "range",
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    conjunction: " to "
+                });
+            }
+
+            // Initialize on existing range input
+            $('.flatpickr-range').each(function() {
+                initFlatpickrRange(this);
+            });
+
+            // Add date range row
+            $('#btn-add-date-range').on('click', function() {
+                var rowHtml = `
+                    <div class="date-range-row d-flex align-items-center mb-2 animate__animated animate__fadeIn">
+                        <input type="text" name="active_date_ranges[]" class="form-control flatpickr-range me-2" placeholder="Select date range" required>
+                        <button type="button" class="btn btn-danger btn-remove-date-range">
+                            <i class="ti ti-trash"></i>
+                        </button>
+                    </div>
+                `;
+                var $row = $(rowHtml);
+                $('#date-ranges-container').append($row);
+                initFlatpickrRange($row.find('.flatpickr-range')[0]);
+                toggleDeleteButtons();
+            });
+
+            // Remove date range row
+            $(document).on('click', '.btn-remove-date-range', function() {
+                $(this).closest('.date-range-row').remove();
+                toggleDeleteButtons();
+            });
+
+            function toggleDeleteButtons() {
+                var rows = $('#date-ranges-container .date-range-row');
+                if (rows.length <= 1) {
+                    rows.find('.btn-remove-date-range').hide();
+                } else {
+                    rows.find('.btn-remove-date-range').show();
+                }
+            }
+            toggleDeleteButtons();
+
+            // Date Type Toggle Functionality
+            function toggleDateFields() {
+                var dateType = $('#date_type').val();
+                if (dateType === 'range') {
+                    $('#range-dates-group').show();
+                    $('#multiple-dates-group').hide();
+                } else {
+                    $('#range-dates-group').hide();
+                    $('#multiple-dates-group').show();
+                }
+            }
+
+            $('#date_type').on('change', toggleDateFields);
+            toggleDateFields(); // Run on page load/old input restoration
 
             var editorInstance;
             ClassicEditor
