@@ -51,20 +51,20 @@ class EventRepository
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
             ->where(function ($query) {
+                // Must not be past the end_date if end_date is set
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', today());
+            })
+            ->where(function ($query) {
+                // Show if always_show is enabled OR standard date conditions are met
                 $query->where('always_show', true)
                     ->orWhere(function ($q) {
                         // Tampil jika (Bulan & Tahun start_date == Sekarang)
-                        // OR (start_date <= hari ini AND (end_date kosong OR end_date >= hari ini))
+                        // OR (start_date <= hari ini)
                         $q->where(function ($q2) {
                             $q2->whereMonth('start_date', now()->month)
                                 ->whereYear('start_date', now()->year);
-                        })->orWhere(function ($q2) {
-                            $q2->where('start_date', '<=', today())
-                                ->where(function ($sub) {
-                                    $sub->whereNull('end_date')
-                                        ->orWhere('end_date', '>=', today());
-                                });
-                        });
+                        })->orWhere('start_date', '<=', today());
                     });
             })
             ->get();
@@ -77,7 +77,7 @@ class EventRepository
             ->where('is_active', true)
             ->where('type', 'exhibition')
             ->where(function ($query) {
-                $query->where('always_show', true)
+                $query->whereNull('end_date')
                     ->orWhere('end_date', '>=', today());
             })
             ->get();

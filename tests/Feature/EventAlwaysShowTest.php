@@ -116,13 +116,13 @@ class EventAlwaysShowTest extends TestCase
     }
 
     /**
-     * Test always_show = true and past end date exhibition event is displayed.
+     * Test always_show = true and past end date exhibition event is hidden.
      */
-    public function test_past_exhibition_event_with_always_show_is_visible()
+    public function test_past_exhibition_event_is_hidden_even_with_always_show()
     {
         $pastDate = Carbon::now('Asia/Makassar')->subDays(5)->toDateString();
 
-        $event = Event::create([
+        Event::create([
             'name' => 'Past Exhibition Visible',
             'type' => 'exhibition',
             'start_date' => $pastDate,
@@ -139,8 +139,34 @@ class EventAlwaysShowTest extends TestCase
         $eventRepository = app(\App\Repositories\EventRepository::class);
         $events = $eventRepository->getExhibitionEvents(['*'], []);
 
-        $this->assertCount(1, $events);
-        $this->assertEquals($event->name, $events->first()->name);
+        $this->assertCount(0, $events);
+    }
+
+    /**
+     * Test always_show = true and past end date regular event is hidden.
+     */
+    public function test_past_regular_event_is_hidden_even_with_always_show()
+    {
+        $pastDate = Carbon::now('Asia/Makassar')->subDays(5)->toDateString();
+
+        Event::create([
+            'name' => 'Past Regular Event',
+            'type' => 'special',
+            'start_date' => $pastDate,
+            'end_date' => $pastDate,
+            'start_time' => '10:00:00',
+            'end_time' => '22:00:00',
+            'description' => 'Test event',
+            'location' => 'Main Atrium',
+            'is_paid' => false,
+            'is_active' => true,
+            'always_show' => true,
+        ]);
+
+        $eventRepository = app(\App\Repositories\EventRepository::class);
+        $events = $eventRepository->getRegularEvents(['*'], []);
+
+        $this->assertCount(0, $events);
     }
 
     /**
