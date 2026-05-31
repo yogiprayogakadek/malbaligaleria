@@ -1,563 +1,507 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>Sign In — Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --indigo-500: #6366f1;
-            --indigo-600: #4f46e5;
-            --indigo-700: #4338ca;
-            --slate-50:  #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
-            --slate-400: #94a3b8;
-            --slate-500: #64748b;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --slate-900: #0f172a;
+            --brand:     #b45309;
+            --brand-dk:  #92400e;
+            --cream:     #faf7f2;
+            --warm-100:  #f5ede0;
+            --warm-200:  #e9d8c0;
+            --warm-300:  #d6b896;
+            --stone-400: #a8a29e;
+            --stone-500: #78716c;
+            --stone-600: #57534e;
+            --stone-700: #44403c;
+            --stone-800: #292524;
+            --stone-900: #1c1917;
         }
 
         html, body {
-            height: 100%;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--slate-50);
-        }
-
-        /* ── Grid Layout ──────────────────────────────────────── */
-        .login-wrapper {
             min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cream);
+            color: var(--stone-800);
         }
 
-        @media (max-width: 900px) {
-            .login-wrapper { grid-template-columns: 1fr; }
-            .login-panel-left { display: none; }
+        /* ── Soft mesh background ───────────────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 55% at 15% 0%, rgba(217, 119, 6, 0.06) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 45% at 85% 100%, rgba(180, 83, 9, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 80% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* ── Left Decorative Panel ────────────────────────────── */
-        .login-panel-left {
+        /* ── Page scaffold ──────────────────────────────────── */
+        .page {
             position: relative;
-            background: linear-gradient(145deg, #312e81 0%, #4f46e5 45%, #818cf8 100%);
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* ── Wordmark / Brand header ────────────────────────── */
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 44px;
+        }
+
+        .brand-logo-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            border: 1.5px solid var(--warm-200);
+            background: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            padding: 48px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         }
 
-        .login-panel-left::before {
-            content: '';
-            position: absolute;
-            width: 500px; height: 500px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.04);
-            top: -120px; left: -120px;
-            pointer-events: none;
-        }
-        .login-panel-left::after {
-            content: '';
-            position: absolute;
-            width: 350px; height: 350px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            bottom: -80px; right: -80px;
-            pointer-events: none;
-        }
-
-        .panel-inner {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            max-width: 400px;
-        }
-
-        .panel-logo-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 80px; height: 80px;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 20px;
-            margin-bottom: 28px;
-        }
-
-        .panel-logo-box img {
-            width: 52px; height: 52px;
+        .brand-logo-ring img {
+            width: 40px;
+            height: 40px;
             object-fit: contain;
         }
 
-        .panel-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #fff;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
-            margin-bottom: 14px;
+        .brand-wordmark {
+            text-align: center;
         }
 
-        .panel-subtitle {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.65);
-            line-height: 1.7;
-            max-width: 300px;
-            margin: 0 auto 40px;
+        .brand-name {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.45rem;
+            font-weight: 400;
+            color: var(--stone-900);
+            letter-spacing: 0.01em;
+            line-height: 1;
         }
 
-        .panel-features { display: flex; flex-direction: column; gap: 14px; text-align: left; }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            padding: 14px 18px;
-        }
-
-        .feature-icon {
-            width: 36px; height: 36px;
-            flex-shrink: 0;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.15);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-        }
-
-        .feature-text {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        /* ── Right Form Panel ─────────────────────────────────── */
-        .login-panel-right {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 32px;
-            background: #fff;
-        }
-
-        .form-box { width: 100%; max-width: 420px; }
-
-        /* Mobile logo */
-        .mobile-logo { display: none; text-align: center; margin-bottom: 32px; }
-        @media (max-width: 900px) { .mobile-logo { display: block; } }
-        .mobile-logo img { height: 48px; object-fit: contain; margin-bottom: 8px; }
-        .mobile-logo-name { font-size: 1.1rem; font-weight: 700; color: var(--slate-800); }
-
-        /* Form header */
-        .form-header { margin-bottom: 32px; }
-
-        .form-eyebrow {
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
+        .brand-sub {
+            font-size: 0.72rem;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            color: var(--indigo-600);
-            margin-bottom: 8px;
+            color: var(--stone-400);
+            margin-top: 4px;
+            font-weight: 400;
         }
 
-        .form-title {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--slate-900);
-            letter-spacing: -0.5px;
+        /* ── Login card ─────────────────────────────────────── */
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border: 1px solid var(--warm-200);
+            border-radius: 20px;
+            padding: 40px 36px;
+            box-shadow:
+                0 1px 3px rgba(0,0,0,0.04),
+                0 8px 32px rgba(0,0,0,0.06),
+                0 0 0 1px rgba(255,255,255,0.9) inset;
+        }
+
+        /* ── Card heading ───────────────────────────────────── */
+        .card-heading {
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.55rem;
+            font-weight: 400;
+            color: var(--stone-900);
+            line-height: 1.25;
             margin-bottom: 6px;
         }
 
-        .form-desc { font-size: 0.9rem; color: var(--slate-500); }
+        .card-title em {
+            font-style: italic;
+            color: var(--brand);
+        }
 
-        /* Alert */
-        .alert-error {
-            background: #fff1f2;
-            border: 1px solid #fecdd3;
-            border-radius: 10px;
-            padding: 12px 16px;
+        .card-desc {
             font-size: 0.85rem;
-            color: #be123c;
-            margin-bottom: 20px;
+            color: var(--stone-500);
+            line-height: 1.5;
+        }
+
+        /* ── Alert ──────────────────────────────────────────── */
+        .alert {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 0.83rem;
+            color: #b91c1c;
+            margin-bottom: 22px;
             display: flex;
+            gap: 9px;
             align-items: flex-start;
-            gap: 10px;
         }
 
-        /* Input group */
-        .input-group { margin-bottom: 20px; }
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #15803d;
+        }
 
-        .input-label {
+        /* ── Form fields ────────────────────────────────────── */
+        .field { margin-bottom: 18px; }
+
+        .field-label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.775rem;
             font-weight: 600;
-            color: var(--slate-700);
+            color: var(--stone-600);
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
             margin-bottom: 7px;
-            letter-spacing: 0.3px;
         }
 
-        .input-wrap { position: relative; }
+        .field-wrap { position: relative; }
 
-        .input-icon {
-            position: absolute;
-            left: 14px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--slate-400);
-            display: flex; align-items: center;
-            pointer-events: none;
-        }
-
-        .input-field {
+        .field-input {
             width: 100%;
-            padding: 12px 14px 12px 42px;
-            border: 1.5px solid var(--slate-200);
+            padding: 11px 14px 11px 40px;
+            border: 1.5px solid var(--warm-200);
             border-radius: 10px;
             font-size: 0.9rem;
             font-family: 'Inter', sans-serif;
-            color: var(--slate-800);
-            background: var(--slate-50);
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            color: var(--stone-800);
+            background: var(--cream);
             outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.15s ease;
         }
 
-        .input-field:focus {
-            border-color: var(--indigo-500);
-            box-shadow: 0 0 0 4px rgba(99,102,241,0.08);
+        .field-input::placeholder { color: var(--stone-400); }
+
+        .field-input:focus {
+            border-color: var(--brand);
             background: #fff;
+            box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.09);
         }
 
-        .input-field.is-invalid {
-            border-color: #f43f5e;
-            box-shadow: 0 0 0 4px rgba(244,63,94,0.07);
+        .field-input.is-invalid {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
         }
 
-        .error-msg {
-            font-size: 0.78rem;
-            color: #f43f5e;
-            margin-top: 5px;
+        .field-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--stone-400);
             display: flex;
             align-items: center;
-            gap: 4px;
+            pointer-events: none;
+        }
+
+        .field-err {
+            font-size: 0.775rem;
+            color: #dc2626;
+            margin-top: 5px;
         }
 
         /* Password toggle */
-        .pw-toggle {
+        .pw-btn {
             position: absolute;
-            right: 14px; top: 50%;
+            right: 12px;
+            top: 50%;
             transform: translateY(-50%);
-            background: none; border: none;
-            color: var(--slate-400);
+            background: none;
+            border: none;
             cursor: pointer;
-            display: flex; align-items: center;
+            color: var(--stone-400);
+            display: flex;
+            align-items: center;
             padding: 0;
             transition: color 0.2s;
         }
-        .pw-toggle:hover { color: var(--indigo-600); }
+        .pw-btn:hover { color: var(--brand); }
 
-        /* Options row */
-        .row-options {
+        /* ── Divider row ────────────────────────────────────── */
+        .options-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
         }
 
-        .remember-label {
-            display: flex; align-items: center; gap: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            color: var(--slate-600);
-        }
-
-        .remember-cb {
-            width: 16px; height: 16px;
-            accent-color: var(--indigo-600);
+        .check-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.83rem;
+            color: var(--stone-500);
             cursor: pointer;
         }
 
-        .forgot-link {
-            font-size: 0.85rem;
+        .check-label input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--brand);
+            cursor: pointer;
+        }
+
+        .link-forgot {
+            font-size: 0.83rem;
+            color: var(--brand);
             font-weight: 500;
-            color: var(--indigo-600);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: color 0.2s, opacity 0.2s;
         }
-        .forgot-link:hover { color: var(--indigo-700); text-decoration: underline; }
+        .link-forgot:hover { opacity: 0.75; }
 
-        /* Submit button */
-        .btn-submit {
+        /* ── Submit button ──────────────────────────────────── */
+        .btn-login {
             width: 100%;
-            padding: 13px 20px;
-            background: linear-gradient(135deg, var(--indigo-600) 0%, var(--indigo-700) 100%);
-            color: #fff;
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
+            padding: 12.5px 20px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 14px rgba(79,70,229,0.3);
-            letter-spacing: 0.2px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
+            color: #fff;
+            background: var(--brand);
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(180, 83, 9, 0.22), 0 1px 3px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
-        .btn-submit:hover {
-            background: linear-gradient(135deg, var(--indigo-700) 0%, #3730a3 100%);
-            box-shadow: 0 6px 20px rgba(79,70,229,0.4);
+
+        .btn-login:hover {
+            background: var(--brand-dk);
             transform: translateY(-1px);
-        }
-        .btn-submit:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 6px 22px rgba(180, 83, 9, 0.3), 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Spinner */
-        .btn-spinner {
-            width: 18px; height: 18px;
-            border: 2px solid rgba(255,255,255,0.3);
+        .btn-login:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(180, 83, 9, 0.2);
+        }
+
+        .btn-login.loading .btn-text { opacity: 0.6; }
+
+        .btn-spin {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.35);
             border-top-color: #fff;
             border-radius: 50%;
-            animation: spin 0.7s linear infinite;
+            animation: spin 0.65s linear infinite;
             display: none;
         }
+        .btn-login.loading .btn-spin { display: block; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .btn-submit.loading .btn-spinner { display: block; }
-        .btn-submit.loading .btn-label { opacity: 0.7; }
 
-        /* Back link */
-        .back-link {
-            display: flex;
+        /* ── Footer ─────────────────────────────────────────── */
+        .card-footer {
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid var(--warm-100);
+            text-align: center;
+        }
+
+        .footer-link {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 24px;
-            font-size: 0.82rem;
-            color: var(--slate-400);
+            gap: 5px;
+            font-size: 0.8rem;
+            color: var(--stone-400);
             text-decoration: none;
             transition: color 0.2s;
         }
-        .back-link:hover { color: var(--indigo-600); }
+        .footer-link:hover { color: var(--stone-600); }
+
+        /* ── Ambient bottom text ────────────────────────────── */
+        .page-footer {
+            margin-top: 28px;
+            font-size: 0.72rem;
+            color: var(--stone-400);
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Responsive ─────────────────────────────────────── */
+        @media (max-width: 480px) {
+            .login-card { padding: 32px 24px; border-radius: 16px; }
+            .card-title { font-size: 1.35rem; }
+        }
     </style>
 </head>
 
 <body>
-    <div class="login-wrapper">
+    <div class="page">
 
-        {{-- ── Left Panel ───────────────────────────────────── --}}
-        <div class="login-panel-left">
-            <div class="panel-inner">
-                <div class="panel-logo-box">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Mal Bali Galeria">
-                </div>
-
-                <h1 class="panel-title">Mal Bali Galeria<br>Admin Portal</h1>
-                <p class="panel-subtitle">
-                    Central management system for mall operations, tenants, events, and promotions.
-                </p>
-
-                <div class="panel-features">
-                    <div class="feature-item">
-                        <div class="feature-icon">🏬</div>
-                        <div class="feature-text">Manage tenants and store data</div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📅</div>
-                        <div class="feature-text">Schedule events and promotions</div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📊</div>
-                        <div class="feature-text">Monitor visitor analytics and reports</div>
-                    </div>
-                </div>
+        {{-- Brand header --}}
+        <div class="brand-header">
+            <div class="brand-logo-ring">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="Logo">
+            </div>
+            <div class="brand-wordmark">
+                <div class="brand-name">Mal Bali Galeria</div>
+                <div class="brand-sub">Management Portal</div>
             </div>
         </div>
 
-        {{-- ── Right Panel ──────────────────────────────────── --}}
-        <div class="login-panel-right">
-            <div class="form-box">
+        {{-- Card --}}
+        <div class="login-card">
+            <div class="card-heading">
+                <h1 class="card-title">Sign in to your<br><em>account</em></h1>
+                <p class="card-desc">Enter your credentials to access the dashboard.</p>
+            </div>
 
-                {{-- Mobile Logo --}}
-                <div class="mobile-logo">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo">
-                    <div class="mobile-logo-name">Mal Bali Galeria</div>
+            {{-- Errors --}}
+            @if ($errors->any())
+                <div class="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <div>
+                        @foreach ($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @if (session('status'))
+                <div class="alert alert-success">{{ session('status') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}" id="loginForm">
+                @csrf
+
+                {{-- Email --}}
+                <div class="field">
+                    <label class="field-label" for="login-email">Email</label>
+                    <div class="field-wrap">
+                        <span class="field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </span>
+                        <input type="email" id="login-email" name="email" value="{{ old('email') }}"
+                            required autofocus autocomplete="email"
+                            placeholder="your@email.com"
+                            class="field-input @error('email') is-invalid @enderror">
+                    </div>
+                    @error('email')
+                        <div class="field-err">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                <div class="form-header">
-                    <p class="form-eyebrow">Admin Portal</p>
-                    <h2 class="form-title">Welcome back 👋</h2>
-                    <p class="form-desc">Sign in to access the management dashboard.</p>
+                {{-- Password --}}
+                <div class="field">
+                    <label class="field-label" for="login-password">Password</label>
+                    <div class="field-wrap">
+                        <span class="field-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="login-password" name="password"
+                            required autocomplete="current-password"
+                            placeholder="Enter your password"
+                            class="field-input @error('password') is-invalid @enderror">
+                        <button type="button" class="pw-btn" onclick="togglePw()" tabindex="-1" aria-label="Toggle password">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    @error('password')
+                        <div class="field-err">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                {{-- Validation errors --}}
-                @if ($errors->any())
-                    <div class="alert-error">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <div>
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
+                {{-- Options --}}
+                <div class="options-row">
+                    <label class="check-label">
+                        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <span>Remember me</span>
+                    </label>
+                    @if (Route::has('password.request'))
+                        <a class="link-forgot" href="{{ route('password.request') }}">Forgot password?</a>
+                    @endif
+                </div>
 
-                @if (session('status'))
-                    <div class="alert-error" style="background:#f0fdf4; border-color:#bbf7d0; color:#15803d;">
-                        {{ session('status') }}
-                    </div>
-                @endif
+                {{-- Submit --}}
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <span class="btn-spin" id="btnSpin"></span>
+                    <span class="btn-text">Sign In</span>
+                </button>
+            </form>
 
-                <form method="POST" action="{{ route('login') }}" id="loginForm">
-                    @csrf
-
-                    {{-- Email --}}
-                    <div class="input-group">
-                        <label class="input-label" for="login-email">Email Address</label>
-                        <div class="input-wrap">
-                            <span class="input-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                            </span>
-                            <input type="email" id="login-email" name="email" value="{{ old('email') }}"
-                                required autofocus autocomplete="email"
-                                placeholder="you@example.com"
-                                class="input-field @error('email') is-invalid @enderror">
-                        </div>
-                        @error('email')
-                            <div class="error-msg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- Password --}}
-                    <div class="input-group">
-                        <label class="input-label" for="login-password">Password</label>
-                        <div class="input-wrap">
-                            <span class="input-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </svg>
-                            </span>
-                            <input type="password" id="login-password" name="password"
-                                required autocomplete="current-password"
-                                placeholder="Enter your password"
-                                class="input-field @error('password') is-invalid @enderror">
-                            <button type="button" class="pw-toggle" onclick="togglePassword()" tabindex="-1" aria-label="Toggle password">
-                                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                            </button>
-                        </div>
-                        @error('password')
-                            <div class="error-msg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- Remember + Forgot --}}
-                    <div class="row-options">
-                        <label class="remember-label">
-                            <input type="checkbox" class="remember-cb" name="remember" id="remember"
-                                {{ old('remember') ? 'checked' : '' }}>
-                            <span>Remember me</span>
-                        </label>
-                        @if (Route::has('password.request'))
-                            <a class="forgot-link" href="{{ route('password.request') }}">Forgot password?</a>
-                        @endif
-                    </div>
-
-                    {{-- Submit --}}
-                    <button type="submit" class="btn-submit" id="submitBtn">
-                        <span class="btn-spinner" id="btnSpinner"></span>
-                        <span class="btn-label">Sign In</span>
-                        <svg id="btnArrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </button>
-                </form>
-
-                <a href="{{ url('/') }}" class="back-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            <div class="card-footer">
+                <a href="{{ url('/') }}" class="footer-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
                     Back to website
                 </a>
-
             </div>
         </div>
+
+        <p class="page-footer">&copy; {{ date('Y') }} Mal Bali Galeria. All rights reserved.</p>
 
     </div>
 
     <script>
-        function togglePassword() {
-            const input = document.getElementById('login-password');
-            const icon  = document.getElementById('eye-icon');
-            const show  = input.type === 'password';
-            input.type  = show ? 'text' : 'password';
-            icon.innerHTML = show
+        function togglePw() {
+            const inp = document.getElementById('login-password');
+            const ico = document.getElementById('eyeIcon');
+            const show = inp.type === 'password';
+            inp.type = show ? 'text' : 'password';
+            ico.innerHTML = show
                 ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`
                 : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
         }
 
         document.getElementById('loginForm').addEventListener('submit', function () {
-            const btn   = document.getElementById('submitBtn');
-            const arrow = document.getElementById('btnArrow');
+            const btn = document.getElementById('loginBtn');
             btn.classList.add('loading');
-            if (arrow) arrow.style.display = 'none';
+            btn.disabled = true;
         });
     </script>
 </body>
-
 </html>
