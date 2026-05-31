@@ -13,7 +13,7 @@
     @endphp
 
     <!-- Announcement Popup Modal -->
-    <div id="announcementModal" class="announcement-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', Montserrat, sans-serif; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px); transition: all 0.3s ease-in-out;">
+    <div id="announcementModal" class="announcement-modal-overlay" data-lenis-prevent style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', Montserrat, sans-serif; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px); transition: all 0.3s ease-in-out;">
         <div class="announcement-modal-content" style="background: #fff; width: 100%; max-width: 600px; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; max-height: 90vh; animation: announcementPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
             <!-- Header -->
             <div style="background: {{ $bgColor }}; color: {{ $textColor }}; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
@@ -21,7 +21,7 @@
                 <button onclick="closeAnnouncementModal(event)" style="background: transparent; border: none; color: {{ $textColor }}; font-size: 24px; cursor: pointer; line-height: 1; padding: 0 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">&times;</button>
             </div>
             <!-- Body -->
-            <div style="padding: 24px; overflow-y: auto; flex: 1;">
+            <div style="padding: 24px; overflow-y: auto; flex: 1;" data-lenis-prevent>
                 @if($globalAnnouncement['image'])
                     <div style="margin-bottom: 20px; text-align: center; border-radius: 8px; overflow: hidden;">
                         <img src="{{ asset('storage/' . $globalAnnouncement['image']) }}" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
@@ -90,6 +90,9 @@
             if (modal) {
                 modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
+                if (window.lenis) {
+                    window.lenis.stop();
+                }
             }
         }
 
@@ -112,6 +115,9 @@
             if (modal) {
                 modal.style.display = 'none';
                 document.body.style.overflow = '';
+                if (window.lenis) {
+                    window.lenis.start();
+                }
             }
         }
 
