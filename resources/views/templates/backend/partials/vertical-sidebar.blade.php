@@ -20,7 +20,7 @@
                 <ul class="sidebar-menu" id="sidebarnav">
 
                     <!-- HOME CATEGORY -->
-                    @role(['admin', 'superuser', 'hr'])
+                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view dashboard'))
                         <li class="nav-small-cap">
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
                             <span class="hide-menu">Home</span>
@@ -31,7 +31,7 @@
                                 <span class="hide-menu">Dashboard</span>
                             </a>
                         </li>
-                    @endrole
+                    @endif
 
                     <!-- SYSTEM ADMIN CATEGORY -->
                     @role('superuser')
@@ -109,15 +109,23 @@
                                 <span class="hide-menu">Visitor Logs</span>
                             </a>
                         </li>
+                        <!-- Role & Permission -->
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('admin.role-permission.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:shield-keyhole-line-duotone"></iconify-icon>
+                                <span class="hide-menu">Role & Permission</span>
+                            </a>
+                        </li>
                     @endrole
 
                     <!-- CONTENT MANAGEMENT CATEGORY -->
-                    @role(['admin', 'superuser'])
+                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasAnyPermission(['view category tenants', 'view tenants', 'view events', 'view gallery', 'view promo']))
                         <li class="nav-small-cap">
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
                             <span class="hide-menu">Content Management</span>
                         </li>
                         <!-- Category Tenants -->
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view category tenants'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:layers-line-duotone"></iconify-icon>
@@ -130,15 +138,19 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create category tenants'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.category.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
                         <!-- Events -->
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view events'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:calendar-mark-line-duotone"></iconify-icon>
@@ -151,12 +163,14 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create events'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.event.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                                 <li class="sidebar-item">
                                     <a class="sidebar-link has-arrow {{ request()->routeIs('admin.event.photo*') ? 'active' : '' }}"
                                         href="javascript:void(0)" aria-expanded="false">
@@ -170,17 +184,21 @@
                                                 <span class="hide-menu">List</span>
                                             </a>
                                         </li>
+                                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create events'))
                                         <li class="sidebar-item">
                                             <a class="sidebar-link" href="{{ route('admin.event.photo.create') }}">
                                                 <span class="icon-small"></span>
                                                 <span class="hide-menu">Create</span>
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </li>
                             </ul>
                         </li>
+                        @endif
                         <!-- Gallery -->
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view gallery'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:album-line-duotone"></iconify-icon>
@@ -193,15 +211,19 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create gallery'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.gallery.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
                         <!-- Promo -->
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view promo'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:tag-price-line-duotone"></iconify-icon>
@@ -214,15 +236,19 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create promo'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.promo.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
                         <!-- Tenants -->
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view tenants'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:shop-2-line-duotone"></iconify-icon>
@@ -235,12 +261,14 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create tenants'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.tenant.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                                 <li class="sidebar-item">
                                     <a class="sidebar-link has-arrow {{ request()->routeIs('admin.tenant.photo*') ? 'active' : '' }}"
                                         href="javascript:void(0)" aria-expanded="false">
@@ -254,6 +282,7 @@
                                                 <span class="hide-menu">List</span>
                                             </a>
                                         </li>
+                                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create tenants'))
                                         <li class="sidebar-item">
                                             <a class="sidebar-link" href="{{ route('admin.tenant.photo.create') }}">
                                                 <span class="icon-small"></span>
@@ -266,14 +295,16 @@
                                                 <span class="hide-menu">Bulk Insert</span>
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </li>
                             </ul>
                         </li>
-                    @endrole
+                        @endif
+                    @endif
 
                     <!-- HUMAN RESOURCES CATEGORY -->
-                    @role(['hr', 'superuser'])
+                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view careers'))
                         <li class="nav-small-cap">
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
                             <span class="hide-menu">Human Resources</span>
@@ -304,14 +335,15 @@
                                 </li>
                             </ul>
                         </li>
-                    @endrole
+                    @endif
 
                     <!-- SETTINGS CATEGORY -->
-                    @role('superuser')
+                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasAnyPermission(['view settings', 'view announcements']))
                         <li class="nav-small-cap">
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
-                            <span class="hide-menu">Settings</span>
+                            <span class="hide-menu">Settings & Tools</span>
                         </li>
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view settings'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:settings-linear"></iconify-icon>
@@ -324,14 +356,18 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create settings'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.setting.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
+                        @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view announcements'))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:volume-loud-linear"></iconify-icon>
@@ -344,15 +380,18 @@
                                         <span class="hide-menu">List</span>
                                     </a>
                                 </li>
+                                @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('create announcements'))
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="{{ route('admin.announcement.create') }}">
                                         <span class="icon-small"></span>
                                         <span class="hide-menu">Create</span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
-                    @endrole
+                        @endif
+                    @endif
 
                 </ul>
             </nav>

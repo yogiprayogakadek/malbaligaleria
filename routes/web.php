@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\Admin\PromoController;
 use App\Http\Controllers\Backend\Admin\ActivityController;
 use App\Http\Controllers\Backend\Admin\SettingController;
 use App\Http\Controllers\Backend\Admin\AnnouncementController;
+use App\Http\Controllers\Backend\Admin\RolePermissionController;
 use App\Http\Controllers\Backend\Admin\JobVacancyController;
 use App\Http\Controllers\Backend\Admin\JobApplicationController;
 use App\Http\Controllers\Backend\ProfileController;
@@ -96,7 +97,7 @@ Route::controller(AdminDashboardController::class)
     ->name('admin.')
     ->group(function () {
         // DASHBOARD
-        Route::get('/', 'index')->name('dashboard');
+        Route::get('/', 'index')->name('dashboard')->middleware('permission:view dashboard');
 
         // PROFILE
         Route::controller(ProfileController::class)
@@ -151,88 +152,88 @@ Route::controller(AdminDashboardController::class)
             Route::controller(CategoryController::class)->prefix('/category')
                 ->name('category.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{uuid}/edit', 'edit')->name('edit');
-                    Route::put('/{uuid}/update', 'update')->name('update');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view category tenants');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create category tenants');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create category tenants');
+                    Route::get('/{uuid}/edit', 'edit')->name('edit')->middleware('permission:edit category tenants');
+                    Route::put('/{uuid}/update', 'update')->name('update')->middleware('permission:edit category tenants');
                 });
 
             // TENANT
             Route::controller(TenantController::class)->prefix('/tenant')
                 ->name('tenant.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/edit/{uuid}', 'edit')->name('edit');
-                    Route::put('/update/{uuid}', 'update')->name('update');
-                    Route::delete('/destroy/{uuid}', 'destroy')->name('destroy');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view tenants');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create tenants');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create tenants');
+                    Route::get('/edit/{uuid}', 'edit')->name('edit')->middleware('permission:edit tenants');
+                    Route::put('/update/{uuid}', 'update')->name('update')->middleware('permission:edit tenants');
+                    Route::delete('/destroy/{uuid}', 'destroy')->name('destroy')->middleware('permission:delete tenants');
                 });
 
             // TENANT PHOTO
             Route::controller(TenantPhotoController::class)->prefix('/tenant-photo')
                 ->name('tenant.photo.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::get('/bulk-create', 'bulkCreate')->name('bulk.create');
-                    Route::post('/bulk-store', 'bulkStore')->name('bulk.store');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{tenant_id}/edit', 'edit')->name('edit');
-                    Route::put('/{id}/update', 'update')->name('update');
-                    Route::delete('/delete/{id}', 'delete')->name('delete');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view tenants');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create tenants');
+                    Route::get('/bulk-create', 'bulkCreate')->name('bulk.create')->middleware('permission:create tenants');
+                    Route::post('/bulk-store', 'bulkStore')->name('bulk.store')->middleware('permission:create tenants');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create tenants');
+                    Route::get('/{tenant_id}/edit', 'edit')->name('edit')->middleware('permission:edit tenants');
+                    Route::put('/{id}/update', 'update')->name('update')->middleware('permission:edit tenants');
+                    Route::delete('/delete/{id}', 'delete')->name('delete')->middleware('permission:delete tenants');
                 });
 
             // EVENT
             Route::controller(EventController::class)->prefix('/event')
                 ->name('event.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/edit/{uuid}', 'edit')->name('edit');
-                    Route::put('/update/{uuid}', 'update')->name('update');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view events');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create events');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create events');
+                    Route::get('/edit/{uuid}', 'edit')->name('edit')->middleware('permission:edit events');
+                    Route::put('/update/{uuid}', 'update')->name('update')->middleware('permission:edit events');
                 });
 
             // EVENT PHOTO
             Route::controller(EventPhotoController::class)->prefix('/event-photo')
                 ->name('event.photo.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{event_id}/edit', 'edit')->name('edit');
-                    Route::put('/{id}/update', 'update')->name('update');
-                    Route::delete('/delete/{id}', 'delete')->name('delete');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view events');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create events');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create events');
+                    Route::get('/{event_id}/edit', 'edit')->name('edit')->middleware('permission:edit events');
+                    Route::put('/{id}/update', 'update')->name('update')->middleware('permission:edit events');
+                    Route::delete('/delete/{id}', 'delete')->name('delete')->middleware('permission:delete events');
                 });
 
             // GALLERY
             Route::controller(GalleryController::class)->prefix('/gallery')
                 ->name('gallery.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{id}/edit', 'edit')->name('edit');
-                    Route::put('/{id}/update', 'update')->name('update');
-                    Route::delete('/delete/{id}', 'delete')->name('delete');
-                    Route::put('/{id}/toggle-active', 'toggleActive')->name('toggle-active');
-                    Route::post('/batch-status', 'batchStatus')->name('batch-status');
-                    Route::post('/batch-clear-title', 'batchClearTitle')->name('batch-clear-title');
-                    Route::post('/batch-clear-sort', 'batchClearSort')->name('batch-clear-sort');
-                    Route::put('/{id}/update-sort', 'updateSort')->name('update-sort');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view gallery');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create gallery');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create gallery');
+                    Route::get('/{id}/edit', 'edit')->name('edit')->middleware('permission:edit gallery');
+                    Route::put('/{id}/update', 'update')->name('update')->middleware('permission:edit gallery');
+                    Route::delete('/delete/{id}', 'delete')->name('delete')->middleware('permission:delete gallery');
+                    Route::put('/{id}/toggle-active', 'toggleActive')->name('toggle-active')->middleware('permission:edit gallery');
+                    Route::post('/batch-status', 'batchStatus')->name('batch-status')->middleware('permission:edit gallery');
+                    Route::post('/batch-clear-title', 'batchClearTitle')->name('batch-clear-title')->middleware('permission:edit gallery');
+                    Route::post('/batch-clear-sort', 'batchClearSort')->name('batch-clear-sort')->middleware('permission:edit gallery');
+                    Route::put('/{id}/update-sort', 'updateSort')->name('update-sort')->middleware('permission:edit gallery');
                 });
 
             // PROMO
             Route::controller(PromoController::class)->prefix('/promo')
                 ->name('promo.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/edit/{uuid}', 'edit')->name('edit');
-                    Route::put('/update/{uuid}', 'update')->name('update');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view promo');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create promo');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create promo');
+                    Route::get('/edit/{uuid}', 'edit')->name('edit')->middleware('permission:edit promo');
+                    Route::put('/update/{uuid}', 'update')->name('update')->middleware('permission:edit promo');
                 });
 
             // Activity (RESTRICTED TO SUPERUSER)
@@ -291,59 +292,67 @@ Route::controller(AdminDashboardController::class)
                     Route::post('/compress-selected', 'compressSelected')->name('compress-selected');
                 });
 
-            // Setting (RESTRICTED TO SUPERUSER)
-            Route::controller(SettingController::class)
+            // Role & Permission Management (RESTRICTED TO SUPERUSER)
+            Route::controller(RolePermissionController::class)
                 ->middleware('superuser')
+                ->prefix('/role-permission')
+                ->name('role-permission.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/update', 'update')->name('update');
+                });
+
+            // Setting
+            Route::controller(SettingController::class)
                 ->prefix('/setting')
                 ->name('setting.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{id}/edit', 'edit')->name('edit');
-                    Route::put('/{id}/update', 'update')->name('update');
-                    Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
-                    Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view settings');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create settings');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create settings');
+                    Route::get('/{id}/edit', 'edit')->name('edit')->middleware('permission:edit settings');
+                    Route::put('/{id}/update', 'update')->name('update')->middleware('permission:edit settings');
+                    Route::post('/destroy-selected', 'destroySelected')->name('destroySelected')->middleware('permission:delete settings');
+                    Route::delete('/{id}/destroy', 'destroy')->name('destroy')->middleware('permission:delete settings');
                 });
 
-            // Announcement (RESTRICTED TO SUPERUSER)
+            // Announcement
             Route::controller(AnnouncementController::class)
-                ->middleware('superuser')
                 ->prefix('/announcement')
                 ->name('announcement.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{id}/edit', 'edit')->name('edit');
-                    Route::put('/{id}/update', 'update')->name('update');
-                    Route::post('/destroy-selected', 'destroySelected')->name('destroySelected');
-                    Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                    Route::get('/', 'index')->name('index')->middleware('permission:view announcements');
+                    Route::get('/create', 'create')->name('create')->middleware('permission:create announcements');
+                    Route::post('/store', 'store')->name('store')->middleware('permission:create announcements');
+                    Route::get('/{id}/edit', 'edit')->name('edit')->middleware('permission:edit announcements');
+                    Route::put('/{id}/update', 'update')->name('update')->middleware('permission:edit announcements');
+                    Route::post('/destroy-selected', 'destroySelected')->name('destroySelected')->middleware('permission:delete announcements');
+                    Route::delete('/{id}/destroy', 'destroy')->name('destroy')->middleware('permission:delete announcements');
                 });
         });
 
-        // CAREER — ACCESSIBLE BY ADMIN, SUPERUSER, AND HR
+        // CAREER — ACCESSIBLE BY ADMIN, SUPERUSER, AND HR (ENFORCED WITH PERMISSIONS)
         Route::controller(JobVacancyController::class)->prefix('/career/vacancy')->name('career.vacancy.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/create', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
-            Route::get('/{uuid}/edit', 'edit')->name('edit');
-            Route::put('/{uuid}/update', 'update')->name('update');
-            Route::delete('/{uuid}/destroy', 'destroy')->name('destroy');
+            Route::get('/', 'index')->name('index')->middleware('permission:view careers');
+            Route::get('/create', 'create')->name('create')->middleware('permission:create careers');
+            Route::post('/store', 'store')->name('store')->middleware('permission:create careers');
+            Route::get('/{uuid}/edit', 'edit')->name('edit')->middleware('permission:edit careers');
+            Route::put('/{uuid}/update', 'update')->name('update')->middleware('permission:edit careers');
+            Route::delete('/{uuid}/destroy', 'destroy')->name('destroy')->middleware('permission:delete careers');
         });
 
         Route::controller(JobApplicationController::class)->prefix('/career/application')->name('career.application.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/{uuid}', 'show')->name('show');
-            Route::get('/{uuid}/print', 'print')->name('print');
-            Route::put('/{uuid}/status', 'updateStatus')->name('updateStatus');
-            Route::get('/{uuid}/download-cv', 'downloadCv')->name('downloadCv');
-            Route::post('/{uuid}/review', 'storeReview')->name('storeReview');
+            Route::get('/', 'index')->name('index')->middleware('permission:view careers');
+            Route::get('/{uuid}', 'show')->name('show')->middleware('permission:view careers');
+            Route::get('/{uuid}/print', 'print')->name('print')->middleware('permission:view careers');
+            Route::put('/{uuid}/status', 'updateStatus')->name('updateStatus')->middleware('permission:edit careers');
+            Route::get('/{uuid}/download-cv', 'downloadCv')->name('downloadCv')->middleware('permission:view careers');
+            Route::post('/{uuid}/review', 'storeReview')->name('storeReview')->middleware('permission:edit careers');
         });
 
         Route::controller(\App\Http\Controllers\Backend\Admin\EmailLogController::class)->prefix('/career/email-logs')->name('career.email-logs.')->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/{id}', 'show')->name('show');
+            Route::get('/', 'index')->name('index')->middleware('permission:view careers');
+            Route::get('/{id}', 'show')->name('show')->middleware('permission:view careers');
         });
     });
 
