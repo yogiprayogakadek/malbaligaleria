@@ -6,637 +6,251 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Sign In — {{ config('app.name', 'Mal Bali Galeria') }}</title>
+    <title>Tenant Login - {{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --indigo-50: #eef2ff;
-            --indigo-100: #e0e7ff;
-            --indigo-500: #6366f1;
-            --indigo-600: #4f46e5;
-            --indigo-700: #4338ca;
-            --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
-            --slate-400: #94a3b8;
-            --slate-500: #64748b;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --slate-900: #0f172a;
-        }
-
-        html, body {
-            height: 100%;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--slate-50);
-        }
-
-        /* ── Layout ───────────────────────────────────────────── */
-        .login-wrapper {
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-
-        @media (max-width: 900px) {
-            .login-wrapper { grid-template-columns: 1fr; }
-            .login-panel-left { display: none; }
-        }
-
-        /* ── Left decorative panel ────────────────────────────── */
-        .login-panel-left {
-            position: relative;
-            background: linear-gradient(145deg, #312e81 0%, #4f46e5 45%, #818cf8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 48px;
-        }
-
-        /* Decorative circles */
-        .login-panel-left::before {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.04);
-            top: -120px;
-            left: -120px;
-            pointer-events: none;
-        }
-        .login-panel-left::after {
-            content: '';
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            bottom: -80px;
-            right: -80px;
-            pointer-events: none;
-        }
-
-        .panel-left-inner {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            max-width: 400px;
-        }
-
-        .panel-logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            margin-bottom: 28px;
-        }
-
-        .panel-logo img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-        }
-
-        .panel-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
-            margin-bottom: 14px;
-        }
-
-        .panel-subtitle {
-            font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.65);
-            line-height: 1.7;
-            max-width: 300px;
-            margin: 0 auto 40px;
-        }
-
-        .panel-features {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            text-align: left;
-        }
-
-        .panel-feature-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-            padding: 14px 18px;
-        }
-
-        .panel-feature-icon {
-            width: 36px;
-            height: 36px;
-            flex-shrink: 0;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .panel-feature-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        /* ── Right form panel ─────────────────────────────────── */
-        .login-panel-right {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 32px;
-            background: #ffffff;
-        }
-
-        .login-form-box {
-            width: 100%;
-            max-width: 420px;
-        }
-
-        /* Mobile-only logo */
-        .mobile-logo {
-            display: none;
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        @media (max-width: 900px) {
-            .mobile-logo { display: block; }
-        }
-
-        .mobile-logo img {
-            height: 48px;
-            object-fit: contain;
-            margin-bottom: 8px;
-        }
-
-        .mobile-logo-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--slate-800);
-        }
-
-        /* Form header */
-        .form-header { margin-bottom: 32px; }
-
-        .form-greeting {
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--indigo-600);
-            margin-bottom: 8px;
-        }
-
-        .form-title {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--slate-900);
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-        }
-
-        .form-description {
-            font-size: 0.9rem;
-            color: var(--slate-500);
-        }
-
-        /* Input groups */
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--slate-700);
-            margin-bottom: 7px;
-            letter-spacing: 0.3px;
-        }
-
-        .input-wrap {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--slate-400);
-            display: flex;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 14px 12px 42px;
-            border: 1.5px solid var(--slate-200);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            color: var(--slate-800);
-            background: var(--slate-50);
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-            outline: none;
-        }
-
-        .input-field:focus {
-            border-color: var(--indigo-500);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08);
-            background: #ffffff;
-        }
-
-        .input-field.is-invalid {
-            border-color: #f43f5e;
-            box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.07);
-        }
-
-        .error-msg {
-            font-size: 0.78rem;
-            color: #f43f5e;
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Toggle password visibility */
-        .password-toggle {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--slate-400);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding: 0;
-            transition: color 0.2s;
-        }
-        .password-toggle:hover { color: var(--indigo-600); }
-
-        /* Remember + forgot */
-        .row-options {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .remember-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            color: var(--slate-600);
-        }
-
-        .remember-checkbox {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--indigo-600);
-            cursor: pointer;
-        }
-
-        .forgot-link {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--indigo-600);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .forgot-link:hover { color: var(--indigo-700); text-decoration: underline; }
-
-        /* Submit button */
-        .btn-submit {
-            width: 100%;
-            padding: 13px 20px;
-            background: linear-gradient(135deg, var(--indigo-600) 0%, var(--indigo-700) 100%);
-            color: #ffffff;
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
-            letter-spacing: 0.2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-submit:hover {
-            background: linear-gradient(135deg, var(--indigo-700) 0%, #3730a3 100%);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
-        }
-
-        /* Loading spinner inside button */
-        .btn-spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            display: none;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .btn-submit.loading .btn-spinner { display: block; }
-        .btn-submit.loading .btn-text { opacity: 0.7; }
-
-        /* Divider */
-        .divider-line {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 24px 0;
-            color: var(--slate-400);
-            font-size: 0.8rem;
-        }
-        .divider-line::before,
-        .divider-line::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--slate-200);
-        }
-
-        /* Back to website link */
-        .back-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 24px;
-            font-size: 0.82rem;
-            color: var(--slate-400);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: var(--indigo-600); }
-
-        /* Alert for session errors */
-        .alert-error {
-            background: #fff1f2;
-            border: 1px solid #fecdd3;
-            border-radius: 10px;
-            padding: 12px 16px;
-            font-size: 0.85rem;
-            color: #be123c;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/auth.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="login-wrapper">
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <img src="{{ asset('assets/images/logo.png') }}" alt="logo"
+                    srcset="{{ asset('assets/images/logo.png') }}">
+            </div>
+            <div class="preloader-text">
+                <p>Loading...</p>
+            </div>
+            <div class="preloader-progress">
+                <div class="preloader-progress-bar" id="preloaderProgressBar"></div>
+            </div>
+        </div>
+    </div>
 
-        {{-- ── Left decorative panel ───────────────────────── --}}
-        <div class="login-panel-left">
-            <div class="panel-left-inner">
-                <div class="panel-logo">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Mal Bali Galeria Logo">
+    <div class="auth-container">
+        <div class="auth-image">
+            <div class="auth-image-content">
+                <div class="auth-logo">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="logo"
+                        srcset="{{ asset('assets/images/logo.png') }}">
                 </div>
-
-                <h1 class="panel-title">Mal Bali Galeria<br>Admin Portal</h1>
-                <p class="panel-subtitle">
-                    Central management system for mall operations, tenants, events, and promotions.
-                </p>
-
-                <div class="panel-features">
-                    <div class="panel-feature-item">
-                        <div class="panel-feature-icon">🏬</div>
-                        <div class="panel-feature-text">Manage tenants and store data</div>
-                    </div>
-                    <div class="panel-feature-item">
-                        <div class="panel-feature-icon">📅</div>
-                        <div class="panel-feature-text">Schedule events and promotions</div>
-                    </div>
-                    <div class="panel-feature-item">
-                        <div class="panel-feature-icon">📊</div>
-                        <div class="panel-feature-text">Monitor visitor analytics and reports</div>
-                    </div>
-                </div>
+                <h2>Welcome Back!</h2>
+                <p>Access your tenant dashboard to manage your store operations</p>
             </div>
         </div>
 
-        {{-- ── Right form panel ───────────────────────────── --}}
-        <div class="login-panel-right">
-            <div class="login-form-box">
+        <div class="auth-forms">
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="showForm('login')">Tenant Login</div>
+                {{-- <div class="auth-tab" onclick="showForm('register')">Tenant Register</div> --}}
+            </div>
 
-                {{-- Mobile-only logo --}}
-                <div class="mobile-logo">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo">
-                    <div class="mobile-logo-name">Mal Bali Galeria</div>
+            <!-- Login Form -->
+            <div id="login-form" class="form-container active">
+                <div class="auth-header">
+                    <h2>Tenant Dashboard Access</h2>
+                    <p>Login to manage your store operations</p>
                 </div>
 
-                <div class="form-header">
-                    <p class="form-greeting">Admin Portal</p>
-                    <h2 class="form-title">Welcome back 👋</h2>
-                    <p class="form-description">Sign in to access the management dashboard.</p>
-                </div>
-
-                {{-- Session / validation errors --}}
-                @if ($errors->any())
-                    <div class="alert-error">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            style="flex-shrink:0; margin-top:1px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                <!-- Google SSO Login -->
+                <div class="auth-sso">
+                    <button class="auth-button auth-sso-button"
+                        style="background: white; border: 1px solid var(--border-light); color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" style="display: block;">
+                            <path fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z">
+                            </path>
+                            <path fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z">
+                            </path>
+                            <path fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z">
+                            </path>
+                            <path fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z">
+                            </path>
                         </svg>
-                        <div>
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
+                        Sign in with Google
+                    </button>
+                </div>
 
-                @if (session('status'))
-                    <div class="alert-error" style="background:#f0fdf4; border-color:#bbf7d0; color:#15803d;">
-                        {{ session('status') }}
-                    </div>
-                @endif
+                <div class="divider">
+                    Or continue with email
+                </div>
 
-                <form method="POST" action="{{ route('login') }}" id="loginForm">
+                <form method="POST" action="{{ route('login') }}">
                     @csrf
 
-                    {{-- Email --}}
-                    <div class="input-group">
-                        <label class="input-label" for="email">Email Address</label>
-                        <div class="input-wrap">
-                            <span class="input-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                            </span>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}"
-                                required autofocus autocomplete="email"
-                                placeholder="you@example.com"
-                                class="input-field @error('email') is-invalid @enderror">
-                        </div>
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" value="{{ old('email') }}" required
+                            autofocus placeholder="Enter your email" class="@error('email') is-invalid @enderror">
                         @error('email')
-                            <div class="error-msg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                {{ $message }}
-                            </div>
+                            <div class="error-message">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    {{-- Password --}}
-                    <div class="input-group">
-                        <label class="input-label" for="password">Password</label>
-                        <div class="input-wrap">
-                            <span class="input-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </svg>
-                            </span>
-                            <input type="password" id="password" name="password"
-                                required autocomplete="current-password"
-                                placeholder="Enter your password"
-                                class="input-field @error('password') is-invalid @enderror">
-                            <button type="button" class="password-toggle" onclick="togglePassword()" tabindex="-1"
-                                aria-label="Toggle password visibility">
-                                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                            </button>
-                        </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required
+                            placeholder="Enter your password" class="@error('password') is-invalid @enderror">
                         @error('password')
-                            <div class="error-msg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                {{ $message }}
-                            </div>
+                            <div class="error-message">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    {{-- Remember + Forgot --}}
-                    <div class="row-options">
+                    <div class="remember-forgot">
                         <label class="remember-label">
-                            <input type="checkbox" class="remember-checkbox" name="remember" id="remember"
+                            <input type="checkbox" name="remember" id="remember"
                                 {{ old('remember') ? 'checked' : '' }}>
                             <span>Remember me</span>
                         </label>
+
                         @if (Route::has('password.request'))
-                            <a class="forgot-link" href="{{ route('password.request') }}">Forgot password?</a>
+                            <a class="forgot-link" href="{{ route('password.request') }}">
+                                Forgot password?
+                            </a>
                         @endif
                     </div>
 
-                    {{-- Submit --}}
-                    <button type="submit" class="btn-submit" id="submitBtn">
-                        <span class="btn-spinner" id="btnSpinner"></span>
-                        <span class="btn-text">Sign In</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                            stroke-linejoin="round" id="btnArrow">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
+                    <button type="submit" class="auth-button">
+                        Access Dashboard
                     </button>
                 </form>
 
-                {{-- Back to website --}}
-                <a href="{{ url('/') }}" class="back-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    Back to website
-                </a>
-
+                {{-- <div class="auth-toggle">
+                    Don't have an account? <a href="#"
+                        onclick="event.preventDefault(); showForm('register')">Register Store</a>
+                </div> --}}
             </div>
-        </div>
 
+            <!-- Register Form -->
+            {{-- <div id="register-form" class="form-container">
+                <div class="auth-header">
+                    <h2>Tenant Registration</h2>
+                    <p>Register your store to join our mall community</p>
+                </div>
+
+                <!-- Google SSO Register -->
+                <div class="auth-sso">
+                    <button class="auth-button auth-sso-button"
+                        style="background: white; border: 1px solid var(--border-light); color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" style="display: block;">
+                            <path fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z">
+                            </path>
+                            <path fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z">
+                            </path>
+                            <path fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z">
+                            </path>
+                            <path fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z">
+                            </path>
+                        </svg>
+                        Sign up with Google
+                    </button>
+                </div>
+
+                <div class="divider">
+                    Or register with email
+                </div>
+
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" name="name" value="{{ old('name') }}" required
+                            autofocus placeholder="Enter your full name" class="@error('name') is-invalid @enderror">
+                        @error('name')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" name="email" value="{{ old('email') }}"
+                            required placeholder="Enter your email" class="@error('email') is-invalid @enderror">
+                        @error('email')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" name="password" required
+                            placeholder="Create a password" class="@error('password') is-invalid @enderror">
+                        @error('password')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password-confirm">Confirm Password</label>
+                        <input type="password" id="register-password-confirm" name="password_confirmation" required
+                            placeholder="Confirm your password"
+                            class="@error('password_confirmation') is-invalid @enderror">
+                        @error('password_confirmation')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tenant">Tenant</label>
+                        <div class="searchable-select">
+                            <div class="searchable-select-control" style="position: relative;">
+                                <input type="text" id="tenant-search" placeholder="Search or select tenant..."
+                                    style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 16px; transition: border-color 0.3s ease, box-shadow 0.3s ease; background-color: white; color: var(--text-primary); padding-right: 40px;"
+                                    autocomplete="off" />
+                                <input type="hidden" name="tenant_id" id="tenant" value="" />
+                                <div
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div id="tenant-options" class="searchable-options"
+                                style="position: absolute; width: 100%; background: white; border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                                <div class="tenant-option" data-value=""
+                                    style="padding: 10px 16px; cursor: pointer; transition: background-color 0.2s ease;"
+                                    onclick="selectTenant('', 'Select a tenant')">Select a tenant</div>
+                                @if (isset($tenants))
+                                    @foreach ($tenants as $tenant)
+                                        <div class="tenant-option" data-value="{{ $tenant->id }}"
+                                            style="padding: 10px 16px; cursor: pointer; transition: background-color 0.2s ease;"
+                                            onclick="selectTenant('{{ $tenant->id }}', '{{ addslashes(trim($tenant->name)) }}')">
+                                            {{ trim($tenant->name) }}</div>
+                                    @endforeach
+                                @endif
+                                <div id="no-results" class="tenant-option hidden"
+                                    style="padding: 10px 16px; color: #94a3b8; font-style: italic; text-align: center;">
+                                    Data tidak ada</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-button">
+                        Register Store
+                    </button>
+                </form>
+
+                <div class="auth-toggle">
+                    Already have an account? <a href="#"
+                        onclick="event.preventDefault(); showForm('login')">Access Dashboard</a>
+                </div>
+            </div> --}}
+        </div>
     </div>
 
-    <script>
-        // Toggle password visibility
-        function togglePassword() {
-            const input = document.getElementById('password');
-            const icon  = document.getElementById('eye-icon');
-            const isPassword = input.type === 'password';
-            input.type = isPassword ? 'text' : 'password';
-            icon.innerHTML = isPassword
-                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`
-                : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
-        }
-
-        // Loading state on submit
-        document.getElementById('loginForm').addEventListener('submit', function () {
-            const btn    = document.getElementById('submitBtn');
-            const arrow  = document.getElementById('btnArrow');
-            btn.classList.add('loading');
-            if (arrow) arrow.style.display = 'none';
-        });
-    </script>
+    <script src="{{ asset('assets/frontend/js/auth.js') }}"></script>
 </body>
 
 </html>
