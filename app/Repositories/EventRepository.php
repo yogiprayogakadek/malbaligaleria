@@ -51,18 +51,21 @@ class EventRepository
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
             ->where(function ($query) {
-                // Tampil jika (Bulan & Tahun start_date == Sekarang)
-                // OR (start_date <= hari ini AND (end_date kosong OR end_date >= hari ini))
-                $query->where(function ($q) {
-                    $q->whereMonth('start_date', now()->month)
-                        ->whereYear('start_date', now()->year);
-                })->orWhere(function ($q) {
-                    $q->where('start_date', '<=', today())
-                        ->where(function ($sub) {
-                            $sub->whereNull('end_date')
-                                ->orWhere('end_date', '>=', today());
+                $query->where('always_show', true)
+                    ->orWhere(function ($q) {
+                        // Tampil jika (Bulan & Tahun start_date == Sekarang)
+                        // OR (start_date <= hari ini AND (end_date kosong OR end_date >= hari ini))
+                        $q->where(function ($q2) {
+                            $q2->whereMonth('start_date', now()->month)
+                                ->whereYear('start_date', now()->year);
+                        })->orWhere(function ($q2) {
+                            $q2->where('start_date', '<=', today())
+                                ->where(function ($sub) {
+                                    $sub->whereNull('end_date')
+                                        ->orWhere('end_date', '>=', today());
+                                });
                         });
-                });
+                    });
             })
             ->get();
     }
@@ -73,7 +76,10 @@ class EventRepository
             ->with($relationship)
             ->where('is_active', true)
             ->where('type', 'exhibition')
-            ->where('end_date', '>=', today())
+            ->where(function ($query) {
+                $query->where('always_show', true)
+                    ->orWhere('end_date', '>=', today());
+            })
             ->get();
     }
 

@@ -28,6 +28,7 @@ class StoreEventRequest extends FormRequest
             'price'            => 'nullable|numeric|min:0|required_if:is_paid,1',
             'target_audience'  => 'nullable|string|max:255',
             'highlights'       => 'nullable|string|max:255',
+            'always_show'      => 'required|boolean',
             'type'             => 'required|in:regular,special,exhibition,upcoming',
             'is_regular'       => 'boolean',
             'recurring_days'   => 'nullable|array',

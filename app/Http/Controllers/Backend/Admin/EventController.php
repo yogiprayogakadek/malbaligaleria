@@ -84,6 +84,7 @@ class EventController extends Controller
             'price'           => $request->price,
             'target_audience' => $request->target_audience,
             'highlights'      => $request->highlights,
+            'always_show'     => $request->always_show,
             'is_regular'      => ($request->type === 'regular'),
             'is_exhibition'   => ($request->type === 'exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,
@@ -98,7 +99,7 @@ class EventController extends Controller
 
     public function edit($uuid)
     {
-        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label', 'specific_dates']);
+        $event = $this->eventService->findByUuid($uuid, ['uuid', 'name', 'type', 'start_date', 'end_date', 'start_time', 'end_time', 'description', 'location', 'organizer', 'is_paid', 'price', 'target_audience', 'highlights', 'is_active', 'always_show', 'is_regular', 'is_exhibition', 'recurring_days', 'recurring_label', 'specific_dates']);
 
         return view('backend.admin.event.edit', compact('event'));
     }
@@ -123,6 +124,7 @@ class EventController extends Controller
             'target_audience' => $request->target_audience,
             'highlights'      => $request->highlights,
             'is_active'       => $request->is_active,
+            'always_show'     => $request->always_show,
             'is_regular'      => ($request->type === 'regular'),
             'is_exhibition'   => ($request->type === 'exhibition'),
             'recurring_days'  => $isRegular ? $request->recurring_days : null,

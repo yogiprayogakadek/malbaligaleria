@@ -290,6 +290,22 @@
                             </div>
                         </div>
 
+                        {{-- Publish Immediately --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="always_show" class="form-label col-sm-3 col-form-label">Publish Immediately</label>
+                            <div class="col-sm-12">
+                                <select name="always_show" id="always_show"
+                                    class="form-select @error('always_show') is-invalid @enderror">
+                                    <option value="0" {{ old('always_show', '0') == '0' ? 'selected' : '' }}>No (Follow Date Constraints)</option>
+                                    <option value="1" {{ old('always_show') == '1' ? 'selected' : '' }}>Yes (Always Show on Frontend)</option>
+                                </select>
+                                <small class="form-text text-muted">If set to Yes, this event will be displayed on the frontend immediately, bypassing any start/end date constraints.</small>
+                                @error('always_show')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         {{-- Submit --}}
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary hstack gap-6 float-end">

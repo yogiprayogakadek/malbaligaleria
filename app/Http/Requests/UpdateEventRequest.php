@@ -36,6 +36,7 @@ class UpdateEventRequest extends FormRequest
             'highlights'       => 'nullable|string|max:255',
             'type'             => 'required|in:regular,special,exhibition,upcoming',
             'is_active'        => 'required|numeric|between:0,1',
+            'always_show'      => 'required|numeric|between:0,1',
             'is_regular'       => 'boolean',
             'recurring_days'   => 'nullable|array',
             'recurring_days.*' => 'integer|between:0,6',

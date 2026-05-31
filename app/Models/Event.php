@@ -29,6 +29,7 @@ class Event extends Model
         'target_audience',
         'highlights',
         'is_active',
+        'always_show',
         'type',
         'is_regular',
         'is_exhibition',
@@ -40,7 +41,7 @@ class Event extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'start_date', 'end_date', 'location', 'type', 'is_active', 'is_regular', 'is_exhibition'])
+            ->logOnly(['name', 'start_date', 'end_date', 'location', 'type', 'is_active', 'always_show', 'is_regular', 'is_exhibition'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
@@ -52,6 +53,7 @@ class Event extends Model
         'recurring_days' => 'array',
         'is_paid'        => 'boolean',
         'is_active'      => 'boolean',
+        'always_show'    => 'boolean',
         'specific_dates' => 'array',
     ];
 
