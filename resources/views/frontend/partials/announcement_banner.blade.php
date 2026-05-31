@@ -180,4 +180,6 @@
             document.addEventListener("DOMContentLoaded", initAnnouncementPopup);
         }
     </script>
+    <!-- Iconify Icon library support on frontend -->
+    <script src="{{ asset('assets/backend/js/iconify-icon.min.js') }}"></script>
 @endif
