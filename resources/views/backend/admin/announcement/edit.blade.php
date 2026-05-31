@@ -346,7 +346,7 @@
     <script src="{{ asset('assets/backend/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/select2.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
         function closeAnnouncementPreviewModal() {
             var modal = document.getElementById('announcementPreviewModal');
@@ -457,17 +457,17 @@
             $('#date_type').on('change', toggleDateFields);
             toggleDateFields(); // Run on page load/old input restoration
 
-            var editorInstance;
-            ClassicEditor
-                .create(document.querySelector('#message'), {
-                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
-                })
-                .then(editor => {
-                    editorInstance = editor;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            var editorInstance = CKEDITOR.replace('message', {
+                allowedContent: true, // Allow all HTML tags like iconify-icon
+                height: 250,
+                toolbar: [
+                    { name: 'document', items: [ 'Source' ] },
+                    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
+                    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Blockquote' ] },
+                    { name: 'links', items: [ 'Link', 'Unlink' ] },
+                    { name: 'undo', items: [ 'Undo', 'Redo' ] }
+                ]
+            });
 
             // Live Preview Click Handler
             $('#btn-preview').on('click', function() {
