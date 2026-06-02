@@ -11,6 +11,23 @@
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logo.png') }}" />
 
+    <!-- PWA settings -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#111111">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/logo.png') }}">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service worker registered for MBG Admin Portal', reg))
+                    .catch(err => console.error('Service worker registration failed', err));
+            });
+        }
+    </script>
+
     <!-- Core Css -->
     <link rel="stylesheet" href="{{ asset('assets/backend/css/styles.css') }}" />
     <script src="{{ asset('assets/backend/js/vendor.min.js') }}"></script>

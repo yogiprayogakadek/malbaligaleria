@@ -7,6 +7,13 @@
     <title>Sign In — Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- PWA settings -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#111111">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/logo.png') }}">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -265,6 +272,15 @@
         btn.classList.add('loading');
         btn.disabled = true;
     });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service worker registered for MBG Admin Portal', reg))
+                .catch(err => console.error('Service worker registration failed', err));
+        });
+    }
 </script>
 </body>
 </html>
