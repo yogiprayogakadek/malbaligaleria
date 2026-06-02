@@ -40,13 +40,13 @@
         }
 
         .top-logo img {
-            width: 56px;
-            height: 56px;
+            width: 90px;
+            height: 90px;
             object-fit: contain;
         }
 
         .top-logo-name {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #111;
             letter-spacing: -0.2px;
