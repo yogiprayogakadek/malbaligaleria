@@ -6,502 +6,381 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sign In — Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        :root {
-            --brand:     #b45309;
-            --brand-dk:  #92400e;
-            --cream:     #faf7f2;
-            --warm-100:  #f5ede0;
-            --warm-200:  #e9d8c0;
-            --warm-300:  #d6b896;
-            --stone-400: #a8a29e;
-            --stone-500: #78716c;
-            --stone-600: #57534e;
-            --stone-700: #44403c;
-            --stone-800: #292524;
-            --stone-900: #1c1917;
-        }
+        html, body { height: 100%; font-family: 'Inter', sans-serif; }
 
-        html, body {
+        .wrapper {
             min-height: 100vh;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--cream);
-            color: var(--stone-800);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #f0f2f8;
+            padding: 24px;
+            gap: 0;
         }
 
-        /* ── Soft mesh background ───────────────────────────── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 60% 55% at 15% 0%, rgba(217, 119, 6, 0.06) 0%, transparent 65%),
-                radial-gradient(ellipse 50% 45% at 85% 100%, rgba(180, 83, 9, 0.05) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 80% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
+        @media (max-width: 860px) {
+            .wrapper { grid-template-columns: 1fr; padding: 20px; }
+            .panel-right { display: none; }
         }
 
-        /* ── Page scaffold ──────────────────────────────────── */
-        .page {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
+        /* ── LEFT PANEL ── */
+        .panel-left {
+            background: linear-gradient(135deg, #ffffff 0%, #f3f4fb 50%, #edf5ee 100%);
+            border-radius: 20px 0 0 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        /* ── Wordmark / Brand header ────────────────────────── */
-        .brand-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 44px;
-        }
-
-        .brand-logo-ring {
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
-            border: 1.5px solid var(--warm-200);
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-        }
-
-        .brand-logo-ring img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-        }
-
-        .brand-wordmark {
-            text-align: center;
-        }
-
-        .brand-name {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.45rem;
-            font-weight: 400;
-            color: var(--stone-900);
-            letter-spacing: 0.01em;
-            line-height: 1;
-        }
-
-        .brand-sub {
-            font-size: 0.72rem;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--stone-400);
-            margin-top: 4px;
-            font-weight: 400;
-        }
-
-        /* ── Login card ─────────────────────────────────────── */
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            background: #fff;
-            border: 1px solid var(--warm-200);
-            border-radius: 20px;
-            padding: 40px 36px;
-            box-shadow:
-                0 1px 3px rgba(0,0,0,0.04),
-                0 8px 32px rgba(0,0,0,0.06),
-                0 0 0 1px rgba(255,255,255,0.9) inset;
-        }
-
-        /* ── Card heading ───────────────────────────────────── */
-        .card-heading {
-            margin-bottom: 30px;
-        }
-
-        .card-title {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.55rem;
-            font-weight: 400;
-            color: var(--stone-900);
-            line-height: 1.25;
-            margin-bottom: 6px;
-        }
-
-        .card-title em {
-            font-style: italic;
-            color: var(--brand);
-        }
-
-        .card-desc {
-            font-size: 0.85rem;
-            color: var(--stone-500);
-            line-height: 1.5;
-        }
-
-        /* ── Alert ──────────────────────────────────────────── */
-        .alert {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 10px;
-            padding: 11px 14px;
-            font-size: 0.83rem;
-            color: #b91c1c;
-            margin-bottom: 22px;
-            display: flex;
-            gap: 9px;
-            align-items: flex-start;
-        }
-
-        .alert-success {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-            color: #15803d;
-        }
-
-        /* ── Form fields ────────────────────────────────────── */
-        .field { margin-bottom: 18px; }
-
-        .field-label {
-            display: block;
-            font-size: 0.775rem;
-            font-weight: 600;
-            color: var(--stone-600);
-            letter-spacing: 0.6px;
-            text-transform: uppercase;
-            margin-bottom: 7px;
-        }
-
-        .field-wrap { position: relative; }
-
-        .field-input {
-            width: 100%;
-            padding: 11px 14px 11px 40px;
-            border: 1.5px solid var(--warm-200);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            color: var(--stone-800);
-            background: var(--cream);
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.15s ease;
-        }
-
-        .field-input::placeholder { color: var(--stone-400); }
-
-        .field-input:focus {
-            border-color: var(--brand);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.09);
-        }
-
-        .field-input.is-invalid {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
-        }
-
-        .field-icon {
-            position: absolute;
-            left: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--stone-400);
-            display: flex;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .field-err {
-            font-size: 0.775rem;
-            color: #dc2626;
-            margin-top: 5px;
-        }
-
-        /* Password toggle */
-        .pw-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--stone-400);
-            display: flex;
-            align-items: center;
-            padding: 0;
-            transition: color 0.2s;
-        }
-        .pw-btn:hover { color: var(--brand); }
-
-        /* ── Divider row ────────────────────────────────────── */
-        .options-row {
-            display: flex;
-            align-items: center;
+            padding: 40px 52px;
             justify-content: space-between;
-            margin-bottom: 24px;
         }
 
-        .check-label {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 7px;
-            font-size: 0.83rem;
-            color: var(--stone-500);
-            cursor: pointer;
+            gap: 10px;
         }
-
-        .check-label input[type="checkbox"] {
-            width: 15px;
-            height: 15px;
-            accent-color: var(--brand);
-            cursor: pointer;
+        .brand-logo {
+            width: 34px; height: 34px;
+            background: #111;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
         }
+        .brand-logo img { width: 22px; height: 22px; object-fit: contain; filter: invert(1); }
+        .brand-name { font-size: 1rem; font-weight: 700; color: #111; letter-spacing: -0.3px; }
 
-        .link-forgot {
-            font-size: 0.83rem;
-            color: var(--brand);
-            font-weight: 500;
-            text-decoration: none;
-            transition: color 0.2s, opacity 0.2s;
-        }
-        .link-forgot:hover { opacity: 0.75; }
+        .form-area { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 360px; }
 
-        /* ── Submit button ──────────────────────────────────── */
-        .btn-login {
+        .form-title { font-size: 2rem; font-weight: 800; color: #0d0f12; margin-bottom: 6px; letter-spacing: -0.5px; }
+        .form-sub { font-size: 0.88rem; color: #6b7280; margin-bottom: 36px; }
+
+        /* Alert */
+        .alert { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 10px 14px; font-size: 0.83rem; color: #b91c1c; margin-bottom: 20px; }
+
+        /* Input */
+        .field { margin-bottom: 14px; position: relative; }
+
+        .field input {
             width: 100%;
-            padding: 12.5px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+            padding: 16px 18px;
+            background: #fff;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            color: #111;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .field input::placeholder { color: #9ca3af; }
+        .field input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.08);
+        }
+        .field input.is-invalid { border-color: #ef4444; }
+
+        .pw-toggle {
+            position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; color: #9ca3af;
+            display: flex; align-items: center; transition: color 0.2s;
+        }
+        .pw-toggle:hover { color: #6366f1; }
+
+        .field-err { font-size: 0.78rem; color: #dc2626; margin-top: 5px; padding-left: 2px; }
+
+        .forgot-row { text-align: right; margin-bottom: 20px; }
+        .forgot-link { font-size: 0.83rem; color: #6b7280; text-decoration: none; font-weight: 500; }
+        .forgot-link:hover { color: #111; }
+
+        /* Buttons */
+        .btn-signin {
+            width: 100%;
+            padding: 16px;
+            background: #0d0f12;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
             font-weight: 600;
             font-family: 'Inter', sans-serif;
-            letter-spacing: 0.3px;
-            color: #fff;
-            background: var(--brand);
-            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 16px rgba(180, 83, 9, 0.22), 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-
-        .btn-login:hover {
-            background: var(--brand-dk);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 22px rgba(180, 83, 9, 0.3), 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .btn-login:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(180, 83, 9, 0.2);
-        }
-
-        .btn-login.loading .btn-text { opacity: 0.6; }
+        .btn-signin:hover { background: #1f2937; transform: translateY(-1px); }
+        .btn-signin:active { transform: translateY(0); }
+        .btn-signin.loading { opacity: 0.75; pointer-events: none; }
 
         .btn-spin {
             width: 16px; height: 16px;
-            border: 2px solid rgba(255,255,255,0.35);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.65s linear infinite;
-            display: none;
+            border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+            border-radius: 50%; animation: spin 0.65s linear infinite; display: none;
         }
-        .btn-login.loading .btn-spin { display: block; }
+        .btn-signin.loading .btn-spin { display: block; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Footer ─────────────────────────────────────────── */
-        .card-footer {
-            margin-top: 28px;
-            padding-top: 22px;
-            border-top: 1px solid var(--warm-100);
-            text-align: center;
-        }
+        .panel-bottom { font-size: 0.8rem; color: #9ca3af; text-align: center; }
+        .panel-bottom a { color: #6b7280; text-decoration: none; font-weight: 500; }
+        .panel-bottom a:hover { color: #111; }
 
-        .footer-link {
-            display: inline-flex;
+        /* ── RIGHT PANEL ── */
+        .panel-right {
+            background: #0d0f12;
+            border-radius: 0 20px 20px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 5px;
-            font-size: 0.8rem;
-            color: var(--stone-400);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-link:hover { color: var(--stone-600); }
-
-        /* ── Ambient bottom text ────────────────────────────── */
-        .page-footer {
-            margin-top: 28px;
-            font-size: 0.72rem;
-            color: var(--stone-400);
-            letter-spacing: 0.5px;
+            justify-content: flex-end;
+            padding: 40px;
         }
 
-        /* ── Responsive ─────────────────────────────────────── */
-        @media (max-width: 480px) {
-            .login-card { padding: 32px 24px; border-radius: 16px; }
-            .card-title { font-size: 1.35rem; }
+        /* Hex grid background */
+        .panel-right::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='1'/%3E%3Cpolygon points='30,62 58,77 58,107 30,122 2,107 2,77' fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='1'/%3E%3Cpolygon points='-30,32 -2,17 -2,47 -30,62 -58,47 -58,17' fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='1'/%3E%3Cpolygon points='90,32 118,17 118,47 90,62 62,47 62,17' fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 60px 104px;
+            pointer-events: none;
         }
+
+        /* Glow blob */
+        .panel-right::after {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(56,189,148,0.15) 0%, rgba(99,102,241,0.08) 45%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -60%);
+            pointer-events: none;
+        }
+
+        /* Center illustration */
+        .illus-wrap {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -58%);
+            z-index: 2;
+        }
+
+        .hex-glow {
+            width: 260px; height: 280px;
+            clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+            background: linear-gradient(160deg, #1a2535, #0f1620);
+            border: 0;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            filter: drop-shadow(0 0 18px rgba(56,189,148,0.35)) drop-shadow(0 0 40px rgba(99,102,241,0.2));
+        }
+
+        .hex-border {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+            background: linear-gradient(to bottom, rgba(56,189,148,0.5), rgba(99,102,241,0.3));
+            z-index: -1;
+        }
+
+        /* Building SVG inside hex */
+        .hex-content {
+            width: 130px; height: 130px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Floating shapes */
+        .float-shape {
+            position: absolute;
+            z-index: 3;
+        }
+        .shape-diamond {
+            width: 14px; height: 14px;
+            background: #facc15;
+            transform: rotate(45deg);
+            top: 22%; right: 28%;
+        }
+        .shape-diamond2 {
+            width: 10px; height: 10px;
+            background: #4ade80;
+            transform: rotate(45deg);
+            bottom: 38%; left: 20%;
+        }
+        .shape-ring {
+            width: 50px; height: 50px;
+            border: 8px solid #34d399;
+            border-radius: 50%;
+            bottom: 30%; right: 18%;
+            opacity: 0.8;
+        }
+        .shape-gem {
+            width: 40px; height: 40px;
+            top: 16%; left: 30%;
+            opacity: 0.75;
+        }
+
+        /* Bottom text */
+        .illus-text {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+            color: #fff;
+        }
+        .illus-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .illus-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 240px; margin: 0 auto 20px; }
+
+        .dots { display: flex; gap: 6px; justify-content: center; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+        .dot.active { background: #fff; width: 18px; border-radius: 3px; }
     </style>
 </head>
-
 <body>
-    <div class="page">
+<div class="wrapper">
 
-        {{-- Brand header --}}
-        <div class="brand-header">
-            <div class="brand-logo-ring">
+    {{-- ── LEFT: Form Panel ── --}}
+    <div class="panel-left">
+        <div class="brand">
+            <div class="brand-logo">
                 <img src="{{ asset('assets/images/logo.png') }}" alt="Logo">
             </div>
-            <div class="brand-wordmark">
-                <div class="brand-name">Mal Bali Galeria</div>
-                <div class="brand-sub">Management Portal</div>
-            </div>
+            <span class="brand-name">Mal Bali Galeria</span>
         </div>
 
-        {{-- Card --}}
-        <div class="login-card">
-            <div class="card-heading">
-                <h1 class="card-title">Sign in to your<br><em>account</em></h1>
-                <p class="card-desc">Enter your credentials to access the dashboard.</p>
-            </div>
+        <div class="form-area">
+            <h1 class="form-title">Welcome Back!</h1>
+            <p class="form-sub">Please enter your log in details below</p>
 
-            {{-- Errors --}}
             @if ($errors->any())
                 <div class="alert">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    <div>
-                        @foreach ($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                    </div>
+                    @foreach ($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
                 </div>
             @endif
-
             @if (session('status'))
-                <div class="alert alert-success">{{ session('status') }}</div>
+                <div class="alert" style="background:#f0fdf4;border-color:#bbf7d0;color:#15803d;">{{ session('status') }}</div>
             @endif
 
             <form method="POST" action="{{ route('login') }}" id="loginForm">
                 @csrf
 
-                {{-- Email --}}
                 <div class="field">
-                    <label class="field-label" for="login-email">Email</label>
-                    <div class="field-wrap">
-                        <span class="field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                        </span>
-                        <input type="email" id="login-email" name="email" value="{{ old('email') }}"
-                            required autofocus autocomplete="email"
-                            placeholder="your@email.com"
-                            class="field-input @error('email') is-invalid @enderror">
-                    </div>
-                    @error('email')
-                        <div class="field-err">{{ $message }}</div>
-                    @enderror
+                    <input type="email" name="email" id="login-email"
+                        value="{{ old('email') }}" required autofocus autocomplete="email"
+                        placeholder="Email"
+                        class="@error('email') is-invalid @enderror">
+                    @error('email')<div class="field-err">{{ $message }}</div>@enderror
                 </div>
 
-                {{-- Password --}}
                 <div class="field">
-                    <label class="field-label" for="login-password">Password</label>
-                    <div class="field-wrap">
-                        <span class="field-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                        </span>
-                        <input type="password" id="login-password" name="password"
-                            required autocomplete="current-password"
-                            placeholder="Enter your password"
-                            class="field-input @error('password') is-invalid @enderror">
-                        <button type="button" class="pw-btn" onclick="togglePw()" tabindex="-1" aria-label="Toggle password">
-                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
-                    </div>
-                    @error('password')
-                        <div class="field-err">{{ $message }}</div>
-                    @enderror
+                    <input type="password" name="password" id="login-password"
+                        required autocomplete="current-password"
+                        placeholder="Password"
+                        class="@error('password') is-invalid @enderror" style="padding-right: 48px;">
+                    <button type="button" class="pw-toggle" onclick="togglePw()" tabindex="-1">
+                        <svg id="eyeIco" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                    @error('password')<div class="field-err">{{ $message }}</div>@enderror
                 </div>
 
-                {{-- Options --}}
-                <div class="options-row">
-                    <label class="check-label">
-                        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                        <span>Remember me</span>
-                    </label>
+                <div class="forgot-row">
                     @if (Route::has('password.request'))
-                        <a class="link-forgot" href="{{ route('password.request') }}">Forgot password?</a>
+                        <a class="forgot-link" href="{{ route('password.request') }}">Forget password?</a>
                     @endif
                 </div>
 
-                {{-- Submit --}}
-                <button type="submit" class="btn-login" id="loginBtn">
+                <button type="submit" class="btn-signin" id="loginBtn">
                     <span class="btn-spin" id="btnSpin"></span>
-                    <span class="btn-text">Sign In</span>
+                    <span class="btn-text">Sign in</span>
                 </button>
             </form>
+        </div>
 
-            <div class="card-footer">
-                <a href="{{ url('/') }}" class="footer-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
+        <div class="panel-bottom">
+            <a href="{{ url('/') }}">← Back to website</a>
+            &nbsp;&nbsp;·&nbsp;&nbsp;
+            &copy; {{ date('Y') }} Mal Bali Galeria
+        </div>
+    </div>
+
+    {{-- ── RIGHT: Dark Illustration Panel ── --}}
+    <div class="panel-right">
+
+        {{-- Floating decorative shapes --}}
+        <div class="float-shape shape-diamond"></div>
+        <div class="float-shape shape-diamond2"></div>
+        <div class="float-shape shape-ring"></div>
+        <div class="float-shape shape-gem">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="20,2 38,14 38,26 20,38 2,26 2,14" fill="rgba(99,102,241,0.25)" stroke="rgba(99,102,241,0.6)" stroke-width="1.5"/>
+            </svg>
+        </div>
+
+        {{-- Central hex illustration --}}
+        <div class="illus-wrap">
+            <div class="hex-glow">
+                <div class="hex-border"></div>
+                <div class="hex-content">
+                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="120">
+                        {{-- Mall building illustration --}}
+                        <rect x="10" y="55" width="100" height="55" rx="3" fill="rgba(255,255,255,0.07)" stroke="rgba(56,189,148,0.4)" stroke-width="1.5"/>
+                        <rect x="22" y="38" width="76" height="20" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(56,189,148,0.35)" stroke-width="1.5"/>
+                        <rect x="35" y="24" width="50" height="17" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(56,189,148,0.3)" stroke-width="1.5"/>
+                        <rect x="48" y="14" width="24" height="13" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(56,189,148,0.25)" stroke-width="1.5"/>
+                        {{-- Windows --}}
+                        <rect x="18" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
+                        <rect x="36" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
+                        <rect x="54" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
+                        <rect x="72" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
+                        <rect x="90" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
+                        {{-- Door --}}
+                        <rect x="48" y="85" width="24" height="25" rx="2" fill="rgba(99,102,241,0.25)" stroke="rgba(99,102,241,0.6)" stroke-width="1.5"/>
+                        {{-- Glow base --}}
+                        <ellipse cx="60" cy="112" rx="40" ry="5" fill="rgba(56,189,148,0.15)"/>
                     </svg>
-                    Back to website
-                </a>
+                </div>
             </div>
         </div>
 
-        <p class="page-footer">&copy; {{ date('Y') }} Mal Bali Galeria. All rights reserved.</p>
+        {{-- Bottom text --}}
+        <div class="illus-text">
+            <h2 class="illus-title">Manage Your Mall Anywhere</h2>
+            <p class="illus-sub">Access and control all mall operations from one powerful admin dashboard.</p>
+            <div class="dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
 
     </div>
+</div>
 
-    <script>
-        function togglePw() {
-            const inp = document.getElementById('login-password');
-            const ico = document.getElementById('eyeIcon');
-            const show = inp.type === 'password';
-            inp.type = show ? 'text' : 'password';
-            ico.innerHTML = show
-                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`
-                : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
-        }
+<script>
+    function togglePw() {
+        const inp = document.getElementById('login-password');
+        const ico = document.getElementById('eyeIco');
+        const show = inp.type === 'password';
+        inp.type = show ? 'text' : 'password';
+        ico.innerHTML = show
+            ? `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`
+            : `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
+    }
 
-        document.getElementById('loginForm').addEventListener('submit', function () {
-            const btn = document.getElementById('loginBtn');
-            btn.classList.add('loading');
-            btn.disabled = true;
-        });
-    </script>
+    document.getElementById('loginForm').addEventListener('submit', function () {
+        const btn = document.getElementById('loginBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+    });
+</script>
 </body>
 </html>
