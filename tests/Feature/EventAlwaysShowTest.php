@@ -38,7 +38,7 @@ class EventAlwaysShowTest extends TestCase
      */
     public function test_future_regular_event_without_always_show_is_hidden()
     {
-        $futureDate = Carbon::now('Asia/Makassar')->addDays(10)->toDateString();
+        $futureDate = Carbon::now('Asia/Makassar')->addMonth(1)->toDateString();
 
         Event::create([
             'name' => 'Future Hidden Event',

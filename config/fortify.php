@@ -88,6 +88,18 @@ return [
 
     'prefix' => '',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Fortify Login URL
+    |--------------------------------------------------------------------------
+    |
+    | This value defines the URI Fortify will use for the login route.
+    | Changed from the default '/login' to obscure the admin portal URL.
+    |
+    */
+
+    'login' => 'mbg-portal',
+
     'domain' => null,
 
     /*

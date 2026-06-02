@@ -17,6 +17,7 @@ class CheckMaintenanceMode
     {
         // Bypass maintenance check for administrative, authentication, and core assets
         if ($request->is('admin*') || 
+            $request->is('mbg-portal*') || 
             $request->is('login*') || 
             $request->is('logout*') || 
             $request->is('check-status-user*') || 
