@@ -98,7 +98,9 @@ return [
     |
     */
 
-    'login' => 'mbg-portal',
+    'paths' => [
+        'login' => 'mbg-portal',
+    ],
 
     'domain' => null,
 
