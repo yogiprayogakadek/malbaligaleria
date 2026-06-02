@@ -4,21 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Sign In — Mal Bali Galeria</title>
+    <title>Sign In - Mal Bali Galeria</title>
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             font-family: 'Inter', sans-serif;
             background: #f5f5f5;
             color: #111;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 16px;
         }
 
         /* ── Center wrapper ── */
@@ -35,13 +36,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
+            gap: 6px;
+            margin-bottom: 16px;
         }
 
         .top-logo img {
-            width: 90px;
-            height: 90px;
+            width: 72px;
+            height: 72px;
             object-fit: contain;
         }
 
@@ -56,23 +57,23 @@
         .card {
             background: #fff;
             border-radius: 20px;
-            padding: 40px 36px;
+            padding: 28px 32px;
             width: 100%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.07);
         }
 
         .form-title {
-            font-size: 1.7rem;
+            font-size: 1.6rem;
             font-weight: 800;
             color: #111;
             letter-spacing: -0.5px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .form-sub {
             font-size: 0.85rem;
             color: #6b7280;
-            margin-bottom: 28px;
+            margin-bottom: 18px;
             line-height: 1.5;
         }
 
@@ -88,11 +89,11 @@
         }
 
         /* Inputs */
-        .field { margin-bottom: 12px; position: relative; }
+        .field { margin-bottom: 10px; position: relative; }
 
         .field input {
             width: 100%;
-            padding: 13px 20px;
+            padding: 11px 20px;
             border: 1.5px solid #e5e7eb;
             border-radius: 50px;
             font-size: 0.9rem;
@@ -130,7 +131,7 @@
         }
 
         /* Forgot */
-        .forgot-row { text-align: right; margin-bottom: 20px; margin-top: 4px; }
+        .forgot-row { text-align: right; margin-bottom: 14px; margin-top: 2px; }
         .forgot-link { font-size: 0.82rem; color: #6b7280; text-decoration: none; }
         .forgot-link:hover { color: #111; }
 
@@ -166,8 +167,8 @@
 
         /* Footer */
         .card-footer {
-            margin-top: 24px;
-            padding-top: 20px;
+            margin-top: 16px;
+            padding-top: 14px;
             border-top: 1px solid #f3f4f6;
             text-align: center;
             font-size: 0.8rem;
