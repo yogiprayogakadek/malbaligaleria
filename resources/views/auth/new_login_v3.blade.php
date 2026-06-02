@@ -32,7 +32,7 @@
             border-radius: 20px 0 0 20px;
             display: flex;
             flex-direction: column;
-            padding: 40px 52px;
+            padding: 32px 44px;
             justify-content: space-between;
         }
 
@@ -51,20 +51,20 @@
         .brand-logo img { width: 22px; height: 22px; object-fit: contain; filter: invert(1); }
         .brand-name { font-size: 1rem; font-weight: 700; color: #111; letter-spacing: -0.3px; }
 
-        .form-area { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 360px; }
+        .form-area { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 300px; }
 
-        .form-title { font-size: 2rem; font-weight: 800; color: #0d0f12; margin-bottom: 6px; letter-spacing: -0.5px; }
-        .form-sub { font-size: 0.88rem; color: #6b7280; margin-bottom: 36px; }
+        .form-title { font-size: 1.65rem; font-weight: 800; color: #0d0f12; margin-bottom: 5px; letter-spacing: -0.5px; }
+        .form-sub { font-size: 0.83rem; color: #6b7280; margin-bottom: 28px; }
 
         /* Alert */
         .alert { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 10px 14px; font-size: 0.83rem; color: #b91c1c; margin-bottom: 20px; }
 
         /* Input */
-        .field { margin-bottom: 14px; position: relative; }
+        .field { margin-bottom: 11px; position: relative; }
 
         .field input {
             width: 100%;
-            padding: 16px 18px;
+            padding: 13px 16px;
             background: #fff;
             border: 1.5px solid #e5e7eb;
             border-radius: 12px;
@@ -91,14 +91,14 @@
 
         .field-err { font-size: 0.78rem; color: #dc2626; margin-top: 5px; padding-left: 2px; }
 
-        .forgot-row { text-align: right; margin-bottom: 20px; }
+        .forgot-row { text-align: right; margin-bottom: 16px; }
         .forgot-link { font-size: 0.83rem; color: #6b7280; text-decoration: none; font-weight: 500; }
         .forgot-link:hover { color: #111; }
 
         /* Buttons */
         .btn-signin {
             width: 100%;
-            padding: 16px;
+            padding: 13px;
             background: #0d0f12;
             color: #fff;
             border: none;
@@ -108,7 +108,7 @@
             font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: background 0.2s, transform 0.15s;
-            margin-bottom: 20px;
+            margin-bottom: 0;
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn-signin:hover { background: #1f2937; transform: translateY(-1px); }
@@ -187,10 +187,16 @@
             z-index: -1;
         }
 
-        /* Building SVG inside hex */
+        /* Logo inside hex */
         .hex-content {
-            width: 130px; height: 130px;
+            width: 140px; height: 140px;
             display: flex; align-items: center; justify-content: center;
+        }
+        .hex-content img {
+            width: 110px; height: 110px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.92;
         }
 
         /* Floating shapes */
@@ -231,11 +237,7 @@
             color: #fff;
         }
         .illus-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
-        .illus-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 240px; margin: 0 auto 20px; }
-
-        .dots { display: flex; gap: 6px; justify-content: center; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); }
-        .dot.active { background: #fff; width: 18px; border-radius: 3px; }
+        .illus-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 240px; margin: 0 auto 0; }
     </style>
 </head>
 <body>
@@ -330,23 +332,7 @@
             <div class="hex-glow">
                 <div class="hex-border"></div>
                 <div class="hex-content">
-                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" width="120" height="120">
-                        {{-- Mall building illustration --}}
-                        <rect x="10" y="55" width="100" height="55" rx="3" fill="rgba(255,255,255,0.07)" stroke="rgba(56,189,148,0.4)" stroke-width="1.5"/>
-                        <rect x="22" y="38" width="76" height="20" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(56,189,148,0.35)" stroke-width="1.5"/>
-                        <rect x="35" y="24" width="50" height="17" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(56,189,148,0.3)" stroke-width="1.5"/>
-                        <rect x="48" y="14" width="24" height="13" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(56,189,148,0.25)" stroke-width="1.5"/>
-                        {{-- Windows --}}
-                        <rect x="18" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
-                        <rect x="36" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
-                        <rect x="54" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
-                        <rect x="72" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
-                        <rect x="90" y="62" width="12" height="10" rx="1" fill="rgba(56,189,148,0.2)" stroke="rgba(56,189,148,0.5)" stroke-width="1"/>
-                        {{-- Door --}}
-                        <rect x="48" y="85" width="24" height="25" rx="2" fill="rgba(99,102,241,0.25)" stroke="rgba(99,102,241,0.6)" stroke-width="1.5"/>
-                        {{-- Glow base --}}
-                        <ellipse cx="60" cy="112" rx="40" ry="5" fill="rgba(56,189,148,0.15)"/>
-                    </svg>
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Mal Bali Galeria">
                 </div>
             </div>
         </div>
@@ -355,11 +341,6 @@
         <div class="illus-text">
             <h2 class="illus-title">Manage Your Mall Anywhere</h2>
             <p class="illus-sub">Access and control all mall operations from one powerful admin dashboard.</p>
-            <div class="dots">
-                <div class="dot active"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
         </div>
 
     </div>
