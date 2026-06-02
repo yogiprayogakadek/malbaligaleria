@@ -136,8 +136,29 @@
             padding-left: 14px;
         }
 
-        /* Forgot */
-        .forgot-row { text-align: right; margin-bottom: 20px; margin-top: 4px; }
+        /* Forgot & Remember Me Row */
+        .forgot-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            margin-top: 4px;
+        }
+        .remember-me {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: #6b7280;
+            cursor: pointer;
+            user-select: none;
+        }
+        .remember-me input {
+            cursor: pointer;
+            accent-color: #111;
+            width: 14px;
+            height: 14px;
+        }
         .forgot-link { font-size: 0.82rem; color: #6b7280; text-decoration: none; }
         .forgot-link:hover { color: #111; }
 
@@ -236,6 +257,10 @@
             </div>
 
             <div class="forgot-row">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember" id="remember_me">
+                    <span>Remember me</span>
+                </label>
                 @if (Route::has('password.request'))
                     <a class="forgot-link" href="{{ route('password.request') }}">Forgot Password?</a>
                 @endif

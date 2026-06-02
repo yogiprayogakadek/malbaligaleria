@@ -149,7 +149,7 @@
     @endif
 
     {{-- === PAGE HEADER === --}}
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4">
         <div>
             <h4 class="mb-0 fw-semibold">Admin Dashboard</h4>
             <p class="text-muted mb-0">
@@ -157,11 +157,11 @@
                 <span class="ms-1 text-muted small">{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</span>
             </p>
         </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('admin.tenant.create') }}" class="btn btn-primary">
+        <div class="d-flex gap-2 w-100 w-sm-auto">
+            <a href="{{ route('admin.tenant.create') }}" class="btn btn-primary flex-fill flex-sm-grow-0 d-inline-flex align-items-center justify-content-center gap-1">
                 <i class="ti ti-building-store"></i> Add Tenant
             </a>
-            <a href="{{ route('admin.event.create') }}" class="btn btn-success">
+            <a href="{{ route('admin.event.create') }}" class="btn btn-success flex-fill flex-sm-grow-0 d-inline-flex align-items-center justify-content-center gap-1">
                 <i class="ti ti-calendar-event"></i> Add Event
             </a>
         </div>
