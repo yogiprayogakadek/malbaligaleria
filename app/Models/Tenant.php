@@ -27,6 +27,9 @@ class Tenant extends Model
         'logo',
         'description',
         'website',
+        'is_active',
+        'isNew',
+        'launched_at',
     ];
     
     public function getActivitylogOptions(): LogOptions

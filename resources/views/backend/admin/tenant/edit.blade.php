@@ -259,7 +259,7 @@
                                     <select name="is_new" id="isNew"
                                         class="form-control @error('is_new') is-invalid @enderror">
                                         <option value="">Choose if this is new store...</option>
-                                        <option value="1" {{ $tenant->is_new == '1' ? 'selected' : '' }}>
+                                        <option value="1" {{ $tenant->isNew == '1' ? 'selected' : '' }}>
                                             Yes, it is new
                                         </option>
                                     </select>

@@ -2029,7 +2029,7 @@ function updateModalContent(data) {
     if (hoursEl) hoursEl.textContent = data.hours;
     if (locationEl) locationEl.textContent = `${data.floor}, Unit ${data.unit}`;
     if (unitEl) unitEl.textContent = data.unit;
-    if (descText) descText.textContent = data.description || "Discover amazing products and services at this store.";
+    if (descText) descText.textContent = data.description || "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!";
     if (descContainer) descContainer.style.display = "block";
 
     // Set logo in modal header ONLY if tenant has album photos

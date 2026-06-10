@@ -197,7 +197,7 @@
 
         const descEl = document.getElementById("modalDescription");
         if (descEl) {
-            descEl.innerHTML = `<p>${data.description || "No description available."}</p>`;
+            descEl.innerHTML = `<p>${data.description || "Discover amazing products and services at this store. Visit us today for an unforgettable shopping experience!"}</p>`;
         }
 
         // Logo
