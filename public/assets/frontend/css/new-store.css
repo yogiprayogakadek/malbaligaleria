@@ -553,7 +553,16 @@ body.dark-mode .modal-container {
     }
 }
 
-.modal-carousel,
+.modal-carousel {
+    position: relative;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+body.dark-mode .modal-carousel {
+    background: rgba(20, 20, 20, 0.8);
+}
+
 .modal-map-view-container {
     position: relative;
     background: #f8f9fa;
@@ -562,7 +571,6 @@ body.dark-mode .modal-container {
     overflow: hidden;
 }
 
-body.dark-mode .modal-carousel,
 body.dark-mode .modal-map-view-container {
     background: rgba(40, 40, 40, 0.8);
 }
@@ -579,12 +587,7 @@ body.dark-mode .modal-map-view-container {
     display: flex;
     align-items: center; /* Vertical Center */
     justify-content: center; /* Horizontal Center */
-    padding: 20px;
-    background: #f8f9fa;
-}
-
-body.dark-mode .carousel-image {
-    background: #1a1a1a;
+    padding: 40px;
 }
 
 .carousel-image img {
