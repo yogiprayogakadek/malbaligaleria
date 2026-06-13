@@ -89,7 +89,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/admin/event-photo/delete/' + eventPhotoId,
+                        url: '/dashboard/event-photo/delete/' + eventPhotoId,
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}'

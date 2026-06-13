@@ -151,7 +151,6 @@ class TenantPhotoController extends Controller
     public function delete($tenant_id)
     {
         $this->tenantPhotoService->delete($tenant_id);
-
-        // return redirect()->route('admin.tenant.photo.index')->with('success', 'Photo deleted successfully');
+        return response()->json(['success' => true]);
     }
 }

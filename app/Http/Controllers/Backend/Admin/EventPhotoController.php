@@ -115,5 +115,6 @@ class EventPhotoController extends Controller
     public function delete($id)
     {
         $this->eventPhotoService->deleteByEventId($id);
+        return response()->json(['success' => true]);
     }
 }

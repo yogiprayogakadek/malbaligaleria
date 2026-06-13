@@ -111,23 +111,11 @@ class EventPhotoService
 
     public function delete(int $id)
     {
-        $eventPhoto = $this->findById($id);
-        if (!empty($eventPhoto->path)) {
-            $this->deleteImage($eventPhoto->path);
-        }
-
         return $this->eventPhotoRepository->delete($id);
     }
 
     public function deleteByEventId(int $eventId)
     {
-        $eventPhotos = $this->eventPhotoRepository->getByEventId($eventId, ['id', 'path']);
-        foreach ($eventPhotos as $photo) {
-            if (!empty($photo->path)) {
-                $this->deleteImage($photo->path);
-            }
-        }
-
         return $this->eventPhotoRepository->deleteByEventId($eventId);
     }
 
