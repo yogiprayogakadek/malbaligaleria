@@ -76,22 +76,40 @@
                     <!-- Custom Nav Tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom mb-4" id="recycleTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="tenants-tab" data-bs-toggle="tab" data-bs-target="#tenants" type="button" role="tab" data-type="tenants"><i class="ti ti-building-store me-1"></i>Tenants</button>
+                            <button class="nav-link active" id="tenants-tab" data-bs-toggle="tab" data-bs-target="#tenants" type="button" role="tab" data-type="tenants" title="{{ $counts['tenants'] }} tenants in Recycle Bin">
+                                <i class="ti ti-building-store me-1"></i>Tenants
+                                <span class="badge bg-danger-subtle text-danger rounded-pill ms-1 tab-count" data-type="tenants">{{ $counts['tenants'] }}</span>
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab" data-type="categories"><i class="ti ti-category me-1"></i>Category Tenants</button>
+                            <button class="nav-link" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab" data-type="categories" title="{{ $counts['categories'] }} category tenants in Recycle Bin">
+                                <i class="ti ti-category me-1"></i>Category Tenants
+                                <span class="badge bg-danger-subtle text-danger rounded-pill ms-1 tab-count" data-type="categories">{{ $counts['categories'] }}</span>
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab" data-type="events"><i class="ti ti-calendar-event me-1"></i>Events</button>
+                            <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events" type="button" role="tab" data-type="events" title="{{ $counts['events'] }} events in Recycle Bin">
+                                <i class="ti ti-calendar-event me-1"></i>Events
+                                <span class="badge bg-danger-subtle text-danger rounded-pill ms-1 tab-count" data-type="events">{{ $counts['events'] }}</span>
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="event_photos-tab" data-bs-toggle="tab" data-bs-target="#event_photos" type="button" role="tab" data-type="event_photos"><i class="ti ti-photo me-1"></i>Event Photos</button>
+                            <button class="nav-link" id="event_photos-tab" data-bs-toggle="tab" data-bs-target="#event_photos" type="button" role="tab" data-type="event_photos" title="{{ $counts['event_photos'] }} event photos in Recycle Bin">
+                                <i class="ti ti-photo me-1"></i>Event Photos
+                                <span class="badge bg-danger-subtle text-danger rounded-pill ms-1 tab-count" data-type="event_photos">{{ $counts['event_photos'] }}</span>
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="promos-tab" data-bs-toggle="tab" data-bs-target="#promos" type="button" role="tab" data-type="promos"><i class="ti ti-ticket me-1"></i>Promos</button>
+                            <button class="nav-link" id="promos-tab" data-bs-toggle="tab" data-bs-target="#promos" type="button" role="tab" data-type="promos" title="{{ $counts['promos'] }} promos in Recycle Bin">
+                                <i class="ti ti-ticket me-1"></i>Promos
+                                <span class="badge bg-danger-subtle text-danger rounded-pill ms-1 tab-count" data-type="promos">{{ $counts['promos'] }}</span>
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="galleries-tab" data-bs-toggle="tab" data-bs-target="#galleries" type="button" role="tab" data-type="galleries"><i class="ti ti-photo-album me-1"></i>Gallery</button>
+                            <button class="nav-link" id="galleries-tab" data-bs-toggle="tab" data-bs-target="#galleries" type="button" role="tab" data-type="galleries" title="{{ $counts['galleries'] }} gallery items in Recycle Bin">
+                                <i class="ti ti-photo-album me-1"></i>Gallery
+                                <span class="badge bg-danger-subtle text-danger rounded-pill ms-1 tab-count" data-type="galleries">{{ $counts['galleries'] }}</span>
+                            </button>
                         </li>
                     </ul>
 
@@ -348,6 +366,15 @@
                 $('#btn-restore, #btn-delete').prop('disabled', checkedCount === 0);
             }
 
+            function updateCounts(counts) {
+                if (counts) {
+                    Object.keys(counts).forEach(key => {
+                        $(`.tab-count[data-type="${key}"]`).text(counts[key]);
+                        $(`#${key}-tab`).attr('title', `${counts[key]} ${key.replace('_', ' ')} in Recycle Bin`);
+                    });
+                }
+            }
+
             // Bulk Restore Action
             $('#btn-restore').on('click', function() {
                 const ids = getSelectedIds();
@@ -389,6 +416,7 @@
                     if (result.isConfirmed && result.value.success) {
                         Swal.fire('Restored!', result.value.message, 'success');
                         tables[activeTab].ajax.reload();
+                        updateCounts(result.value.counts);
                     }
                 });
             });
@@ -434,6 +462,7 @@
                     if (result.isConfirmed && result.value.success) {
                         Swal.fire('Deleted!', result.value.message, 'success');
                         tables[activeTab].ajax.reload();
+                        updateCounts(result.value.counts);
                     }
                 });
             });

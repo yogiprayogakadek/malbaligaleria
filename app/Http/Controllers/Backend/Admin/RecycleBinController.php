@@ -16,7 +16,16 @@ class RecycleBinController extends Controller
 {
     public function index()
     {
-        return view('backend.admin.recycle-bin.index');
+        $counts = [
+            'tenants' => Tenant::onlyTrashed()->count(),
+            'categories' => Category::onlyTrashed()->count(),
+            'events' => Event::onlyTrashed()->count(),
+            'event_photos' => EventPhoto::onlyTrashed()->count(),
+            'promos' => Promo::onlyTrashed()->count(),
+            'galleries' => Gallery::onlyTrashed()->count(),
+        ];
+
+        return view('backend.admin.recycle-bin.index', compact('counts'));
     }
 
     public function data(Request $request)
@@ -173,7 +182,15 @@ class RecycleBinController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Selected items restored successfully.'
+                'message' => 'Selected items restored successfully.',
+                'counts' => [
+                    'tenants' => Tenant::onlyTrashed()->count(),
+                    'categories' => Category::onlyTrashed()->count(),
+                    'events' => Event::onlyTrashed()->count(),
+                    'event_photos' => EventPhoto::onlyTrashed()->count(),
+                    'promos' => Promo::onlyTrashed()->count(),
+                    'galleries' => Gallery::onlyTrashed()->count(),
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -207,7 +224,15 @@ class RecycleBinController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Selected items permanently deleted.'
+                'message' => 'Selected items permanently deleted.',
+                'counts' => [
+                    'tenants' => Tenant::onlyTrashed()->count(),
+                    'categories' => Category::onlyTrashed()->count(),
+                    'events' => Event::onlyTrashed()->count(),
+                    'event_photos' => EventPhoto::onlyTrashed()->count(),
+                    'promos' => Promo::onlyTrashed()->count(),
+                    'galleries' => Gallery::onlyTrashed()->count(),
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
