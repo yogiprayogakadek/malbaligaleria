@@ -87,6 +87,11 @@ class EventService
         return $this->eventRepository->delete($id);
     }
 
+    public function deleteByUuid(string $uuid)
+    {
+        return $this->eventRepository->deleteByUuid($uuid);
+    }
+
     public function uploadImage(UploadedFile $file)
     {
         $path = $file->store('event_images', 'public');

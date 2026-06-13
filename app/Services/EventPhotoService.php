@@ -80,7 +80,7 @@ class EventPhotoService
         $results = [];
 
         if (isset($data['path']) && $data['path'] instanceof UploadedFile) {
-            if (!empty($tenantPhoto->path)) {
+            if (!empty($eventPhotoPrimary->path)) {
                 $this->deleteImage($eventPhotoPrimary->path);
             }
             $data['path'] = $this->uploadImage($data['path']);
@@ -89,8 +89,7 @@ class EventPhotoService
 
         if (isset($data['album']) && is_array($data['album'])) {
             foreach ($album as $al) {
-                $this->deleteImage($al->path);
-                $this->delete($al->id);
+                $al->forceDelete();
             }
 
             foreach ($data['album'] as $index => $file) {
@@ -114,10 +113,22 @@ class EventPhotoService
     {
         $eventPhoto = $this->findById($id);
         if (!empty($eventPhoto->path)) {
-            $this->deleteImage($eventPhoto);
+            $this->deleteImage($eventPhoto->path);
         }
 
         return $this->eventPhotoRepository->delete($id);
+    }
+
+    public function deleteByEventId(int $eventId)
+    {
+        $eventPhotos = $this->eventPhotoRepository->getByEventId($eventId, ['id', 'path']);
+        foreach ($eventPhotos as $photo) {
+            if (!empty($photo->path)) {
+                $this->deleteImage($photo->path);
+            }
+        }
+
+        return $this->eventPhotoRepository->deleteByEventId($eventId);
     }
 
     public function uploadImage(UploadedFile $file)

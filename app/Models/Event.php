@@ -66,6 +66,12 @@ class Event extends Model
                 $model->uuid = (string) Str::uuid();
             }
         });
+
+        static::forceDeleted(function ($model) {
+            foreach ($model->photos()->withTrashed()->get() as $photo) {
+                $photo->forceDelete();
+            }
+        });
     }
 
     public function photos()

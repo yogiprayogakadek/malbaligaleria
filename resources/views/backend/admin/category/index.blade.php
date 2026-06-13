@@ -49,7 +49,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#table').DataTable({
+            var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
@@ -80,6 +80,52 @@
                     },
                 ]
             });
+
+            // Delete functionality
+            $('#table').on('click', '.delete-btn', function() {
+                const uuid = $(this).data('uuid');
+                const name = $(this).data('name');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: `You are about to delete "${name}". This item will be moved to the Recycle Bin.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        return $.ajax({
+                            url: `/dashboard/category/delete/${uuid}`,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                return response;
+                            },
+                            error: function(xhr) {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${xhr.responseJSON ? xhr.responseJSON.message : xhr.statusText}`
+                                );
+                            }
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed && result.value.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            'The category has been deleted.',
+                            'success'
+                        );
+                        table.ajax.reload();
+                    }
+                });
+            });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush

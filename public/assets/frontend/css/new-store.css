@@ -172,11 +172,17 @@ body.new-store-page {
 /* 3-Column Grid (Optimized for space) */
 .new-store-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
     gap: 2.5rem;
     padding: 0 4rem 10rem;
     max-width: 1500px;
     margin: 0 auto;
+}
+
+.new-store-grid .tenant-card {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
 }
 
 @media (max-width: 1200px) {

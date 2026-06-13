@@ -58,10 +58,6 @@ class GalleryService
 
     public function delete(int $id)
     {
-        $gallery = $this->galleryRepository->findById($id, ['id', 'path']);
-        if (!empty($gallery->path)) {
-            $this->deleteImage($gallery->path);
-        }
         return $this->galleryRepository->delete($id);
     }
 

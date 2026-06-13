@@ -130,4 +130,10 @@ class EventRepository
         $tenant = $this->model::find($id);
         $tenant->delete();
     }
+
+    public function deleteByUuid(string $uuid)
+    {
+        $event = $this->model::where('uuid', $uuid)->firstOrFail();
+        $event->delete();
+    }
 }

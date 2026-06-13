@@ -454,6 +454,14 @@
                                 </ul>
                             </li>
                             @endif
+                            @if(auth()->user()->hasRole('superuser') || auth()->user()->hasRole('admin'))
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.recycle-bin.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:trash-bin-trash-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Recycle Bin</span>
+                                </a>
+                            </li>
+                            @endif
                         </div>
                     @endif
 

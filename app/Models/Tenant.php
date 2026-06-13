@@ -56,6 +56,22 @@ class Tenant extends Model
                 $model->uuid = (string) Str::uuid();
             }
         });
+
+        static::forceDeleted(function ($model) {
+            if (!empty($model->logo)) {
+                $relativePath = 'tenant_images/' . basename($model->logo);
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
+                }
+            }
+
+            foreach ($model->photos as $photo) {
+                $relativePath = 'tenant_images/' . basename($photo->path);
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
+                }
+            }
+        });
     }
 
     public function photos()

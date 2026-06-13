@@ -42,6 +42,15 @@ class Promo extends Model
                 $model->uuid = (string) Str::uuid();
             }
         });
+
+        static::forceDeleted(function ($model) {
+            if (!empty($model->banner)) {
+                $relativePath = 'promo_images/' . basename($model->banner);
+                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
+                }
+            }
+        });
     }
 
     public function tenant()

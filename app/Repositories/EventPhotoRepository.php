@@ -40,9 +40,19 @@ class EventPhotoRepository
         return $tenant->update($data);
     }
 
+    public function getByEventId(int $event_id, array $fields)
+    {
+        return $this->model::select($fields)->where('event_id', $event_id)->get();
+    }
+
     public function delete(int $id)
     {
         $tenant = $this->model::find($id);
         $tenant->delete();
+    }
+
+    public function deleteByEventId(int $eventId)
+    {
+        $this->model::where('event_id', $eventId)->delete();
     }
 }

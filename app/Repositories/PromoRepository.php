@@ -61,7 +61,7 @@ class PromoRepository
 
     public function delete(string $uuid)
     {
-        $promo = $this->model::find($uuid);
+        $promo = $this->model::where('uuid', $uuid)->firstOrFail();
         $promo->delete();
     }
 }

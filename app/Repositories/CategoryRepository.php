@@ -42,7 +42,7 @@ class CategoryRepository
 
     public function delete(string $uuid)
     {
-        $category = $this->model::find($uuid);
+        $category = $this->model::where('uuid', $uuid)->firstOrFail();
         $category->delete();
     }
 }

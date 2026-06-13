@@ -45,19 +45,34 @@ class EventController extends Controller
                     return $badges[$row->type] ?? $row->type;
                 })
                 ->addColumn('action', function ($row) {
-                    return '<a href="' . route('admin.event.edit', $row->uuid) . '">
-                        <button type="button"
-                            class="justify-content-center w-80 btn mb-1 bg-primary-subtle text-primary">
-                            <i class="ti ti-pencil fs-4 me-2"></i>
-                            Edit
-                        </button>
-                    </a>                    ';
+                    return '<a href="' . route('admin.event.edit', $row->uuid) . '" class="btn btn-primary-subtle text-primary btn-sm me-1">
+                            <i class="ti ti-pencil fs-4"></i> Edit
+                        </a>
+                        <button type="button" class="btn btn-danger-subtle text-danger btn-sm delete-btn" data-uuid="' . $row->uuid . '" data-name="' . $row->name . '">
+                            <i class="ti ti-trash fs-4"></i> Delete
+                        </button>';
                 })
                 ->rawColumns(['action', 'is_active', 'type'])
                 ->make(true);
         }
 
         return view('backend.admin.event.index');
+    }
+
+    public function delete($uuid)
+    {
+        try {
+            $this->eventService->deleteByUuid($uuid);
+            return response()->json([
+                'success' => true,
+                'message' => 'Event deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete event: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function create()

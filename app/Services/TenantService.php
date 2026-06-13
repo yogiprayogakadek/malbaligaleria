@@ -87,10 +87,6 @@ class TenantService
 
     public function deleteByUuid(string $uuid)
     {
-        $tenant = $this->tenantRepository->findByUuid($uuid, ['id', 'logo']);
-        if ($tenant && !empty($tenant->logo)) {
-            $this->deleteImage($tenant->logo);
-        }
         return $this->tenantRepository->deleteByUuid($uuid);
     }
 
