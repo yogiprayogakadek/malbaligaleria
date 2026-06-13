@@ -276,7 +276,7 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/', 'index')->name('index');
                     Route::get('/data', 'data')->name('data');
                     Route::post('/restore', 'restore')->name('restore');
-                    Route::post('/force-delete', 'force-delete')->name('force-delete');
+                    Route::post('/force-delete', 'forceDelete')->name('force-delete');
                 });
         });
 
