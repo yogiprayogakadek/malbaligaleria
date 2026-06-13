@@ -10,7 +10,7 @@ class EventPhotoRepository
 
     public function getAll(array $fields)
     {
-        return $this->model::select($fields)->where('is_primary', true)->get();
+        return $this->model::select($fields)->whereHas('event')->where('is_primary', true)->get();
     }
 
     public function findById(int $id, array $fields)

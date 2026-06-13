@@ -57,6 +57,14 @@ class Tenant extends Model
             }
         });
 
+        static::deleted(function ($model) {
+            $model->promos()->delete();
+        });
+
+        static::restored(function ($model) {
+            $model->promos()->withTrashed()->restore();
+        });
+
         static::forceDeleted(function ($model) {
             if (!empty($model->logo)) {
                 $relativePath = 'tenant_images/' . basename($model->logo);
@@ -71,7 +79,16 @@ class Tenant extends Model
                     \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
                 }
             }
+
+            foreach ($model->promos()->withTrashed()->get() as $promo) {
+                $promo->forceDelete();
+            }
         });
+    }
+
+    public function promos()
+    {
+        return $this->hasMany(Promo::class);
     }
 
     public function photos()

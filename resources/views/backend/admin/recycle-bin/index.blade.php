@@ -70,6 +70,9 @@
                             <button id="btn-delete" class="btn btn-bulk-delete px-3 py-2 fw-semibold rounded d-flex align-items-center gap-1" disabled>
                                 <i class="ti ti-trash-x fs-5"></i> Delete Permanently
                             </button>
+                            <button id="btn-empty" class="btn btn-danger px-3 py-2 fw-semibold rounded d-flex align-items-center gap-1" disabled>
+                                <i class="ti ti-trash fs-5"></i> Empty Bin
+                            </button>
                         </div>
                     </div>
 
@@ -364,6 +367,9 @@
             function updateActionButtons() {
                 const checkedCount = $(`#table-${activeTab} tbody .select-item:checked`).length;
                 $('#btn-restore, #btn-delete').prop('disabled', checkedCount === 0);
+
+                const currentCount = parseInt($(`.tab-count[data-type="${activeTab}"]`).text()) || 0;
+                $('#btn-empty').prop('disabled', currentCount === 0);
             }
 
             function updateCounts(counts) {
@@ -463,6 +469,52 @@
                         Swal.fire('Deleted!', result.value.message, 'success');
                         tables[activeTab].ajax.reload();
                         updateCounts(result.value.counts);
+                    }
+                });
+            });
+
+            // Empty Recycle Bin Action
+            $('#btn-empty').on('click', function() {
+                const currentCount = parseInt($(`.tab-count[data-type="${activeTab}"]`).text()) || 0;
+                if (currentCount === 0) return;
+
+                Swal.fire({
+                    title: 'Empty Recycle Bin?',
+                    text: `Are you sure you want to permanently delete all ${currentCount} item(s) in this category? This action cannot be undone and will permanently erase all associated files!`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#7a828a',
+                    confirmButtonText: 'Yes, empty it!',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        return $.ajax({
+                            url: "{{ route('admin.recycle-bin.empty') }}",
+                            type: 'POST',
+                            data: {
+                                type: activeTab
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                return response;
+                            },
+                            error: function(xhr) {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${xhr.responseJSON ? xhr.responseJSON.message : xhr.statusText}`
+                                );
+                            }
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed && result.value.success) {
+                        Swal.fire('Emptied!', result.value.message, 'success');
+                        tables[activeTab].ajax.reload();
+                        updateCounts(result.value.counts);
+                        updateActionButtons();
                     }
                 });
             });

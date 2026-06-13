@@ -67,6 +67,14 @@ class Event extends Model
             }
         });
 
+        static::deleted(function ($model) {
+            $model->photos()->delete();
+        });
+
+        static::restored(function ($model) {
+            $model->photos()->withTrashed()->restore();
+        });
+
         static::forceDeleted(function ($model) {
             foreach ($model->photos()->withTrashed()->get() as $photo) {
                 $photo->forceDelete();

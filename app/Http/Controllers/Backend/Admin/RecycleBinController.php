@@ -242,6 +242,44 @@ class RecycleBinController extends Controller
         }
     }
 
+    public function emptyBin(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|string'
+        ]);
+
+        $type = $request->input('type');
+        $modelClass = $this->getModelClass($type);
+        if (!$modelClass) {
+            return response()->json(['success' => false, 'message' => 'Invalid model type.'], 400);
+        }
+
+        try {
+            $items = $modelClass::onlyTrashed()->get();
+            foreach ($items as $item) {
+                $item->forceDelete();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Recycle bin emptied successfully.',
+                'counts' => [
+                    'tenants' => Tenant::onlyTrashed()->count(),
+                    'categories' => Category::onlyTrashed()->count(),
+                    'events' => Event::onlyTrashed()->count(),
+                    'event_photos' => EventPhoto::onlyTrashed()->count(),
+                    'promos' => Promo::onlyTrashed()->count(),
+                    'galleries' => Gallery::onlyTrashed()->count(),
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to empty recycle bin: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     private function getModelClass($type)
     {
         switch ($type) {

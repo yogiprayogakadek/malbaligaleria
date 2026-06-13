@@ -15,12 +15,13 @@ class PromoRepository
 
     public function getAllWithRelationship(array $fields, array $relationship)
     {
-        return $this->model::select($fields)->with($relationship)->get();
+        return $this->model::select($fields)->whereHas('tenant')->with($relationship)->get();
     }
 
     public function getPromoWithRelationship(array $fields, array $relationship)
     {
         return $this->model::select($fields)
+            ->whereHas('tenant')
             ->with($relationship)
             ->where('is_active', true)
             ->whereDate('end_date', '>=', now()->toDateString())
@@ -29,7 +30,7 @@ class PromoRepository
 
     public function getPromoWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
     {
-        return $this->model::select($fields)->with($relationship)->where($column, $condition)->get();
+        return $this->model::select($fields)->whereHas('tenant')->with($relationship)->where($column, $condition)->get();
     }
 
     public function getPromoByStatus(array $fields, bool $is_active)
