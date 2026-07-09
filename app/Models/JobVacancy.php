@@ -20,6 +20,7 @@ class JobVacancy extends Model
         'requirements',
         'responsibilities',
         'salary_range',
+        'flyer_path',
         'deadline',
         'closing_date',
         'is_active',

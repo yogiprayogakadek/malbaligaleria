@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.career.vacancy.store') }}" method="POST" id="vacancyForm">
+                    <form action="{{ route('admin.career.vacancy.store') }}" method="POST" id="vacancyForm" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row g-3">
@@ -93,6 +93,26 @@
                                 @error('closing_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            {{-- Flyer --}}
+                            <div class="col-md-8">
+                                <label for="flyer" class="form-label fw-semibold">Vacancy Flyer <small class="text-muted">(optional, Image format)</small></label>
+                                <input type="file" name="flyer" id="flyer" class="form-control @error('flyer') is-invalid @enderror">
+                                @error('flyer')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Compression Toggle --}}
+                            <div class="col-md-4 d-flex align-items-end">
+                                <div class="mb-2 w-100">
+                                    <input type="hidden" name="compress_image_submitted" value="1">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" name="compress_image" id="compress_image" value="1" checked>
+                                        <label class="form-check-label fw-semibold" for="compress_image">Compress flyer image</label>
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- Deskripsi --}}

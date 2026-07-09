@@ -185,6 +185,12 @@
                     </div>
                 @endif
 
+                @if($vacancy->flyer_path)
+                    <div class="detail-card career-reveal" style="margin-bottom: 20px; padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <img src="{{ asset('storage/' . $vacancy->flyer_path) }}" alt="Flyer {{ $vacancy->title }}" style="width: 100%; height: auto; display: block; object-fit: cover;">
+                    </div>
+                @endif
+
                 <div class="detail-card career-reveal">
                     <div class="detail-section">
                         <h3>

@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Models\JobVacancy;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageOptimizer;
+use Illuminate\Http\UploadedFile;
 
 class JobVacancyService
 {
@@ -32,12 +35,23 @@ class JobVacancyService
 
     public function create(array $data): JobVacancy
     {
+        if (isset($data['flyer']) && $data['flyer'] instanceof UploadedFile) {
+            $data['flyer_path'] = $this->uploadFlyer($data['flyer']);
+        }
         return JobVacancy::create($data);
     }
 
     public function update(array $data, string $uuid): JobVacancy
     {
         $vacancy = $this->findByUuid($uuid);
+
+        if (isset($data['flyer']) && $data['flyer'] instanceof UploadedFile) {
+            if ($vacancy->flyer_path) {
+                $this->deleteFlyer($vacancy->flyer_path);
+            }
+            $data['flyer_path'] = $this->uploadFlyer($data['flyer']);
+        }
+
         $vacancy->update($data);
         return $vacancy;
     }
@@ -45,7 +59,24 @@ class JobVacancyService
     public function delete(string $uuid): void
     {
         $vacancy = $this->findByUuid($uuid);
+        if ($vacancy->flyer_path) {
+            $this->deleteFlyer($vacancy->flyer_path);
+        }
         $vacancy->delete();
+    }
+
+    private function uploadFlyer(UploadedFile $file): string
+    {
+        $path = $file->store('career/flyers', 'public');
+        ImageOptimizer::optimize($path);
+        return $path;
+    }
+
+    private function deleteFlyer(string $path): void
+    {
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     public function getDepartments(): array

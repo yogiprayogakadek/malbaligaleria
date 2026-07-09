@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.career.vacancy.update', $vacancy->uuid) }}" method="POST">
+                    <form action="{{ route('admin.career.vacancy.update', $vacancy->uuid) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -73,6 +73,35 @@
                                 <input type="date" name="closing_date" id="closing_date" class="form-control @error('closing_date') is-invalid @enderror"
                                     value="{{ old('closing_date', $vacancy->closing_date ? $vacancy->closing_date->format('Y-m-d') : '') }}">
                                 @error('closing_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+
+                            {{-- Flyer --}}
+                            <div class="col-md-8">
+                                <label for="flyer" class="form-label fw-semibold">Vacancy Flyer <small class="text-muted">(optional, Image format)</small></label>
+                                <input type="file" name="flyer" id="flyer" class="form-control @error('flyer') is-invalid @enderror">
+                                <small class="text-muted d-block mt-1">Leave empty if you do not want to change the current flyer.</small>
+                                @error('flyer')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                @if($vacancy->flyer_path)
+                                    <div class="mt-2">
+                                        <label class="form-label fw-semibold d-block">Current Flyer:</label>
+                                        <a href="{{ asset('storage/' . $vacancy->flyer_path) }}" target="_blank" class="d-inline-block">
+                                            <img src="{{ asset('storage/' . $vacancy->flyer_path) }}" alt="Vacancy Flyer" class="img-thumbnail" style="max-height: 150px;">
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- Compression Toggle --}}
+                            <div class="col-md-4 d-flex align-items-start">
+                                <div class="mb-2 w-100">
+                                    <input type="hidden" name="compress_image_submitted" value="1">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" name="compress_image" id="compress_image" value="1" checked>
+                                        <label class="form-check-label fw-semibold" for="compress_image">Compress flyer image</label>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-12">

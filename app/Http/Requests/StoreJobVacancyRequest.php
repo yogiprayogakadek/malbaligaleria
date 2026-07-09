@@ -26,6 +26,7 @@ class StoreJobVacancyRequest extends FormRequest
             'closing_date'     => 'nullable|date|after:today',
             'is_active'        => 'boolean',
             'sort_order'       => 'integer|min:0',
+            'flyer'            => 'nullable|image|mimes:png,jpg,jpeg,jfif,webp|max:5120',
         ];
     }
 }
