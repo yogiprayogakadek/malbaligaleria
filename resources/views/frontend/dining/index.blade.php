@@ -93,13 +93,9 @@
 
         <nav>
             <ul>
-                <li><a href="{{ url('/') }}#home">Home</a></li>
-                <li><a href="{{ url('/') }}#about">About</a></li>
-                <li><a href="{{ url('/') }}#tenants">Tenants</a></li>
-                <li><a href="{{ route('frontend.directory.index') }}">Directory</a></li>
-                <li><a href="{{ url('/') }}#experience">Experience</a></li>
-                <li><a href="{{ route('frontend.event.index') }}">Events</a></li>
-                <li><a href="{{ url('/') }}#contact">Contact</a></li>
+                @foreach ($frontendMenus as $menu)
+                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
+                @endforeach
             </ul>
         </nav>
 

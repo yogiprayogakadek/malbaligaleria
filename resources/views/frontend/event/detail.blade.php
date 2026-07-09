@@ -113,14 +113,9 @@
 
         <nav>
             <ul>
-                <li><a href="{{ route('frontend.landing') }}">Home</a></li>
-                <li><a href="{{ route('frontend.landing') }}/#about">About</a></li>
-
-                <li><a href="{{ route('frontend.directory.index') }}">Tenant List</a></li>
-
-                <li><a href="{{ route('frontend.landing') }}#events">Events</a></li>
-                <li><a href="{{ route('frontend.promotion.index') }}">Promo</a></li>
-                <li><a href="{{ route('frontend.landing') }}#contact">Contact</a></li>
+                @foreach ($frontendMenus as $menu)
+                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
+                @endforeach
             </ul>
         </nav>
 

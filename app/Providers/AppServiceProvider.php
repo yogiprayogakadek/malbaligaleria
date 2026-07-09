@@ -77,6 +77,11 @@ class AppServiceProvider extends ServiceProvider
                 'frontend.directory.index',
                 'frontend.promotion.index',
                 'frontend.new-store.index',
+                'frontend.event.index',
+                'frontend.event.detail',
+                'frontend.dining.index',
+                'frontend.tenant.index',
+                'frontend.tenant.index_new',
                 'frontend.partials._sidebar',
                 'frontend.partials.footer_v2'
             ],
