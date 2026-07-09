@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             TenantSeederV3::class,
             SettingSeeder::class,
             FrontendMenuSeeder::class,
+            InventoryCategorySeeder::class,
         ]);
     }
 }

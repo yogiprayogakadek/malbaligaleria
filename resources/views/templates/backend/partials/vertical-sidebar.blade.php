@@ -164,6 +164,27 @@
                                     <span class="hide-menu">Role & Permission</span>
                                 </a>
                             </li>
+                            <!-- Inventory -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <iconify-icon icon="solar:box-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Inventory</span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse first-level">
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('admin.inventory.index') }}">
+                                            <span class="icon-small"></span>
+                                            <span class="hide-menu">Assets List</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('admin.inventory.categories.index') }}">
+                                            <span class="icon-small"></span>
+                                            <span class="hide-menu">Categories</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </div>
                     @endrole
 
