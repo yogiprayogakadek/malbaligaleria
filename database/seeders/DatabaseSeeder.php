@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             FrontendMenuSeeder::class,
             InventoryCategorySeeder::class,
+            InventoryItemSeeder::class,
         ]);
     }
 }
