@@ -709,6 +709,7 @@ body.dark-mode {
     max-width: 600px;
     max-height: 85vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     background: #ffffff;
     border-radius: 20px;
     opacity: 0;

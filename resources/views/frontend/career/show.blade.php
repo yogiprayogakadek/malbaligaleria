@@ -338,7 +338,7 @@
     {{-- Apply Modal --}}
     @if(!$vacancy->isExpired())
     <div class="apply-modal-overlay" id="applyModalOverlay"></div>
-    <div class="apply-modal" id="applyModal">
+    <div class="apply-modal" id="applyModal" data-lenis-prevent>
         <div class="apply-modal-header">
             <h3>Submit Application</h3>
             <button class="apply-modal-close" id="closeApplyModal">

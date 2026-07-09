@@ -32,7 +32,7 @@
     <div class="row g-4">
         {{-- Informasi Pelamar --}}
         <div class="col-md-7">
-            <div class="card h-100">
+            <div class="card">
                 <div class="card-header">
                     <h6 class="mb-0"><i class="ti ti-user me-2"></i>Applicant Information</h6>
                 </div>
