@@ -54,6 +54,51 @@
             height: 18px;
             stroke: currentColor;
         }
+
+        .career-flyer-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1.5px solid rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.05);
+            color: var(--gold-dark, #b89327);
+            text-decoration: none;
+            width: 100%;
+            margin-top: 12px;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        .career-flyer-btn:hover {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            color: var(--gold-dark, #b89327);
+        }
+
+        body.dark-mode .career-flyer-btn {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold, #D4AF37);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        body.dark-mode .career-flyer-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+            color: var(--gold, #D4AF37);
+        }
+
+        .career-flyer-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
     </style>
 </head>
 
@@ -185,11 +230,7 @@
                     </div>
                 @endif
 
-                @if($vacancy->flyer_path)
-                    <div class="detail-card career-reveal" style="margin-bottom: 20px; padding: 0; overflow: hidden; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                        <img src="{{ asset('storage/' . $vacancy->flyer_path) }}" alt="Flyer {{ $vacancy->title }}" style="width: 100%; height: auto; display: block; object-fit: cover;">
-                    </div>
-                @endif
+
 
                 <div class="detail-card career-reveal">
                     <div class="detail-section">
@@ -313,6 +354,17 @@
                             </div>
                         @endif
 
+                        @if($vacancy->flyer_path)
+                            <button type="button" class="career-flyer-btn" id="openFlyerModal">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                View Job Flyer
+                            </button>
+                        @endif
+
                         <button type="button" class="career-share-btn" id="careerShareBtn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="18" cy="5" r="3" />
@@ -410,6 +462,24 @@
     </div>
     @endif
 
+    @if($vacancy->flyer_path)
+    {{-- Flyer Modal --}}
+    <div class="apply-modal-overlay" id="flyerModalOverlay"></div>
+    <div class="apply-modal" id="flyerModal" data-lenis-prevent style="max-width: 600px; border-radius: 20px; overflow: hidden; background: #ffffff;">
+        <div class="apply-modal-header" style="border-bottom: none; padding: 20px 24px; position: sticky; top: 0; background: #ffffff; z-index: 10; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-family:'Playfair Display', serif; font-size:20px; font-weight:700; color:var(--text-primary); margin:0;">Job Flyer</h3>
+            <button class="apply-modal-close" id="closeFlyerModal" style="width:32px; height:32px; border:1px solid var(--border); border-radius:50%; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="apply-modal-body" style="padding: 0 24px 24px; max-height: calc(85vh - 72px); overflow-y: auto;">
+            <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: #fcfcfc; border: 1px solid var(--border);">
+                <img src="{{ asset('storage/' . $vacancy->flyer_path) }}" alt="Job Flyer {{ $vacancy->title }}" style="width: 100%; height: auto; display: block; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+    @endif
+
     @include('frontend.partials.share_menu')
     @include('frontend.partials.footer_v2')
 
@@ -496,6 +566,32 @@
                     confirmButton: 'swal-premium-btn'
                 }
             });
+        @endif
+
+        // Flyer Modal JS
+        @if($vacancy->flyer_path)
+        const flyerOverlay  = document.getElementById('flyerModalOverlay');
+        const flyerModal    = document.getElementById('flyerModal');
+        const flyerOpenBtn  = document.getElementById('openFlyerModal');
+        const flyerCloseBtn = document.getElementById('closeFlyerModal');
+
+        const openFlyerModal  = () => {
+            flyerOverlay.classList.add('active');
+            flyerModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.lenis) window.lenis.stop();
+        };
+
+        const closeFlyerModal = () => {
+            flyerOverlay.classList.remove('active');
+            flyerModal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (window.lenis) window.lenis.start();
+        };
+
+        flyerOpenBtn?.addEventListener('click', openFlyerModal);
+        flyerCloseBtn?.addEventListener('click', closeFlyerModal);
+        flyerOverlay?.addEventListener('click', closeFlyerModal);
         @endif
 
         // Share Vacancy
