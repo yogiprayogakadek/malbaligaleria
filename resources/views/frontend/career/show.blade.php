@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $vacancy->title }} — Careers Mal Bali Galeria</title>
+    <title>{{ $vacancy->title }} - Careers Mal Bali Galeria</title>
     <meta name="description" content="Apply for {{ $vacancy->title }} position at Mal Bali Galeria, {{ $vacancy->department }}. {{ Str::limit($vacancy->description, 120) }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
@@ -449,7 +449,7 @@
                         </div>
                         <div class="file-upload-text">
                             <strong>Click to upload</strong> or drag & drop<br>
-                            <small>PDF, DOC, DOCX — Max 2MB</small>
+                            <small>PDF, DOC, DOCX - Max 2MB</small>
                         </div>
                         <div class="file-name-display" id="fileNameDisplay"></div>
                     </div>

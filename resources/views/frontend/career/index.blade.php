@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Careers — Mal Bali Galeria</title>
+    <title>Careers - Mal Bali Galeria</title>
     <meta name="description" content="Join the Mal Bali Galeria team. Find job vacancies and realize your dream career at Bali's leading shopping center.">
     <meta name="keywords" content="Job Vacancies Bali, Mal Bali Galeria Careers, Jobs Bali, Kuta Recruitment">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url('/career') }}">
-    <meta property="og:title" content="Careers — Mal Bali Galeria">
+    <meta property="og:title" content="Careers - Mal Bali Galeria">
     <meta property="og:description" content="Join the Mal Bali Galeria team and realize your dream career.">
     <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
 
