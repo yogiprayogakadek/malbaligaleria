@@ -30,7 +30,7 @@ class JobVacancyService
 
     public function findByUuid(string $uuid): JobVacancy
     {
-        return JobVacancy::where('uuid', $uuid)->firstOrFail();
+        return JobVacancy::where('uuid', $uuid)->orWhere('slug', $uuid)->firstOrFail();
     }
 
     public function create(array $data): JobVacancy

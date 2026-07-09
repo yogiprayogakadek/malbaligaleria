@@ -15,6 +15,7 @@ class StoreJobVacancyRequest extends FormRequest
     {
         return [
             'title'            => 'required|string|max:255',
+            'slug'             => 'required|string|max:255|unique:job_vacancies,slug',
             'department'       => 'required|string|max:100',
             'type'             => 'required|in:full-time,part-time,contract,internship',
             'location'         => 'required|string|max:255',

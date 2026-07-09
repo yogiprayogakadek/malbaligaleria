@@ -15,6 +15,12 @@ class UpdateJobVacancyRequest extends FormRequest
     {
         return [
             'title'            => 'required|string|max:255',
+            'slug'             => [
+                'required',
+                'string',
+                'max:255',
+                \Illuminate\Validation\Rule::unique('job_vacancies', 'slug')->ignore($this->route('uuid'), 'uuid'),
+            ],
             'department'       => 'required|string|max:100',
             'type'             => 'required|in:full-time,part-time,contract,internship',
             'location'         => 'required|string|max:255',

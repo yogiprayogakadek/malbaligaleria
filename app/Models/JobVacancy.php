@@ -13,6 +13,7 @@ class JobVacancy extends Model
     protected $fillable = [
         'uuid',
         'title',
+        'slug',
         'department',
         'type',
         'location',

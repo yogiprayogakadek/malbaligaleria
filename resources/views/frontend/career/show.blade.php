@@ -413,7 +413,7 @@
                     <h4 class="modal-info-title">{{ $vacancy->title }}</h4>
                 </div>
             </div>
-            <form action="{{ route('frontend.career.apply', $vacancy->uuid) }}" method="POST" enctype="multipart/form-data" id="applyForm">
+            <form action="{{ route('frontend.career.apply', $vacancy->slug ?: $vacancy->uuid) }}" method="POST" enctype="multipart/form-data" id="applyForm">
                 @csrf
                 <div class="form-group">
                     <label for="name">Full Name <span class="required">*</span></label>

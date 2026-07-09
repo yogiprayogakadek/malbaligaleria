@@ -22,11 +22,21 @@
 
                         <div class="row g-3">
                             {{-- Posisi / Title --}}
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <label for="title" class="form-label fw-semibold">Position Name <span class="text-danger">*</span></label>
                                 <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror"
                                     value="{{ old('title') }}" placeholder="Example: Marketing Staff" required>
                                 @error('title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Slug --}}
+                            <div class="col-md-6">
+                                <label for="slug" class="form-label fw-semibold">Slug <span class="text-danger">*</span></label>
+                                <input type="text" name="slug" id="slug" class="form-control @error('slug') is-invalid @enderror"
+                                    value="{{ old('slug') }}" placeholder="Will be automatically generated" readonly required>
+                                @error('slug')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -182,3 +192,18 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('#title').on('keyup change input', function() {
+                let title = $(this).val();
+                let slug = title.toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '') // remove invalid chars
+                    .replace(/\s+/g, '-')         // collapse whitespace and replace by -
+                    .replace(/-+/g, '-');         // collapse dashes
+                $('#slug').val(slug);
+            });
+        });
+    </script>
+@endpush

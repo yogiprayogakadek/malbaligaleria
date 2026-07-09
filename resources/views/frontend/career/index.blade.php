@@ -381,7 +381,7 @@
                             </div>
                             <div class="vacancy-actions" style="display:flex; align-items:center; gap:8px;">
                                 <button type="button" class="vacancy-card-share-btn" 
-                                        data-url="{{ route('frontend.career.show', $vacancy->uuid) }}"
+                                        data-url="{{ route('frontend.career.show', $vacancy->slug ?: $vacancy->uuid) }}"
                                         data-title="{{ $vacancy->title }}"
                                         title="Share Vacancy">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -393,7 +393,7 @@
                                     </svg>
                                 </button>
                                 @if(!$vacancy->isExpired())
-                                    <a href="{{ route('frontend.career.show', $vacancy->uuid) }}" class="vacancy-apply-btn">
+                                    <a href="{{ route('frontend.career.show', $vacancy->slug ?: $vacancy->uuid) }}" class="vacancy-apply-btn">
                                         View Details
                                         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>

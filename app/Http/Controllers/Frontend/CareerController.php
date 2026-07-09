@@ -120,7 +120,7 @@ class CareerController extends Controller
             }
         }
 
-        return redirect()->route('frontend.career.show', $uuid)
+        return redirect()->route('frontend.career.show', $vacancy->slug ?: $vacancy->uuid)
             ->with('success', 'Your application has been successfully submitted! We will contact you soon.');
     }
 }
