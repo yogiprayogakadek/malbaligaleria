@@ -24,6 +24,20 @@ return Application::configure(basePath: dirname(__DIR__))
             'check_inventory_access' => \App\Http\Middleware\CheckInventoryAccess::class,
             'check_inventory_ip'     => \App\Http\Middleware\CheckInventoryIpWhitelist::class,
         ]);
+
+        $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
+            if ($request->getHost() === config('inventory.subdomain', 'inventory.malbaligaleria.com')) {
+                return route('inventory.login');
+            }
+            return route('login');
+        });
+
+        $middleware->redirectUsersTo(function (\Illuminate\Http\Request $request) {
+            if ($request->getHost() === config('inventory.subdomain', 'inventory.malbaligaleria.com')) {
+                return route('inventory.index');
+            }
+            return '/dashboard';
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

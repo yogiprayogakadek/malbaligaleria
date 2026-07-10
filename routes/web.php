@@ -40,8 +40,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/check-status-user', [StatusUserController::class, 'index'])->name('check-status-user');
 
 // Include segmented routes
-require __DIR__ . '/frontend.php';
-require __DIR__ . '/admin.php';
 require __DIR__ . '/inventory/auth.php';  // Inventory subdomain — auth (login/logout)
 require __DIR__ . '/inventory/web.php';   // Inventory subdomain — protected CRUD
+require __DIR__ . '/frontend.php';
+require __DIR__ . '/admin.php';
 require __DIR__ . '/tenant.php';
