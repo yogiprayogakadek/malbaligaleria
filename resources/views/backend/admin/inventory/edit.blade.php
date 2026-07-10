@@ -20,7 +20,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('inventory.assets.update', $item->id) }}" method="POST" id="asset-form">
+                    <form action="{{ route('inventory.assets.update', $item->id) }}" method="POST" id="asset-form" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -61,6 +61,31 @@
                                 @error('parent_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <!-- Asset Image Section -->
+                        <h5 class="fw-semibold text-primary mb-4 pb-2 border-bottom"><i class="ti ti-photo me-1"></i> Asset Image</h5>
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-semibold">Upload New Image</label>
+                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*">
+                            <div class="form-text">Supported formats: JPEG, PNG, JPG, WebP. Max size: 2MB. Leave blank to keep existing image.</div>
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            
+                            <input type="hidden" name="remove_image" id="remove_image" value="0">
+                            
+                            <div class="mt-3 {{ $item->image_path ? '' : 'd-none' }}" id="image-preview-container">
+                                <label class="form-label d-block fw-semibold">Current/Preview Image</label>
+                                <div class="position-relative d-inline-block">
+                                    <img id="image-preview" src="{{ $item->image_path ? asset('storage/' . $item->image_path) : '#' }}" alt="Preview" class="img-thumbnail" style="max-height: 150px;">
+                                    @if($item->image_path)
+                                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle p-1" id="btn-remove-image" title="Remove image">
+                                            <i class="ti ti-x fs-5"></i>
+                                        </button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
 
@@ -225,6 +250,37 @@
             if ($('#specs-container .spec-row').length === 0) {
                 addSpecRow('Properties', '');
             }
+
+            // Image preview
+            $('#image').on('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#image-preview').attr('src', event.target.result);
+                        $('#image-preview-container').removeClass('d-none');
+                        $('#remove_image').val('0');
+                        if ($('#btn-remove-image').length === 0) {
+                            $('#image-preview').after(`
+                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle p-1" id="btn-remove-image" title="Remove image">
+                                    <i class="ti ti-x fs-5"></i>
+                                </button>
+                            `);
+                        } else {
+                            $('#btn-remove-image').show();
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Image removal button handler
+            $(document).on('click', '#btn-remove-image', function() {
+                $('#image').val('');
+                $('#remove_image').val('1');
+                $('#image-preview').attr('src', '#');
+                $('#image-preview-container').addClass('d-none');
+            });
         });
     </script>
 @endpush

@@ -7,8 +7,11 @@ use App\Models\InventoryCategory;
 use App\Models\InventoryItem;
 use App\Models\InventoryHistory;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageOptimizer;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 
@@ -36,6 +39,12 @@ class InventoryController extends Controller
 
             return DataTables::of($items)
                 ->addIndexColumn()
+                ->addColumn('image', function ($row) {
+                    if ($row->image_path) {
+                        return '<img src="' . asset('storage/' . $row->image_path) . '" class="img-thumbnail" style="max-height: 50px; max-width: 50px; object-fit: cover;" />';
+                    }
+                    return '<span class="text-muted">No Image</span>';
+                })
                 ->editColumn('category', function ($row) {
                     return $row->category ? $row->category->name : '<span class="text-muted">-</span>';
                 })
@@ -58,7 +67,7 @@ class InventoryController extends Controller
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-delete" data-id="' . $row->id . '" data-name="' . htmlspecialchars($row->name) . '" title="Delete Item"><i class="ti ti-trash"></i></button>';
                     return $btn;
                 })
-                ->rawColumns(['category', 'parent', 'status', 'action'])
+                ->rawColumns(['image', 'category', 'parent', 'status', 'action'])
                 ->make(true);
         }
 
@@ -66,6 +75,55 @@ class InventoryController extends Controller
         $locations = InventoryItem::whereNotNull('location')->distinct()->pluck('location')->filter();
 
         return view('backend.admin.inventory.index', compact('categories', 'locations'));
+    }
+
+    public function print(Request $request)
+    {
+        $query = InventoryItem::with(['category', 'parent']);
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('location')) {
+            $query->where('location', $request->location);
+        }
+
+        $items = $query->orderBy('name')->get();
+        $layout = $request->input('layout', 'table');
+
+        if ($layout === 'hierarchy') {
+            $itemsMap = [];
+            foreach ($items as $item) {
+                $item->children = collect();
+                $itemsMap[$item->id] = $item;
+            }
+
+            $roots = collect();
+            foreach ($items as $item) {
+                if ($item->parent_id && isset($itemsMap[$item->parent_id])) {
+                    $itemsMap[$item->parent_id]->children->push($item);
+                } else {
+                    $roots->push($item);
+                }
+            }
+
+            return view('backend.admin.inventory.print.hierarchy', [
+                'roots' => $roots,
+                'category' => $request->filled('category_id') ? InventoryCategory::find($request->category_id) : null,
+                'status' => $request->status,
+                'location' => $request->location
+            ]);
+        }
+
+        return view('backend.admin.inventory.print.table', [
+            'items' => $items,
+            'category' => $request->filled('category_id') ? InventoryCategory::find($request->category_id) : null,
+            'status' => $request->status,
+            'location' => $request->location
+        ]);
     }
 
     public function create()
@@ -92,6 +150,7 @@ class InventoryController extends Controller
             'notes' => 'nullable|string',
             'specs_keys' => 'nullable|array',
             'specs_values' => 'nullable|array',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         // Process specs dynamic array into JSON
@@ -102,6 +161,13 @@ class InventoryController extends Controller
                     $specs[trim($key)] = $request->specs_values[$index] ?? '';
                 }
             }
+        }
+
+        // Handle image upload
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('inventory_images', 'public');
+            ImageOptimizer::optimize($imagePath);
         }
 
         $item = InventoryItem::create([
@@ -116,6 +182,7 @@ class InventoryController extends Controller
             'quantity' => $request->quantity,
             'specs' => $specs,
             'notes' => $request->notes,
+            'image_path' => $imagePath,
         ]);
 
         // Log history
@@ -157,6 +224,7 @@ class InventoryController extends Controller
             'notes' => 'nullable|string',
             'specs_keys' => 'nullable|array',
             'specs_values' => 'nullable|array',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         // Process specs dynamic array into JSON
@@ -169,7 +237,22 @@ class InventoryController extends Controller
             }
         }
 
-        $oldData = $item->only(['category_id', 'parent_id', 'name', 'brand', 'model', 'serial_number', 'location', 'status', 'quantity', 'specs', 'notes']);
+        // Handle image upload / removal
+        $imagePath = $item->image_path;
+        if ($request->hasFile('image')) {
+            if ($item->image_path && Storage::disk('public')->exists($item->image_path)) {
+                Storage::disk('public')->delete($item->image_path);
+            }
+            $imagePath = $request->file('image')->store('inventory_images', 'public');
+            ImageOptimizer::optimize($imagePath);
+        } elseif ($request->input('remove_image') === '1') {
+            if ($item->image_path && Storage::disk('public')->exists($item->image_path)) {
+                Storage::disk('public')->delete($item->image_path);
+            }
+            $imagePath = null;
+        }
+
+        $oldData = $item->only(['category_id', 'parent_id', 'name', 'brand', 'model', 'serial_number', 'location', 'status', 'quantity', 'specs', 'notes', 'image_path']);
 
         $item->update([
             'name' => $request->name,
@@ -183,9 +266,10 @@ class InventoryController extends Controller
             'quantity' => $request->quantity,
             'specs' => $specs,
             'notes' => $request->notes,
+            'image_path' => $imagePath,
         ]);
 
-        $newData = $item->only(['category_id', 'parent_id', 'name', 'brand', 'model', 'serial_number', 'location', 'status', 'quantity', 'specs', 'notes']);
+        $newData = $item->only(['category_id', 'parent_id', 'name', 'brand', 'model', 'serial_number', 'location', 'status', 'quantity', 'specs', 'notes', 'image_path']);
 
         $changes = [];
         foreach ($newData as $key => $val) {

@@ -35,6 +35,7 @@ Route::domain(config('inventory.subdomain'))
         // ── Assets CRUD ──────────────────────────────────────────────────
         Route::prefix('/items')->name('assets.')->group(function () {
             Route::get('/',               [InventoryController::class, 'index'])->name('index');
+            Route::get('/print',          [InventoryController::class, 'print'])->name('print');
             Route::get('/create',         [InventoryController::class, 'create'])->name('create');
             Route::post('/store',         [InventoryController::class, 'store'])->name('store');
             Route::get('/{id}/edit',      [InventoryController::class, 'edit'])->name('edit');

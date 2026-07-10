@@ -20,7 +20,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('inventory.assets.store') }}" method="POST" id="asset-form">
+                    <form action="{{ route('inventory.assets.store') }}" method="POST" id="asset-form" enctype="multipart/form-data">
                         @csrf
 
                         <!-- General Information Section -->
@@ -60,6 +60,20 @@
                                 @error('parent_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <!-- Asset Image Section -->
+                        <h5 class="fw-semibold text-primary mb-4 pb-2 border-bottom"><i class="ti ti-photo me-1"></i> Asset Image</h5>
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-semibold">Upload Image</label>
+                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*">
+                            <div class="form-text">Supported formats: JPEG, PNG, JPG, WebP. Max size: 2MB.</div>
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <div class="mt-2 d-none" id="image-preview-container">
+                                <img id="image-preview" src="#" alt="Preview" class="img-thumbnail" style="max-height: 150px;">
                             </div>
                         </div>
 
@@ -219,6 +233,21 @@
             if ($('#specs-container .spec-row').length === 0) {
                 addSpecRow('Properties', '');
             }
+
+            // Image preview
+            $('#image').on('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#image-preview').attr('src', event.target.result);
+                        $('#image-preview-container').removeClass('d-none');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#image-preview-container').addClass('d-none');
+                }
+            });
         });
     </script>
 @endpush

@@ -23,6 +23,7 @@ class InventoryItem extends Model
         'quantity',
         'specs',
         'notes',
+        'image_path',
     ];
 
     protected $casts = [

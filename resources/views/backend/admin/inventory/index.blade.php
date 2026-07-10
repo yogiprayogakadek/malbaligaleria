@@ -39,6 +39,9 @@
             <a href="{{ route('inventory.categories.index') }}" class="btn btn-outline-primary hstack gap-2">
                 <i class="ti ti-folders fs-4"></i> Manage Categories
             </a>
+            <button type="button" class="btn btn-outline-success hstack gap-2" data-bs-toggle="modal" data-bs-target="#printModal">
+                <i class="ti ti-printer fs-4"></i> Print / Cetak
+            </button>
             <a href="{{ route('inventory.assets.create') }}" class="btn btn-primary hstack gap-2">
                 <i class="ti ti-plus fs-4"></i> Add Asset
             </a>
@@ -92,6 +95,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Image</th>
                                     <th>Asset Name</th>
                                     <th>Category</th>
                                     <th>Parent Asset</th>
@@ -107,6 +111,63 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Modal -->
+    <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="printModalLabel"><i class="ti ti-printer me-2 text-primary"></i> Print Asset Document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('inventory.assets.print') }}" method="GET" target="_blank">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="print_layout" class="form-label fw-semibold">Layout Format</label>
+                            <select name="layout" id="print_layout" class="form-select" required>
+                                <option value="table">Table List (Tabel Biasa)</option>
+                                <option value="hierarchy">Visual Hierarchy Tree (Bentuk Hirarki)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="print_category_id" class="form-label fw-semibold">Category Filter</label>
+                            <select name="category_id" id="print_category_id" class="form-select">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="print_status" class="form-label fw-semibold">Status Filter</label>
+                            <select name="status" id="print_status" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="active">Active</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="broken">Broken</option>
+                                <option value="stored">Stored</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="print_location" class="form-label fw-semibold">Location Filter</label>
+                            <select name="location" id="print_location" class="form-select">
+                                <option value="">All Locations</option>
+                                @foreach($locations as $loc)
+                                    <option value="{{ $loc }}">{{ $loc }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary hstack gap-2">
+                            <i class="ti ti-printer"></i> Generate & Print
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -134,6 +195,12 @@
                     {
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'image',
+                        name: 'image',
                         orderable: false,
                         searchable: false
                     },
@@ -237,6 +304,11 @@
                         table.ajax.reload();
                     }
                 });
+            // Prefill print modal filters from active page filters when modal is shown
+            $('#printModal').on('show.bs.modal', function () {
+                $('#print_category_id').val($('#filter_category_id').val());
+                $('#print_status').val($('#filter_status').val());
+                $('#print_location').val($('#filter_location').val());
             });
         });
     </script>
