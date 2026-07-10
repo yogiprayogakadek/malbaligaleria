@@ -22,7 +22,6 @@ use App\Http\Controllers\Backend\Admin\InventoryController;
 
 Route::domain(config('inventory.subdomain'))
     ->middleware([
-        'web',
         'auth',
         'check_inventory_access',
         'check_inventory_ip',
@@ -34,7 +33,7 @@ Route::domain(config('inventory.subdomain'))
         Route::get('/', [InventoryController::class, 'index'])->name('index');
 
         // ── Assets CRUD ──────────────────────────────────────────────────
-        Route::prefix('/assets')->name('assets.')->group(function () {
+        Route::prefix('/items')->name('assets.')->group(function () {
             Route::get('/',               [InventoryController::class, 'index'])->name('index');
             Route::get('/create',         [InventoryController::class, 'create'])->name('create');
             Route::post('/store',         [InventoryController::class, 'store'])->name('store');

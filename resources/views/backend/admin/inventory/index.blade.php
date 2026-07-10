@@ -211,7 +211,7 @@
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
                         return $.ajax({
-                            url: `/inventory/assets/${id}/destroy`,
+                            url: "{{ route('inventory.assets.index') }}/" + id,
                             type: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
