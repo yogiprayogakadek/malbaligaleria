@@ -29,6 +29,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->runningInConsole()) {
+            $exceptionsRendererPath = base_path('vendor/laravel/framework/src/Illuminate/Foundation/resources/exceptions/renderer');
+            if (is_dir($exceptionsRendererPath)) {
+                \Illuminate\Support\Facades\Blade::anonymousComponentPath($exceptionsRendererPath, 'laravel-exceptions-renderer');
+            }
+        }
+
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
             return $user->hasRole('superuser') ? true : null;
         });
