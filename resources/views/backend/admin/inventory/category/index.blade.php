@@ -1,7 +1,7 @@
-@extends('templates.backend.master')
+@extends('templates.inventory.master')
 
 @section('page-title', 'Inventory Categories')
-@section('page-link', route('admin.inventory.categories.index'))
+@section('page-subtitle', 'Kelola kategori aset inventory')
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dataTables.bootstrap5.min.css') }}">
@@ -27,10 +27,10 @@
             <p class="text-muted mb-0">Group assets by categories (e.g. CCTV, Computers, Servers)</p>
         </div>
         <div class="col-auto d-flex gap-2">
-            <a href="{{ route('admin.inventory.index') }}" class="btn btn-outline-secondary hstack gap-2">
+            <a href="{{ route('inventory.assets.index') }}" class="btn btn-outline-secondary hstack gap-2">
                 <i class="ti ti-arrow-left fs-4"></i> Back to Assets
             </a>
-            <a href="{{ route('admin.inventory.categories.create') }}" class="btn btn-primary hstack gap-2">
+            <a href="{{ route('inventory.categories.create') }}" class="btn btn-primary hstack gap-2">
                 <i class="ti ti-plus fs-4"></i> Add Category
             </a>
         </div>
@@ -71,7 +71,7 @@
                 processing: true,
                 serverSide: true,
                 searchDelay: 500,
-                ajax: "{{ route('admin.inventory.categories.index') }}",
+                ajax: "{{ route('inventory.categories.index') }}",
                 columns: [
                     {
                         data: 'DT_RowIndex',
@@ -120,7 +120,7 @@
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
                         return $.ajax({
-                            url: `/dashboard/inventory/categories/${id}/destroy`,
+                            url: `/inventory/categories/${id}/destroy`,
                             type: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

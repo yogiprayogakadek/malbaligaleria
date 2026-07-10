@@ -53,8 +53,8 @@ class InventoryController extends Controller
                     return '<span class="badge bg-' . $badge . '">' . ucfirst($row->status) . '</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="' . route('admin.inventory.history', $row->id) . '" class="btn btn-sm btn-info me-1" title="View History Log"><i class="ti ti-history"></i> Log</a>';
-                    $btn .= '<a href="' . route('admin.inventory.edit', $row->id) . '" class="btn btn-sm btn-primary me-1" title="Edit Item"><i class="ti ti-pencil"></i></a>';
+                    $btn = '<a href="' . route('inventory.assets.history', $row->id) . '" class="btn btn-sm btn-info me-1" title="View History Log"><i class="ti ti-history"></i> Log</a>';
+                    $btn .= '<a href="' . route('inventory.assets.edit', $row->id) . '" class="btn btn-sm btn-primary me-1" title="Edit Item"><i class="ti ti-pencil"></i></a>';
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-delete" data-id="' . $row->id . '" data-name="' . htmlspecialchars($row->name) . '" title="Delete Item"><i class="ti ti-trash"></i></button>';
                     return $btn;
                 })
@@ -127,7 +127,7 @@ class InventoryController extends Controller
             'changes' => $item->toArray()
         ]);
 
-        return redirect()->route('admin.inventory.index')->with('success', 'Inventory item created successfully.');
+        return redirect()->route('inventory.assets.index')->with('success', 'Inventory item created successfully.');
     }
 
     public function edit($id)
@@ -217,7 +217,7 @@ class InventoryController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.inventory.index')->with('success', 'Inventory item updated successfully.');
+        return redirect()->route('inventory.assets.index')->with('success', 'Inventory item updated successfully.');
     }
 
     public function destroy($id)
@@ -259,7 +259,7 @@ class InventoryController extends Controller
             return DataTables::of($categories)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="' . route('admin.inventory.categories.edit', $row->id) . '" class="btn btn-sm btn-primary me-1"><i class="ti ti-pencil"></i></a>';
+                    $btn = '<a href="' . route('inventory.categories.edit', $row->id) . '" class="btn btn-sm btn-primary me-1"><i class="ti ti-pencil"></i></a>';
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-delete-cat" data-id="' . $row->id . '" data-name="' . htmlspecialchars($row->name) . '"><i class="ti ti-trash"></i></button>';
                     return $btn;
                 })
@@ -288,7 +288,7 @@ class InventoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.inventory.categories.index')->with('success', 'Category created successfully.');
+        return redirect()->route('inventory.categories.index')->with('success', 'Category created successfully.');
     }
 
     public function categoryEdit($id)
@@ -312,7 +312,7 @@ class InventoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.inventory.categories.index')->with('success', 'Category updated successfully.');
+        return redirect()->route('inventory.categories.index')->with('success', 'Category updated successfully.');
     }
 
     public function categoryDestroy($id)

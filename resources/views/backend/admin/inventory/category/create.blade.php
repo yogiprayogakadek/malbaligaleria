@@ -1,7 +1,7 @@
-@extends('templates.backend.master')
+@extends('templates.inventory.master')
 
-@section('page-title', 'Create Inventory Category')
-@section('page-link', route('admin.inventory.categories.create'))
+@section('page-title', 'Tambah Kategori')
+@section('page-subtitle', 'Buat klasifikasi kategori aset baru')
 
 @section('content')
     <div class="row mb-4 align-items-center">
@@ -10,7 +10,7 @@
             <p class="text-muted mb-0">Add a new category classification for assets</p>
         </div>
         <div class="col-auto">
-            <a href="{{ route('admin.inventory.categories.index') }}" class="btn btn-outline-secondary hstack gap-2">
+            <a href="{{ route('inventory.categories.index') }}" class="btn btn-outline-secondary hstack gap-2">
                 <i class="ti ti-arrow-left fs-4"></i> Back to Categories
             </a>
         </div>
@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin.inventory.categories.store') }}" method="POST">
+                    <form action="{{ route('inventory.categories.store') }}" method="POST">
                         @csrf
 
                         <div class="mb-4">

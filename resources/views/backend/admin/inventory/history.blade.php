@@ -1,7 +1,7 @@
-@extends('templates.backend.master')
+@extends('templates.inventory.master')
 
-@section('page-title', 'Asset History Log')
-@section('page-link', route('admin.inventory.history', $item->id))
+@section('page-title', 'Asset Audit Log')
+@section('page-subtitle', 'Riwayat perubahan aset')
 
 @push('css')
     <style>
@@ -54,7 +54,7 @@
             <p class="text-muted mb-0">Audit history trail for **{{ $item->name }}**</p>
         </div>
         <div class="col-auto">
-            <a href="{{ route('admin.inventory.index') }}" class="btn btn-outline-secondary hstack gap-2">
+            <a href="{{ route('inventory.assets.index') }}" class="btn btn-outline-secondary hstack gap-2">
                 <i class="ti ti-arrow-left fs-4"></i> Back to List
             </a>
         </div>

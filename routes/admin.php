@@ -18,7 +18,7 @@ use App\Http\Controllers\Backend\Admin\JobApplicationController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\FrontendMenuController;
-use App\Http\Controllers\Backend\Admin\InventoryController;
+// InventoryController moved to routes/inventory.php
 use App\Http\Controllers\Backend\Admin\VisitorController;
 use App\Http\Controllers\Backend\Admin\GalleryController;
 use App\Http\Controllers\Backend\Admin\LogViewerController;
@@ -281,27 +281,7 @@ Route::controller(AdminDashboardController::class)
                     Route::post('/empty', 'emptyBin')->name('empty');
                 });
 
-            // INVENTORY MANAGEMENT
-            Route::controller(InventoryController::class)->prefix('/inventory')->name('inventory.')->group(function () {
-                // Item routes
-                Route::get('/', 'index')->name('index');
-                Route::get('/create', 'create')->name('create');
-                Route::post('/store', 'store')->name('store');
-                Route::get('/{id}/edit', 'edit')->name('edit');
-                Route::put('/{id}/update', 'update')->name('update');
-                Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-                Route::get('/{id}/history', 'history')->name('history');
-
-                // Category routes
-                Route::prefix('/categories')->name('categories.')->group(function () {
-                    Route::get('/', 'categories')->name('index');
-                    Route::get('/create', 'categoryCreate')->name('create');
-                    Route::post('/store', 'categoryStore')->name('store');
-                    Route::get('/{id}/edit', 'categoryEdit')->name('edit');
-                    Route::put('/{id}/update', 'categoryUpdate')->name('update');
-                    Route::delete('/{id}/destroy', 'categoryDestroy')->name('destroy');
-                });
-            });
+            // INVENTORY MANAGEMENT → moved to routes/inventory.php
         });
 
         // CAREER — ACCESSIBLE BY ADMIN, SUPERUSER, AND HR (ENFORCED WITH PERMISSIONS)

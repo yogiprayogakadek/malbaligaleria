@@ -1,7 +1,7 @@
-@extends('templates.backend.master')
+@extends('templates.inventory.master')
 
-@section('page-title', 'Edit Inventory Asset')
-@section('page-link', route('admin.inventory.edit', $item->id))
+@section('page-title', 'Edit Asset')
+@section('page-subtitle', 'Perbarui detail aset di sistem inventory')
 
 @section('content')
     <div class="row mb-4 align-items-center">
@@ -10,7 +10,7 @@
             <p class="text-muted mb-0">Modify details of an asset in the inventory system</p>
         </div>
         <div class="col-auto">
-            <a href="{{ route('admin.inventory.index') }}" class="btn btn-outline-secondary hstack gap-2">
+            <a href="{{ route('inventory.assets.index') }}" class="btn btn-outline-secondary hstack gap-2">
                 <i class="ti ti-arrow-left fs-4"></i> Back to List
             </a>
         </div>
@@ -20,7 +20,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin.inventory.update', $item->id) }}" method="POST" id="asset-form">
+                    <form action="{{ route('inventory.assets.update', $item->id) }}" method="POST" id="asset-form">
                         @csrf
                         @method('PUT')
 

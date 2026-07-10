@@ -1,7 +1,7 @@
-@extends('templates.backend.master')
+@extends('templates.inventory.master')
 
-@section('page-title', 'Inventory Asset Management')
-@section('page-link', route('admin.inventory.index'))
+@section('page-title', 'Asset Management')
+@section('page-subtitle', 'Kelola semua aset hardware, CCTV, network dan lainnya')
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/backend/css/dataTables.bootstrap5.min.css') }}">
@@ -36,10 +36,10 @@
             <p class="text-muted mb-0">Manage hardware, network, CCTV, and other assets</p>
         </div>
         <div class="col-auto d-flex gap-2">
-            <a href="{{ route('admin.inventory.categories.index') }}" class="btn btn-outline-primary hstack gap-2">
+            <a href="{{ route('inventory.categories.index') }}" class="btn btn-outline-primary hstack gap-2">
                 <i class="ti ti-folders fs-4"></i> Manage Categories
             </a>
-            <a href="{{ route('admin.inventory.create') }}" class="btn btn-primary hstack gap-2">
+            <a href="{{ route('inventory.assets.create') }}" class="btn btn-primary hstack gap-2">
                 <i class="ti ti-plus fs-4"></i> Add Asset
             </a>
         </div>
@@ -123,7 +123,7 @@
                 serverSide: true,
                 searchDelay: 500,
                 ajax: {
-                    url: "{{ route('admin.inventory.index') }}",
+                    url: "{{ route('inventory.assets.index') }}",
                     data: function(d) {
                         d.category_id = $('#filter_category_id').val();
                         d.status = $('#filter_status').val();
@@ -211,7 +211,7 @@
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
                         return $.ajax({
-                            url: `/dashboard/inventory/${id}/destroy`,
+                            url: `/inventory/assets/${id}/destroy`,
                             type: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

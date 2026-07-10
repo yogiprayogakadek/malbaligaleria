@@ -172,13 +172,13 @@
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('admin.inventory.index') }}">
+                                        <a class="sidebar-link" href="{{ route('inventory.assets.index') }}">
                                             <span class="icon-small"></span>
                                             <span class="hide-menu">Assets List</span>
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('admin.inventory.categories.index') }}">
+                                        <a class="sidebar-link" href="{{ route('inventory.categories.index') }}">
                                             <span class="icon-small"></span>
                                             <span class="hide-menu">Categories</span>
                                         </a>
