@@ -17,10 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
-            'role' => \App\Http\Middleware\CheckRole::class,
-            'superuser' => \App\Http\Middleware\SuperUserMiddleware::class,
-            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'checkUserStatus'        => \App\Http\Middleware\CheckUserStatus::class,
+            'role'                   => \App\Http\Middleware\CheckRole::class,
+            'superuser'              => \App\Http\Middleware\SuperUserMiddleware::class,
+            'permission'             => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'check_inventory_access' => \App\Http\Middleware\CheckInventoryAccess::class,
+            'check_inventory_ip'     => \App\Http\Middleware\CheckInventoryIpWhitelist::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

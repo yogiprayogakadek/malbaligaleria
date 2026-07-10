@@ -25,6 +25,8 @@ use App\Http\Controllers\Backend\Admin\LogViewerController;
 use App\Http\Controllers\Backend\Admin\BackupController;
 use App\Http\Controllers\Backend\Admin\MediaCleanupController;
 use App\Http\Controllers\Backend\Admin\ImageCompressionController;
+use App\Http\Controllers\Backend\Admin\SubdomainAccessController;
+use App\Http\Controllers\Backend\Admin\IpWhitelistController;
 
 // ADMIN & SUPERUSER COMMON ROUTES
 Route::controller(AdminDashboardController::class)
@@ -281,7 +283,33 @@ Route::controller(AdminDashboardController::class)
                     Route::post('/empty', 'emptyBin')->name('empty');
                 });
 
-            // INVENTORY MANAGEMENT → moved to routes/inventory.php
+            // INVENTORY MANAGEMENT → moved to routes/inventory/
+
+            // SUBDOMAIN ACCESS MANAGEMENT
+            Route::controller(SubdomainAccessController::class)
+                ->prefix('/subdomain-access')
+                ->name('subdomain-access.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::patch('/{id}/toggle', 'toggle')->name('toggle');
+                    Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                });
+
+            // IP WHITELIST MANAGEMENT
+            Route::controller(IpWhitelistController::class)
+                ->prefix('/ip-whitelist')
+                ->name('ip-whitelist.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{id}/edit', 'edit')->name('edit');
+                    Route::put('/{id}/update', 'update')->name('update');
+                    Route::patch('/{id}/toggle', 'toggle')->name('toggle');
+                    Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                });
         });
 
         // CAREER — ACCESSIBLE BY ADMIN, SUPERUSER, AND HR (ENFORCED WITH PERMISSIONS)

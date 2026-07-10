@@ -164,6 +164,20 @@
                                     <span class="hide-menu">Role & Permission</span>
                                 </a>
                             </li>
+                            <!-- Subdomain Access -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.subdomain-access.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:user-check-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Subdomain Access</span>
+                                </a>
+                            </li>
+                            <!-- IP Whitelist -->
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.ip-whitelist.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:shield-network-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">IP Whitelist</span>
+                                </a>
+                            </li>
                             <!-- Inventory -->
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
