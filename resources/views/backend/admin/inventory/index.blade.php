@@ -304,6 +304,8 @@
                         table.ajax.reload();
                     }
                 });
+            });
+
             // Prefill print modal filters from active page filters when modal is shown
             $('#printModal').on('show.bs.modal', function () {
                 $('#print_category_id').val($('#filter_category_id').val());
