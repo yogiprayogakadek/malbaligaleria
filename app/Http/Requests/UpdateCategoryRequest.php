@@ -27,7 +27,7 @@ class UpdateCategoryRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('categories', 'name')->ignore($this->uuid, 'uuid')
+                Rule::unique('categories', 'name')->ignore($this->uuid, 'uuid')->whereNull('deleted_at')
             ],
             'color_zone' => [
                 'required',

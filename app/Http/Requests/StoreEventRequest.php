@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreEventRequest extends FormRequest
 {
@@ -16,7 +17,11 @@ class StoreEventRequest extends FormRequest
         $isRegular = $this->type === 'regular';
 
         return [
-            'name'             => 'required|string|unique:events,name',
+            'name'             => [
+                'required',
+                'string',
+                Rule::unique('events', 'name')->whereNull('deleted_at'),
+            ],
             'start_date'       => 'required|date',
             'end_date'         => 'nullable|date|after_or_equal:start_date',
             'start_time'       => 'required',

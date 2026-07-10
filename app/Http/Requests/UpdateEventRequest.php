@@ -21,7 +21,7 @@ class UpdateEventRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('events', 'name')->ignore($this->uuid, 'uuid'),
+                Rule::unique('events', 'name')->ignore($this->uuid, 'uuid')->whereNull('deleted_at'),
             ],
             'start_date'       => 'required|date',
             'end_date'         => 'nullable|date|after_or_equal:start_date',

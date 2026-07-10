@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreJobVacancyRequest extends FormRequest
 {
@@ -15,7 +16,12 @@ class StoreJobVacancyRequest extends FormRequest
     {
         return [
             'title'            => 'required|string|max:255',
-            'slug'             => 'required|string|max:255|unique:job_vacancies,slug',
+            'slug'             => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('job_vacancies', 'slug')->whereNull('deleted_at'),
+            ],
             'department'       => 'required|string|max:100',
             'type'             => 'required|in:full-time,part-time,contract,internship',
             'location'         => 'required|string|max:255',

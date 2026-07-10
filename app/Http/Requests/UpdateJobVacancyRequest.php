@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateJobVacancyRequest extends FormRequest
 {
@@ -19,7 +20,7 @@ class UpdateJobVacancyRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                \Illuminate\Validation\Rule::unique('job_vacancies', 'slug')->ignore($this->route('uuid'), 'uuid'),
+                Rule::unique('job_vacancies', 'slug')->ignore($this->route('uuid'), 'uuid')->whereNull('deleted_at'),
             ],
             'department'       => 'required|string|max:100',
             'type'             => 'required|in:full-time,part-time,contract,internship',

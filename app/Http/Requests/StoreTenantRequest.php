@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTenantRequest extends FormRequest
 {
@@ -24,7 +25,12 @@ class StoreTenantRequest extends FormRequest
         return [
             'type'              => 'required|string|in:tenant,island,gate',
             'category_id'       => 'required_if:type,tenant,island|exists:categories,id',
-            'name'              => 'required|string|max:255|unique:tenants,name',
+            'name'              => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('tenants', 'name')->whereNull('deleted_at'),
+            ],
             'phone'             => 'nullable|string|max:20',
             'email'             => 'nullable|email|max:255',
             'website'           => 'nullable|url|max:255',
