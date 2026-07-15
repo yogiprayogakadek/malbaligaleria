@@ -73,54 +73,113 @@
             color: #475569;
         }
 
-        /* Hierarchy visual styling */
+        /* Hierarchy top-down visual styling */
         .tree-container {
             margin-top: 10px;
+            width: 100%;
+            overflow-x: auto;
+            text-align: center;
+            padding-bottom: 30px;
         }
 
-        .tree-children {
-            margin-left: 28px;
-            padding-left: 20px;
-            border-left: 2px dashed #cbd5e1;
+        .tree-container * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .tree-container ul {
+            padding-top: 20px;
             position: relative;
+            display: inline-flex;
+            justify-content: center;
         }
 
-        .tree-node-wrapper {
-            margin-bottom: 15px;
+        .tree-container li {
+            float: left;
+            text-align: center;
+            list-style-type: none;
             position: relative;
+            padding: 20px 8px 0 8px;
         }
 
-        .tree-node-item {
-            display: flex;
-            align-items: flex-start;
-            background-color: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 10px 12px;
-            gap: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            position: relative;
-        }
-
-        /* Connector horizontal line */
-        .tree-children > .tree-node-wrapper::before {
+        /* We use ::before and ::after to draw the connector lines */
+        .tree-container li::before, .tree-container li::after {
             content: '';
             position: absolute;
-            left: -20px;
-            top: 22px;
-            width: 20px;
-            height: 2px;
-            border-top: 2px dashed #cbd5e1;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid #cbd5e1;
+            width: 50%;
+            height: 20px;
+        }
+
+        .tree-container li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid #cbd5e1;
+        }
+
+        /* Remove left-right connectors from single child nodes */
+        .tree-container li:only-child::after, .tree-container li:only-child::before {
+            display: none;
+        }
+
+        .tree-container li:only-child {
+            padding-top: 0;
+        }
+
+        /* Remove left connector from first child and right connector from last child */
+        .tree-container li:first-child::before, .tree-container li:last-child::after {
+            border: 0 none;
+        }
+
+        /* Add back vertical connector for boundary sibling nodes */
+        .tree-container li:last-child::before {
+            border-right: 2px solid #cbd5e1;
+            border-radius: 0 6px 0 0;
+        }
+
+        .tree-container li:first-child::after {
+            border-radius: 6px 0 0 0;
+        }
+
+        /* Downward connectors from parents */
+        .tree-container ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #cbd5e1;
+            width: 0;
+            height: 20px;
+        }
+
+        /* The node card */
+        .tree-node-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px;
+            width: 170px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
+            position: relative;
+            text-align: left;
+            vertical-align: top;
         }
 
         .icon-box {
             width: 32px;
             height: 32px;
-            border-radius: 6px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            margin-bottom: 6px;
         }
 
         .icon-cctv {
@@ -142,12 +201,12 @@
         }
 
         .thumbnail {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 6px;
             border: 1px solid #cbd5e1;
-            flex-shrink: 0;
+            margin-bottom: 6px;
         }
 
         .badge {
@@ -165,55 +224,79 @@
         .badge-stored { background-color: #f1f5f9; color: #475569; }
 
         .specs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 4px 10px;
-            margin-top: 6px;
-            font-size: 9px;
+            width: 100%;
+            margin-top: 4px;
+            font-size: 8.5px;
             color: #64748b;
             background-color: #f8fafc;
-            padding: 4px 8px;
+            padding: 4px 6px;
             border-radius: 4px;
+            border: 1px solid #f1f5f9;
         }
 
-        .specs-grid span strong {
-            color: #475569;
+        .specs-grid div {
+            margin-bottom: 2px;
+        }
+
+        .specs-grid div:last-child {
+            margin-bottom: 0;
         }
 
         .node-main-info {
-            flex-grow: 1;
+            width: 100%;
         }
 
         .node-title-row {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 3px;
         }
 
         .node-name {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             color: #1e293b;
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         .node-meta {
-            font-size: 9.5px;
+            font-size: 9px;
             color: #64748b;
-            margin-top: 2px;
+            margin-top: 4px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 4px;
+        }
+        
+        .node-meta div {
+            margin-bottom: 2px;
+        }
+        
+        .node-meta div:last-child {
+            margin-bottom: 0;
         }
         
         @media print {
             body {
                 padding: 0;
-                margin: 1.5cm;
+                margin: 0.5cm;
             }
             .no-print {
                 display: none;
             }
-            .tree-node-wrapper {
+            .tree-container {
+                overflow: visible;
+            }
+            .tree-container ul {
                 page-break-inside: avoid;
             }
+            li {
+                page-break-inside: avoid;
+            }
+        }
+        @page {
+            size: A4 landscape;
+            margin: 0.5cm;
         }
     </style>
 </head>
@@ -247,9 +330,11 @@
     </div>
 
     <div class="tree-container">
-        @foreach($roots as $root)
-            @include('backend.admin.inventory.print.hierarchy_node', ['node' => $root])
-        @endforeach
+        <ul>
+            @foreach($roots as $root)
+                @include('backend.admin.inventory.print.hierarchy_node', ['node' => $root])
+            @endforeach
+        </ul>
     </div>
 
     <script>

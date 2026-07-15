@@ -15,7 +15,7 @@
     }
 @endphp
 
-<div class="tree-node-wrapper">
+<li>
     <div class="tree-node-item">
         <!-- Icon block based on category/name -->
         @if($isCctv)
@@ -58,26 +58,28 @@
         <div class="node-main-info">
             <div class="node-title-row">
                 <span class="node-name">{{ $node->name }}</span>
-                <span class="badge badge-{{ $node->status }}">{{ $node->status }}</span>
-                @if($node->category)
-                    <span style="font-size: 9px; color: #3b82f6; background-color: #eff6ff; padding: 1px 4px; border-radius: 4px; border: 1px solid #dbeafe;">{{ $node->category->name }}</span>
-                @endif
+                <div>
+                    <span class="badge badge-{{ $node->status }}">{{ $node->status }}</span>
+                    @if($node->category)
+                        <span style="font-size: 8px; color: #3b82f6; background-color: #eff6ff; padding: 1px 4px; border-radius: 4px; border: 1px solid #dbeafe; display: inline-block; margin-top: 2px;">{{ $node->category->name }}</span>
+                    @endif
+                </div>
             </div>
 
             <div class="node-meta">
                 @if($node->brand || $node->model)
-                    Brand/Model: <strong>{{ $node->brand ?? '-' }} {{ $node->model ? '/ ' . $node->model : '' }}</strong> &nbsp;|&nbsp;
+                    <div>Brand/Model: <strong>{{ $node->brand ?? '-' }}{{ $node->model ? ' / ' . $node->model : '' }}</strong></div>
                 @endif
-                Serial Number: <strong><code>{{ $node->serial_number ?? '-' }}</code></strong> &nbsp;|&nbsp;
-                Location: <strong>{{ $node->location ?? '-' }}</strong> &nbsp;|&nbsp;
-                Qty: <strong>{{ $node->quantity }}</strong>
+                <div>S/N: <strong><code>{{ $node->serial_number ?? '-' }}</code></strong></div>
+                <div>Loc: <strong>{{ $node->location ?? '-' }}</strong></div>
+                <div>Qty: <strong>{{ $node->quantity }}</strong></div>
             </div>
 
             <!-- Technical specifications grid -->
             @if(!empty($node->specs) && is_array($node->specs))
                 <div class="specs-grid">
                     @foreach($node->specs as $k => $v)
-                        <span><strong>{{ $k }}:</strong> {{ $v }}</span>
+                        <div><strong>{{ $k }}:</strong> {{ $v }}</div>
                     @endforeach
                 </div>
             @endif
@@ -86,10 +88,10 @@
 
     <!-- Render Children recursively -->
     @if($node->children->count() > 0)
-        <div class="tree-children">
+        <ul>
             @foreach($node->children as $child)
                 @include('backend.admin.inventory.print.hierarchy_node', ['node' => $child])
             @endforeach
-        </div>
+        </ul>
     @endif
-</div>
+</li>
