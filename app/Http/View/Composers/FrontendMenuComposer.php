@@ -40,7 +40,7 @@ class FrontendMenuComposer
             ->latest()
             ->get();
 
-        $activeAnnouncement = null;
+        $activeAnnouncements = [];
         $currentRouteName = request()->route() ? request()->route()->getName() : '';
 
         foreach ($announcements as $ann) {
@@ -113,22 +113,32 @@ class FrontendMenuComposer
             }
 
             if ($matches) {
-                $activeAnnouncement = $ann;
-                break;
+                $activeAnnouncements[] = [
+                    'id' => $ann->id,
+                    'text' => $ann->title,
+                    'title' => $ann->title,
+                    'message' => $ann->message,
+                    'image' => $ann->image,
+                    'type' => $ann->type,
+                    'link' => $ann->link,
+                    'frequency' => $ann->frequency ?? 'always',
+                ];
             }
         }
 
+        $activeAnnouncement = count($activeAnnouncements) > 0 ? $activeAnnouncements[0] : null;
+
         $announcement = $activeAnnouncement
             ? [
-                'id' => $activeAnnouncement->id,
+                'id' => $activeAnnouncement['id'],
                 'active' => true,
-                'text' => $activeAnnouncement->title,
-                'title' => $activeAnnouncement->title,
-                'message' => $activeAnnouncement->message,
-                'image' => $activeAnnouncement->image,
-                'type' => $activeAnnouncement->type,
-                'link' => $activeAnnouncement->link,
-                'frequency' => $activeAnnouncement->frequency ?? 'always',
+                'text' => $activeAnnouncement['title'],
+                'title' => $activeAnnouncement['title'],
+                'message' => $activeAnnouncement['message'],
+                'image' => $activeAnnouncement['image'],
+                'type' => $activeAnnouncement['type'],
+                'link' => $activeAnnouncement['link'],
+                'frequency' => $activeAnnouncement['frequency'] ?? 'always',
             ]
             : [
                 'id' => null,
@@ -143,5 +153,6 @@ class FrontendMenuComposer
             ];
 
         $view->with('globalAnnouncement', $announcement);
+        $view->with('globalAnnouncements', $activeAnnouncements);
     }
 }
