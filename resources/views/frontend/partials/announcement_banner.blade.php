@@ -10,7 +10,7 @@
             <div class="announcement-modal-content" style="background: #fff; width: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; max-height: 90vh; animation: announcementPop 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative;">
                 
                 <!-- Slides Track -->
-                <div id="annSlidesTrack" style="display: flex; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); width: 100%;">
+                <div id="annSlidesTrack" style="display: flex; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); width: 100%; flex: 1; min-height: 0;">
                     <!-- Dynamically populated in JavaScript -->
                 </div>
 
@@ -142,6 +142,7 @@
                 slide.style.flexShrink = '0';
                 slide.style.display = 'flex';
                 slide.style.flexDirection = 'column';
+                slide.style.maxHeight = '100%';
 
                 var bgColor = bgColors[ann.type] || '#0d6efd';
                 var textColor = ann.type === 'warning' ? '#212529' : '#ffffff';
@@ -159,8 +160,8 @@
                 if (ann.images && ann.images.length > 0) {
                     if (ann.images.length === 1) {
                         imagesHtml = `
-                            <div style="margin-bottom: 20px; text-align: center; border-radius: 8px; overflow: hidden;">
-                                <img src="/storage/${ann.images[0]}" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            <div style="margin-bottom: 20px; text-align: center; border-radius: 8px; overflow: hidden; max-height: 55vh; display: flex; align-items: center; justify-content: center;">
+                                <img src="/storage/${ann.images[0]}" alt="Announcement" style="max-width: 100%; max-height: 55vh; object-fit: contain; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                             </div>
                         `;
                     } else {
@@ -169,14 +170,14 @@
                         var slideWidth = 100 / ann.images.length;
                         var slideImages = ann.images.map(function(img) {
                             return `
-                                <div style="width: ${slideWidth}%; flex-shrink: 0;">
-                                    <img src="/storage/${img}" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <div style="width: ${slideWidth}%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; max-height: 55vh;">
+                                    <img src="/storage/${img}" alt="Announcement" style="max-width: 100%; max-height: 55vh; object-fit: contain; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                 </div>
                             `;
                         }).join('');
-
+ 
                         imagesHtml = `
-                            <div class="announcement-inner-carousel" style="position: relative; margin-bottom: 20px; border-radius: 8px; overflow: hidden; width: 100%;">
+                            <div class="announcement-inner-carousel" style="position: relative; margin-bottom: 20px; border-radius: 8px; overflow: hidden; width: 100%; max-height: 55vh;">
                                 <div class="ann-inner-track-${ann.id}" style="display: flex; transition: transform 0.3s ease-in-out; width: ${trackWidth}%;">
                                     ${slideImages}
                                 </div>
@@ -194,7 +195,7 @@
                 ` : '';
 
                 var bodyHtml = `
-                    <div style="padding: 24px; overflow-y: auto; flex: 1;" data-lenis-prevent>
+                    <div style="padding: 24px; overflow-y: auto; flex: 1; min-height: 0;" data-lenis-prevent>
                         ${imagesHtml}
                         ${messageHtml}
                     </div>
