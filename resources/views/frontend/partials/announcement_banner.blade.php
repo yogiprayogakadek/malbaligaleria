@@ -1,9 +1,9 @@
 @if(isset($globalAnnouncements) && count($globalAnnouncements) > 0)
     <!-- Announcement Carousel Modal -->
-    <div id="announcementModal" class="announcement-modal-overlay" data-lenis-prevent style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', Montserrat, sans-serif; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px); transition: all 0.3s ease-in-out;">
-        <div class="announcement-modal-wrapper" style="position: relative; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center;">
+    <div id="announcementModal" class="announcement-modal-overlay" data-lenis-prevent onclick="closeAnnouncementModal(event)" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', Montserrat, sans-serif; padding: 20px; box-sizing: border-box; backdrop-filter: blur(4px); transition: all 0.3s ease-in-out;">
+        <div class="announcement-modal-wrapper" onclick="event.stopPropagation()" style="position: relative; width: 100%; max-width: 600px; display: flex; align-items: center; justify-content: center;">
             
-            <!-- Navigation Left Arrow -->
+            <!-- Navigation Outer Left Arrow -->
             <button id="annPrevBtn" onclick="annSlidePrev(event)" style="display: none; position: absolute; left: -50px; background: rgba(255,255,255,0.25); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.4); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10100;" onmouseover="this.style.background='rgba(255,255,255,0.4)'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255,255,255,0.25)'; this.style.transform='scale(1)';">&#10094;</button>
 
             <!-- Modal Content Container -->
@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <!-- Navigation Right Arrow -->
+            <!-- Navigation Outer Right Arrow -->
             <button id="annNextBtn" onclick="annSlideNext(event)" style="display: none; position: absolute; right: -50px; background: rgba(255,255,255,0.25); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.4); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10100;" onmouseover="this.style.background='rgba(255,255,255,0.4)'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='rgba(255,255,255,0.25)'; this.style.transform='scale(1)';">&#10095;</button>
 
         </div>
@@ -76,6 +76,7 @@
             var activeAnnouncements = [];
             var currentSlideIndex = 0;
             var nowTime = new Date().getTime();
+            var innerImageIndices = {};
 
             // Client-side filtering based on localStorage dismissal states
             rawAnnouncements.forEach(function(ann) {
@@ -149,15 +150,42 @@
                 var headerHtml = `
                     <div style="background: ${bgColor}; color: ${textColor}; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
                         <h5 style="margin: 0; font-size: 18px; font-weight: 700;">${ann.title}</h5>
-                        <button onclick="closeAnnouncementModal(event)" style="background: transparent; border: none; color: ${textColor}; font-size: 24px; cursor: pointer; line-height: 1; padding: 0 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">&times;</button>
+                        <button onclick="closeAnnouncementModal(event)" style="background: transparent; border: none; color: ${textColor}; font-size: 28px; cursor: pointer; line-height: 1; padding: 0 10px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">&times;</button>
                     </div>
                 `;
 
-                var imageHtml = ann.image ? `
-                    <div style="margin-bottom: 20px; text-align: center; border-radius: 8px; overflow: hidden;">
-                        <img src="/storage/${ann.image}" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    </div>
-                ` : '';
+                // Handle single image vs multiple images
+                var imagesHtml = '';
+                if (ann.images && ann.images.length > 0) {
+                    if (ann.images.length === 1) {
+                        imagesHtml = `
+                            <div style="margin-bottom: 20px; text-align: center; border-radius: 8px; overflow: hidden;">
+                                <img src="/storage/${ann.images[0]}" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            </div>
+                        `;
+                    } else {
+                        // Multi-image inner carousel
+                        var trackWidth = ann.images.length * 100;
+                        var slideWidth = 100 / ann.images.length;
+                        var slideImages = ann.images.map(function(img) {
+                            return `
+                                <div style="width: ${slideWidth}%; flex-shrink: 0;">
+                                    <img src="/storage/${img}" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                </div>
+                            `;
+                        }).join('');
+
+                        imagesHtml = `
+                            <div class="announcement-inner-carousel" style="position: relative; margin-bottom: 20px; border-radius: 8px; overflow: hidden; width: 100%;">
+                                <div class="ann-inner-track-${ann.id}" style="display: flex; transition: transform 0.3s ease-in-out; width: ${trackWidth}%;">
+                                    ${slideImages}
+                                </div>
+                                <button onclick="annInnerPrev(event, ${ann.id}, ${ann.images.length})" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; font-weight: bold;">&#10094;</button>
+                                <button onclick="annInnerNext(event, ${ann.id}, ${ann.images.length})" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; font-weight: bold;">&#10095;</button>
+                            </div>
+                        `;
+                    }
+                }
 
                 var messageHtml = ann.message ? `
                     <div class="announcement-content" style="font-size: 15px; line-height: 1.6; color: #4a5568;">
@@ -167,7 +195,7 @@
 
                 var bodyHtml = `
                     <div style="padding: 24px; overflow-y: auto; flex: 1;" data-lenis-prevent>
-                        ${imageHtml}
+                        ${imagesHtml}
                         ${messageHtml}
                     </div>
                 `;
@@ -181,7 +209,7 @@
                 var footerHtml = `
                     <div style="padding: 16px 24px; border-top: 1px solid #edf2f7; display: flex; align-items: center; justify-content: space-between; background: #f7fafc;">
                         <div style="display: flex; align-items: center;">
-                            <input type="checkbox" id="annDismissForever_${ann.id}" style="width: 16px; height: 16px; cursor: pointer; margin-right: 8px;">
+                            <input type="checkbox" id="annDismissForever_${ann.id}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 8px;">
                             <label for="annDismissForever_${ann.id}" style="font-size: 13px; color: #4a5568; cursor: pointer; user-select: none; margin: 0; font-weight: 500;">Don't show this again</label>
                         </div>
                         <div style="display: flex; gap: 12px; align-items: center;">
@@ -216,7 +244,7 @@
                 }
             }
 
-            // Navigation Helpers
+            // Outer Navigation Helpers
             window.annSlidePrev = function(e) {
                 if (e) e.stopPropagation();
                 var newIdx = currentSlideIndex - 1;
@@ -244,6 +272,40 @@
                 dots.forEach(function(dot, dIdx) {
                     dot.style.background = dIdx === idx ? '#4a5568' : '#cbd5e1';
                 });
+            };
+
+            // Inner Navigation Helpers for images
+            window.annInnerPrev = function(e, annId, totalImages) {
+                if (e) e.stopPropagation();
+                if (typeof innerImageIndices[annId] === 'undefined') {
+                    innerImageIndices[annId] = 0;
+                }
+                var newIdx = innerImageIndices[annId] - 1;
+                if (newIdx < 0) {
+                    newIdx = totalImages - 1;
+                }
+                annGotoInnerSlide(annId, newIdx, totalImages);
+            };
+
+            window.annInnerNext = function(e, annId, totalImages) {
+                if (e) e.stopPropagation();
+                if (typeof innerImageIndices[annId] === 'undefined') {
+                    innerImageIndices[annId] = 0;
+                }
+                var newIdx = innerImageIndices[annId] + 1;
+                if (newIdx >= totalImages) {
+                    newIdx = 0;
+                }
+                annGotoInnerSlide(annId, newIdx, totalImages);
+            };
+
+            window.annGotoInnerSlide = function(annId, idx, totalImages) {
+                innerImageIndices[annId] = idx;
+                var percentage = -idx * (100 / totalImages);
+                var track = document.querySelector('.ann-inner-track-' + annId);
+                if (track) {
+                    track.style.transform = 'translateX(' + percentage + '%)';
+                }
             };
 
             // Modal Display Handlers
@@ -290,14 +352,6 @@
                     }
                 });
             }
-
-            // Close on overlay click
-            window.addEventListener('click', function(e) {
-                var modal = document.getElementById('announcementModal');
-                if (e.target === modal) {
-                    closeAnnouncementModal();
-                }
-            });
 
             // Trigger modal on load
             function initAnnouncementPopup() {

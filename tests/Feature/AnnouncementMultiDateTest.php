@@ -141,4 +141,37 @@ class AnnouncementMultiDateTest extends TestCase
         $this->assertTrue($globalAnnouncement2['active']);
         $this->assertEquals('Hours In Range', $globalAnnouncement2['title']);
     }
+
+    public function test_announcement_multiple_images_attribute_serialization_and_accessor()
+    {
+        // 1. Test single string path (backward compatibility)
+        $ann1 = Announcement::create([
+            'title' => 'Single Image Announcement',
+            'type' => 'info',
+            'image' => 'announcement_images/dummy1.jpg',
+            'target_page' => ['all'],
+            'frequency' => 'always',
+        ]);
+        $this->assertEquals(['announcement_images/dummy1.jpg'], $ann1->images);
+
+        // 2. Test JSON encoded array of paths
+        $ann2 = Announcement::create([
+            'title' => 'Multiple Image Announcement',
+            'type' => 'info',
+            'image' => json_encode(['announcement_images/dummy1.jpg', 'announcement_images/dummy2.jpg']),
+            'target_page' => ['all'],
+            'frequency' => 'always',
+        ]);
+        $this->assertEquals(['announcement_images/dummy1.jpg', 'announcement_images/dummy2.jpg'], $ann2->images);
+
+        // 3. Test empty image
+        $ann3 = Announcement::create([
+            'title' => 'No Image Announcement',
+            'type' => 'info',
+            'image' => null,
+            'target_page' => ['all'],
+            'frequency' => 'always',
+        ]);
+        $this->assertEquals([], $ann3->images);
+    }
 }

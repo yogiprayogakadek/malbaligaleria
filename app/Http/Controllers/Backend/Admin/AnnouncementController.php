@@ -81,7 +81,8 @@ class AnnouncementController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'nullable|string',
-            'image' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048',
+            'images' => 'nullable|array',
+            'images.*' => 'mimes:png,jpg,jpeg,webp|max:2048',
             'type' => 'required|string|in:info,warning,danger,success,primary',
             'date_type' => 'required|string|in:range,multiple',
             'start_date' => 'nullable|required_if:date_type,range|date',
@@ -129,8 +130,12 @@ class AnnouncementController extends Controller
             'frequency' => $request->frequency,
         ];
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'));
+        if ($request->hasFile('images')) {
+            $uploadedImages = [];
+            foreach ($request->file('images') as $imageFile) {
+                $uploadedImages[] = $this->uploadImage($imageFile);
+            }
+            $data['image'] = json_encode($uploadedImages);
         }
 
         Announcement::create($data);
@@ -151,7 +156,8 @@ class AnnouncementController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'nullable|string',
-            'image' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048',
+            'images' => 'nullable|array',
+            'images.*' => 'mimes:png,jpg,jpeg,webp|max:2048',
             'type' => 'required|string|in:info,warning,danger,success,primary',
             'date_type' => 'required|string|in:range,multiple',
             'start_date' => 'nullable|required_if:date_type,range|date',
@@ -199,11 +205,17 @@ class AnnouncementController extends Controller
             'frequency' => $request->frequency,
         ];
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('images')) {
             if ($announcement->image) {
-                $this->deleteImage($announcement->image);
+                foreach ($announcement->images as $oldImage) {
+                    $this->deleteImage($oldImage);
+                }
             }
-            $data['image'] = $this->uploadImage($request->file('image'));
+            $uploadedImages = [];
+            foreach ($request->file('images') as $imageFile) {
+                $uploadedImages[] = $this->uploadImage($imageFile);
+            }
+            $data['image'] = json_encode($uploadedImages);
         }
 
         $announcement->update($data);
@@ -215,7 +227,9 @@ class AnnouncementController extends Controller
     {
         $announcement = Announcement::findOrFail($id);
         if ($announcement->image) {
-            $this->deleteImage($announcement->image);
+            foreach ($announcement->images as $oldImage) {
+                $this->deleteImage($oldImage);
+            }
         }
         $announcement->delete();
 
@@ -232,7 +246,9 @@ class AnnouncementController extends Controller
         $announcements = Announcement::whereIn('id', $request->ids)->get();
         foreach ($announcements as $announcement) {
             if ($announcement->image) {
-                $this->deleteImage($announcement->image);
+                foreach ($announcement->images as $oldImage) {
+                    $this->deleteImage($oldImage);
+                }
             }
             $announcement->delete();
         }

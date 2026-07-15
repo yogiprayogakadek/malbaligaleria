@@ -207,13 +207,14 @@
                             </div>
                         </div>
 
-                        {{-- Image --}}
+                        {{-- Images --}}
                         <div class="mb-4 row">
-                            <label for="image" class="form-label col-sm-3 col-form-label">Popup Banner Image (Optional)</label>
+                            <label for="images" class="form-label col-sm-3 col-form-label">Popup Banner Images (Optional)</label>
                             <div class="col-sm-12">
-                                <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                    id="image" name="image" accept="image/*">
-                                @error('image')
+                                <input type="file" class="form-control @error('images') is-invalid @enderror"
+                                    id="images" name="images[]" accept="image/*" multiple>
+                                <div class="form-text text-muted">You can select and upload multiple images.</div>
+                                @error('images')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -282,7 +283,7 @@
             <!-- Body -->
             <div style="padding: 24px; overflow-y: auto; flex: 1;">
                 <div id="previewImageWrapper" style="margin-bottom: 20px; text-align: center; border-radius: 8px; overflow: hidden; display: none;">
-                    <img id="previewImage" src="" alt="Announcement" style="max-width: 100%; height: auto; display: block; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div id="previewImagesContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
                 </div>
                 <div id="previewMessage" class="announcement-content" style="font-size: 15px; line-height: 1.6; color: #4a5568;">
                     Announcement message goes here...
@@ -493,19 +494,32 @@
                 }
 
                 // Image preview
-                var imageInput = document.getElementById('image');
-                if (imageInput && imageInput.files && imageInput.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#previewImage').attr('src', e.target.result);
-                        $('#previewImageWrapper').show();
-                        // Open modal
-                        $('#announcementPreviewModal').css('display', 'flex');
-                    };
-                    reader.readAsDataURL(imageInput.files[0]);
+                var imageInput = document.getElementById('images');
+                var $wrapper = $('#previewImageWrapper');
+                var $container = $('#previewImagesContainer');
+                $container.empty();
+
+                if (imageInput && imageInput.files && imageInput.files.length > 0) {
+                    var filesLoaded = 0;
+                    Array.from(imageInput.files).forEach(function(file) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            var img = $('<img>', {
+                                src: e.target.result,
+                                alt: 'Announcement Preview',
+                                style: 'max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'
+                            });
+                            $container.append(img);
+                            filesLoaded++;
+                            if (filesLoaded === imageInput.files.length) {
+                                $wrapper.show();
+                                $('#announcementPreviewModal').css('display', 'flex');
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
                 } else {
-                    $('#previewImageWrapper').hide();
-                    // Open modal
+                    $wrapper.hide();
                     $('#announcementPreviewModal').css('display', 'flex');
                 }
             });
