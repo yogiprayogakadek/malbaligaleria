@@ -94,6 +94,13 @@ class InventoryController extends Controller
         $items = $query->orderBy('name')->get();
         $layout = $request->input('layout', 'table');
 
+        $commonVars = [
+            'category' => $request->filled('category_id') ? InventoryCategory::find($request->category_id) : null,
+            'status'   => $request->status,
+            'location' => $request->location,
+        ];
+
+        // ── Visual Hierarchy Tree (top-down) ──────────────────────────
         if ($layout === 'hierarchy') {
             $itemsMap = [];
             foreach ($items as $item) {
@@ -110,21 +117,63 @@ class InventoryController extends Controller
                 }
             }
 
-            return view('backend.admin.inventory.print.hierarchy', [
+            return view('backend.admin.inventory.print.hierarchy', array_merge($commonVars, [
                 'roots' => $roots,
-                'category' => $request->filled('category_id') ? InventoryCategory::find($request->category_id) : null,
-                'status' => $request->status,
-                'location' => $request->location
-            ]);
+            ]));
         }
 
-        return view('backend.admin.inventory.print.table', [
+        // ── Indented Outline (text-based tree) ────────────────────────
+        if ($layout === 'outline') {
+            $itemsMap = [];
+            foreach ($items as $item) {
+                $item->children = collect();
+                $itemsMap[$item->id] = $item;
+            }
+
+            $roots = collect();
+            foreach ($items as $item) {
+                if ($item->parent_id && isset($itemsMap[$item->parent_id])) {
+                    $itemsMap[$item->parent_id]->children->push($item);
+                } else {
+                    $roots->push($item);
+                }
+            }
+
+            return view('backend.admin.inventory.print.outline', array_merge($commonVars, [
+                'roots' => $roots,
+            ]));
+        }
+
+        // ── Grouped by Category ───────────────────────────────────────
+        if ($layout === 'by_category') {
+            $grouped = $items->groupBy(function ($item) {
+                return $item->category ? $item->category->name : 'Tanpa Kategori';
+            })->sortKeys();
+
+            return view('backend.admin.inventory.print.by_category', array_merge($commonVars, [
+                'items'   => $items,
+                'grouped' => $grouped,
+            ]));
+        }
+
+        // ── Grouped by Location ───────────────────────────────────────
+        if ($layout === 'by_location') {
+            $grouped = $items->groupBy(function ($item) {
+                return $item->location ?: 'Tanpa Lokasi';
+            })->sortKeys();
+
+            return view('backend.admin.inventory.print.by_location', array_merge($commonVars, [
+                'items'   => $items,
+                'grouped' => $grouped,
+            ]));
+        }
+
+        // ── Default: Table List ───────────────────────────────────────
+        return view('backend.admin.inventory.print.table', array_merge($commonVars, [
             'items' => $items,
-            'category' => $request->filled('category_id') ? InventoryCategory::find($request->category_id) : null,
-            'status' => $request->status,
-            'location' => $request->location
-        ]);
+        ]));
     }
+
 
     public function create()
     {

@@ -117,7 +117,7 @@
 
     <!-- Print Modal -->
     <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="printModalLabel"><i class="ti ti-printer me-2 text-primary"></i> Print Asset Document</h5>
@@ -125,52 +125,150 @@
                 </div>
                 <form action="{{ route('inventory.assets.print') }}" method="GET" target="_blank">
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="print_layout" class="form-label fw-semibold">Layout Format</label>
-                            <select name="layout" id="print_layout" class="form-select" required>
-                                <option value="table">Table List (Tabel Biasa)</option>
-                                <option value="hierarchy">Visual Hierarchy Tree (Bentuk Hirarki)</option>
-                            </select>
+
+                        {{-- Layout Selector --}}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold mb-2">Pilih Model Tampilan Hirarki</label>
+                            <input type="hidden" name="layout" id="print_layout" value="table">
+                            <div class="row g-2" id="layout-cards">
+
+                                <div class="col-md-4 col-sm-6">
+                                    <label class="layout-card selected" data-value="table" for="lc_table">
+                                        <input type="radio" id="lc_table" name="_layout_radio" value="table" class="d-none" checked>
+                                        <div class="lc-icon"><i class="ti ti-table"></i></div>
+                                        <div class="lc-name">Tabel Daftar</div>
+                                        <div class="lc-desc">Semua aset dalam tabel baris-kolom standar</div>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6">
+                                    <label class="layout-card" data-value="hierarchy" for="lc_hierarchy">
+                                        <input type="radio" id="lc_hierarchy" name="_layout_radio" value="hierarchy" class="d-none">
+                                        <div class="lc-icon"><i class="ti ti-hierarchy"></i></div>
+                                        <div class="lc-name">Pohon Hirarki</div>
+                                        <div class="lc-desc">Visual tree dari atas ke bawah (landscape)</div>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6">
+                                    <label class="layout-card" data-value="outline" for="lc_outline">
+                                        <input type="radio" id="lc_outline" name="_layout_radio" value="outline" class="d-none">
+                                        <div class="lc-icon"><i class="ti ti-list-tree"></i></div>
+                                        <div class="lc-name">Garis Bertingkat</div>
+                                        <div class="lc-desc">Outline indentasi teks per level kedalaman</div>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6">
+                                    <label class="layout-card" data-value="by_category" for="lc_by_category">
+                                        <input type="radio" id="lc_by_category" name="_layout_radio" value="by_category" class="d-none">
+                                        <div class="lc-icon"><i class="ti ti-folders"></i></div>
+                                        <div class="lc-name">Per Kategori</div>
+                                        <div class="lc-desc">Aset dikelompokkan berdasarkan kategori/divisi</div>
+                                    </label>
+                                </div>
+
+                                <div class="col-md-4 col-sm-6">
+                                    <label class="layout-card" data-value="by_location" for="lc_by_location">
+                                        <input type="radio" id="lc_by_location" name="_layout_radio" value="by_location" class="d-none">
+                                        <div class="lc-icon"><i class="ti ti-map-pin"></i></div>
+                                        <div class="lc-name">Per Lokasi</div>
+                                        <div class="lc-desc">Aset dikelompokkan berdasarkan lokasi/lantai</div>
+                                    </label>
+                                </div>
+
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="print_category_id" class="form-label fw-semibold">Category Filter</label>
-                            <select name="category_id" id="print_category_id" class="form-select">
-                                <option value="">All Categories</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="print_status" class="form-label fw-semibold">Status Filter</label>
-                            <select name="status" id="print_status" class="form-select">
-                                <option value="">All Statuses</option>
-                                <option value="active">Active</option>
-                                <option value="maintenance">Maintenance</option>
-                                <option value="broken">Broken</option>
-                                <option value="stored">Stored</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="print_location" class="form-label fw-semibold">Location Filter</label>
-                            <select name="location" id="print_location" class="form-select">
-                                <option value="">All Locations</option>
-                                @foreach($locations as $loc)
-                                    <option value="{{ $loc }}">{{ $loc }}</option>
-                                @endforeach
-                            </select>
+
+                        <hr class="my-3">
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="print_category_id" class="form-label fw-semibold">Filter Kategori</label>
+                                <select name="category_id" id="print_category_id" class="form-select">
+                                    <option value="">Semua Kategori</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="print_status" class="form-label fw-semibold">Filter Status</label>
+                                <select name="status" id="print_status" class="form-select">
+                                    <option value="">Semua Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="broken">Broken</option>
+                                    <option value="stored">Stored</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="print_location" class="form-label fw-semibold">Filter Lokasi</label>
+                                <select name="location" id="print_location" class="form-select">
+                                    <option value="">Semua Lokasi</option>
+                                    @foreach($locations as $loc)
+                                        <option value="{{ $loc }}">{{ $loc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary hstack gap-2">
-                            <i class="ti ti-printer"></i> Generate & Print
+                            <i class="ti ti-printer"></i> Generate &amp; Print
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    {{-- Layout Card Styles --}}
+    @push('css')
+    <style>
+        .layout-card {
+            display: block;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 14px 12px;
+            cursor: pointer;
+            transition: border-color .18s, background .18s, transform .12s;
+            background: #fff;
+            text-align: center;
+            height: 100%;
+        }
+        .layout-card:hover {
+            border-color: #86b7fe;
+            background: #f8fbff;
+            transform: translateY(-1px);
+        }
+        .layout-card.selected {
+            border-color: #0d6efd;
+            background: #f0f6ff;
+            box-shadow: 0 0 0 2px rgba(13,110,253,0.15);
+        }
+        .lc-icon {
+            font-size: 26px;
+            color: #6c757d;
+            margin-bottom: 6px;
+            transition: color .18s;
+        }
+        .layout-card.selected .lc-icon { color: #0d6efd; }
+        .lc-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 4px;
+        }
+        .lc-desc {
+            font-size: 11px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+        .layout-card.selected .lc-name { color: #0d6efd; }
+    </style>
+    @endpush
 @endsection
 
 @push('script')
@@ -311,6 +409,16 @@
                 $('#print_category_id').val($('#filter_category_id').val());
                 $('#print_status').val($('#filter_status').val());
                 $('#print_location').val($('#filter_location').val());
+            });
+
+            // Layout card selection
+            $(document).on('click', '.layout-card', function () {
+                const val = $(this).data('value');
+                $('.layout-card').removeClass('selected');
+                $(this).addClass('selected');
+                $('#print_layout').val(val);
+                // sync the hidden radio
+                $(this).find('input[type="radio"]').prop('checked', true);
             });
         });
     </script>
