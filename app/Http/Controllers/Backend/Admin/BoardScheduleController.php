@@ -120,13 +120,25 @@ class BoardScheduleController extends Controller
         $schedules = $query->get();
 
         $formatted = $schedules->map(function ($s) {
+            $isAllDay = empty($s->start_time);
+
             $start = $s->start_date->format('Y-m-d');
             if ($s->start_time) {
                 $start .= 'T' . $s->start_time;
             }
-            $end = $s->end_date ? $s->end_date->format('Y-m-d') : $s->start_date->format('Y-m-d');
-            if ($s->end_time) {
-                $end .= 'T' . $s->end_time;
+
+            // Actual end date stored in DB (inclusive)
+            $actualEndDate = $s->end_date ? $s->end_date->format('Y-m-d') : $s->start_date->format('Y-m-d');
+
+            // FullCalendar requires exclusive end for all-day events (+1 day)
+            if ($isAllDay) {
+                $fcEndDate = \Carbon\Carbon::parse($actualEndDate)->addDay()->format('Y-m-d');
+                $end = $fcEndDate;
+            } else {
+                $end = $actualEndDate;
+                if ($s->end_time) {
+                    $end .= 'T' . $s->end_time;
+                }
             }
 
             return [
@@ -134,8 +146,8 @@ class BoardScheduleController extends Controller
                 'title'           => $s->title,
                 'start'           => $start,
                 'end'             => $end,
-                'allDay'          => empty($s->start_time),
-                'backgroundColor' => $s->color . '22',   // transparent fill
+                'allDay'          => $isAllDay,
+                'backgroundColor' => $s->color . '22',
                 'borderColor'     => $s->color,
                 'textColor'       => $this->darkenColor($s->color),
                 'extendedProps'   => [
@@ -145,12 +157,18 @@ class BoardScheduleController extends Controller
                     'column'      => $s->column,
                     'color'       => $s->color,
                     'created_by'  => $s->creator ? $s->creator->name : '-',
+                    // Store actual (inclusive) dates as plain strings for modal use
+                    'actual_start_date' => $s->start_date->format('Y-m-d'),
+                    'actual_end_date'   => $actualEndDate,
+                    'start_time'  => $s->start_time ? substr($s->start_time, 0, 5) : '',
+                    'end_time'    => $s->end_time ? substr($s->end_time, 0, 5) : '',
                 ],
             ];
         });
 
         return response()->json($formatted);
     }
+
 
     /**
      * Store a new schedule via AJAX.

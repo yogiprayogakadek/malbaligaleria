@@ -326,7 +326,7 @@ function refetchAll() {
 function openAddModal() {
     $('#modal-title').text('Tambah Jadwal');
     $('#form-uuid,#form-title,#form-desc,#form-location,#form-start-time,#form-end-time').val('');
-    $('#form-start-date').val(new Date().toISOString().slice(0,10));
+    $('#form-start-date').val(localDateStr(new Date()));  // local date, not UTC
     $('#form-end-date').val('');
     $('#form-column').val('todo');
     selectColor('#5d87ff');
@@ -342,10 +342,11 @@ function openEditModal(uuid) {
     $('#form-title').val(s.title);
     $('#form-desc').val(p.description || '');
     $('#form-location').val(p.location || '');
-    $('#form-start-date').val(s.start ? s.start.slice(0,10) : '');
-    $('#form-end-date').val(s.end ? new Date(new Date(s.end) - (s.allDay ? 86400000 : 0)).toISOString().slice(0,10) : '');
-    $('#form-start-time').val('');
-    $('#form-end-time').val('');
+    // Use actual (inclusive) dates stored in extendedProps — plain YYYY-MM-DD, no timezone issues
+    $('#form-start-date').val(p.actual_start_date || (s.start ? s.start.slice(0, 10) : ''));
+    $('#form-end-date').val(p.actual_end_date || '');
+    $('#form-start-time').val(p.start_time || '');
+    $('#form-end-time').val(p.end_time || '');
     $('#form-column').val(p.column || 'todo');
     selectColor(p.color || '#5d87ff');
     $('#btn-delete-schedule').removeClass('d-none');
@@ -414,9 +415,23 @@ function removeUser(id) {
 }
 
 // ── Utility ────────────────────────────────────────────────────────────────
+// Returns YYYY-MM-DD using LOCAL timezone (avoids UTC offset bug with toISOString)
+function localDateStr(date) {
+    if (!date) return '';
+    const d = (date instanceof Date) ? date : new Date(date);
+    if (isNaN(d)) return '';
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
+
 function formatDate(str) {
     if (!str) return '';
-    return new Date(str).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+    // Parse YYYY-MM-DD without time to avoid UTC offset shift
+    const parts = str.slice(0, 10).split('-');
+    const d = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+    return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
 }
 </script>
 @endpush
