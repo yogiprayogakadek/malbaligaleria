@@ -178,7 +178,14 @@
                                         }
                                     }).then(() => {
                                         if (link) {
-                                            window.location.href = link;
+                                            let targetUrl = link;
+                                            if (link.startsWith('http://') || link.startsWith('https://')) {
+                                                try {
+                                                    const url = new URL(link);
+                                                    targetUrl = url.pathname + url.search + url.hash;
+                                                } catch (e) {}
+                                            }
+                                            window.location.href = targetUrl;
                                         } else {
                                             fetchNotifications(); // Refresh list
                                         }

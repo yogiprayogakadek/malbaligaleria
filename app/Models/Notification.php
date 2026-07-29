@@ -40,4 +40,40 @@ class Notification extends Model
     {
         $this->update(['read_at' => now()]);
     }
+
+    /**
+     * Get relative link to prevent hardcoded domain/localhost redirects.
+     */
+    public function getLinkAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            $parsed = parse_url($value);
+            $path = $parsed['path'] ?? '/';
+            $query = isset($parsed['query']) ? '?' . $parsed['query'] : '';
+            $fragment = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+            return $path . $query . $fragment;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Store link as relative path.
+     */
+    public function setLinkAttribute($value)
+    {
+        if ($value && (str_starts_with($value, 'http://') || str_starts_with($value, 'https://'))) {
+            $parsed = parse_url($value);
+            $path = $parsed['path'] ?? '/';
+            $query = isset($parsed['query']) ? '?' . $parsed['query'] : '';
+            $fragment = isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+            $value = $path . $query . $fragment;
+        }
+
+        $this->attributes['link'] = $value;
+    }
 }
