@@ -291,8 +291,8 @@ function renderKanban(data) {
                     <h6 class="fw-bold mb-1 text-truncate" style="max-width:180px;">${e.title}</h6>
                     <button class="btn btn-sm p-0 ms-1 text-muted" onclick="openEditModal('${e.extendedProps.uuid}')"><i class="ti ti-pencil" style="font-size:13px;"></i></button>
                 </div>
-                <p class="text-muted small mb-1 text-truncate">${e.extendedProps.location || ''}</p>
-                <span class="badge bg-light text-dark small"><i class="ti ti-calendar me-1"></i>${formatDate(e.start)}</span>
+                <p class="text-muted small mb-1 text-truncate">${e.extendedProps.location || '<span class="fst-italic">Lokasi belum diisi</span>'}</p>
+                <span class="badge bg-light text-dark small"><i class="ti ti-calendar me-1"></i>${formatDateRange(e.extendedProps.actual_start_date, e.extendedProps.actual_end_date)}</span>
             </div></div>`;
         $(`#cards-${col}`).append(html);
     });
@@ -426,12 +426,52 @@ function localDateStr(date) {
     return `${y}-${m}-${day}`;
 }
 
+// Parse YYYY-MM-DD safely in local time
+function parseLocalDate(str) {
+    if (!str) return null;
+    const parts = str.slice(0, 10).split('-');
+    return new Date(+parts[0], +parts[1] - 1, +parts[2]);
+}
+
 function formatDate(str) {
     if (!str) return '';
     // Parse YYYY-MM-DD without time to avoid UTC offset shift
-    const parts = str.slice(0, 10).split('-');
-    const d = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+    const d = parseLocalDate(str);
+    if (!d) return '';
     return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// Show "17 Jul" or "17 – 25 Jul 2026" or "17 Jul – 3 Agt 2026"
+function formatDateRange(startStr, endStr) {
+    if (!startStr) return '';
+    const start = parseLocalDate(startStr);
+    const end   = endStr ? parseLocalDate(endStr) : null;
+
+    const opts = { day: 'numeric', month: 'short' };
+    const optsYear = { day: 'numeric', month: 'short', year: 'numeric' };
+
+    if (!end || startStr === endStr) {
+        // Single day — show full date
+        return start.toLocaleDateString('id-ID', optsYear);
+    }
+
+    const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+    const sameYear  = start.getFullYear() === end.getFullYear();
+
+    if (sameMonth) {
+        // e.g. "17 – 25 Jul 2026"
+        const startDay = start.toLocaleDateString('id-ID', { day: 'numeric' });
+        const endFull  = end.toLocaleDateString('id-ID', optsYear);
+        return `${startDay} – ${endFull}`;
+    } else if (sameYear) {
+        // e.g. "17 Jul – 3 Agt 2026"
+        const startShort = start.toLocaleDateString('id-ID', opts);
+        const endFull    = end.toLocaleDateString('id-ID', optsYear);
+        return `${startShort} – ${endFull}`;
+    } else {
+        // Different years
+        return `${start.toLocaleDateString('id-ID', optsYear)} – ${end.toLocaleDateString('id-ID', optsYear)}`;
+    }
 }
 </script>
 @endpush
