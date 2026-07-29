@@ -292,7 +292,10 @@ function renderKanban(data) {
                     <button class="btn btn-sm p-0 ms-1 text-muted" onclick="openEditModal('${e.extendedProps.uuid}')"><i class="ti ti-pencil" style="font-size:13px;"></i></button>
                 </div>
                 <p class="text-muted small mb-1 text-truncate">${e.extendedProps.location || '<span class="fst-italic">Lokasi belum diisi</span>'}</p>
-                <span class="badge bg-light text-dark small"><i class="ti ti-calendar me-1"></i>${formatDateRange(e.extendedProps.actual_start_date, e.extendedProps.actual_end_date)}</span>
+                <div class="d-flex flex-wrap gap-1 mt-1">
+                    <span class="badge bg-light text-dark small"><i class="ti ti-calendar me-1"></i>${formatDateRange(e.extendedProps.actual_start_date, e.extendedProps.actual_end_date)}</span>
+                    ${e.extendedProps.start_time ? `<span class="badge bg-light text-dark small"><i class="ti ti-clock me-1"></i>${formatTimeRange(e.extendedProps.start_time, e.extendedProps.end_time)}</span>` : ''}
+                </div>
             </div></div>`;
         $(`#cards-${col}`).append(html);
     });
@@ -472,6 +475,15 @@ function formatDateRange(startStr, endStr) {
         // Different years
         return `${start.toLocaleDateString('id-ID', optsYear)} – ${end.toLocaleDateString('id-ID', optsYear)}`;
     }
+}
+
+// Format time "09:00" or "09:00 - 17:00"
+function formatTimeRange(startStr, endStr) {
+    if (!startStr) return '';
+    const s = startStr.slice(0, 5);
+    if (!endStr || startStr === endStr) return s;
+    const e = endStr.slice(0, 5);
+    return `${s} - ${e}`;
 }
 </script>
 @endpush
