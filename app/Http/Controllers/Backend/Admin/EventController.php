@@ -151,4 +151,204 @@ class EventController extends Controller
 
         return redirect()->route('admin.event.index')->with('success', 'Event updated successfully');
     }
+
+    public function board(Request $request)
+    {
+        $setting = \App\Models\Setting::where('pages', 'dashboard_menu')
+            ->where('name', 'calendar_kanban_visibility')
+            ->where('is_active', true)
+            ->first();
+
+        $allowedRoles = $setting ? ($setting->payload['roles'] ?? []) : [];
+
+        $user = auth()->user();
+        $isSuperUser = $user->hasRole('superuser');
+
+        // Check permission: superuser always has access, others only if allowed in settings
+        $hasAccess = $isSuperUser || collect($allowedRoles)->contains(function($role) use ($user) {
+            return $user->hasRole($role);
+        });
+
+        if (!$hasAccess) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $allRoles = ['admin', 'hr', 'tenant'];
+
+        return view('backend.admin.event.board', compact('allowedRoles', 'allRoles', 'isSuperUser'));
+    }
+
+    public function apiList(Request $request)
+    {
+        $query = \App\Models\Event::query();
+
+        if ($request->has('start') && $request->has('end')) {
+            $start = substr($request->start, 0, 10);
+            $end = substr($request->end, 0, 10);
+            $query->where(function($q) use ($start, $end) {
+                $q->whereBetween('start_date', [$start, $end])
+                  ->orWhereBetween('end_date', [$start, $end]);
+            });
+        }
+
+        $events = $query->get();
+
+        $formattedEvents = $events->map(function ($event) {
+            $start = $event->start_date;
+            if ($event->start_time) {
+                $start .= 'T' . $event->start_time;
+            }
+            $end = $event->end_date;
+            if ($event->end_time) {
+                $end .= 'T' . $event->end_time;
+            }
+
+            // Colors based on status & type
+            if (!$event->is_active) {
+                $bg = '#ffebee';
+                $border = '#ef5350';
+                $text = '#c62828';
+            } else {
+                switch ($event->type) {
+                    case 'regular':
+                        $bg = '#fffdf0';
+                        $border = '#c9a96e';
+                        $text = '#8d703d';
+                        break;
+                    case 'special':
+                        $bg = '#fff8e1';
+                        $border = '#ffb300';
+                        $text = '#ff8f00';
+                        break;
+                    case 'exhibition':
+                        $bg = '#eef5fc';
+                        $border = '#4a6fa5';
+                        $text = '#2c4b75';
+                        break;
+                    default: // upcoming
+                        $bg = '#f5f5f5';
+                        $border = '#9e9e9e';
+                        $text = '#424242';
+                        break;
+                }
+            }
+
+            return [
+                'id' => $event->uuid,
+                'title' => $event->name,
+                'start' => $start,
+                'end' => $end,
+                'allDay' => empty($event->start_time),
+                'backgroundColor' => $bg,
+                'borderColor' => $border,
+                'textColor' => $text,
+                'extendedProps' => [
+                    'uuid' => $event->uuid,
+                    'type' => $event->type,
+                    'location' => $event->location,
+                    'organizer' => $event->organizer,
+                    'is_active' => $event->is_active,
+                    'description' => strip_tags($event->description),
+                ]
+            ];
+        });
+
+        return response()->json($formattedEvents);
+    }
+
+    public function apiUpdateDate(Request $request, $uuid)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
+        ]);
+
+        $event = \App\Models\Event::where('uuid', $uuid)->firstOrFail();
+
+        $startStr = $request->start_date;
+        $endStr = $request->end_date;
+
+        $startDate = substr($startStr, 0, 10);
+        $startTime = strpos($startStr, 'T') !== false ? substr($startStr, 11, 8) : null;
+
+        $event->start_date = $startDate;
+        if ($startTime) {
+            $event->start_time = $startTime;
+        }
+
+        if ($endStr) {
+            $endDate = substr($endStr, 0, 10);
+            $endTime = strpos($endStr, 'T') !== false ? substr($endStr, 11, 8) : null;
+            $event->end_date = $endDate;
+            if ($endTime) {
+                $event->end_time = $endTime;
+            }
+        } else {
+            $event->end_date = $startDate;
+        }
+
+        $event->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event dates updated successfully.'
+        ]);
+    }
+
+    public function apiUpdateKanban(Request $request, $uuid)
+    {
+        $request->validate([
+            'column' => 'required|in:draft,regular,special,exhibition,upcoming'
+        ]);
+
+        $event = \App\Models\Event::where('uuid', $uuid)->firstOrFail();
+        $column = $request->column;
+
+        if ($column === 'draft') {
+            $event->is_active = false;
+        } else {
+            $event->is_active = true;
+            $event->type = $column;
+            $event->is_regular = ($column === 'regular');
+            $event->is_exhibition = ($column === 'exhibition');
+        }
+
+        $event->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event status and type updated successfully.'
+        ]);
+    }
+
+    public function saveSettings(Request $request)
+    {
+        if (!auth()->user()->hasRole('superuser')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized.'
+            ], 403);
+        }
+
+        $roles = $request->input('roles', []);
+
+        $setting = \App\Models\Setting::updateOrCreate(
+            [
+                'pages' => 'dashboard_menu',
+                'name' => 'calendar_kanban_visibility',
+            ],
+            [
+                'description' => 'Dashboard visibility for Event Board (Calendar & Kanban)',
+                'type' => 'custom',
+                'is_active' => true,
+                'payload' => ['roles' => $roles]
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Visibility settings updated successfully.'
+        ]);
+    }
 }
+

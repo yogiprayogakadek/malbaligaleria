@@ -59,7 +59,19 @@
                 <ul class="sidebar-menu" id="sidebarnav">
 
                     <!-- HOME CATEGORY -->
-                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view dashboard'))
+                    @php
+                        $boardVisibilitySetting = \App\Models\Setting::where('pages', 'dashboard_menu')
+                            ->where('name', 'calendar_kanban_visibility')
+                            ->where('is_active', true)
+                            ->first();
+                        $allowedBoardRoles = $boardVisibilitySetting ? ($boardVisibilitySetting->payload['roles'] ?? []) : [];
+                        $userHasBoardAccess = auth()->user()->hasRole('superuser') || collect($allowedBoardRoles)->contains(function($role) {
+                            return auth()->user()->hasRole($role);
+                        });
+                        $hasHomeAccess = auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view dashboard') || auth()->user()->hasRole('tenant') || $userHasBoardAccess;
+                    @endphp
+
+                    @if($hasHomeAccess)
                         <li class="nav-small-cap sidebar-section-header hide-menu" data-section="section-home">
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
                             <span class="hide-menu">Home</span>
@@ -68,14 +80,26 @@
                             </span>
                         </li>
                         <div class="sidebar-section-items" id="section-home">
+                            @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view dashboard') || auth()->user()->hasRole('tenant'))
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="{{ route('admin.dashboard') }}" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ auth()->user()->hasRole('tenant') ? route('tenant.dashboard') : route('admin.dashboard') }}" aria-expanded="false">
                                     <iconify-icon icon="solar:widget-add-line-duotone" class=""></iconify-icon>
                                     <span class="hide-menu">Dashboard</span>
                                 </a>
                             </li>
+                            @endif
+
+                            @if($userHasBoardAccess)
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href="{{ route('admin.event-board.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:calendar-date-line-duotone" class=""></iconify-icon>
+                                    <span class="hide-menu">Event Board</span>
+                                </a>
+                            </li>
+                            @endif
                         </div>
                     @endif
+
 
                     <!-- SYSTEM ADMIN CATEGORY -->
                     @role('superuser')

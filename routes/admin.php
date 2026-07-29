@@ -336,3 +336,16 @@ Route::controller(AdminDashboardController::class)
             Route::get('/{id}', 'show')->name('show')->middleware('permission:view careers');
         });
     });
+
+// EVENT BOARD ROUTES (ACCESSIBLE BY SUPERUSER, ADMIN, HR, TENANT)
+Route::middleware(['auth', 'verified', 'checkUserStatus', 'role:superuser,admin,hr,tenant'])
+    ->prefix('/dashboard/event-board')
+    ->name('admin.event-board.')
+    ->group(function () {
+        Route::get('/', [\App\Http\Controllers\Backend\Admin\EventController::class, 'board'])->name('index');
+        Route::get('/api/list', [\App\Http\Controllers\Backend\Admin\EventController::class, 'apiList'])->name('api.list');
+        Route::post('/api/update-date/{uuid}', [\App\Http\Controllers\Backend\Admin\EventController::class, 'apiUpdateDate'])->name('api.update-date');
+        Route::post('/api/update-kanban/{uuid}', [\App\Http\Controllers\Backend\Admin\EventController::class, 'apiUpdateKanban'])->name('api.update-kanban');
+        Route::post('/save-settings', [\App\Http\Controllers\Backend\Admin\EventController::class, 'saveSettings'])->name('save-settings');
+    });
+
