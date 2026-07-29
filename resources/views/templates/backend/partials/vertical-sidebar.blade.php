@@ -64,11 +64,27 @@
                             ->where('name', 'calendar_kanban_visibility')
                             ->where('is_active', true)
                             ->first();
-                        $allowedBoardRoles = $boardVisibilitySetting ? ($boardVisibilitySetting->payload['roles'] ?? []) : [];
-                        $userHasBoardAccess = auth()->user()->hasRole('superuser') || collect($allowedBoardRoles)->contains(function($role) {
-                            return auth()->user()->hasRole($role);
-                        });
-                        $hasHomeAccess = auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view dashboard') || auth()->user()->hasRole('tenant') || $userHasBoardAccess;
+
+                        $boardPayload       = $boardVisibilitySetting ? ($boardVisibilitySetting->payload ?? []) : [];
+                        $boardAllRoles      = !empty($boardPayload['all_roles']);
+                        $allowedBoardRoles  = $boardPayload['roles'] ?? [];
+                        $allowedBoardUsers  = $boardPayload['users'] ?? [];
+                        $authUser           = auth()->user();
+
+                        if ($authUser->hasRole('superuser')) {
+                            $userHasBoardAccess = true;
+                        } elseif ($boardAllRoles) {
+                            $userHasBoardAccess = true;
+                        } elseif (in_array($authUser->id, $allowedBoardUsers)) {
+                            $userHasBoardAccess = true;
+                        } else {
+                            $userHasBoardAccess = collect($allowedBoardRoles)->contains(fn($role) => $authUser->hasRole($role));
+                        }
+
+                        $hasHomeAccess = $authUser->hasRole('superuser')
+                            || $authUser->hasPermissionTo('view dashboard')
+                            || $authUser->hasRole('tenant')
+                            || $userHasBoardAccess;
                     @endphp
 
                     @if($hasHomeAccess)
@@ -80,9 +96,9 @@
                             </span>
                         </li>
                         <div class="sidebar-section-items" id="section-home">
-                            @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view dashboard') || auth()->user()->hasRole('tenant'))
+                            @if($authUser->hasRole('superuser') || $authUser->hasPermissionTo('view dashboard') || $authUser->hasRole('tenant'))
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="{{ auth()->user()->hasRole('tenant') ? route('tenant.dashboard') : route('admin.dashboard') }}" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ $authUser->hasRole('tenant') ? route('tenant.dashboard') : route('admin.dashboard') }}" aria-expanded="false">
                                     <iconify-icon icon="solar:widget-add-line-duotone" class=""></iconify-icon>
                                     <span class="hide-menu">Dashboard</span>
                                 </a>
@@ -99,7 +115,6 @@
                             @endif
                         </div>
                     @endif
-
 
                     <!-- SYSTEM ADMIN CATEGORY -->
                     @role('superuser')

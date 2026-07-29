@@ -337,15 +337,20 @@ Route::controller(AdminDashboardController::class)
         });
     });
 
-// EVENT BOARD ROUTES (ACCESSIBLE BY SUPERUSER, ADMIN, HR, TENANT)
-Route::middleware(['auth', 'verified', 'checkUserStatus', 'role:superuser,admin,hr,tenant'])
+// EVENT BOARD ROUTES (ACCESSIBLE BY SUPERUSER + ROLES/USERS CONFIGURED IN SETTINGS)
+Route::middleware(['auth', 'verified', 'checkUserStatus'])
     ->prefix('/dashboard/event-board')
     ->name('admin.event-board.')
     ->group(function () {
-        Route::get('/', [\App\Http\Controllers\Backend\Admin\EventController::class, 'board'])->name('index');
-        Route::get('/api/list', [\App\Http\Controllers\Backend\Admin\EventController::class, 'apiList'])->name('api.list');
-        Route::post('/api/update-date/{uuid}', [\App\Http\Controllers\Backend\Admin\EventController::class, 'apiUpdateDate'])->name('api.update-date');
-        Route::post('/api/update-kanban/{uuid}', [\App\Http\Controllers\Backend\Admin\EventController::class, 'apiUpdateKanban'])->name('api.update-kanban');
-        Route::post('/save-settings', [\App\Http\Controllers\Backend\Admin\EventController::class, 'saveSettings'])->name('save-settings');
+        Route::get('/', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'board'])->name('index');
+        Route::get('/api/list', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'apiList'])->name('api.list');
+        Route::post('/api/store', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'apiStore'])->name('api.store');
+        Route::put('/api/update/{uuid}', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'apiUpdate'])->name('api.update');
+        Route::post('/api/update-date/{uuid}', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'apiUpdateDate'])->name('api.update-date');
+        Route::post('/api/update-kanban/{uuid}', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'apiUpdateKanban'])->name('api.update-kanban');
+        Route::delete('/api/delete/{uuid}', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'apiDelete'])->name('api.delete');
+        Route::post('/save-settings', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'saveSettings'])->name('save-settings');
+        Route::get('/search-users', [\App\Http\Controllers\Backend\Admin\BoardScheduleController::class, 'searchUsers'])->name('search-users');
     });
+
 
