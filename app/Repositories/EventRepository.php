@@ -56,16 +56,9 @@ class EventRepository
                     ->orWhere('end_date', '>=', today());
             })
             ->where(function ($query) {
-                // Show if always_show is enabled OR standard date conditions are met
+                // Show if always_show is enabled OR start_date has been reached (start_date <= today())
                 $query->where('always_show', true)
-                    ->orWhere(function ($q) {
-                        // Tampil jika (Bulan & Tahun start_date == Sekarang)
-                        // OR (start_date <= hari ini)
-                        $q->where(function ($q2) {
-                            $q2->whereMonth('start_date', now()->month)
-                                ->whereYear('start_date', now()->year);
-                        })->orWhere('start_date', '<=', today());
-                    });
+                    ->orWhere('start_date', '<=', today());
             })
             ->get();
     }
@@ -79,6 +72,11 @@ class EventRepository
             ->where(function ($query) {
                 $query->whereNull('end_date')
                     ->orWhere('end_date', '>=', today());
+            })
+            ->where(function ($query) {
+                // Show if always_show is enabled OR start_date has been reached (start_date <= today())
+                $query->where('always_show', true)
+                    ->orWhere('start_date', '<=', today());
             })
             ->get();
     }

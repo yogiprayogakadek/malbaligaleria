@@ -18,6 +18,7 @@ class EventAlwaysShowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->withoutMiddleware();
         date_default_timezone_set('Asia/Makassar');
 
         // Setup role/user for admin testing
@@ -45,6 +46,33 @@ class EventAlwaysShowTest extends TestCase
             'type' => 'special',
             'start_date' => $futureDate,
             'end_date' => $futureDate,
+            'start_time' => '10:00:00',
+            'end_time' => '22:00:00',
+            'description' => 'Test event',
+            'location' => 'Main Atrium',
+            'is_paid' => false,
+            'is_active' => true,
+            'always_show' => false,
+        ]);
+
+        $eventRepository = app(\App\Repositories\EventRepository::class);
+        $events = $eventRepository->getRegularEvents(['*'], []);
+
+        $this->assertCount(0, $events);
+    }
+
+    /**
+     * Test always_show = false and future start date in SAME month regular event is not displayed.
+     */
+    public function test_future_regular_event_in_same_month_without_always_show_is_hidden()
+    {
+        $futureDateSameMonth = Carbon::now('Asia/Makassar')->addDays(5)->toDateString();
+
+        Event::create([
+            'name' => 'Future Hidden Event Same Month',
+            'type' => 'special',
+            'start_date' => $futureDateSameMonth,
+            'end_date' => $futureDateSameMonth,
             'start_time' => '10:00:00',
             'end_time' => '22:00:00',
             'description' => 'Test event',
