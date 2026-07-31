@@ -264,4 +264,31 @@ class EventAlwaysShowTest extends TestCase
             'always_show' => true,
         ]);
     }
+
+    /**
+     * Test always_show = false and future start date upcoming event is hidden in getEventsWithRelationshipAndCondition.
+     */
+    public function test_future_upcoming_event_without_always_show_is_hidden()
+    {
+        $futureDate = Carbon::now('Asia/Makassar')->addDays(5)->toDateString();
+
+        Event::create([
+            'name' => 'Future Hidden Upcoming Event',
+            'type' => 'upcoming',
+            'start_date' => $futureDate,
+            'end_date' => $futureDate,
+            'start_time' => '10:00:00',
+            'end_time' => '22:00:00',
+            'description' => 'Test event',
+            'location' => 'Main Atrium',
+            'is_paid' => false,
+            'is_active' => true,
+            'always_show' => false,
+        ]);
+
+        $eventRepository = app(\App\Repositories\EventRepository::class);
+        $events = $eventRepository->getEventsWithRelationshipAndCondition(['*'], [], 'type', 'upcoming');
+
+        $this->assertCount(0, $events);
+    }
 }

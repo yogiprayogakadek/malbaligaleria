@@ -39,6 +39,14 @@ class EventRepository
             ->with($relationship)
             ->where('is_active', true)
             ->whereIn('type', ['regular', 'special'])
+            ->where(function ($query) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', today());
+            })
+            ->where(function ($query) {
+                $query->where('always_show', true)
+                    ->orWhere('start_date', '<=', today());
+            })
             ->orderBy('id', 'desc')
             ->limit(100)
             ->get();
@@ -83,7 +91,19 @@ class EventRepository
 
     public function getEventsWithRelationshipAndCondition(array $fields, array $relationship, string $column, string $condition)
     {
-        return $this->model::select($fields)->with($relationship)->where($column, $condition)->where('is_active', true)->get();
+        return $this->model::select($fields)
+            ->with($relationship)
+            ->where($column, $condition)
+            ->where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', today());
+            })
+            ->where(function ($query) {
+                $query->where('always_show', true)
+                    ->orWhere('start_date', '<=', today());
+            })
+            ->get();
     }
 
     public function getUpcomingEvents(array $fields, array $relationship, string $uuid)
@@ -93,6 +113,14 @@ class EventRepository
             ->where('uuid', '!=', $uuid)
             ->where('is_active', true)
             ->where('type', 'upcoming')
+            ->where(function ($query) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', today());
+            })
+            ->where(function ($query) {
+                $query->where('always_show', true)
+                    ->orWhere('start_date', '<=', today());
+            })
             ->get();
     }
 
