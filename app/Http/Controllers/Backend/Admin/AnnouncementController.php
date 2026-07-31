@@ -205,17 +205,40 @@ class AnnouncementController extends Controller
             'frequency' => $request->frequency,
         ];
 
-        if ($request->hasFile('images')) {
-            if ($announcement->image) {
-                foreach ($announcement->images as $oldImage) {
+        $existingImages = $request->input('existing_images');
+        $finalImages = [];
+
+        // Delete any existing images that were removed by the user
+        if ($announcement->image) {
+            $keptExisting = is_array($existingImages) ? $existingImages : [];
+            foreach ($announcement->images as $oldImage) {
+                if (!in_array($oldImage, $keptExisting)) {
                     $this->deleteImage($oldImage);
                 }
             }
-            $uploadedImages = [];
-            foreach ($request->file('images') as $imageFile) {
-                $uploadedImages[] = $this->uploadImage($imageFile);
+        }
+
+        // Keep existing images in their user-defined reordered sequence
+        if (is_array($existingImages)) {
+            foreach ($existingImages as $imgPath) {
+                // Ensure the image path belongs to this announcement for security
+                if (in_array($imgPath, $announcement->images)) {
+                    $finalImages[] = $imgPath;
+                }
             }
-            $data['image'] = json_encode($uploadedImages);
+        }
+
+        // Upload and append new images in their reordered sequence
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $imageFile) {
+                $finalImages[] = $this->uploadImage($imageFile);
+            }
+        }
+
+        if (count($finalImages) > 0) {
+            $data['image'] = json_encode(array_values($finalImages));
+        } else {
+            $data['image'] = null;
         }
 
         $announcement->update($data);

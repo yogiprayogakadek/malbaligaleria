@@ -213,10 +213,12 @@
                             <div class="col-sm-12">
                                 <input type="file" class="form-control @error('images') is-invalid @enderror"
                                     id="images" name="images[]" accept="image/*" multiple>
-                                <div class="form-text text-muted">You can select and upload multiple images.</div>
+                                <div class="form-text text-muted">You can select and upload multiple images. Use the arrow buttons on thumbnails to arrange slide order (Slide 1, Slide 2, etc.).</div>
                                 @error('images')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+
+                                <div id="reorder-preview-container" class="mt-3 d-flex flex-wrap gap-3" style="display: none;"></div>
                             </div>
                         </div>
 
@@ -494,24 +496,27 @@
                 }
 
                 // Image preview
-                var imageInput = document.getElementById('images');
                 var $wrapper = $('#previewImageWrapper');
                 var $container = $('#previewImagesContainer');
                 $container.empty();
 
-                if (imageInput && imageInput.files && imageInput.files.length > 0) {
+                if (selectedFiles && selectedFiles.length > 0) {
                     var filesLoaded = 0;
-                    Array.from(imageInput.files).forEach(function(file) {
+                    var previewElements = new Array(selectedFiles.length);
+
+                    selectedFiles.forEach(function(file, idx) {
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            var img = $('<img>', {
+                            previewElements[idx] = $('<img>', {
                                 src: e.target.result,
-                                alt: 'Announcement Preview',
+                                alt: 'Announcement Preview Slide ' + (idx + 1),
                                 style: 'max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'
                             });
-                            $container.append(img);
                             filesLoaded++;
-                            if (filesLoaded === imageInput.files.length) {
+                            if (filesLoaded === selectedFiles.length) {
+                                previewElements.forEach(function(imgEl) {
+                                    $container.append(imgEl);
+                                });
                                 $wrapper.show();
                                 $('#announcementPreviewModal').css('display', 'flex');
                             }
@@ -523,6 +528,106 @@
                     $('#announcementPreviewModal').css('display', 'flex');
                 }
             });
+
+            // Image Reordering Logic
+            var selectedFiles = [];
+
+            $('#images').on('change', function(e) {
+                var files = Array.from(e.target.files);
+                selectedFiles = files;
+                renderReorderCards();
+            });
+
+            function renderReorderCards() {
+                var $container = $('#reorder-preview-container');
+                $container.empty();
+
+                if (selectedFiles.length === 0) {
+                    $container.hide();
+                    return;
+                }
+
+                $container.show();
+                var loadedCount = 0;
+                var dataUrls = new Array(selectedFiles.length);
+
+                selectedFiles.forEach(function(file, index) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        dataUrls[index] = e.target.result;
+                        loadedCount++;
+                        if (loadedCount === selectedFiles.length) {
+                            buildCards();
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                function buildCards() {
+                    $container.empty();
+                    selectedFiles.forEach(function(file, index) {
+                        var cardHtml = `
+                            <div class="card p-2 border shadow-sm position-relative text-center" style="width: 140px; background: #f8f9fa;">
+                                <div class="badge bg-primary mb-2 align-self-center px-2 py-1" style="font-size: 11px;">
+                                    <i class="ti ti-slideshow me-1"></i> Slide ${index + 1}
+                                </div>
+                                <div class="position-relative mb-2" style="height: 100px; overflow: hidden; border-radius: 6px;">
+                                    <img src="${dataUrls[index]}" style="width: 100%; height: 100%; object-fit: cover;" alt="Slide ${index + 1}">
+                                </div>
+                                <div class="d-flex justify-content-center gap-1">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-move-left" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move Left">
+                                        <i class="ti ti-arrow-left"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-remove-file" data-index="${index}" title="Remove">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-move-right" data-index="${index}" ${index === selectedFiles.length - 1 ? 'disabled' : ''} title="Move Right">
+                                        <i class="ti ti-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        $container.append(cardHtml);
+                    });
+                }
+            }
+
+            $(document).on('click', '.btn-move-left', function() {
+                var idx = parseInt($(this).data('index'));
+                if (idx > 0) {
+                    var temp = selectedFiles[idx];
+                    selectedFiles[idx] = selectedFiles[idx - 1];
+                    selectedFiles[idx - 1] = temp;
+                    syncInputFiles();
+                }
+            });
+
+            $(document).on('click', '.btn-move-right', function() {
+                var idx = parseInt($(this).data('index'));
+                if (idx < selectedFiles.length - 1) {
+                    var temp = selectedFiles[idx];
+                    selectedFiles[idx] = selectedFiles[idx + 1];
+                    selectedFiles[idx + 1] = temp;
+                    syncInputFiles();
+                }
+            });
+
+            $(document).on('click', '.btn-remove-file', function() {
+                var idx = parseInt($(this).data('index'));
+                selectedFiles.splice(idx, 1);
+                syncInputFiles();
+            });
+
+            function syncInputFiles() {
+                if (window.DataTransfer) {
+                    var dt = new DataTransfer();
+                    selectedFiles.forEach(function(file) {
+                        dt.items.add(file);
+                    });
+                    document.getElementById('images').files = dt.files;
+                }
+                renderReorderCards();
+            }
         });
     </script>
 @endpush

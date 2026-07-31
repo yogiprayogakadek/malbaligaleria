@@ -228,23 +228,44 @@
 
                         {{-- Images --}}
                         <div class="mb-4 row">
-                            <label for="images" class="form-label col-sm-3 col-form-label">Popup Banner Images (Optional)</label>
+                            <label class="form-label col-sm-3 col-form-label">Popup Banner Images (Optional)</label>
                             <div class="col-sm-12">
-                                @if (count($announcement->images) > 0)
-                                    <div class="mb-2 d-flex flex-wrap gap-2">
-                                        @foreach ($announcement->images as $img)
-                                            <div class="position-relative">
-                                                <img src="{{ asset('storage/' . $img) }}" alt="Announcement Image" class="img-thumbnail img-existing" style="max-height: 120px; object-fit: cover;">
+
+                                {{-- Reorderable combined image container --}}
+                                <div id="reorder-edit-container" class="d-flex flex-wrap gap-3 mb-3">
+                                    @foreach ($announcement->images as $index => $img)
+                                        <div class="card p-2 border shadow-sm text-center img-reorder-card" data-type="existing" data-path="{{ $img }}" style="width: 140px; background: #f8f9fa;">
+                                            <div class="badge bg-success mb-2 align-self-center px-2 py-1 slide-badge" style="font-size: 11px;">
+                                                <i class="ti ti-slideshow me-1"></i> Slide {{ $index + 1 }}
                                             </div>
-                                        @endforeach
-                                    </div>
-                                @endif
+                                            <div class="position-relative mb-2" style="height: 100px; overflow: hidden; border-radius: 6px;">
+                                                <img src="{{ asset('storage/' . $img) }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Slide {{ $index + 1 }}" class="img-preview-thumb">
+                                            </div>
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-move-left" title="Move Left"><i class="ti ti-arrow-left"></i></button>
+                                                <button type="button" class="btn btn-sm btn-outline-danger btn-edit-remove" title="Remove"><i class="ti ti-trash"></i></button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-move-right" title="Move Right"><i class="ti ti-arrow-right"></i></button>
+                                            </div>
+                                            {{-- Hidden field to pass the existing image path order to server --}}
+                                            <input type="hidden" name="existing_images[]" value="{{ $img }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                {{-- Upload new images --}}
+                                <label for="images" class="form-label fw-semibold">Upload New Images</label>
                                 <input type="file" class="form-control @error('images') is-invalid @enderror"
                                     id="images" name="images[]" accept="image/*" multiple>
-                                <div class="form-text text-muted">Leave empty to keep current images. Uploading new images will replace existing ones.</div>
+                                <div class="form-text text-muted mt-1">
+                                    Existing images above can be reordered or deleted. New uploaded images will be appended after existing ones (can be reordered too).
+                                    Leave empty to keep current image arrangement.
+                                </div>
                                 @error('images')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+
+                                {{-- New image preview reorder cards --}}
+                                <div id="reorder-new-preview" class="mt-3 d-flex flex-wrap gap-3"></div>
                             </div>
                         </div>
 
@@ -473,6 +494,9 @@
                 ]
             });
 
+            // Declare before preview handler so it is in scope
+            var newSelectedFiles = [];
+
             // Live Preview Click Handler
             $('#btn-preview').on('click', function() {
                 var title = $('#title').val() || 'Preview Title';
@@ -522,37 +546,42 @@
                 }
 
                 // Image preview
-                var imageInput = document.getElementById('images');
                 var $wrapper = $('#previewImageWrapper');
                 var $container = $('#previewImagesContainer');
                 $container.empty();
 
-                if (imageInput && imageInput.files && imageInput.files.length > 0) {
-                    var filesLoaded = 0;
-                    Array.from(imageInput.files).forEach(function(file) {
+                // Collect all current images in order: existing cards + new files
+                var existingThumbs = [];
+                $('#reorder-edit-container .img-reorder-card').each(function() {
+                    existingThumbs.push($(this).find('.img-preview-thumb').attr('src'));
+                });
+
+                var allPreviewSrcs = existingThumbs.slice();
+                var totalToLoad = newSelectedFiles.length;
+                var fileDataUrls = new Array(newSelectedFiles.length);
+
+                if (newSelectedFiles.length > 0) {
+                    newSelectedFiles.forEach(function(file, idx) {
                         var reader = new FileReader();
                         reader.onload = function(e) {
-                            var img = $('<img>', {
-                                src: e.target.result,
-                                alt: 'Announcement Preview',
-                                style: 'max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'
-                            });
-                            $container.append(img);
-                            filesLoaded++;
-                            if (filesLoaded === imageInput.files.length) {
-                                $wrapper.show();
-                                $('#announcementPreviewModal').css('display', 'flex');
+                            fileDataUrls[idx] = e.target.result;
+                            totalToLoad--;
+                            if (totalToLoad === 0) {
+                                fileDataUrls.forEach(function(src) { allPreviewSrcs.push(src); });
+                                showPreviewImages(allPreviewSrcs);
                             }
                         };
                         reader.readAsDataURL(file);
                     });
                 } else {
-                    // Check if edit view has existing images
-                    var existingImgs = $('.img-existing');
-                    if (existingImgs.length > 0) {
-                        existingImgs.each(function() {
+                    showPreviewImages(allPreviewSrcs);
+                }
+
+                function showPreviewImages(srcs) {
+                    if (srcs.length > 0) {
+                        srcs.forEach(function(src) {
                             var img = $('<img>', {
-                                src: $(this).attr('src'),
+                                src: src,
                                 alt: 'Announcement Preview',
                                 style: 'max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'
                             });
@@ -565,6 +594,162 @@
                     $('#announcementPreviewModal').css('display', 'flex');
                 }
             });
+
+            // ============================================================
+            // Reordering Logic for EXISTING images (edit page)
+            // ============================================================
+
+            function refreshEditSlidesBadges() {
+                $('#reorder-edit-container .img-reorder-card').each(function(i) {
+                    $(this).find('.slide-badge').html('<i class="ti ti-slideshow me-1"></i> Slide ' + (i + 1));
+                });
+                // Disable / enable arrows
+                var $cards = $('#reorder-edit-container .img-reorder-card');
+                $cards.each(function(i) {
+                    $(this).find('.btn-edit-move-left').prop('disabled', i === 0);
+                    $(this).find('.btn-edit-move-right').prop('disabled', i === $cards.length - 1);
+                });
+                // Rebuild existing_images hidden inputs
+                $('#reorder-edit-container input[name="existing_images[]"]').remove();
+                $cards.each(function() {
+                    var path = $(this).data('path');
+                    if ($(this).data('type') === 'existing') {
+                        $(this).append('<input type="hidden" name="existing_images[]" value="' + path + '">');
+                    }
+                });
+            }
+
+            // Move LEFT existing
+            $(document).on('click', '.btn-edit-move-left', function() {
+                var $card = $(this).closest('.img-reorder-card');
+                var $prev = $card.prev('.img-reorder-card');
+                if ($prev.length) {
+                    $card.insertBefore($prev);
+                    refreshEditSlidesBadges();
+                }
+            });
+
+            // Move RIGHT existing
+            $(document).on('click', '.btn-edit-move-right', function() {
+                var $card = $(this).closest('.img-reorder-card');
+                var $next = $card.next('.img-reorder-card');
+                if ($next.length) {
+                    $card.insertAfter($next);
+                    refreshEditSlidesBadges();
+                }
+            });
+
+            // REMOVE existing image card
+            $(document).on('click', '.btn-edit-remove', function() {
+                $(this).closest('.img-reorder-card').remove();
+                refreshEditSlidesBadges();
+            });
+
+            // Initialize badges on page load
+            refreshEditSlidesBadges();
+
+            // ============================================================
+            // Reordering Logic for NEW uploaded images (edit page)
+            // ============================================================
+
+            $('#images').on('change', function(e) {
+                newSelectedFiles = Array.from(e.target.files);
+                renderNewReorderCards();
+            });
+
+            function renderNewReorderCards() {
+                var $container = $('#reorder-new-preview');
+                $container.empty();
+
+                if (newSelectedFiles.length === 0) {
+                    $container.hide();
+                    return;
+                }
+
+                $container.show();
+                var loadedCount = 0;
+                var dataUrls = new Array(newSelectedFiles.length);
+
+                newSelectedFiles.forEach(function(file, index) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        dataUrls[index] = e.target.result;
+                        loadedCount++;
+                        if (loadedCount === newSelectedFiles.length) {
+                            buildNewCards();
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                function buildNewCards() {
+                    $container.empty();
+                    var existingCount = $('#reorder-edit-container .img-reorder-card').length;
+                    newSelectedFiles.forEach(function(file, index) {
+                        var slideNum = existingCount + index + 1;
+                        var cardHtml = `
+                            <div class="card p-2 border shadow-sm text-center new-file-card" style="width: 140px; background: #f8f9fa;">
+                                <div class="badge bg-primary mb-2 align-self-center px-2 py-1 new-slide-badge" style="font-size: 11px;">
+                                    <i class="ti ti-slideshow me-1"></i> Slide ${slideNum}
+                                </div>
+                                <div class="position-relative mb-2" style="height: 100px; overflow: hidden; border-radius: 6px;">
+                                    <img src="${dataUrls[index]}" style="width: 100%; height: 100%; object-fit: cover;" alt="New Slide ${slideNum}">
+                                </div>
+                                <div class="d-flex justify-content-center gap-1">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-new-move-left" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move Left">
+                                        <i class="ti ti-arrow-left"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-new-remove" data-index="${index}" title="Remove">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-new-move-right" data-index="${index}" ${index === newSelectedFiles.length - 1 ? 'disabled' : ''} title="Move Right">
+                                        <i class="ti ti-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        $container.append(cardHtml);
+                    });
+                }
+            }
+
+            $(document).on('click', '.btn-new-move-left', function() {
+                var idx = parseInt($(this).data('index'));
+                if (idx > 0) {
+                    var temp = newSelectedFiles[idx];
+                    newSelectedFiles[idx] = newSelectedFiles[idx - 1];
+                    newSelectedFiles[idx - 1] = temp;
+                    syncNewInputFiles();
+                }
+            });
+
+            $(document).on('click', '.btn-new-move-right', function() {
+                var idx = parseInt($(this).data('index'));
+                if (idx < newSelectedFiles.length - 1) {
+                    var temp = newSelectedFiles[idx];
+                    newSelectedFiles[idx] = newSelectedFiles[idx + 1];
+                    newSelectedFiles[idx + 1] = temp;
+                    syncNewInputFiles();
+                }
+            });
+
+            $(document).on('click', '.btn-new-remove', function() {
+                var idx = parseInt($(this).data('index'));
+                newSelectedFiles.splice(idx, 1);
+                syncNewInputFiles();
+            });
+
+            function syncNewInputFiles() {
+                if (window.DataTransfer) {
+                    var dt = new DataTransfer();
+                    newSelectedFiles.forEach(function(file) {
+                        dt.items.add(file);
+                    });
+                    document.getElementById('images').files = dt.files;
+                }
+                renderNewReorderCards();
+            }
         });
     </script>
 @endpush
+
