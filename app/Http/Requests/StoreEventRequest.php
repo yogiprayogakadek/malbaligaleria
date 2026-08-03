@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class StoreEventRequest extends FormRequest
 {
@@ -20,7 +21,18 @@ class StoreEventRequest extends FormRequest
             'name'             => [
                 'required',
                 'string',
-                Rule::unique('events', 'name')->whereNull('deleted_at'),
+                function ($attribute, $value, $fail) {
+                    // Cek apakah ada event aktif (is_active = 1) dengan nama yang sama
+                    $activeExists = DB::table('events')
+                        ->where('name', $value)
+                        ->whereNull('deleted_at')
+                        ->where('is_active', 1)
+                        ->exists();
+
+                    if ($activeExists) {
+                        $fail('Nama event sudah digunakan oleh event yang masih aktif. Nonaktifkan event tersebut terlebih dahulu sebelum membuat event dengan nama yang sama.');
+                    }
+                },
             ],
             'start_date'       => 'required|date',
             'end_date'         => 'nullable|date|after_or_equal:start_date',

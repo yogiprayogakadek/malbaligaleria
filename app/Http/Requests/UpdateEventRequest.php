@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class UpdateEventRequest extends FormRequest
 {
@@ -21,7 +22,19 @@ class UpdateEventRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('events', 'name')->ignore($this->uuid, 'uuid')->whereNull('deleted_at'),
+                function ($attribute, $value, $fail) {
+                    // Cek apakah ada event aktif (is_active = 1) lain dengan nama yang sama
+                    $activeExists = DB::table('events')
+                        ->where('name', $value)
+                        ->whereNull('deleted_at')
+                        ->where('is_active', 1)
+                        ->where('uuid', '!=', $this->uuid)
+                        ->exists();
+
+                    if ($activeExists) {
+                        $fail('Nama event sudah digunakan oleh event yang masih aktif. Nonaktifkan event tersebut terlebih dahulu sebelum menggunakan nama yang sama.');
+                    }
+                },
             ],
             'start_date'       => 'required|date',
             'end_date'         => 'nullable|date|after_or_equal:start_date',
