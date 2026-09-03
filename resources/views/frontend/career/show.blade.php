@@ -150,13 +150,18 @@
                             About This Position
                         </h3>
                         @php
-                            $description = array_filter(array_map('trim', explode("\n", $vacancy->description ?? '')));
+                            $rawDesc = trim($vacancy->description ?? '');
+                            $descriptionLines = array_values(array_filter(array_map('trim', explode("\n", $rawDesc))));
                         @endphp
-                        <div class="detail-content {{ count($description) > 1 ? 'structured-content' : '' }}">
-                            @if(count($description) > 1)
-                                <ul class="detail-list">@foreach($description as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ul>
-                            @else
-                                {{ $vacancy->description }}
+                        <div class="detail-content">
+                            @if(count($descriptionLines) > 1)
+                                <ul class="detail-list">
+                                    @foreach($descriptionLines as $item)
+                                        <li>{{ preg_replace('/^[\s\-\*\•\d\.\)]+/u', '', $item) }}</li>
+                                    @endforeach
+                                </ul>
+                            @elseif(count($descriptionLines) === 1)
+                                <p style="margin: 0; padding: 0; text-align: left;">{{ preg_replace('/^[\s\-\*\•\d\.\)]+/u', '', $descriptionLines[0]) }}</p>
                             @endif
                         </div>
                     </div>
@@ -167,13 +172,18 @@
                             Required Qualifications
                         </h3>
                         @php
-                            $requirements = array_filter(array_map('trim', explode("\n", $vacancy->requirements ?? '')));
+                            $rawReq = trim($vacancy->requirements ?? '');
+                            $requirementLines = array_values(array_filter(array_map('trim', explode("\n", $rawReq))));
                         @endphp
-                        <div class="detail-content {{ count($requirements) > 1 ? 'structured-content' : '' }}">
-                            @if(count($requirements) > 1)
-                                <ul class="detail-list">@foreach($requirements as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ul>
-                            @else
-                                {{ $vacancy->requirements }}
+                        <div class="detail-content">
+                            @if(count($requirementLines) > 1)
+                                <ul class="detail-list">
+                                    @foreach($requirementLines as $item)
+                                        <li>{{ preg_replace('/^[\s\-\*\•\d\.\)]+/u', '', $item) }}</li>
+                                    @endforeach
+                                </ul>
+                            @elseif(count($requirementLines) === 1)
+                                <p style="margin: 0; padding: 0; text-align: left;">{{ preg_replace('/^[\s\-\*\•\d\.\)]+/u', '', $requirementLines[0]) }}</p>
                             @endif
                         </div>
                     </div>
@@ -185,13 +195,18 @@
                             Key Responsibilities
                         </h3>
                         @php
-                            $responsibilities = array_filter(array_map('trim', explode("\n", $vacancy->responsibilities ?? '')));
+                            $rawResp = trim($vacancy->responsibilities ?? '');
+                            $respLines = array_values(array_filter(array_map('trim', explode("\n", $rawResp))));
                         @endphp
-                        <div class="detail-content {{ count($responsibilities) > 1 ? 'structured-content' : '' }}">
-                            @if(count($responsibilities) > 1)
-                                <ul class="detail-list">@foreach($responsibilities as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ul>
-                            @else
-                                {{ $vacancy->responsibilities }}
+                        <div class="detail-content">
+                            @if(count($respLines) > 1)
+                                <ul class="detail-list">
+                                    @foreach($respLines as $item)
+                                        <li>{{ preg_replace('/^[\s\-\*\•\d\.\)]+/u', '', $item) }}</li>
+                                    @endforeach
+                                </ul>
+                            @elseif(count($respLines) === 1)
+                                <p style="margin: 0; padding: 0; text-align: left;">{{ preg_replace('/^[\s\-\*\•\d\.\)]+/u', '', $respLines[0]) }}</p>
                             @endif
                         </div>
                     </div>
