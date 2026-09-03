@@ -324,6 +324,7 @@ Route::controller(AdminDashboardController::class)
 
         Route::controller(JobApplicationController::class)->prefix('/career/application')->name('career.application.')->group(function () {
             Route::get('/', 'index')->name('index')->middleware('permission:view careers');
+            Route::post('/bulk-download-cv', 'bulkDownloadCv')->name('bulkDownloadCv')->middleware('permission:view careers');
             Route::get('/{uuid}', 'show')->name('show')->middleware('permission:view careers');
             Route::get('/{uuid}/print', 'print')->name('print')->middleware('permission:view careers');
             Route::put('/{uuid}/status', 'updateStatus')->name('updateStatus')->middleware('permission:edit careers');

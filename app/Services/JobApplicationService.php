@@ -23,6 +23,11 @@ class JobApplicationService
         return JobApplication::where('uuid', $uuid)->with('vacancy')->firstOrFail();
     }
 
+    public function getByUuids(array $uuids)
+    {
+        return JobApplication::whereIn('uuid', $uuids)->with('vacancy')->get();
+    }
+
     public function create(array $data, UploadedFile $cvFile): JobApplication
     {
         $cvPath = $cvFile->store('career/cv', 'public');

@@ -6,9 +6,41 @@
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/select2.css') }}">
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.snow.css">
     <style>
-        .ck-editor__editable {
-            min-height: 200px;
+        /* Quill editor styling */
+        #quill-editor {
+            min-height: 220px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fff;
+            border-radius: 0 0 6px 6px;
+        }
+        .ql-toolbar.ql-snow {
+            border-radius: 6px 6px 0 0;
+            border-color: #dee2e6;
+            background: #f8f9fa;
+        }
+        .ql-container.ql-snow {
+            border-color: #dee2e6;
+            border-radius: 0 0 6px 6px;
+        }
+        .ql-toolbar.ql-snow .ql-picker-label,
+        .ql-toolbar.ql-snow button {
+            color: #495057;
+        }
+        .ql-toolbar.ql-snow button:hover,
+        .ql-toolbar.ql-snow button:focus,
+        .ql-toolbar.ql-snow button.ql-active {
+            color: #0d6efd;
+        }
+        .ql-toolbar.ql-snow button:hover .ql-stroke,
+        .ql-toolbar.ql-snow button.ql-active .ql-stroke {
+            stroke: #0d6efd;
+        }
+        .ql-toolbar.ql-snow button:hover .ql-fill,
+        .ql-toolbar.ql-snow button.ql-active .ql-fill {
+            fill: #0d6efd;
         }
         /* Custom Select2 invalid styling to match Bootstrap 5 */
         .select2-container--default .select2-selection--multiple {
@@ -284,11 +316,14 @@
                         <div class="mb-4 row">
                             <label for="message" class="form-label col-sm-3 col-form-label">Detailed Message / Announcement Content (Optional)</label>
                             <div class="col-sm-12">
-                                <textarea name="message" id="message" class="form-control @error('message') is-invalid @enderror"
-                                    rows="6" placeholder="Enter detailed message to show inside the details modal popup...">{{ old('message', $announcement->message) }}</textarea>
+                                {{-- Hidden textarea holds the actual submitted value --}}
+                                <textarea name="message" id="message" style="display:none;">{{ old('message', $announcement->message) }}</textarea>
+                                {{-- Quill editor container --}}
+                                <div id="quill-editor" class="@error('message') border border-danger @enderror"></div>
                                 @error('message')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
+                                <div class="form-text text-muted mt-1">Enter detailed message to show inside the announcement popup modal.</div>
                             </div>
                         </div>
 
@@ -371,7 +406,7 @@
     <script src="{{ asset('assets/backend/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/select2.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script>
         function closeAnnouncementPreviewModal() {
             var modal = document.getElementById('announcementPreviewModal');
@@ -482,16 +517,32 @@
             $('#date_type').on('change', toggleDateFields);
             toggleDateFields(); // Run on page load/old input restoration
 
-            var editorInstance = CKEDITOR.replace('message', {
-                allowedContent: true, // Allow all HTML tags like iconify-icon
-                height: 250,
-                toolbar: [
-                    { name: 'document', items: [ 'Source' ] },
-                    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
-                    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Blockquote' ] },
-                    { name: 'links', items: [ 'Link', 'Unlink' ] },
-                    { name: 'undo', items: [ 'Undo', 'Redo' ] }
-                ]
+            // Initialize Quill editor
+            var quillEditor = new Quill('#quill-editor', {
+                theme: 'snow',
+                placeholder: 'Enter detailed message to show inside the announcement popup modal...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['blockquote', 'link'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Pre-fill Quill with existing announcement message
+            var initialMessage = $('#message').val();
+            if (initialMessage) {
+                quillEditor.root.innerHTML = initialMessage;
+            }
+
+            // Sync Quill content to hidden textarea before form submit
+            $('#form').on('submit', function() {
+                $('#message').val(quillEditor.root.innerHTML);
             });
 
             // Declare before preview handler so it is in scope
@@ -502,9 +553,9 @@
                 var title = $('#title').val() || 'Preview Title';
                 var type = $('#type').val() || 'info';
                 var link = $('#link').val();
-                
-                // Get CKEditor message
-                var message = editorInstance ? editorInstance.getData() : $('#message').val();
+
+                // Get Quill message content
+                var message = quillEditor.root.innerHTML;
 
                 // Colors mapping
                 var bgColors = {
