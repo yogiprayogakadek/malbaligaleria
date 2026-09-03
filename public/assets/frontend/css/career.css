@@ -721,12 +721,14 @@ body.dark-mode .vacancy-meta-item svg {
     margin-bottom: 32px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
     border: 1px solid var(--border);
+    text-align: left !important;
 }
 
 .detail-section {
     padding-bottom: 36px;
     margin-bottom: 36px;
     border-bottom: 1px dashed var(--border);
+    text-align: left !important;
 }
 
 .detail-section:last-child {
@@ -744,14 +746,20 @@ body.dark-mode .vacancy-meta-item svg {
     align-items: center;
     gap: 12px;
     font-weight: 700;
+    text-align: left !important;
 }
 
 .detail-card h3 svg {
-    width: 22px;
-    height: 22px;
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
     stroke: var(--gold-dark);
     fill: none;
     stroke-width: 1.8;
+    flex-shrink: 0;
 }
 
 body.dark-mode .detail-card h3 svg {
@@ -764,6 +772,7 @@ body.dark-mode .detail-card h3 svg {
     font-size: 14.5px;
     line-height: 1.8;
     white-space: pre-wrap;
+    text-align: left !important;
 }
 
 .detail-content.structured-content {
@@ -778,6 +787,7 @@ body.dark-mode .detail-card h3 svg {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    text-align: left !important;
 }
 
 .detail-list li {
@@ -787,6 +797,7 @@ body.dark-mode .detail-card h3 svg {
     font-size: 14.5px;
     line-height: 1.75;
     color: var(--text-primary);
+    text-align: left !important;
 }
 
 .detail-list li::before {
@@ -866,11 +877,16 @@ body.dark-mode .detail-card h3 svg {
 }
 
 .apply-info-label svg {
-    width: 15px;
-    height: 15px;
+    width: 15px !important;
+    height: 15px !important;
+    min-width: 15px !important;
+    min-height: 15px !important;
+    max-width: 15px !important;
+    max-height: 15px !important;
     stroke: var(--gold-dark);
     fill: none;
     stroke-width: 2;
+    flex-shrink: 0;
 }
 
 body.dark-mode .apply-info-label svg { stroke: var(--gold); }
@@ -918,6 +934,18 @@ body.dark-mode .apply-info-label svg { stroke: var(--gold); }
     width: 100%;
     margin-top: 10px;
     text-decoration: none;
+    box-sizing: border-box;
+}
+
+.career-share-btn svg, .career-flyer-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    stroke: currentColor;
+    flex-shrink: 0;
 }
 
 .career-share-btn {
