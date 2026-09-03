@@ -15,186 +15,11 @@
     <meta property="og:image" content="{{ asset('assets/images/logo.png') }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/career.css') }}?v={{ time() }}">
-    <style>
-        .career-filter-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 12px 24px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            margin-bottom: 32px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .sidebar {
-            z-index: 10000 !important;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-        }
-
-        .career-dropdown {
-            position: relative;
-            min-width: 220px;
-            z-index: 11;
-        }
-
-        .career-dropdown-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 10px 18px;
-            background: #f8f9fa;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .career-dropdown-toggle:hover {
-            border-color: var(--gold);
-            background: #fff;
-        }
-
-        .career-dropdown-toggle svg {
-            width: 14px;
-            height: 14px;
-            transition: transform 0.3s ease;
-        }
-
-        .career-dropdown.active .career-dropdown-toggle {
-            border-color: var(--gold);
-            background: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .career-dropdown.active .career-dropdown-toggle svg {
-            transform: rotate(180deg);
-        }
-
-        .career-dropdown-menu {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-        }
-
-        .career-dropdown.active .career-dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .career-dropdown-item {
-            padding: 12px 18px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .career-dropdown-item:hover {
-            background: rgba(212, 175, 55, 0.08);
-            color: var(--gold-dark);
-        }
-
-        .career-dropdown-item.active {
-            background: var(--gold);
-            color: #000;
-            font-weight: 600;
-        }
-
-        body.dark-mode .career-dropdown-toggle {
-            background: #1a1a1a;
-            color: #eee;
-        }
-
-        body.dark-mode .career-dropdown-menu {
-            background: #222;
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        body.dark-mode .career-dropdown-item:hover {
-            background: rgba(255,255,255,0.05);
-        }
-
-        body.dark-mode .career-dropdown-item.active {
-            background: var(--gold);
-            color: #1a1a1a;
-        }
-
-        @media (max-width: 768px) {
-            .career-filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .career-dropdown {
-                min-width: 100%;
-            }
-        }
-
-        .vacancy-card-share-btn {
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 1px solid rgba(44, 95, 93, 0.2);
-            background: rgba(44, 95, 93, 0.05);
-            color: #2c5f5d;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .vacancy-card-share-btn:hover {
-            background: #2c5f5d;
-            color: white;
-            transform: scale(1.1);
-        }
-
-        body.dark-mode .vacancy-card-share-btn {
-            border-color: rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            color: #eee;
-        }
-
-        body.dark-mode .vacancy-card-share-btn:hover {
-            background: var(--gold, #D4AF37);
-            border-color: var(--gold, #D4AF37);
-            color: #1a1a1a;
-        }
-
-        .vacancy-card-share-btn svg {
-            width: 16px;
-            height: 16px;
-            stroke: currentColor;
-        }
-    </style>
 </head>
 
 <body>
@@ -280,14 +105,15 @@
         </div>
     </div>
 
+    {{-- Hero Section --}}
     <section class="career-hero">
         <div class="career-hero-content">
-            <span class="career-hero-eyebrow">Mal Bali Galeria</span>
-            <h1 class="career-hero-title">Careers</h1>
+            <span class="career-hero-eyebrow">Mal Bali Galeria • Careers</span>
+            <h1 class="career-hero-title">Shape Your Future in <span>Bali</span></h1>
             <p class="career-hero-subtitle">
-                Join our team and be part of the most iconic shopping center in Bali.
+                Join our team and build a rewarding career at Bali's premier shopping and lifestyle destination.
             </p>
-            <a href="{{ route('frontend.landing') }}" class="career-hero-back">
+            <a href="{{ url('/') }}" class="career-hero-back">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
@@ -301,7 +127,7 @@
         <div class="career-container">
             <div class="career-section-header career-reveal">
                 <h2>Available Vacancies</h2>
-                <p>Choose a position that suits your skills and passion</p>
+                <p>Explore opportunities matching your professional skills and aspirations</p>
                 <div class="career-divider"></div>
             </div>
 
@@ -331,13 +157,6 @@
             </div>
 
             {{-- Vacancy Grid --}}
-            @forelse($vacancies as $vacancy)
-                <div class="vacancy-grid" id="vacancyGrid">
-                    {{-- rendered by JS --}}
-                </div>
-            @empty
-            @endforelse
-
             <div class="vacancy-grid" id="vacancyGrid">
                 @forelse($vacancies as $vacancy)
                     <div class="vacancy-card career-reveal"
@@ -345,13 +164,10 @@
                          data-title="{{ strtolower($vacancy->title) }}"
                          data-dept-name="{{ $vacancy->department }}">
 
-                        <div class="vacancy-card-header">
-                            <div class="vacancy-icon">
-                                <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                            </div>
+                        <div class="vacancy-card-top">
+                            <span class="vacancy-dept-chip">{{ $vacancy->department }}</span>
                             <div class="vacancy-badges">
                                 <span class="vacancy-badge badge-{{ $vacancy->type }}">{{ $vacancy->type_label }}</span>
-                                <span class="vacancy-badge badge-department">{{ $vacancy->department }}</span>
                                 @if($vacancy->isExpired())
                                     <span class="vacancy-badge badge-expired">Closed</span>
                                 @endif
@@ -383,7 +199,7 @@
                                     <span>Open Recruitment</span>
                                 @endif
                             </div>
-                            <div class="vacancy-actions" style="display:flex; align-items:center; gap:8px;">
+                            <div class="vacancy-actions">
                                 <button type="button" class="vacancy-card-share-btn" 
                                         data-url="{{ route('frontend.career.show', $vacancy->slug ?: $vacancy->uuid) }}"
                                         data-title="{{ $vacancy->title }}"
@@ -398,33 +214,33 @@
                                 </button>
                                 @if(!$vacancy->isExpired())
                                     <a href="{{ route('frontend.career.show', $vacancy->slug ?: $vacancy->uuid) }}" class="vacancy-apply-btn">
-                                        View Details
+                                        View Role
                                         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
                                 @else
-                                    <span style="font-size:12px; color:#e74c3c; font-weight:600;">Closed</span>
+                                    <span style="font-size:12px; color:#eb5757; font-weight:600; padding:6px 14px; background:rgba(235,87,87,0.12); border-radius:100px;">Closed</span>
                                 @endif
                             </div>
                         </div>
                     </div>
                 @empty
                     <div class="career-empty" style="grid-column: 1/-1;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                         </svg>
-                        <h3>No Vacancies Yet</h3>
-                        <p>Currently, there are no positions available. Please visit again later.</p>
+                        <h3>No Vacancies Open</h3>
+                        <p>Currently, there are no open positions. Please check back soon!</p>
                     </div>
                 @endforelse
             </div>
 
             {{-- No match message --}}
             <div id="noMatchState">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="width:60px;height:60px;stroke:var(--gold);opacity:0.3;margin-bottom:16px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:56px;height:56px;stroke:var(--gold);opacity:0.4;margin-bottom:16px;">
                     <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/>
                 </svg>
-                <h3 style="font-family:var(--font-display);color:var(--dark);margin-bottom:8px;">Not found</h3>
-                <p style="color:var(--text-secondary);font-size:14px;">Try different keywords or filters.</p>
+                <h3 style="font-family:var(--font-display);color:var(--text-primary);margin-bottom:8px;">No matching positions</h3>
+                <p style="color:var(--text-secondary);font-size:14px;">Try searching with different keywords or clearing filters.</p>
             </div>
         </div>
     </section>

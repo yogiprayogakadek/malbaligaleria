@@ -8,98 +8,11 @@
     <meta name="description" content="Apply for {{ $vacancy->title }} position at Mal Bali Galeria, {{ $vacancy->department }}. {{ Str::limit($vacancy->description, 120) }}">
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo.png') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/landing_v2.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/career.css') }}?v={{ time() }}">
-    <style>
-        .career-share-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1.5px solid rgba(44, 95, 93, 0.2);
-            background: #f8f9fa;
-            color: #2c5f5d;
-            text-decoration: none;
-            width: 100%;
-            margin-top: 12px;
-            font-family: "Montserrat", sans-serif;
-        }
-
-        .career-share-btn:hover {
-            background: #e8e8e8;
-            border-color: #2c5f5d;
-            transform: translateY(-2px);
-        }
-
-        body.dark-mode .career-share-btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: #eee;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        body.dark-mode .career-share-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .career-share-btn svg {
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-        }
-
-        .career-flyer-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1.5px solid rgba(212, 175, 55, 0.3);
-            background: rgba(212, 175, 55, 0.05);
-            color: var(--gold-dark, #b89327);
-            text-decoration: none;
-            width: 100%;
-            margin-top: 12px;
-            font-family: "Montserrat", sans-serif;
-        }
-
-        .career-flyer-btn:hover {
-            background: rgba(212, 175, 55, 0.15);
-            border-color: var(--gold);
-            transform: translateY(-2px);
-            color: var(--gold-dark, #b89327);
-        }
-
-        body.dark-mode .career-flyer-btn {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold, #D4AF37);
-            border-color: rgba(212, 175, 55, 0.4);
-        }
-
-        body.dark-mode .career-flyer-btn:hover {
-            background: rgba(212, 175, 55, 0.2);
-            border-color: var(--gold);
-            color: var(--gold, #D4AF37);
-        }
-
-        .career-flyer-btn svg {
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-        }
-    </style>
 </head>
 
 <body>
@@ -169,7 +82,7 @@
 
     {{-- Detail Hero --}}
     <div class="career-detail-hero">
-        <div style="max-width:1100px;margin:0 auto;">
+        <div style="max-width:1180px;margin:0 auto;">
             <div class="career-detail-breadcrumb">
                 <a href="{{ url('/') }}">Home</a>
                 <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
@@ -180,7 +93,7 @@
 
             <div class="vacancy-badges" style="margin-bottom:16px;">
                 <span class="vacancy-badge badge-{{ $vacancy->type }}">{{ $vacancy->type_label }}</span>
-                <span class="vacancy-badge badge-department">{{ $vacancy->department }}</span>
+                <span class="vacancy-badge" style="background:rgba(255,255,255,0.12); color:#ffffff; border:1px solid rgba(255,255,255,0.25);">{{ $vacancy->department }}</span>
                 @if($vacancy->isExpired())
                     <span class="vacancy-badge badge-expired">Recruitment Closed</span>
                 @endif
@@ -221,16 +134,14 @@
                 @endif
 
                 @if($errors->any())
-                    <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-left:4px solid #e74c3c;border-radius:12px;padding:16px 20px;margin-bottom:20px;">
-                        <ul style="margin:0;padding-left:16px;font-size:14px;color:#e74c3c;">
+                    <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-left:4px solid #e74c3c;border-radius:14px;padding:18px 22px;margin-bottom:24px;">
+                        <ul style="margin:0;padding-left:18px;font-size:14px;color:#e74c3c;font-family:var(--font-main);">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
                 @endif
-
-
 
                 <div class="detail-card career-reveal">
                     <div class="detail-section">
@@ -243,7 +154,7 @@
                         @endphp
                         <div class="detail-content {{ count($description) > 1 ? 'structured-content' : '' }}">
                             @if(count($description) > 1)
-                                <ol class="detail-list">@foreach($description as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ol>
+                                <ul class="detail-list">@foreach($description as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ul>
                             @else
                                 {{ $vacancy->description }}
                             @endif
@@ -260,7 +171,7 @@
                         @endphp
                         <div class="detail-content {{ count($requirements) > 1 ? 'structured-content' : '' }}">
                             @if(count($requirements) > 1)
-                                <ol class="detail-list">@foreach($requirements as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ol>
+                                <ul class="detail-list">@foreach($requirements as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ul>
                             @else
                                 {{ $vacancy->requirements }}
                             @endif
@@ -271,14 +182,14 @@
                     <div class="detail-section">
                         <h3>
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                            Responsibilities
+                            Key Responsibilities
                         </h3>
                         @php
                             $responsibilities = array_filter(array_map('trim', explode("\n", $vacancy->responsibilities ?? '')));
                         @endphp
                         <div class="detail-content {{ count($responsibilities) > 1 ? 'structured-content' : '' }}">
                             @if(count($responsibilities) > 1)
-                                <ol class="detail-list">@foreach($responsibilities as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ol>
+                                <ul class="detail-list">@foreach($responsibilities as $item)<li>{{ ltrim($item, "-* \t\n\r\0\x0B") }}</li>@endforeach</ul>
                             @else
                                 {{ $vacancy->responsibilities }}
                             @endif
@@ -292,7 +203,7 @@
             <div class="apply-sidebar">
                 <div class="apply-card">
                     <div class="apply-card-header">
-                        <h3>Job Information</h3>
+                        <h3>Job Summary</h3>
                     </div>
                     <div class="apply-card-body">
                         <div class="apply-quick-info">
@@ -349,7 +260,7 @@
                                 Apply Now &rarr;
                             </button>
                         @else
-                            <div style="text-align:center;padding:12px;background:rgba(231,76,60,0.1);border-radius:10px;font-size:13px;color:#e74c3c;font-weight:600;">
+                            <div style="text-align:center;padding:12px;background:rgba(231,76,60,0.1);border-radius:100px;font-size:13px;color:#e74c3c;font-weight:600;font-family:var(--font-main);">
                                 Recruitment Closed
                             </div>
                         @endif
@@ -379,13 +290,13 @@
                 </div>
 
                 <div class="apply-card">
-                    <div class="apply-card-body" style="padding:20px 24px;">
-                        <p style="font-size:13px;color:var(--text-secondary,#aaa);line-height:1.7;margin-bottom:16px;">
-                            Interested in this position? Submit your CV and cover letter now.
+                    <div class="apply-card-body" style="padding:22px 24px;">
+                        <p style="font-family:var(--font-main);font-size:13.5px;color:var(--text-secondary);line-height:1.65;margin-bottom:16px;">
+                            Interested in exploring more opportunities at Mal Bali Galeria?
                         </p>
-                        <a href="{{ route('frontend.career.index') }}" style="display:flex;align-items:center;gap:8px;color:var(--gold,#D4AF37);font-size:13px;font-weight:600;text-decoration:none;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                            View Other Vacancies
+                        <a href="{{ route('frontend.career.index') }}" style="display:flex;align-items:center;gap:8px;color:var(--gold-dark);font-family:var(--font-main);font-size:13.5px;font-weight:700;text-decoration:none;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            Explore All Vacancies
                         </a>
                     </div>
                 </div>
@@ -428,13 +339,13 @@
                     <input type="tel" name="phone" id="phone" class="form-control-career" placeholder="08xx-xxxx-xxxx" value="{{ old('phone') }}" required>
                 </div>
                 <div class="form-group">
-                    <label for="address">Address <small style="color:#666;text-transform:none;">(optional)</small></label>
-                    <input type="text" name="address" id="address" class="form-control-career" placeholder="Current city" value="{{ old('address') }}">
+                    <label for="address">Address <small style="color:var(--text-secondary);text-transform:none;">(optional)</small></label>
+                    <input type="text" name="address" id="address" class="form-control-career" placeholder="Current city or residence" value="{{ old('address') }}">
                 </div>
                 <div class="form-group">
-                    <label for="cover_letter">Cover Letter <small style="color:#666;text-transform:none;">(optional)</small></label>
+                    <label for="cover_letter">Cover Letter <small style="color:var(--text-secondary);text-transform:none;">(optional)</small></label>
                     <textarea name="cover_letter" id="cover_letter" class="form-control-career" rows="4"
-                        placeholder="Tell us why you are interested in this position...">{{ old('cover_letter') }}</textarea>
+                        placeholder="Briefly describe your interest and qualifications for this role...">{{ old('cover_letter') }}</textarea>
                 </div>
                 <div class="form-group">
                     <label>CV / Resume <span class="required">*</span></label>
@@ -449,7 +360,7 @@
                         </div>
                         <div class="file-upload-text">
                             <strong>Click to upload</strong> or drag & drop<br>
-                            <small>PDF, DOC, DOCX - Max 2MB</small>
+                            <small>PDF, DOC, DOCX — Max 2MB</small>
                         </div>
                         <div class="file-name-display" id="fileNameDisplay"></div>
                     </div>
@@ -465,15 +376,15 @@
     @if($vacancy->flyer_path)
     {{-- Flyer Modal --}}
     <div class="apply-modal-overlay" id="flyerModalOverlay"></div>
-    <div class="apply-modal" id="flyerModal" data-lenis-prevent style="max-width: 600px; border-radius: 20px; overflow: hidden; background: #ffffff;">
-        <div class="apply-modal-header" style="border-bottom: none; padding: 20px 24px; position: sticky; top: 0; background: #ffffff; z-index: 10; display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-family:'Playfair Display', serif; font-size:20px; font-weight:700; color:var(--text-primary); margin:0;">Job Flyer</h3>
-            <button class="apply-modal-close" id="closeFlyerModal" style="width:32px; height:32px; border:1px solid var(--border); border-radius:50%; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+    <div class="apply-modal" id="flyerModal" data-lenis-prevent style="max-width: 620px; border-radius: 24px; overflow: hidden; background: var(--card-bg);">
+        <div class="apply-modal-header" style="border-bottom: none; padding: 22px 28px; position: sticky; top: 0; background: var(--card-bg); z-index: 10; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-family:var(--font-display); font-size:1.35rem; font-weight:700; color:var(--text-primary); margin:0;">Job Flyer</h3>
+            <button class="apply-modal-close" id="closeFlyerModal">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
-        <div class="apply-modal-body" style="padding: 0 24px 24px; max-height: calc(85vh - 72px); overflow-y: auto;">
-            <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: #fcfcfc; border: 1px solid var(--border);">
+        <div class="apply-modal-body" style="padding: 0 28px 28px; max-height: calc(85vh - 72px); overflow-y: auto;">
+            <div style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); background: var(--teal-soft); border: 1px solid var(--border);">
                 <img src="{{ asset('storage/' . $vacancy->flyer_path) }}" alt="Job Flyer {{ $vacancy->title }}" style="width: 100%; height: auto; display: block; object-fit: contain;">
             </div>
         </div>
@@ -548,7 +459,7 @@
         document.getElementById('applyForm')?.addEventListener('submit', function() {
             const btn = document.getElementById('submitApplyBtn');
             btn.disabled = true;
-            btn.textContent = 'Sending...';
+            btn.textContent = 'Sending Application...';
         });
         @endif
 
