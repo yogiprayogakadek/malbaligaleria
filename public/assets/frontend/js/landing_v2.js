@@ -442,11 +442,12 @@ revealOnScroll();
     clones.forEach(c => c.remove());
 
     let isTransitioning = false;
-    const gap = 30;
+    const getGap = () => window.innerWidth <= 768 ? 0 : 30;
 
     const updateStatus = () => {
         const count = grid.querySelectorAll(".regular-show-card").length;
-        const canRotate = count > 3;
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        const canRotate = count > threshold;
         if (controls) {
             controls.classList.toggle("hidden", !canRotate);
         }
@@ -457,11 +458,12 @@ revealOnScroll();
     const next = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".regular-show-card");
-        if (cards.length <= 3) return;
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        if (cards.length <= threshold) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
-        const moveAmount = cardWidth + gap;
+        const moveAmount = cardWidth + getGap();
 
         grid.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
         grid.style.transform = `translateX(-${moveAmount}px)`;
@@ -479,11 +481,12 @@ revealOnScroll();
     const prev = () => {
         if (isTransitioning) return;
         const cards = grid.querySelectorAll(".regular-show-card");
-        if (cards.length <= 3) return;
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        if (cards.length <= threshold) return;
 
         isTransitioning = true;
         const cardWidth = cards[0].offsetWidth;
-        const moveAmount = cardWidth + gap;
+        const moveAmount = cardWidth + getGap();
 
         grid.style.transition = "none";
         grid.insertBefore(grid.lastElementChild, grid.firstElementChild);
@@ -507,7 +510,8 @@ revealOnScroll();
     const startAuto = () => {
         if (autoplay) clearInterval(autoplay);
         const count = grid.querySelectorAll(".regular-show-card").length;
-        if (count > 3) {
+        const threshold = window.innerWidth <= 768 ? 1 : 3;
+        if (count > threshold) {
             autoplay = setInterval(next, 6000);
         }
     };
