@@ -119,47 +119,62 @@
         }
 
         @media (max-width: 768px) {
+            .favorites-filter-btn {
+                margin-bottom: 12px !important;
+            }
+
             .mobile-map-download-wrapper {
                 display: flex;
                 justify-content: center;
-                margin-top: 15px;
-                margin-bottom: 15px;
+                margin-bottom: 20px;
                 width: 100%;
             }
 
             .mobile-map-download-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                width: 100%;
-                padding: 13px 20px;
-                background: linear-gradient(135deg, #111111 0%, #2c3e50 100%);
+                position: relative;
+                background: linear-gradient(135deg, #2c5f5d 0%, #1e4240 100%);
+                border: 1px solid rgba(95, 207, 218, 0.35);
+                border-radius: 12px;
+                padding: 12px 20px;
                 color: #ffffff !important;
                 font-size: 14px;
                 font-weight: 600;
-                border-radius: 12px;
-                text-decoration: none;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                transition: all 0.25s ease;
                 cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-decoration: none;
+                box-shadow: 0 4px 15px rgba(44, 95, 93, 0.25);
                 box-sizing: border-box;
             }
 
+            .mobile-map-download-btn:hover,
             .mobile-map-download-btn:active {
-                transform: scale(0.98);
-                background: #000000;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(44, 95, 93, 0.4);
+                background: linear-gradient(135deg, #234c4a 0%, #153331 100%);
             }
 
             .mobile-map-download-btn svg {
                 width: 20px;
                 height: 20px;
+                stroke: #5fcfda;
+                stroke-width: 2.2;
             }
 
             .mobile-map-download-btn.disabled {
-                opacity: 0.75;
-                background: #6c757d;
+                opacity: 0.7;
+                background: linear-gradient(135deg, #7f8c8d, #6c757d);
+                border-color: transparent;
+                box-shadow: none;
+            }
+
+            body.dark-mode .mobile-map-download-btn {
+                background: linear-gradient(135deg, #1f4544 0%, #122b2a 100%);
+                border-color: rgba(95, 207, 218, 0.2);
             }
         }
     </style>
@@ -322,6 +337,29 @@
                     </div>
 
                     <div class="filter-body">
+
+                        {{-- Download Map Button (Mobile Only, Sitting Below Favorites Button) --}}
+                        <div class="mobile-map-download-wrapper">
+                            @if (!empty($mallMapUrl))
+                                <a href="{{ $mallMapUrl }}" download target="_blank" class="mobile-map-download-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="7 10 12 15 17 10" />
+                                        <line x1="12" y1="15" x2="12" y2="3" />
+                                    </svg>
+                                    <span>Download Map</span>
+                                </a>
+                            @else
+                                <button class="mobile-map-download-btn disabled" onclick="alert('File peta belum diunggah oleh admin.')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="7 10 12 15 17 10" />
+                                        <line x1="12" y1="15" x2="12" y2="3" />
+                                    </svg>
+                                    <span>Download Map</span>
+                                </button>
+                            @endif
+                        </div>
 
                         <div class="view-toggle">
                             <button class="view-btn" id="mapViewBtn">
@@ -509,29 +547,6 @@
                                     </svg>
                                     <p style="color: #666; font-size: 16px; margin: 0;">Loading mall map...</p>
                                 </div>
-                            </div>
-
-                            {{-- Download Map Button (Mobile Only) --}}
-                            <div class="mobile-map-download-wrapper">
-                                @if (!empty($mallMapUrl))
-                                    <a href="{{ $mallMapUrl }}" download target="_blank" class="mobile-map-download-btn">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                            <polyline points="7 10 12 15 17 10" />
-                                            <line x1="12" y1="15" x2="12" y2="3" />
-                                        </svg>
-                                        <span>Download Map</span>
-                                    </a>
-                                @else
-                                    <button class="mobile-map-download-btn disabled" onclick="alert('File peta belum diunggah oleh admin.')">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                            <polyline points="7 10 12 15 17 10" />
-                                            <line x1="12" y1="15" x2="12" y2="3" />
-                                        </svg>
-                                        <span>Download Map</span>
-                                    </button>
-                                @endif
                             </div>
 
                             <div class="map-legend">
