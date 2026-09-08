@@ -70,7 +70,7 @@ class MallMapController extends Controller
                 'description' => 'Official Mall Map file for mobile download',
                 'payload' => $payload,
                 'is_active' => true,
-                'type' => 'file',
+                'type' => 'custom',
             ]
         );
 
