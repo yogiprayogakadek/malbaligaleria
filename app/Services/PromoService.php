@@ -54,23 +54,57 @@ class PromoService
 
     public function create(array $data)
     {
-        if (isset($data['banner']) && $data['banner'] instanceof UploadedFile) {
-            $data['banner'] = $this->uploadImage($data['banner']);
+        if (isset($data['banner'])) {
+            $uploadedBanners = [];
+            if (is_array($data['banner'])) {
+                foreach ($data['banner'] as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $uploadedBanners[] = $this->uploadImage($file);
+                    }
+                }
+            } elseif ($data['banner'] instanceof UploadedFile) {
+                $uploadedBanners[] = $this->uploadImage($data['banner']);
+            }
+            $data['banner'] = json_encode($uploadedBanners);
         }
         return $this->promoRepository->create($data);
     }
 
     public function update(array $data, string $uuid)
     {
-
         $promo = $this->promoRepository->findByUuid($uuid, ['id', 'banner']);
+        $existingBanners = $promo->banners;
 
-        if (isset($data['banner']) && $data['banner'] instanceof UploadedFile) {
-            if (!empty($promo->banner)) {
-                $this->deleteImage($promo->banner);
+        if (isset($data['retained_banners']) && is_array($data['retained_banners'])) {
+            foreach ($existingBanners as $old) {
+                if (!in_array($old, $data['retained_banners'])) {
+                    $this->deleteImage($old);
+                }
             }
-            $data['banner'] = $this->uploadImage($data['banner']);
+            $finalBanners = array_values($data['retained_banners']);
+        } else if (isset($data['banner']) && !empty($data['banner'])) {
+            foreach ($existingBanners as $old) {
+                $this->deleteImage($old);
+            }
+            $finalBanners = [];
+        } else {
+            $finalBanners = $existingBanners;
         }
+
+        if (isset($data['banner']) && !empty($data['banner'])) {
+            if (is_array($data['banner'])) {
+                foreach ($data['banner'] as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $finalBanners[] = $this->uploadImage($file);
+                    }
+                }
+            } elseif ($data['banner'] instanceof UploadedFile) {
+                $finalBanners[] = $this->uploadImage($data['banner']);
+            }
+        }
+
+        unset($data['retained_banners']);
+        $data['banner'] = json_encode(array_values($finalBanners));
         return $this->promoRepository->update($data, $uuid);
     }
 

@@ -868,16 +868,26 @@ function closePromotionModal() {
 function updateModalCarousel() {
     const carouselContainer = document.getElementById('modalCarouselImages');
     const indicatorsContainer = document.getElementById('modalCarouselIndicators');
+    const prevBtn = document.getElementById('modalCarouselPrev');
+    const nextBtn = document.getElementById('modalCarouselNext');
+    const swipeHint = document.getElementById('carouselSwipeHint');
 
     if (!carouselContainer || !indicatorsContainer) return;
 
-    carouselContainer.innerHTML = modalCarouselImages.map(img => `
+    carouselContainer.innerHTML = modalCarouselImages.map((img, i) => `
         <div class="carousel-image">
-            <img src="${img}" alt="Promotion Image">
+            <img src="${img}" alt="Promotion Image ${i + 1}" loading="${i === 0 ? 'eager' : 'lazy'}">
         </div>
     `).join('');
 
-    if (modalCarouselImages.length > 1) {
+    const hasMultiple = modalCarouselImages.length > 1;
+
+    // Show/hide nav buttons
+    if (prevBtn) prevBtn.style.display = hasMultiple ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = hasMultiple ? 'flex' : 'none';
+    if (swipeHint) swipeHint.style.display = hasMultiple ? 'flex' : 'none';
+
+    if (hasMultiple) {
         indicatorsContainer.innerHTML = modalCarouselImages.map((_, index) => `
             <div class="carousel-indicator ${index === currentModalCarouselIndex ? 'active' : ''}" data-index="${index}"></div>
         `).join('');

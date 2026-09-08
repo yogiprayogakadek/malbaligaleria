@@ -86,7 +86,7 @@ class PromoController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'description' => $request->description,
-            'banner' => $request->banner,
+            'banner' => $request->file('banner'),
         ];
 
         $this->promoService->create($data);
@@ -115,8 +115,12 @@ class PromoController extends Controller
             'is_active' => $request->is_active,
         ];
 
-        if ($request->banner != '') {
-            $data['banner'] = $request->banner;
+        if ($request->hasFile('banner')) {
+            $data['banner'] = $request->file('banner');
+        }
+
+        if ($request->has('retained_banners')) {
+            $data['retained_banners'] = $request->retained_banners;
         }
 
         $this->promoService->update($data, $uuid);

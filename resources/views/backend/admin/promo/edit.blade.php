@@ -52,16 +52,37 @@
                         </div>
 
                         {{-- Promo Banner --}}
-                        <div class="mb-4 row align-items-center">
-                            <label for="banner" class="form-label col-sm-3 col-form-label">Banner</label>
+                        <div class="mb-4 row">
+                            <label for="banner" class="form-label col-sm-3 col-form-label">Banner Image(s)</label>
                             <div class="col-sm-12">
-                                <input type="file" class="form-control @error('banner') is-invalid @enderror"
-                                    id="banner" name="banner" placeholder="Enter promo banner"
-                                    value="{{ old('banner') }}">
-                                <small>Leave empty if you do not want change the current image.</small>
+                                @if(!empty($promo->banners) && count($promo->banners) > 0)
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Current Banners:</label>
+                                        <div class="d-flex flex-wrap gap-3" id="existingBannersContainer">
+                                            @foreach($promo->banners as $index => $bPath)
+                                                @php
+                                                    $url = str_starts_with($bPath, 'http') ? $bPath : (Storage::disk('public')->exists($bPath) ? asset('storage/' . $bPath) : asset($bPath));
+                                                @endphp
+                                                <div class="existing-banner-item position-relative border rounded p-1" style="width: 110px; height: 110px;">
+                                                    <img src="{{ $url }}" alt="Banner {{ $index + 1 }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+                                                    <input type="hidden" name="retained_banners[]" value="{{ $bPath }}">
+                                                    <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 remove-existing-banner" style="padding: 2px 6px; font-size: 11px; border-radius: 50%;" title="Remove this image">&times;</button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <input type="file" class="form-control @error('banner') is-invalid @enderror @error('banner.*') is-invalid @enderror"
+                                    id="banner" name="banner[]" multiple accept="image/*">
+                                <small class="text-muted d-block mt-1">Select new images if you want to add or replace banners.</small>
                                 @error('banner')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
+                                @error('banner.*')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                                <div id="bannerPreviewContainer" class="d-flex flex-wrap gap-2 mt-3"></div>
                             </div>
                         </div>
 
@@ -157,6 +178,53 @@
         $("#tenantId").select2({
             placeholder: "Select a tenant",
             allowClear: true,
+        });
+
+        // Remove existing banner item
+        $(document).on('click', '.remove-existing-banner', function () {
+            $(this).closest('.existing-banner-item').remove();
+        });
+
+        // Preview new banner files
+        $('#banner').on('change', function(e) {
+            const container = $('#bannerPreviewContainer');
+            container.empty();
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const wrapper = $('<div>').css({
+                            'position': 'relative',
+                            'width': '110px',
+                            'height': '110px',
+                            'border': '2px dashed #4CAF50',
+                            'border-radius': '8px',
+                            'overflow': 'hidden'
+                        });
+                        const badge = $('<span>').text('NEW').css({
+                            'position': 'absolute',
+                            'top': '4px',
+                            'left': '4px',
+                            'background': '#4CAF50',
+                            'color': '#fff',
+                            'font-size': '10px',
+                            'padding': '1px 5px',
+                            'border-radius': '4px',
+                            'font-weight': '600',
+                            'z-index': 1
+                        });
+                        const img = $('<img>').attr('src', evt.target.result).css({
+                            'width': '100%',
+                            'height': '100%',
+                            'object-fit': 'cover'
+                        });
+                        wrapper.append(img).append(badge);
+                        container.append(wrapper);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
         });
     </script>
 @endpush

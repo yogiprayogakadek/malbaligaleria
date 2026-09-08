@@ -49,9 +49,12 @@ class PromotionPageController extends Controller
                 'validUntil' => $data->end_date,
                 'createdAt' => $data->created_at,
                 'description' => $data->description,
-                'images' => [
-                    asset('storage/' . $data->banner)
-                ]
+                'images' => collect($data->banners)->map(function ($b) {
+                    if (str_starts_with($b, 'http')) {
+                        return $b;
+                    }
+                    return Storage::disk('public')->exists($b) ? asset('storage/' . $b) : asset($b);
+                })->values()->toArray()
             ];
         });
 

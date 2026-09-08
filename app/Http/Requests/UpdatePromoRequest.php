@@ -41,7 +41,8 @@ class UpdatePromoRequest extends FormRequest
             ],
             'end_date'  => 'required|date|after_or_equal:today|after_or_equal:start_date',
             'description' => 'required|string',
-            'banner' => 'nullable|mimes:png,jpg,jpeg,webp|max:2048',
+            'banner' => 'nullable',
+            'banner.*' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
             'is_active' => 'required|numeric|between:0,1'
         ];
     }

@@ -52,14 +52,18 @@
 
                         {{-- Promo Banner --}}
                         <div class="mb-4 row align-items-center">
-                            <label for="banner" class="form-label col-sm-3 col-form-label">Banner</label>
+                            <label for="banner" class="form-label col-sm-3 col-form-label">Banner Image(s)</label>
                             <div class="col-sm-12">
-                                <input type="file" class="form-control @error('banner') is-invalid @enderror"
-                                    id="banner" name="banner" placeholder="Enter promo banner"
-                                    value="{{ old('banner') }}">
+                                <input type="file" class="form-control @error('banner') is-invalid @enderror @error('banner.*') is-invalid @enderror"
+                                    id="banner" name="banner[]" multiple accept="image/*">
+                                <small class="text-muted d-block mt-1">You can select multiple images for carousel presentation.</small>
                                 @error('banner')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
+                                @error('banner.*')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                                <div id="bannerPreviewContainer" class="d-flex flex-wrap gap-2 mt-3"></div>
                             </div>
                         </div>
 
@@ -139,6 +143,28 @@
         $("#tenantId").select2({
             placeholder: "Select a tenant",
             allowClear: true,
+        });
+
+        $('#banner').on('change', function(e) {
+            const container = $('#bannerPreviewContainer');
+            container.empty();
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const img = $('<img>').attr('src', evt.target.result).css({
+                            'width': '100px',
+                            'height': '100px',
+                            'object-fit': 'cover',
+                            'border-radius': '8px',
+                            'border': '1px solid #ddd'
+                        });
+                        container.append(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
         });
     </script>
 @endpush

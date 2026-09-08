@@ -44,13 +44,33 @@ class Promo extends Model
         });
 
         static::forceDeleted(function ($model) {
-            if (!empty($model->banner)) {
-                $relativePath = 'promo_images/' . basename($model->banner);
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
+            foreach ($model->banners as $b) {
+                if (!empty($b)) {
+                    $relativePath = 'promo_images/' . basename($b);
+                    if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relativePath)) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($relativePath);
+                    }
                 }
             }
         });
+    }
+
+    public function getBannersAttribute()
+    {
+        $val = $this->banner;
+        if (empty($val)) {
+            return [];
+        }
+        if (is_array($val)) {
+            return $val;
+        }
+        if (str_starts_with($val, '[') && str_ends_with($val, ']')) {
+            $decoded = json_decode($val, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        return [$val];
     }
 
     public function tenant()

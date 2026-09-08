@@ -33,7 +33,8 @@ class StorePromoRequest extends FormRequest
             // 'start_date' => 'required|date|after_or_equal:today',
             // 'end_date' => 'required|date|after_or_equal:today|after_or_equal:start_date',
             'description' => 'required|string',
-            'banner' => 'required|mimes:png,jpg,jpeg,webp|max:2048'
+            'banner' => 'required',
+            'banner.*' => 'image|mimes:png,jpg,jpeg,webp|max:2048'
         ];
     }
 
