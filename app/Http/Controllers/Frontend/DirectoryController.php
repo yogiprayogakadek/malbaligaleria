@@ -8,6 +8,8 @@ use App\Services\TenantService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\Setting;
+
 class DirectoryController extends Controller
 {
     protected $categoryService, $tenantService;
@@ -22,7 +24,14 @@ class DirectoryController extends Controller
     {
         $categories = $this->categoryService->getAll(['id', 'name', 'color_zone']);
 
-        return view('frontend.directory.index', compact('categories'));
+        $mapSetting = Setting::where('pages', 'mall_map')->where('is_active', true)->first();
+        $mallMapUrl = null;
+        if ($mapSetting && !empty($mapSetting->payload['file_path'])) {
+            $filePath = $mapSetting->payload['file_path'];
+            $mallMapUrl = str_starts_with($filePath, 'http') ? $filePath : asset('storage/' . $filePath);
+        }
+
+        return view('frontend.directory.index', compact('categories', 'mallMapUrl'));
     }
 
     public function getCategoryTenant()

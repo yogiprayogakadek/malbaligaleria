@@ -482,6 +482,14 @@
                         <div class="sidebar-section-items" id="section-settings">
                             @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view settings'))
                             <li class="sidebar-item">
+                                <a class="sidebar-link {{ request()->routeIs('admin.mall-map.*') ? 'active' : '' }}" href="{{ route('admin.mall-map.index') }}" aria-expanded="false">
+                                    <iconify-icon icon="solar:map-point-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Mall Map</span>
+                                </a>
+                            </li>
+                            @endif
+                            @if(auth()->user()->hasRole('superuser') || auth()->user()->hasPermissionTo('view settings'))
+                            <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <iconify-icon icon="solar:settings-linear"></iconify-icon>
                                     <span class="hide-menu">Settings</span>

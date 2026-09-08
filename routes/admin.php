@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\Admin\MediaCleanupController;
 use App\Http\Controllers\Backend\Admin\ImageCompressionController;
 use App\Http\Controllers\Backend\Admin\SubdomainAccessController;
 use App\Http\Controllers\Backend\Admin\IpWhitelistController;
+use App\Http\Controllers\Backend\Admin\MallMapController;
 
 // ADMIN & SUPERUSER COMMON ROUTES
 Route::controller(AdminDashboardController::class)
@@ -255,6 +256,16 @@ Route::controller(AdminDashboardController::class)
                     Route::put('/{id}/update', 'update')->name('update')->middleware('permission:edit settings');
                     Route::post('/destroy-selected', 'destroySelected')->name('destroySelected')->middleware('permission:delete settings');
                     Route::delete('/{id}/destroy', 'destroy')->name('destroy')->middleware('permission:delete settings');
+                });
+
+            // Mall Map
+            Route::controller(MallMapController::class)
+                ->prefix('/mall-map')
+                ->name('mall-map.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/store', 'store')->name('store');
+                    Route::delete('/destroy', 'destroy')->name('destroy');
                 });
 
             // Announcement

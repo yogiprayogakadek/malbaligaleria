@@ -112,6 +112,56 @@
         .dir-mobile-sticky-cta {
             z-index: 9999 !important;
         }
+
+        /* Download Map Mobile Button (Hidden on Desktop) */
+        .mobile-map-download-wrapper {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-map-download-wrapper {
+                display: flex;
+                justify-content: center;
+                margin-top: 15px;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+
+            .mobile-map-download-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+                padding: 13px 20px;
+                background: linear-gradient(135deg, #111111 0%, #2c3e50 100%);
+                color: #ffffff !important;
+                font-size: 14px;
+                font-weight: 600;
+                border-radius: 12px;
+                text-decoration: none;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.25s ease;
+                cursor: pointer;
+                box-sizing: border-box;
+            }
+
+            .mobile-map-download-btn:active {
+                transform: scale(0.98);
+                background: #000000;
+            }
+
+            .mobile-map-download-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .mobile-map-download-btn.disabled {
+                opacity: 0.75;
+                background: #6c757d;
+            }
+        }
     </style>
 </head>
 
@@ -459,6 +509,29 @@
                                     </svg>
                                     <p style="color: #666; font-size: 16px; margin: 0;">Loading mall map...</p>
                                 </div>
+                            </div>
+
+                            {{-- Download Map Button (Mobile Only) --}}
+                            <div class="mobile-map-download-wrapper">
+                                @if (!empty($mallMapUrl))
+                                    <a href="{{ $mallMapUrl }}" download target="_blank" class="mobile-map-download-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="7 10 12 15 17 10" />
+                                            <line x1="12" y1="15" x2="12" y2="3" />
+                                        </svg>
+                                        <span>Download Map</span>
+                                    </a>
+                                @else
+                                    <button class="mobile-map-download-btn disabled" onclick="alert('File peta belum diunggah oleh admin.')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="7 10 12 15 17 10" />
+                                            <line x1="12" y1="15" x2="12" y2="3" />
+                                        </svg>
+                                        <span>Download Map</span>
+                                    </button>
+                                @endif
                             </div>
 
                             <div class="map-legend">
