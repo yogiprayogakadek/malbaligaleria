@@ -632,7 +632,7 @@ body.dark-mode .dark-mode-toggle .moon-icon {
 
     /* Mobile Hero Overrides */
     .hero-slide {
-        background-image: url("../../facade/new_portrait_compress.png") !important;
+        background-image: url("../../facade/new_portrait_without_aksara_compress.png") !important;
         background-size: cover !important;
         background-position: center 40% !important;
     }
