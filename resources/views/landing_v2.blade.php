@@ -215,7 +215,7 @@
     <section class="hero" id="home">
         <div class="hero-slider" id="heroSlider">
             <div class="hero-slide active"
-                style="background-image: url('{{ asset('assets/facade/new_facade.png') }}')">
+                style="background-image: url('{{ asset('assets/facade/new_landscape_mbg.png') }}')">
             </div>
             {{-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> --}}
             {{-- <div class="hero-slide" style="background-image: url('{{ asset('assets/bg_front.jfif') }}')"></div> --}}
