@@ -208,9 +208,10 @@
         </main>
 
         {{-- Tenant Modal (Info + Map) --}}
-        <div class="tenant-modal" id="tenantModal">
+        <div class="tenant-modal" id="tenantModal" role="dialog" aria-modal="true"
+            aria-labelledby="modalTenantName" aria-hidden="true">
             <div class="modal-overlay" id="modalOverlay"></div>
-            <div class="modal-container">
+            <div class="modal-container" tabindex="-1">
                 <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18" />
@@ -218,14 +219,15 @@
                     </svg>
                 </button>
 
-                <button class="favorite-btn" id="modalFavoriteBtn" data-unit="">
+                <button class="favorite-btn" id="modalFavoriteBtn" data-unit="" aria-label="Save store to favorites"
+                    aria-pressed="false">
                     <svg viewBox="0 0 24 24">
                         <path
                             d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                     </svg>
                 </button>
 
-                <button class="share-btn" id="modalShareBtn" title="Share Store">
+                <button class="share-btn" id="modalShareBtn" title="Share Store" aria-label="Share store">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="18" cy="5" r="3" />
                         <circle cx="6" cy="12" r="3" />
@@ -307,7 +309,8 @@
                                     </div>
                                 </div>
 
-                                <div class="modal-info-item highlight" id="showOnMapBtn">
+                                <button class="modal-info-item highlight" id="showOnMapBtn" type="button"
+                                    aria-label="Show store location on map">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
                                         <line x1="8" y1="2" x2="8" y2="18" />
@@ -317,7 +320,7 @@
                                         <span class="info-label">Direction</span>
                                         <span class="info-value">Show on Map</span>
                                     </div>
-                                </div>
+                                </button>
                             </div>
 
                             <div class="modal-description" id="modalDescription"></div>

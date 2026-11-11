@@ -971,3 +971,145 @@ body.dark-mode .logo-pin {
     0% { transform: scale(1); opacity: 1; }
     100% { transform: scale(2.5); opacity: 0; }
 }
+
+/* ========================================
+   TENANT MODAL REFINEMENT
+   ======================================== */
+.tenant-modal .modal-container {
+    max-width: 1120px;
+    border-radius: 22px;
+}
+
+.tenant-modal .modal-header {
+    gap: 24px;
+    margin-bottom: 26px;
+    padding-bottom: 26px;
+}
+
+.tenant-modal .modal-logo {
+    width: 96px;
+    height: 96px;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.tenant-modal .modal-title h2 {
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.tenant-modal .modal-category {
+    font-size: 13px;
+}
+
+.tenant-modal .modal-info {
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.tenant-modal .modal-info-item {
+    padding: 16px;
+    gap: 14px;
+    border-radius: 12px;
+}
+
+.tenant-modal button.modal-info-item {
+    width: 100%;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.tenant-modal button.modal-info-item:hover {
+    transform: translateY(-1px);
+}
+
+.tenant-modal .modal-info-item.highlight {
+    background: rgba(44, 95, 93, 0.08);
+    border: 1px solid rgba(44, 95, 93, 0.16);
+}
+
+.tenant-modal .modal-info-item.highlight:hover {
+    background: rgba(44, 95, 93, 0.14);
+    box-shadow: 0 4px 12px rgba(44, 95, 93, 0.08);
+}
+
+.tenant-modal .modal-info-item.highlight .info-value {
+    color: #2c5f5d;
+    font-weight: 600;
+}
+
+.tenant-modal .modal-info-item.highlight svg {
+    stroke: #2c5f5d;
+}
+
+body.dark-mode .tenant-modal .modal-info-item.highlight {
+    background: rgba(138, 170, 168, 0.1);
+    border-color: rgba(138, 170, 168, 0.2);
+}
+
+body.dark-mode .tenant-modal .modal-info-item.highlight .info-value {
+    color: #cfe0de;
+}
+
+body.dark-mode .tenant-modal .modal-info-item.highlight svg {
+    stroke: #a8c5c3;
+}
+
+.tenant-modal .modal-description {
+    padding: 18px;
+    border-left: 0;
+}
+
+.tenant-modal .carousel-image {
+    padding: 28px;
+}
+
+.tenant-modal .modal-details {
+    padding: 36px;
+}
+
+.tenant-modal :is(button, a):focus-visible {
+    outline: 2px solid #d4af37;
+    outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+    .tenant-modal .modal-content {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tenant-modal .modal-details {
+        overflow: visible;
+        max-height: none;
+        padding: 24px 20px;
+    }
+
+    .tenant-modal .modal-logo {
+        width: 88px;
+        height: 88px;
+    }
+
+    .tenant-modal .modal-title h2 {
+        font-size: 24px;
+    }
+
+    .tenant-modal .modal-header {
+        gap: 18px;
+    }
+
+    .tenant-modal .carousel-image {
+        padding: 18px;
+    }
+}
+.tenant-modal .carousel-indicator {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    padding: 0;
+}

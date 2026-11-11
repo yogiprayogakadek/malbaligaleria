@@ -801,9 +801,10 @@
         </div>
     </section>
 
-    <div class="tenant-modal" id="tenantModal">
+    <div class="tenant-modal" id="tenantModal" role="dialog" aria-modal="true"
+        aria-labelledby="modalTenantName" aria-hidden="true">
         <div class="modal-overlay" id="modalOverlay" onclick="closeTenantModal()"></div>
-        <div class="modal-container">
+        <div class="modal-container" tabindex="-1">
 
             <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Modal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -813,7 +814,8 @@
             </button>
 
 
-            <button class="favorite-btn" id="modalFavoriteBtn" data-unit="">
+            <button class="favorite-btn" id="modalFavoriteBtn" data-unit="" aria-label="Save store to favorites"
+                aria-pressed="false">
                 <svg viewBox="0 0 24 24">
                     <path
                         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
@@ -821,7 +823,7 @@
             </button>
 
 
-            <button class="share-btn" id="modalShareBtn" title="Share Store">
+            <button class="share-btn" id="modalShareBtn" title="Share Store" aria-label="Share store">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="18" cy="5" r="3" />
                     <circle cx="6" cy="12" r="3" />
@@ -915,7 +917,8 @@
                                 </div>
                             </div>
 
-                            <div class="modal-info-item highlight" id="showOnMapBtn">
+                            <button class="modal-info-item highlight" id="showOnMapBtn" type="button"
+                                aria-label="Show store location on map">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
                                     <line x1="8" y1="2" x2="8" y2="18" />
@@ -925,7 +928,7 @@
                                     <span class="info-label">Direction</span>
                                     <span class="info-value">Show on Map</span>
                                 </div>
-                            </div>
+                            </button>
                         </div>
 
                         <div class="modal-description" id="modalDescription"></div>
@@ -961,9 +964,10 @@
     </div>
 
     {{-- ===== EVENT DETAIL MODAL ===== --}}
-    <div class="event-detail-modal" id="eventDetailModal">
+    <div class="event-detail-modal" id="eventDetailModal" role="dialog" aria-modal="true"
+        aria-labelledby="eventModalTitle" aria-hidden="true">
         <div class="event-modal-overlay" id="eventModalOverlay" onclick="closeEventModal()"></div>
-        <div class="event-modal-container">
+        <div class="event-modal-container" tabindex="-1">
 
             <button class="event-modal-close" id="eventModalCloseBtn" aria-label="Close">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1002,6 +1006,7 @@
                     <div class="carousel-indicators" id="eventModalCarouselIndicators">
                         <!-- Dynamic indicators -->
                     </div>
+                    <div class="event-modal-counter" id="eventModalCounter" aria-hidden="true"></div>
                 </div>
 
                 <div class="event-modal-details" data-lenis-prevent>
@@ -1010,21 +1015,30 @@
                         <h2 id="eventModalTitle"></h2>
                     </div>
 
-                    <div class="event-modal-info">
-                        <div class="event-modal-info-item">
+                    <div class="event-modal-when">
+                        <div class="event-modal-when-item">
+                            <span class="info-label">Date</span>
+                            <span class="info-value" id="eventModalDate"></span>
+                        </div>
+                        <div class="event-modal-when-item">
+                            <span class="info-label">Time</span>
+                            <span class="info-value" id="eventModalTime"></span>
+                        </div>
+                    </div>
+
+                    <div class="event-modal-meta">
+                        <div class="event-modal-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                <line x1="16" y1="2" x2="16" y2="6" />
-                                <line x1="8" y1="2" x2="8" y2="6" />
-                                <line x1="3" y1="10" x2="21" y2="10" />
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
                             </svg>
                             <div>
-                                <span class="info-label">Date</span>
-                                <span class="info-value" id="eventModalDate"></span>
+                                <span class="info-label">Location</span>
+                                <span class="info-value" id="eventModalLocation"></span>
                             </div>
                         </div>
 
-                        <div class="event-modal-info-item" id="specificDatesContainer">
+                        <div class="event-modal-meta-item" id="specificDatesContainer">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                                 <polyline points="9 11 12 14 22 4" />
@@ -1036,29 +1050,7 @@
                             </div>
                         </div>
 
-                        <div class="event-modal-info-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Time</span>
-                                <span class="info-value" id="eventModalTime"></span>
-                            </div>
-                        </div>
-
-                        <div class="event-modal-info-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Location</span>
-                                <span class="info-value" id="eventModalLocation"></span>
-                            </div>
-                        </div>
-
-                        <div class="event-modal-info-item">
+                        <div class="event-modal-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path
                                     d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -1068,26 +1060,9 @@
                                 <span class="info-value" id="eventModalHighlights"></span>
                             </div>
                         </div>
-
-                        <div class="event-modal-info-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                                <polyline points="10 9 9 9 8 9" />
-                            </svg>
-                            <div>
-                                <span class="info-label">Description</span>
-                                <span class="info-value" id="eventModalDescription"
-                                    style="color: var(--gold);"></span>
-                                {{-- <span class="info-value" id="eventModalMonthYear"
-                                    style="text-transform: uppercase; font-weight: 700; color: var(--gold);"></span> --}}
-                            </div>
-                        </div>
                     </div>
 
-                    {{-- <div class="event-modal-description" id="eventModalDescription"></div> --}}
+                    <div class="event-modal-description" id="eventModalDescription"></div>
 
                     <div class="event-modal-actions">
                         <button class="event-modal-calendar-btn" id="eventModalCalendarBtn">

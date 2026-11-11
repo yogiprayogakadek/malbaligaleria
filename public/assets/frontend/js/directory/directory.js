@@ -1954,6 +1954,14 @@ async function getDataByTenantId(tenant_id) {
     }
 }
 
+let lastTenantModalFocused = null;
+
+function getTenantModalFocusable(modal) {
+    return Array.from(modal.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter((el) => el.offsetParent !== null);
+}
+
 async function showTenantModal(tenant) {
     const modal = document.getElementById("tenantModal");
     if (!modal) return;
@@ -1999,9 +2007,13 @@ async function showTenantModal(tenant) {
     currentTenantData = tenant;
 
     // Show modal and prevent body scroll
+    lastTenantModalFocused = document.activeElement;
+    modal.setAttribute("aria-hidden", "false");
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
     if (window.lenis) window.lenis.stop();
+    const closeBtn = document.getElementById("modalCloseBtn");
+    if (closeBtn) closeBtn.focus();
 
     // Hide swipe hint after 3 seconds
     setTimeout(() => {
@@ -2059,6 +2071,7 @@ function updateModalContent(data) {
         } else {
             modalFavBtn.classList.remove("active");
         }
+        modalFavBtn.setAttribute("aria-pressed", isFavorite(data.unit) ? "true" : "false");
 
         // Remove old listeners
         const newBtn = modalFavBtn.cloneNode(true);
@@ -2067,11 +2080,9 @@ function updateModalContent(data) {
         // Add new listener
         newBtn.addEventListener("click", () => {
             toggleFavorite(data.unit);
-            if (isFavorite(data.unit)) {
-                newBtn.classList.add("active");
-            } else {
-                newBtn.classList.remove("active");
-            }
+            const active = isFavorite(data.unit);
+            newBtn.classList.toggle("active", active);
+            newBtn.setAttribute("aria-pressed", active ? "true" : "false");
         });
     }
 
@@ -2123,6 +2134,11 @@ function closeTenantModal() {
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
     if (window.lenis) window.lenis.start();
+    if (lastTenantModalFocused && typeof lastTenantModalFocused.focus === "function") {
+        lastTenantModalFocused.focus();
+    }
+    lastTenantModalFocused = null;
+    if (modal) modal.setAttribute("aria-hidden", "true");
 
     // Clear state
     currentTenantData = null;
@@ -2154,9 +2170,9 @@ function updateModalCarousel(tenantName) {
         indicatorsContainer.innerHTML = modalCarouselImages
             .map(
                 (_, index) => `
-                    <div class="carousel-indicator ${
+                    <button type="button" class="carousel-indicator ${
                         index === currentModalCarouselIndex ? "active" : ""
-                    }" data-index="${index}"></div>
+                    }" data-index="${index}" aria-label="Go to image ${index + 1}"></button>
                 `
             )
             .join("");
@@ -2233,13 +2249,26 @@ document.addEventListener("DOMContentLoaded", () => {
     // Keyboard navigation
     document.addEventListener("keydown", (e) => {
         const modal = document.getElementById("tenantModal");
-        if (modal && modal.classList.contains("active")) {
-            if (e.key === "Escape") {
-                closeTenantModal();
-            } else if (e.key === "ArrowLeft") {
-                prevModalImage();
-            } else if (e.key === "ArrowRight") {
-                nextModalImage();
+        if (!modal || !modal.classList.contains("active")) return;
+
+        if (e.key === "Escape") {
+            closeTenantModal();
+        } else if (e.key === "ArrowLeft") {
+            prevModalImage();
+        } else if (e.key === "ArrowRight") {
+            nextModalImage();
+        } else if (e.key === "Tab") {
+            const focusable = getTenantModalFocusable(modal);
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
             }
         }
     });

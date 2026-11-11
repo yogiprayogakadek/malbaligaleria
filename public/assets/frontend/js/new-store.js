@@ -18,6 +18,7 @@
     let tenantCache = {};
     let modalImages = [];
     let currentModalImageIndex = 0;
+    let lastTenantFocused = null;
 
     // Elements for Modal
     const tenantModal = document.getElementById("tenantModal");
@@ -26,6 +27,13 @@
     const modalCarouselIndicators = document.getElementById("modalCarouselIndicators");
     const modalCarouselPrev = document.getElementById("modalCarouselPrev");
     const modalCarouselNext = document.getElementById("modalCarouselNext");
+
+    function getTenantFocusable() {
+        if (!tenantModal) return [];
+        return Array.from(tenantModal.querySelectorAll(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )).filter((el) => el.offsetParent !== null);
+    }
 
     // --- GLOBAL UI LOGIC ---
 
@@ -226,7 +234,14 @@
 
         // Show Modal
         document.body.style.overflow = "hidden";
+        const wasActive = tenantModal.classList.contains("active");
+        if (!wasActive) lastTenantFocused = document.activeElement;
+        tenantModal.setAttribute("aria-hidden", "false");
         tenantModal.classList.add("active");
+        if (!wasActive) {
+            const closeBtn = document.getElementById("modalCloseBtn");
+            if (closeBtn) closeBtn.focus();
+        }
 
         // Favorites & Share
         setupActionButtons(data);
@@ -253,8 +268,9 @@
             const newFavBtn = modalFavBtn.cloneNode(true);
             modalFavBtn.parentNode.replaceChild(newFavBtn, modalFavBtn);
             newFavBtn.addEventListener("click", () => {
-                newFavBtn.classList.toggle("active");
-                showToast(newFavBtn.classList.contains("active") ? "Added to favorites" : "Removed from favorites", "success");
+                const active = newFavBtn.classList.toggle("active");
+                newFavBtn.setAttribute("aria-pressed", active ? "true" : "false");
+                showToast(active ? "Added to favorites" : "Removed from favorites", "success");
             });
         }
 
@@ -292,7 +308,7 @@
 
         modalCarouselIndicators.innerHTML = modalImages
             .map((_, index) => `
-                <div class="carousel-indicator ${index === 0 ? "active" : ""}" data-index="${index}"></div>
+                <button type="button" class="carousel-indicator ${index === 0 ? "active" : ""}" data-index="${index}" aria-label="Go to image ${index + 1}"></button>
             `).join("");
 
         updateModalCarousel();
@@ -325,6 +341,9 @@
     function closeTenantModal() {
         if (tenantModal) tenantModal.classList.remove("active");
         document.body.style.overflow = "";
+        if (lastTenantFocused && typeof lastTenantFocused.focus === "function") lastTenantFocused.focus();
+        lastTenantFocused = null;
+        if (tenantModal) tenantModal.setAttribute("aria-hidden", "true");
     }
 
     /**
@@ -528,9 +547,27 @@
         }
     });
 
-    // ESC Key
+    // Keyboard handling
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeTenantModal();
+        if (!tenantModal || !tenantModal.classList.contains("active")) return;
+        if (e.key === "Escape") {
+            closeTenantModal();
+            return;
+        }
+        if (e.key !== "Tab") return;
+
+        const focusable = getTenantFocusable();
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
     });
 
     // URL Param Check

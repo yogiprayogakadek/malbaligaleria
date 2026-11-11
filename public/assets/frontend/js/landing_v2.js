@@ -1239,7 +1239,15 @@ const modalCarouselIndicators = document.getElementById(
 let currentModalImageIndex = 0;
 let modalImages = [];
 let tenantData = null;
+let lastTenantFocused = null;
 const tenantCache = {}; // Client-side cache for tenant data
+
+function getTenantFocusable() {
+    if (!tenantModal) return [];
+    return Array.from(tenantModal.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter((el) => el.offsetParent !== null);
+}
 
 // Visual Map Constants
 const visualMapContainer = document.getElementById("visualMapContainer");
@@ -1362,7 +1370,16 @@ function updateModalContent(data) {
     // Show modal and prevent body scroll
     document.body.style.overflow = "hidden";
     if (window.lenis) window.lenis.stop();
-    if (tenantModal) tenantModal.classList.add("active");
+    if (tenantModal) {
+        const wasActive = tenantModal.classList.contains("active");
+        if (!wasActive) lastTenantFocused = document.activeElement;
+        tenantModal.setAttribute("aria-hidden", "false");
+        tenantModal.classList.add("active");
+        if (!wasActive) {
+            const closeBtn = document.getElementById("modalCloseBtn");
+            if (closeBtn) closeBtn.focus();
+        }
+    }
 
     // Action button listeners
     const modalFavBtn = document.getElementById("modalFavoriteBtn");
@@ -1381,12 +1398,14 @@ function updateModalContent(data) {
         } else {
             modalFavBtn.classList.remove("active");
         }
+        modalFavBtn.setAttribute("aria-pressed", isFavorited ? "true" : "false");
 
         const newFavBtn = modalFavBtn.cloneNode(true);
         modalFavBtn.parentNode.replaceChild(newFavBtn, modalFavBtn);
         
         newFavBtn.addEventListener("click", () => {
             const isActive = newFavBtn.classList.toggle("active");
+            newFavBtn.setAttribute("aria-pressed", isActive ? "true" : "false");
             let favs = JSON.parse(localStorage.getItem('mall_favorites') || '[]');
             const currentUnit = (data.unit || "").trim();
             
@@ -1450,6 +1469,9 @@ function closeTenantModal() {
     // Restore body scroll
     document.body.style.overflow = "";
     document.body.style.paddingRight = "";
+    if (lastTenantFocused && typeof lastTenantFocused.focus === "function") lastTenantFocused.focus();
+    lastTenantFocused = null;
+    if (tenantModal) tenantModal.setAttribute("aria-hidden", "true");
 
 
     setTimeout(() => {
@@ -1478,9 +1500,9 @@ function renderModalCarousel(tenantName) {
     modalCarouselIndicators.innerHTML = modalImages
         .map(
             (_, index) => `
-                <div class="carousel-indicator ${
+                <button type="button" class="carousel-indicator ${
                     index === currentModalImageIndex ? "active" : ""
-                }" data-index="${index}"></div>
+                }" data-index="${index}" aria-label="Go to image ${index + 1}"></button>
             `
         )
         .join("");
@@ -1622,8 +1644,24 @@ if (modalOverlay) {
 
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && tenantModal.classList.contains("active")) {
+    if (!tenantModal || !tenantModal.classList.contains("active")) return;
+    if (e.key === "Escape") {
         closeTenantModal();
+        return;
+    }
+    if (e.key !== "Tab") return;
+
+    const focusable = getTenantFocusable();
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
     }
 });
 
@@ -2102,6 +2140,7 @@ async function drawGates(floorId) {
     const carouselPrev = document.getElementById("eventModalCarouselPrev");
     const carouselNext = document.getElementById("eventModalCarouselNext");
     const swipeHint = document.getElementById("eventModalCarouselSwipeHint");
+    const counterEl = document.getElementById("eventModalCounter");
 
     const typeBadge = document.getElementById("eventModalTypeBadge");
     const dateEl = document.getElementById("eventModalDate");
@@ -2117,7 +2156,14 @@ async function drawGates(floorId) {
     let currentEventUuid = null;
     let eventImages = [];
     let currentImageIndex = 0;
+    let lastFocused = null;
     const eventCache = {};
+
+    function getFocusable() {
+        return Array.from(modal.querySelectorAll(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )).filter((el) => el.offsetParent !== null);
+    }
 
     async function fetchEventData(uuid) {
         if (eventCache[uuid]) return eventCache[uuid];
@@ -2144,7 +2190,7 @@ async function drawGates(floorId) {
         `).join("");
 
         carouselIndicators.innerHTML = images.map((_, idx) => `
-            <div class="carousel-indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}"></div>
+            <button type="button" class="carousel-indicator ${idx === 0 ? 'active' : ''}" data-index="${idx}" aria-label="Go to image ${idx + 1}"></button>
         `).join("");
 
         const hasMultipleImages = images.length > 1;
@@ -2177,6 +2223,12 @@ async function drawGates(floorId) {
             indicator.classList.toggle("active", idx === currentImageIndex);
         });
 
+        if (counterEl) {
+            counterEl.textContent = eventImages.length > 1
+                ? `${currentImageIndex + 1} / ${eventImages.length}`
+                : "";
+        }
+
         // Toggle swipe hint visibility
         if (swipeHint) {
             swipeHint.style.display = (eventImages.length > 1 && currentImageIndex === 0) ? 'flex' : 'none';
@@ -2202,6 +2254,7 @@ async function drawGates(floorId) {
         if (!uuid) return;
 
         currentEventUuid = uuid;
+        lastFocused = document.activeElement;
 
         // Show modal with skeleton or partial data first
         if (titleEl) titleEl.textContent = card.dataset.eventName || "Event";
@@ -2214,21 +2267,16 @@ async function drawGates(floorId) {
         if (typeBadge) typeBadge.textContent = eventType;
 
         if (descEl) {
-            const currentMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
-            const showMonthYear = (eventType === 'Regular Show' || eventType === 'Exhibition');
-            const prefix = showMonthYear ? `<strong>${currentMonthYear}</strong><br>` : "";
-            descEl.innerHTML = card.dataset.eventDesc ? `${prefix}${card.dataset.eventDesc}` : "";
+            descEl.innerHTML = card.dataset.eventDesc || "";
         }
 
         // New Fields (Fast Load)
         const timeEl = document.getElementById("eventModalTime");
         const highlightEl = document.getElementById("eventModalHighlights");
-        const monthYearEl = document.getElementById("eventModalMonthYear");
         const specDatesCont = document.getElementById("specificDatesContainer");
 
         if (timeEl) timeEl.textContent = card.dataset.eventTime || "All Day";
         if (highlightEl) highlightEl.textContent = card.dataset.eventHighlight || "-";
-        if (monthYearEl) monthYearEl.textContent = card.dataset.eventMonthyear || "";
         
 
         // Fast Load Specific Dates
@@ -2260,7 +2308,9 @@ async function drawGates(floorId) {
 
         document.body.style.overflow = "hidden";
         if (window.lenis) window.lenis.stop();
+        modal.setAttribute("aria-hidden", "false");
         modal.classList.add("active");
+        if (closeBtn) closeBtn.focus();
 
         // Fetch full data
         const data = await fetchEventData(uuid);
@@ -2277,12 +2327,8 @@ async function drawGates(floorId) {
             }
             if (locationEl) locationEl.textContent = data.location;
             if (typeBadge) typeBadge.textContent = data.type;
-            const displayType = typeBadge ? typeBadge.textContent : data.type;
             if (descEl) {
-                const currentMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date()).toUpperCase();
-                const showMonthYear = (displayType === 'Regular Show' || displayType === 'Exhibition' || data.type === 'regular' || data.type === 'exhibition');
-                const prefix = showMonthYear ? `<strong>${currentMonthYear}</strong><br>` : "";
-                descEl.innerHTML = data.description ? `${prefix}${data.description}` : `<p>No description available.</p>`;
+                descEl.innerHTML = data.description ? data.description : `<p>No description available.</p>`;
             }
 
             // New Fields (Full Data Update)
@@ -2292,11 +2338,6 @@ async function drawGates(floorId) {
                 timeEl.textContent = startTime && endTime ? `${startTime} - ${endTime}` : "All Day";
             }
             if (highlightEl) highlightEl.textContent = data.highlights || "-";
-            if (monthYearEl && data.start_date) {
-                const dateObj = new Date(data.start_date);
-                const formatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
-                monthYearEl.textContent = formatter.format(dateObj).toUpperCase();
-            }
 
             const specDatesEl = document.getElementById("eventModalSpecificDates");
             if (specDatesEl) {
@@ -2328,6 +2369,9 @@ async function drawGates(floorId) {
         document.body.style.overflow = "";
         if (window.lenis) window.lenis.start();
         currentEventUuid = null;
+        if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+        lastFocused = null;
+        modal.setAttribute("aria-hidden", "true");
     }
 
     function formatSpecificDates(dates) {
@@ -2371,6 +2415,12 @@ async function drawGates(floorId) {
         return formatted.length > 0 ? formatted.join(", ") : "-";
     }
 
+    document.querySelectorAll(".event-modal-trigger").forEach((card) => {
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", card.dataset.eventName || "View event details");
+    });
+
     document.addEventListener("click", (e) => {
         const card = e.target.closest(".event-modal-trigger");
         if (card) {
@@ -2379,12 +2429,36 @@ async function drawGates(floorId) {
         }
     });
 
+    document.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        const card = e.target.closest(".event-modal-trigger");
+        if (!card) return;
+        e.preventDefault();
+        openEventModal(card);
+    });
+
     if (closeBtn) closeBtn.addEventListener("click", closeEventModal);
     if (overlay) overlay.addEventListener("click", closeEventModal);
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
+        if (!modal.classList.contains("active")) return;
+        if (e.key === "Escape") {
             closeEventModal();
+            return;
+        }
+        if (e.key !== "Tab") return;
+
+        const focusable = getFocusable();
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
         }
     });
 
