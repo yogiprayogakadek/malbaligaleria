@@ -6702,14 +6702,19 @@ body.dark-mode .event-modal-share-btn svg {
 
 @media (max-width: 900px) {
     .event-modal-container {
-        max-height: 92dvh;
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
         border-radius: 18px;
     }
 
     .event-modal-content {
-        grid-template-columns: 1fr;
+        display: block;
         min-height: 0;
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
         overflow-y: auto;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
     }
 
@@ -7017,8 +7022,18 @@ body.dark-mode .tenant-modal .modal-info-item.highlight svg {
 }
 
 @media (max-width: 768px) {
+    .tenant-modal .modal-container {
+        max-height: calc(100vh - 24px);
+        max-height: calc(100dvh - 24px);
+    }
+
     .tenant-modal .modal-content {
+        display: block;
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
         overflow-y: auto;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
     }
 
