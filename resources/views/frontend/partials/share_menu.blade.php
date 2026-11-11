@@ -5,7 +5,7 @@
     <div class="share-menu-container">
         <div class="share-menu-header">
             <h4 id="shareMenuTitle">Share Content</h4>
-            <button class="share-menu-close"
+            <button class="share-menu-close" aria-label="Close share menu"
                 onclick="document.getElementById('shareMenu').classList.remove('active')">&times;</button>
         </div>
         <div class="share-menu-body">

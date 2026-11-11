@@ -859,6 +859,15 @@ body.dark-mode .sidebar nav ul li a {
     background: var(--primary-gradient);
 }
 
+.sidebar nav ul li.sidebar-empty {
+    color: #5a6b7b;
+    font-size: 16px;
+}
+
+body.dark-mode .sidebar nav ul li.sidebar-empty {
+    color: #b0b8b8;
+}
+
 /* Hero Section with Parallax */
 .hero {
     position: relative;

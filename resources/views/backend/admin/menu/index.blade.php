@@ -30,6 +30,11 @@
                         <span class="align-middle">Configure which frontend navigation menus are active and control which user roles have permission to view them. If no roles are selected, the menu item is visible to everyone (including guests).</span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{{ route('admin.menu.create') }}" class="btn btn-primary">
+                            <i class="ti ti-plus me-1"></i> Add Menu
+                        </a>
+                    </div>
                     <div class="table-responsive">
                         <table id="table" class="table table-striped table-bordered text-nowrap align-middle">
                             <thead>

@@ -94,7 +94,7 @@
                 style="height: 45px; width: auto; object-fit: contain;" loading="lazy">
         </a>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -102,20 +102,22 @@
     </header>
 
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar" data-lenis-prevent>
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
-                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                @endforeach
+                @forelse ($frontendMenus as $menu)
+                    <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
             </ul>
         </nav>
     </div>
@@ -420,7 +422,7 @@
                 </svg>
             </button>
 
-            <div class="event-modal-content">
+            <div class="event-modal-content" data-lenis-prevent>
                 <div class="event-modal-carousel">
                     <div class="carousel-swipe-hint" id="eventModalCarouselSwipeHint">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -436,13 +438,13 @@
                         <!-- Dynamic images -->
                     </div>
 
-                    <button class="carousel-nav prev" id="eventModalCarouselPrev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav prev" id="eventModalCarouselPrev" aria-label="Previous image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="eventModalCarouselNext">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav next" id="eventModalCarouselNext" aria-label="Next image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
@@ -582,55 +584,6 @@
                     setTimeout(() => pageLoader.style.display = "none", 500);
                 }
             }, remaining);
-        });
-
-        // ===== SIDEBAR / MENU =====
-        function initMenu() {
-            const menuBtn = document.getElementById("menuBtn");
-            const sidebar = document.getElementById("sidebar");
-            const sidebarClose = document.getElementById("sidebarClose");
-
-            if (menuBtn && sidebar && sidebarClose) {
-                // Remove existing for clean init
-                menuBtn.replaceWith(menuBtn.cloneNode(true));
-                sidebarClose.replaceWith(sidebarClose.cloneNode(true));
-
-                const newMenuBtn = document.getElementById("menuBtn");
-                const newSidebarClose = document.getElementById("sidebarClose");
-
-                newMenuBtn.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    newMenuBtn.classList.toggle("active");
-                    sidebar.classList.toggle("active");
-                    document.body.classList.toggle("menu-open");
-                });
-
-                newSidebarClose.addEventListener("click", () => {
-                    newMenuBtn.classList.remove("active");
-                    sidebar.classList.remove("active");
-                    document.body.classList.remove("menu-open");
-                });
-
-                sidebar.querySelectorAll("a").forEach(link => {
-                    link.addEventListener("click", () => {
-                        newMenuBtn.classList.remove("active");
-                        sidebar.classList.remove("active");
-                        document.body.classList.remove("menu-open");
-                    });
-                });
-            }
-        }
-
-        // Init
-        initMenu();
-
-        // Dark mode
-        const darkModeToggle = document.getElementById("darkModeToggle");
-        if (localStorage.getItem("darkMode") === "enabled") document.body.classList.add("dark-mode");
-        darkModeToggle.addEventListener("click", (e) => {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
         });
 
         // Scroll top
@@ -859,8 +812,8 @@
         <div class="share-menu-container">
             <div class="share-menu-header">
                 <h4 id="shareMenuTitle">Share Content</h4>
-                <button class="share-menu-close"
-                    onclick="document.getElementById('shareMenu').classList.remove('active')">×</button>
+                <button class="share-menu-close" aria-label="Close share menu"
+                    onclick="document.getElementById('shareMenu').classList.remove('active')">&times;</button>
             </div>
             <div class="share-menu-body">
                 <button class="share-option" id="shareCopyLink">

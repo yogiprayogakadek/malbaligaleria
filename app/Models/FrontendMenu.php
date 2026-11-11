@@ -18,4 +18,12 @@ class FrontendMenu extends Model
         'roles' => 'array',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Resolve the menu destination. External URLs are used as-is.
+     */
+    public function getLinkAttribute(): string
+    {
+        return preg_match('#^https?://#i', $this->url) ? $this->url : url($this->url);
+    }
 }

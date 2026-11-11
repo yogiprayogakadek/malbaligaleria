@@ -626,25 +626,26 @@ const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const sidebarClose = document.getElementById("sidebarClose");
 
+const setMenu = (open) => {
+    menuBtn.classList.toggle("active", open);
+    sidebar.classList.toggle("active", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("menu-open", open);
+};
+
 menuBtn.addEventListener("click", () => {
-    menuBtn.classList.toggle("active");
-    sidebar.classList.toggle("active");
-    document.body.classList.toggle("menu-open");
+    setMenu(!sidebar.classList.contains("active"));
 });
 
-sidebarClose.addEventListener("click", () => {
-    menuBtn.classList.remove("active");
-    sidebar.classList.remove("active");
-    document.body.classList.remove("menu-open");
+sidebarClose.addEventListener("click", () => setMenu(false));
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenu(false);
 });
 
 sidebar.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-        if (!link.getAttribute("onclick")) {
-            menuBtn.classList.remove("active");
-            sidebar.classList.remove("active");
-            document.body.classList.remove("menu-open");
-        }
+        if (!link.getAttribute("onclick")) setMenu(false);
     });
 });
 

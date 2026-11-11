@@ -12,21 +12,41 @@
                         @method('PUT')
                         @csrf
 
-                        {{-- Menu Name (Read-Only) --}}
+                        {{-- Menu Name --}}
                         <div class="mb-4 row align-items-center">
                             <label for="name" class="form-label col-sm-3 col-form-label">Menu Name</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="name" value="{{ $menu->name }}" readonly>
-                                <small class="text-muted">The display name of the menu on the frontend.</small>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                    name="name" value="{{ old('name', $menu->name) }}" required>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
-                        {{-- URL / Route (Read-Only) --}}
+                        {{-- URL / Route --}}
                         <div class="mb-4 row align-items-center">
                             <label for="url" class="form-label col-sm-3 col-form-label">URL / Path</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="url" value="{{ $menu->url }}" readonly>
-                                <small class="text-muted">The destination path/anchor link.</small>
+                                <input type="text" class="form-control @error('url') is-invalid @enderror" id="url"
+                                    name="url" value="{{ old('url', $menu->url) }}" placeholder="https://example.com or /promotion" required>
+                                <small class="text-muted">Use a full external URL (https://...), an internal path (/promotion), or an anchor (/#about).</small>
+                                @error('url')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Order --}}
+                        <div class="mb-4 row align-items-center">
+                            <label for="order" class="form-label col-sm-3 col-form-label">Order</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control @error('order') is-invalid @enderror" id="order"
+                                    name="order" value="{{ old('order', $menu->order) }}" min="0">
+                                <small class="text-muted">Lower numbers appear first.</small>
+                                @error('order')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 

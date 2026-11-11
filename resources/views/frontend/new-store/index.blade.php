@@ -108,7 +108,8 @@
                 </a>
             </div>
 
-            <button class="menu-btn" id="menuBtn">
+            <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar"
+                aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -116,22 +117,24 @@
         </header>
 
         <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
+        <div class="sidebar" id="sidebar" data-lenis-prevent>
             <div class="sidebar-logo">
                 <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
             </div>
 
-            <button class="sidebar-close" id="sidebarClose">
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
 
-            <nav>
+            <nav aria-label="Main navigation">
                 <ul>
-                    @foreach ($frontendMenus as $menu)
-                        <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                    @endforeach
+                    @forelse ($frontendMenus as $menu)
+                        <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                    @empty
+                        <li class="sidebar-empty">No menu items available</li>
+                    @endforelse
                 </ul>
             </nav>
         </div>
@@ -232,7 +235,7 @@
                     </svg>
                 </button>
 
-                <div class="modal-content">
+                <div class="modal-content" data-lenis-prevent>
                     <div class="modal-carousel">
                         <div class="carousel-swipe-hint" id="carouselSwipeHint">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -250,13 +253,13 @@
                             </div>
                         </div>
                         <div class="carousel-images" id="modalCarouselImages"></div>
-                        <button class="carousel-nav prev" id="modalCarouselPrev">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button class="carousel-nav prev" id="modalCarouselPrev" aria-label="Previous image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path d="M15 18l-6-6 6-6" />
                             </svg>
                         </button>
-                        <button class="carousel-nav next" id="modalCarouselNext">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button class="carousel-nav next" id="modalCarouselNext" aria-label="Next image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path d="M9 18l6-6-6-6" />
                             </svg>
                         </button>

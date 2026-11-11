@@ -246,30 +246,36 @@ const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const sidebarClose = document.getElementById("sidebarClose");
 
+const setMenu = (open) => {
+    if (!menuBtn || !sidebar) return;
+    menuBtn.classList.toggle("active", open);
+    sidebar.classList.toggle("active", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("menu-open", open);
+};
+
 if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => {
-        menuBtn.classList.toggle("active");
-        sidebar.classList.toggle("active");
-        document.body.classList.toggle("menu-open");
+        setMenu(!sidebar.classList.contains("active"));
     });
 }
 
 if (sidebarClose && sidebar) {
     sidebarClose.addEventListener("click", () => {
-        if (menuBtn) menuBtn.classList.remove("active");
-        sidebar.classList.remove("active");
-        document.body.classList.remove("menu-open");
+        setMenu(false);
     });
 }
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenu(false);
+});
 
 // Close sidebar when clicking on a link
 if (sidebar) {
     const sidebarLinks = sidebar.querySelectorAll("a");
     sidebarLinks.forEach((link) => {
         link.addEventListener("click", () => {
-            if (menuBtn) menuBtn.classList.remove("active");
-            sidebar.classList.remove("active");
-            document.body.classList.remove("menu-open");
+            setMenu(false);
         });
     });
 }
@@ -598,8 +604,8 @@ async function displayPromotions() {
                 ${countdownBarHTML}
                 <p class="promotion-description">${promo.description}</p>
                 <button class="view-details-btn">
-                    Learn More
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    View promotion
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </button>

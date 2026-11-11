@@ -38,28 +38,26 @@ const sidebar = document.getElementById("sidebar");
 const sidebarClose = document.getElementById("sidebarClose");
 const header = document.querySelector("header");
 
+const setMenu = (open) => {
+    menuBtn.classList.toggle("active", open);
+    sidebar.classList.toggle("active", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("menu-open", open);
+};
+
 menuBtn.addEventListener("click", () => {
-    menuBtn.classList.toggle("active");
-    sidebar.classList.toggle("active");
-    // Toggle body scroll
-    document.body.classList.toggle("menu-open");
+    setMenu(!sidebar.classList.contains("active"));
 });
 
-// Close sidebar with close button
-sidebarClose.addEventListener("click", () => {
-    menuBtn.classList.remove("active");
-    sidebar.classList.remove("active");
-    document.body.classList.remove("menu-open");
+sidebarClose.addEventListener("click", () => setMenu(false));
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenu(false);
 });
 
-// Close sidebar when clicking on a link
 const sidebarLinks = sidebar.querySelectorAll("a");
 sidebarLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-        menuBtn.classList.remove("active");
-        sidebar.classList.remove("active");
-        document.body.classList.remove("menu-open");
-    });
+    link.addEventListener("click", () => setMenu(false));
 });
 
 // Sticky Header - Always visible

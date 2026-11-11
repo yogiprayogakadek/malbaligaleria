@@ -92,7 +92,7 @@
                 style="height: 45px; width: auto; object-fit: contain;">
         </div>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -105,17 +105,19 @@
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
-                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                @endforeach
+                @forelse ($frontendMenus as $menu)
+                    <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
             </ul>
         </nav>
 

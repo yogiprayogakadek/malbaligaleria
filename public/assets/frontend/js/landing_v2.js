@@ -47,27 +47,31 @@ const sidebar = document.getElementById("sidebar");
 const sidebarClose = document.getElementById("sidebarClose");
 const header = document.querySelector("header");
 
-menuBtn.addEventListener("click", () => {
-    menuBtn.classList.toggle("active");
-    sidebar.classList.toggle("active");
+const setMenu = (open) => {
+    menuBtn.classList.toggle("active", open);
+    sidebar.classList.toggle("active", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("menu-open", open);
+};
 
-    document.body.classList.toggle("menu-open");
+menuBtn.addEventListener("click", () => {
+    setMenu(!sidebar.classList.contains("active"));
 });
 
 
 sidebarClose.addEventListener("click", () => {
-    menuBtn.classList.remove("active");
-    sidebar.classList.remove("active");
-    document.body.classList.remove("menu-open");
+    setMenu(false);
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenu(false);
 });
 
 
 const sidebarLinks = sidebar.querySelectorAll("a");
 sidebarLinks.forEach((link) => {
     link.addEventListener("click", () => {
-        menuBtn.classList.remove("active");
-        sidebar.classList.remove("active");
-        document.body.classList.remove("menu-open");
+        setMenu(false);
     });
 });
 

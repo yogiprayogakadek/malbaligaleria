@@ -66,7 +66,7 @@
             <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -79,13 +79,13 @@
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
@@ -398,8 +398,8 @@
     <div class="tenant-modal" id="tenantModal">
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="modal-container">
-            <button class="modal-close" id="modalClose">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="modal-close" id="modalClose" aria-label="Close tenant details">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
             </button>
@@ -409,13 +409,13 @@
                     <div class="carousel-images" id="modalCarouselImages">
                         <!-- Images will be inserted here dynamically -->
                     </div>
-                    <button class="carousel-nav prev" id="modalCarouselPrev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav prev" id="modalCarouselPrev" aria-label="Previous image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="modalCarouselNext">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav next" id="modalCarouselNext" aria-label="Next image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>

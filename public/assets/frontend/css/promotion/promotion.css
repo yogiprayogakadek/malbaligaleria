@@ -524,6 +524,7 @@ body.dark-mode .sidebar-close span {
     font-weight: 400;
     transition: 0.3s;
     display: block;
+    padding: 8px 0;
     position: relative;
 }
 
@@ -549,6 +550,15 @@ body.dark-mode .sidebar nav ul li a {
 
 .sidebar nav ul li a:hover::after {
     width: 60px;
+}
+
+.sidebar nav ul li.sidebar-empty {
+    color: #5a6b7b;
+    font-size: 16px;
+}
+
+body.dark-mode .sidebar nav ul li.sidebar-empty {
+    color: #b0b8b8;
 }
 
 /* ===== DARK MODE TOGGLE ===== */
@@ -700,6 +710,15 @@ body.dark-mode .tenant-filter-sidebar {
     padding: 20px;
     max-height: calc(100vh - 300px);
     overflow-y: auto;
+}
+
+.filter-body:focus-visible {
+    outline: 2px solid #2c5f5d;
+    outline-offset: -2px;
+}
+
+body.dark-mode .filter-body:focus-visible {
+    outline-color: #f5f5dc;
 }
 
 .tenant-search-container {

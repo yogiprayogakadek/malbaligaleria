@@ -571,6 +571,15 @@
             width: 50px;
         }
 
+        .sidebar nav ul li.sidebar-empty {
+            color: #5a6b7b;
+            font-size: 16px;
+        }
+
+        body.dark-mode .sidebar nav ul li.sidebar-empty {
+            color: #b0b8b8;
+        }
+
         .dark-mode-toggle {
             position: fixed;
             bottom: 2rem;
@@ -1961,7 +1970,7 @@
             <h1>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h1>
         </div>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -1973,17 +1982,19 @@
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
-                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                @endforeach
+                @forelse ($frontendMenus as $menu)
+                    <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
             </ul>
         </nav>
 
@@ -2287,25 +2298,26 @@
         const sidebar = document.getElementById('sidebar');
         const sidebarClose = document.getElementById('sidebarClose');
 
+        const setMenu = (open) => {
+            menuBtn.classList.toggle('active', open);
+            sidebar.classList.toggle('active', open);
+            menuBtn.setAttribute('aria-expanded', String(open));
+            document.body.classList.toggle('menu-open', open);
+        };
+
         menuBtn.addEventListener('click', () => {
-            menuBtn.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            document.body.classList.toggle('menu-open');
+            setMenu(!sidebar.classList.contains('active'));
         });
 
-        sidebarClose.addEventListener('click', () => {
-            menuBtn.classList.remove('active');
-            sidebar.classList.remove('active');
-            document.body.classList.remove('menu-open');
+        sidebarClose.addEventListener('click', () => setMenu(false));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') setMenu(false);
         });
 
         const sidebarLinks = sidebar.querySelectorAll('a');
         sidebarLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuBtn.classList.remove('active');
-                sidebar.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            });
+            link.addEventListener('click', () => setMenu(false));
         });
 
         // Dark Mode Toggle

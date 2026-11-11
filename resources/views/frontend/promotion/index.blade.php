@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mal Bali Galeria | Promotions</title>
     <meta name="description"
-        content="Check out the latest promotions and exclusive deals at Mal Bali Galeria. Your premium shopping experience simplified.">
+        content="Current promotions and exclusive deals from tenants at Mal Bali Galeria.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -112,7 +112,7 @@
             </a>
         </div>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -120,22 +120,24 @@
     </header>
 
 
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar" data-lenis-prevent>
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
-                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                @endforeach
+                @forelse ($frontendMenus as $menu)
+                    <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
             </ul>
         </nav>
     </div>
@@ -149,7 +151,7 @@
                 <span class="promo-hero-eyebrow">Mal Bali Galeria</span>
                 <h1 class="promo-hero-title">Promotions</h1>
                 <p class="promo-hero-subtitle">
-                    {{ $setting->payload['page_subtitle'] ?? 'Discover amazing deals and offers from our tenants' }}
+                    {{ $setting->payload['page_subtitle'] ?? 'Current deals and offers from tenants at Mal Bali Galeria' }}
                 </p>
                 <a href="{{ route('frontend.landing') }}" class="promo-hero-back">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -165,7 +167,7 @@
             {{-- Remove old header because now using hero banner above --}}
             <div class="promotion-layout">
 
-                <aside class="tenant-filter-sidebar">
+                <aside class="tenant-filter-sidebar" data-lenis-prevent>
                     <div class="filter-header">
                         <button class="mobile-filter-close-btn" id="mobileFilterCloseBtn" aria-label="Close Filter">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -182,7 +184,8 @@
                         </h3>
                         <p>Select a tenant to view their promotions</p>
                     </div>
-                    <div class="filter-body">
+                    <div class="filter-body" data-lenis-prevent tabindex="0" role="region"
+                        aria-label="Tenant filters">
 
                         <div class="category-filter-section">
                             <h4 class="filter-section-title">
@@ -348,8 +351,8 @@
     <div class="tenant-modal" id="promotionModal">
         <div class="modal-overlay" id="modalOverlay"></div>
         <div class="modal-container">
-            <button class="modal-close" id="modalClose">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="modal-close" id="modalClose" aria-label="Close promotion details">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
             </button>
@@ -359,13 +362,15 @@
                     <div class="carousel-images" id="modalCarouselImages">
 
                     </div>
-                    <button class="carousel-nav prev" id="modalCarouselPrev" style="display: none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav prev" id="modalCarouselPrev" aria-label="Previous image"
+                        style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="modalCarouselNext" style="display: none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav next" id="modalCarouselNext" aria-label="Next image"
+                        style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
@@ -634,8 +639,8 @@
         <div class="share-menu-container">
             <div class="share-menu-header">
                 <h4 id="shareMenuTitle">Share Content</h4>
-                <button class="share-menu-close"
-                    onclick="document.getElementById('shareMenu').classList.remove('active')">×</button>
+                <button class="share-menu-close" aria-label="Close share menu"
+                    onclick="document.getElementById('shareMenu').classList.remove('active')">&times;</button>
             </div>
             <div class="share-menu-body">
                 <button class="share-option" id="shareCopyLink" onclick="shareContent('copy')">

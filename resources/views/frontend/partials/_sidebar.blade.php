@@ -13,7 +13,7 @@
     <nav>
         <ul>
             @foreach ($frontendMenus as $menu)
-                <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
+                <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
             @endforeach
         </ul>
     </nav>

@@ -240,7 +240,7 @@
             </a>
         </div>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -254,26 +254,28 @@
             <h4>Success</h4>
             <p>Action completed successfully</p>
         </div>
-        <button class="toastr-close" id="toastrClose">×</button>
+        <button class="toastr-close" id="toastrClose" aria-label="Dismiss notification">&times;</button>
     </div>
 
 
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar" data-lenis-prevent>
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
-                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                @endforeach
+                @forelse ($frontendMenus as $menu)
+                    <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
                 @role(['admin', 'superuser'])
                     <li><a href="#" onclick="event.preventDefault(); enableCoordinatePicker();">📍 Get Coordinates</a></li>
                 @endrole
@@ -317,7 +319,7 @@
 
             <div class="content-layout">
 
-                <aside class="filter-sidebar">
+                <aside class="filter-sidebar" data-lenis-prevent>
                     <div class="filter-header">
                         <h3>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -593,7 +595,7 @@
                     <h2>MAP Tenant List</h2>
                     <div class="header-line"></div>
                 </div>
-                <div class="flyer-image-wrapper">
+                <div class="flyer-image-wrapper" data-lenis-prevent>
                     <img src="{{ asset('assets/images/flyers/map_tenant_list.png') }}" alt="MAP Tenant List Flyer">
                 </div>
             </div>
@@ -655,13 +657,13 @@
 
                     </div>
 
-                    <button class="carousel-nav prev" id="modalCarouselPrev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav prev" id="modalCarouselPrev" aria-label="Previous image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="modalCarouselNext">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav next" id="modalCarouselNext" aria-label="Next image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
@@ -802,7 +804,7 @@
                 </svg>
             </button>
         </div>
-        <div class="recent-searches-list" id="recentSearchesList">
+        <div class="recent-searches-list" id="recentSearchesList" data-lenis-prevent>
 
         </div>
     </div>
@@ -814,8 +816,8 @@
         <div class="share-menu-container">
             <div class="share-menu-header">
                 <h4>Share Store</h4>
-                <button class="share-menu-close"
-                    onclick="document.getElementById('shareMenu').classList.remove('active')">×</button>
+                <button class="share-menu-close" aria-label="Close share menu"
+                    onclick="document.getElementById('shareMenu').classList.remove('active')">&times;</button>
             </div>
             <div class="share-menu-body">
                 <button class="share-option" id="shareCopyLink">

@@ -42,7 +42,7 @@
                 <ul class="footer-links">
                     @foreach ($frontendMenus as $menu)
                         @if ($menu->name !== 'Dashboard')
-                            <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
+                            <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
                         @endif
                     @endforeach
                 </ul>

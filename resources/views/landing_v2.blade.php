@@ -172,29 +172,31 @@
             </a>
         </div>
 
-        <button class="menu-btn" id="menuBtn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
         </button>
     </header>
 
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar" data-lenis-prevent>
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
 
-        <button class="sidebar-close" id="sidebarClose">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
-                    <li><a href="{{ url($menu->url) }}">{{ $menu->name }}</a></li>
-                @endforeach
+                @forelse ($frontendMenus as $menu)
+                    <li><a href="{{ $menu->link }}">{{ $menu->name }}</a></li>
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
             </ul>
         </nav>
 
@@ -230,7 +232,7 @@
             <a href="{{ route('frontend.directory.index') }}" style="text-decoration: none;">
                 <button class="explore-btn">
                     <span class="arrow">&rarr;</span>
-                    <span class="text">Explore malbaligaleria</span>
+                    <span class="text">Browse the tenant directory</span>
                 </button>
             </a>
         </div>
@@ -258,7 +260,7 @@
                     comes to life. As the island's pioneer of premium retail concepts, the mall continues to set the
                     standard for trendsetting brands, exciting experiences, and unforgettable moments.
                     With its signature motto, Enjoy Play Eat Shop, Mal Bali Galeria is more than a shopping
-                    destination, it's a lifestyle playground. From fashion, forward retail and curated dining spots to
+                    destination: it's a lifestyle playground. From fashion-forward retail and curated dining spots to
                     thrilling, high-energy events that light up the calendar, there's always something happening.
                     Designed as a dynamic Family Mall, it's the place where friends gather, families connect, cultures
                     meet, and excitement never stops. Every visit brings new discoveries, fresh flavors, and vibrant
@@ -268,7 +270,7 @@
 
             <div class="info-grid">
                 <div class="info-item">
-                    <h3>Open Hour</h3>
+                    <h3>Opening Hours</h3>
                     <p>10AM - 10PM (Daily)</p>
                 </div>
                 <div class="info-item">
@@ -325,7 +327,7 @@
         <div class="experience-container">
             <div class="experience-header">
                 <h2>What's On at MBG</h2>
-                <p class="experience-subtitle">From exciting events to brand-new stores - there's always
+                <p class="experience-subtitle">From exciting events to brand-new stores, there's always
                     something
                     happening.</p>
                 <div class="header-divider"></div>
@@ -426,7 +428,7 @@
                                     <p class="event-desc">
                                         {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                     </p>
-                                    <span class="event-link">Learn More &rarr;</span>
+                                    <span class="event-link">View event details</span>
                                 </div>
                             </div>
                         @endforeach
@@ -445,7 +447,7 @@
     <section class="event-section reveal" id="events">
         <div class="event-container">
             <h2>Upcoming Events</h2>
-            <p class="event-subtitle">Don't miss out - explore what's coming up at Mal Bali Galeria</p>
+            <p class="event-subtitle">Don't miss what's coming up at Mal Bali Galeria</p>
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="eventGrid">
                     @forelse ($events as $event)
@@ -485,7 +487,7 @@
                                 <p class="event-desc">
                                     {{ strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
-                                <span class="event-link">Learn More &rarr;</span>
+                                <span class="event-link">View event details</span>
                             </div>
                         </div>
                     @empty
@@ -518,7 +520,7 @@
     <section class="event-section reveal" id="exhibition">
         <div class="event-container">
             <h2>Exhibition</h2>
-            <p class="event-subtitle">Discover exclusive exhibitions and unique experiences at Mal Bali Galeria</p>
+            <p class="event-subtitle">Exclusive exhibitions and one-off experiences at Mal Bali Galeria</p>
             <div class="event-slider-wrapper">
                 <div class="event-grid" id="exhibitionGrid">
                     @forelse ($exhibitionEvents ?? [] as $exEvent)
@@ -555,7 +557,7 @@
                                 <p class="event-desc">
                                     {{ $exEvent && isset($exEvent->start_date) ? strtoupper(\Carbon\Carbon::parse($exEvent->start_date)->format('F Y')) : strtoupper(\Carbon\Carbon::now()->format('F Y')) }}
                                 </p>
-                                <span class="event-link">Learn More &rarr;</span>
+                                <span class="event-link">View exhibition details</span>
                             </div>
                         </div>
                     @empty
@@ -721,7 +723,7 @@
             </div>
             <div class="map-wrapper">
                 <div class="map-display">
-                    <div class="visual-map-container" id="visualMapContainer" style="display: none;">
+                    <div class="visual-map-container" id="visualMapContainer" data-lenis-prevent style="display: none;">
                         <img id="visualMapImage" src="" alt="Mall Map">
                         <div id="mapMarker" class="map-marker" style="display: none;">
                             <div class="marker-pin"></div>
@@ -758,7 +760,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="map-floors" id="mapFloors">
+                <div class="map-floors" id="mapFloors" data-lenis-prevent>
                     <div class="floor-list-wrapper" id="floorListWrapper">
                         <div class="floor-item active">
                             <h4>Level 1</h4>
@@ -855,13 +857,13 @@
 
                     </div>
 
-                    <button class="carousel-nav prev" id="modalCarouselPrev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav prev" id="modalCarouselPrev" aria-label="Previous image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="modalCarouselNext">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav next" id="modalCarouselNext" aria-label="Next image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
@@ -970,7 +972,7 @@
                 </svg>
             </button>
 
-            <div class="event-modal-content">
+            <div class="event-modal-content" data-lenis-prevent>
                 <div class="event-modal-carousel">
                     <div class="carousel-swipe-hint" id="eventModalCarouselSwipeHint">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -986,13 +988,13 @@
                         <!-- Dynamic images -->
                     </div>
 
-                    <button class="carousel-nav prev" id="eventModalCarouselPrev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav prev" id="eventModalCarouselPrev" aria-label="Previous image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
-                    <button class="carousel-nav next" id="eventModalCarouselNext">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="carousel-nav next" id="eventModalCarouselNext" aria-label="Next image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
@@ -1148,8 +1150,8 @@
         <div class="share-menu-container">
             <div class="share-menu-header">
                 <h4 id="shareMenuTitle">Share Content</h4>
-                <button class="share-menu-close"
-                    onclick="document.getElementById('shareMenu').classList.remove('active')">Ã—</button>
+                <button class="share-menu-close" aria-label="Close share menu"
+                    onclick="document.getElementById('shareMenu').classList.remove('active')">&times;</button>
             </div>
             <div class="share-menu-body">
                 <button class="share-option" id="shareCopyLink">

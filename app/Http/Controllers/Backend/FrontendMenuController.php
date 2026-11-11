@@ -53,6 +53,35 @@ class FrontendMenuController extends Controller
     }
 
     /**
+     * Show the form for creating a new frontend menu.
+     */
+    public function create()
+    {
+        $roles = Role::all();
+        $nextOrder = (int) FrontendMenu::max('order') + 1;
+
+        return view('backend.admin.menu.create', compact('roles', 'nextOrder'));
+    }
+
+    /**
+     * Store a newly created frontend menu.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate($this->rules());
+
+        FrontendMenu::create([
+            'name' => $validated['name'],
+            'url' => $validated['url'],
+            'is_active' => $validated['is_active'] == '1',
+            'roles' => $validated['roles'] ?? null,
+            'order' => $validated['order'] ?? ((int) FrontendMenu::max('order') + 1),
+        ]);
+
+        return redirect()->route('admin.menu.index')->with('success', 'Frontend menu created successfully.');
+    }
+
+    /**
      * Show the form for editing the specified frontend menu.
      */
     public function edit($id)
@@ -70,18 +99,41 @@ class FrontendMenuController extends Controller
     {
         $menu = FrontendMenu::findOrFail($id);
 
-        $request->validate([
-            'is_active' => 'required|in:0,1',
-            'roles' => 'nullable|array',
-            'roles.*' => 'string|exists:roles,name',
-        ]);
+        $validated = $request->validate($this->rules());
 
         $menu->update([
-            'is_active' => $request->is_active == '1',
-            'roles' => $request->roles,
+            'name' => $validated['name'],
+            'url' => $validated['url'],
+            'is_active' => $validated['is_active'] == '1',
+            'roles' => $validated['roles'] ?? null,
+            'order' => $validated['order'] ?? $menu->order,
         ]);
 
         return redirect()->route('admin.menu.index')->with('success', 'Frontend menu updated successfully.');
+    }
+
+    /**
+     * Validation rules for create/update.
+     */
+    private function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'url' => [
+                'required',
+                'string',
+                'max:2048',
+                function ($attribute, $value, $fail) {
+                    if (!preg_match('#^(https?://|/|\#)#i', $value)) {
+                        $fail('The URL must be an external http(s) URL, an internal path starting with /, or an anchor starting with #.');
+                    }
+                },
+            ],
+            'order' => 'nullable|integer|min:0',
+            'is_active' => 'required|in:0,1',
+            'roles' => 'nullable|array',
+            'roles.*' => 'string|exists:roles,name',
+        ];
     }
 
     /**

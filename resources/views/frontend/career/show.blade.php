@@ -51,23 +51,26 @@
                 <img src="{{ asset('assets/images/default/mbg.png') }}" alt="Mal Bali Galeria" class="header-main-logo" style="height: 45px; width: auto; object-fit: contain;">
             </a>
         </div>
-        <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar"
+            aria-expanded="false"><span></span><span></span><span></span></button>
     </header>
 
     {{-- Sidebar --}}
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar" data-lenis-prevent>
         <div class="sidebar-logo"><h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2></div>
-        <button class="sidebar-close" id="sidebarClose"><span></span><span></span><span></span></button>
-        <nav>
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu"><span></span><span></span><span></span></button>
+        <nav aria-label="Main navigation">
             <ul>
-                @foreach ($frontendMenus as $menu)
+                @forelse ($frontendMenus as $menu)
                     <li>
-                        <a href="{{ url($menu->url) }}" 
-                           class="{{ request()->url() == url($menu->url) ? 'active-nav' : '' }}">
+                        <a href="{{ $menu->link }}" 
+                           class="{{ request()->url() == $menu->link ? 'active-nav' : '' }}">
                             {{ $menu->name }}
                         </a>
                     </li>
-                @endforeach
+                @empty
+                    <li class="sidebar-empty">No menu items available</li>
+                @endforelse
             </ul>
         </nav>
         <div class="sidebar-search">
@@ -325,8 +328,8 @@
     <div class="apply-modal" id="applyModal" data-lenis-prevent>
         <div class="apply-modal-header">
             <h3>Submit Application</h3>
-            <button class="apply-modal-close" id="closeApplyModal">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <button class="apply-modal-close" id="closeApplyModal" aria-label="Close application form">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
         <div class="apply-modal-body">
@@ -394,8 +397,8 @@
     <div class="apply-modal" id="flyerModal" data-lenis-prevent style="max-width: 620px; border-radius: 24px; overflow: hidden; background: var(--card-bg);">
         <div class="apply-modal-header" style="border-bottom: none; padding: 22px 28px; position: sticky; top: 0; background: var(--card-bg); z-index: 10; display: flex; justify-content: space-between; align-items: center;">
             <h3 style="font-family:var(--font-display); font-size:1.35rem; font-weight:700; color:var(--text-primary); margin:0;">Job Flyer</h3>
-            <button class="apply-modal-close" id="closeFlyerModal">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <button class="apply-modal-close" id="closeFlyerModal" aria-label="Close job flyer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
         <div class="apply-modal-body" style="padding: 0 28px 28px; max-height: calc(85vh - 72px); overflow-y: auto;">
