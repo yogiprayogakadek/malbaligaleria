@@ -90,7 +90,7 @@ class DirectoryController extends Controller
         // });
 
         $tenants = $this->tenantService->getTenantsWithRelationshipAndCondition(
-            ['id', 'name', 'category_id', 'type', 'map_coords', 'path_coords', 'map_original_size', 'logo', 'description'],
+            ['id', 'name', 'category_id', 'type', 'map_coords', 'path_coords', 'map_original_size', 'logo', 'description', 'isNew', 'launched_at', 'created_at'],
             [
                 'category:id,name',
                 'albumPhoto:id,tenant_id,path',
@@ -122,12 +122,21 @@ class DirectoryController extends Controller
                 ->values()
                 ->all();
 
+            $isNew = (bool) $data['isNew'];
+            $floorId = isset($data['map_coords']['floor']) ? (int) $data['map_coords']['floor'] : null;
+            $newStoreDate = $data['launched_at'] ?? $data['created_at'];
+
             $tenantData = [
                 'id' => $data['id'],
                 'name' => $data['name'],
                 'type' => $data['type'],
                 'category' => $data['category']['name'] ?? 'Gate',
-                'floor' => $data['map_coords']['floor'] == 1 ? '1st Floor' : '2nd Floor',
+                'floor' => $floorId === 1 ? '1st Floor' : '2nd Floor',
+                'floor_id' => $floorId,
+                'isNew' => $isNew,
+                'new_store_until' => $isNew && $newStoreDate
+                    ? $newStoreDate->copy()->addDays(7)->toIso8601String()
+                    : null,
                 'unit' => $data['map_coords']['unit'] ?? '-',
                 'logo' => $logoUrl,
                 'hours' => "10:00 AM - 10:00 PM",

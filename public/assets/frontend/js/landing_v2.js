@@ -803,8 +803,9 @@ if (footer) {
 }
 
 
-// Global cache for tenant search (1st and 2nd floor only)
+// Global cache for tenant search
 let allTenantsCache = {
+    "All": [],
     "1st Floor": [],
     "2nd Floor": [],
     "New Store": [],
@@ -815,15 +816,15 @@ async function fetchAllTenantsForSearch() {
     if (allTenantsCache.loaded) return;
 
     try {
-        const [floor1, floor2, newStore] = await Promise.all([
-            loadTenantsOnDatabase("1st Floor", false),
-            loadTenantsOnDatabase("2nd Floor", false),
-            loadTenantsOnDatabase("New Store", true)
-        ]);
+        const tenants = (await $.get(window.location.origin + "/directory/tenants")) || [];
+        const now = Date.now();
 
-        allTenantsCache["1st Floor"] = floor1 || [];
-        allTenantsCache["2nd Floor"] = floor2 || [];
-        allTenantsCache["New Store"] = newStore || [];
+        allTenantsCache["All"] = tenants;
+        allTenantsCache["1st Floor"] = tenants.filter(t => t.floor_id === 1);
+        allTenantsCache["2nd Floor"] = tenants.filter(t => t.floor_id === 2);
+        allTenantsCache["New Store"] = tenants.filter(t =>
+            t.isNew && t.new_store_until && new Date(t.new_store_until).getTime() > now
+        );
         allTenantsCache.loaded = true;
     } catch (error) {
         console.error("Failed to fetch all tenants for search", error);
@@ -861,33 +862,21 @@ window.addEventListener("load", () => {
 
 
 
-async function loadTenantsOnDatabase(floor, isNew = false) {
-    try {
-        const data = await $.get(window.location.origin + "/tenants/" + floor + '/' + isNew);
-        return data;
-    } catch (error) {
-        console.error("Failed to load data", error);
-        return [];
-    }
-}
-
 async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
-    // Try to get from cache first for performance
+    if (!allTenantsCache.loaded) {
+        await fetchAllTenantsForSearch();
+    }
+
+    const newStoreView = isNew || floor === "New Store";
     let tenantData = [];
-    
+
     if (floor === "Favorites") {
         const favoriteUnits = JSON.parse(localStorage.getItem('mall_favorites') || '[]')
                                   .map(u => u.trim());
-        // We need all tenants to filter by unit. If cache is not loaded, we have to fetch or wait.
-        if (!allTenantsCache.loaded) {
-            await fetchAllTenantsForSearch();
-        }
-        tenantData = [...allTenantsCache["1st Floor"], ...allTenantsCache["2nd Floor"], ...allTenantsCache["New Store"]]
+        tenantData = allTenantsCache["All"]
                         .filter(t => t && t.unit && favoriteUnits.includes(t.unit.trim()));
-    } else if (!isNew && allTenantsCache.loaded && allTenantsCache[floor]) {
-        tenantData = allTenantsCache[floor];
     } else {
-        tenantData = await loadTenantsOnDatabase(floor, isNew);
+        tenantData = allTenantsCache[newStoreView ? "New Store" : floor] || [];
     }
 
     const grid = document.getElementById("landingTenantGrid");
@@ -926,7 +915,7 @@ async function renderLandingTenants(floor, isNew = false, searchQuery = "") {
                         <img src="${tenant.logo}" alt="${tenant.name}" loading="lazy" onerror="this.src='/assets/images/no_image.jpg'">
                     </div>
                     <div class="tenant-info">
-                        <span class="floor-badge">${tenant.floor}</span>
+                        <span class="floor-badge">${newStoreView ? "New Store" : tenant.floor}</span>
                         <h3>${tenant.name}</h3>
                         <p class="tenant-category">
                             <svg viewBox="0 0 24 24">
@@ -1043,6 +1032,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let currentFloor = "";
                 if (currentFloorText.includes("1st") || currentFloorText.includes("Level 1")) currentFloor = "1st Floor";
                 else if (currentFloorText.includes("2nd") || currentFloorText.includes("Level 2")) currentFloor = "2nd Floor";
+                else if (currentFloorText.includes("New Store")) currentFloor = "New Store";
 
                 // Ensure cache is loaded before global search
                 if (!allTenantsCache.loaded) {
@@ -2055,15 +2045,7 @@ async function drawGates(floorId) {
         await fetchAllTenantsForSearch();
     }
 
-    // Search gates across ALL cache buckets (1st Floor, 2nd Floor, New Store)
-    // A gate may be miscategorised as isNew=true in the DB and land in the "New Store"
-    // bucket instead of the expected floor bucket. We guard against this by checking
-    // every bucket and matching on the gate's own `floor` field.
-    const allCachedTenants = [
-        ...(allTenantsCache["1st Floor"] || []),
-        ...(allTenantsCache["2nd Floor"] || []),
-        ...(allTenantsCache["New Store"] || []),
-    ];
+    const allCachedTenants = allTenantsCache["All"] || [];
     const gates = allCachedTenants.filter(t => t.type === 'gate' && t.floor === floorName);
 
     // Diagnostic log
