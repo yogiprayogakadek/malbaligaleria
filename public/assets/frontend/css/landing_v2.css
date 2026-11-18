@@ -763,6 +763,10 @@ body.dark-mode .menu-btn.active span {
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
 }
 
+.sidebar.sidebar-no-search {
+    padding-bottom: 40px;
+}
+
 body.dark-mode .sidebar {
     background: rgba(26, 26, 26, 0.98);
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);

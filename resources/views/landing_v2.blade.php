@@ -179,7 +179,7 @@
         </button>
     </header>
 
-    <div class="sidebar" id="sidebar" data-lenis-prevent>
+    <div class="sidebar sidebar-no-search" id="sidebar" data-lenis-prevent>
         <div class="sidebar-logo">
             <h2>Mal Bali Galeria<span>Enjoy, Play, Eat, Shop</span></h2>
         </div>
@@ -199,19 +199,6 @@
                 @endforelse
             </ul>
         </nav>
-
-        <div class="sidebar-search">
-            <form action="{{ route('frontend.directory.index') }}" method="GET" id="sidebarSearchForm">
-                <div class="search-bar">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="8" stroke-width="2" />
-                        <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                    <input type="text" name="search" id="sidebarSearchInput" placeholder="Search tenants..."
-                        autocomplete="off">
-                </div>
-            </form>
-        </div>
     </div>
 
     <section class="hero" id="home">
