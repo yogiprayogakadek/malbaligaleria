@@ -48,4 +48,13 @@ Route::name('frontend.')->group(function () {
     Route::prefix('/gallery')->name('gallery.')->group(function () {
         Route::get('/', [FrontendGalleryController::class, 'index'])->name('index');
     });
+
+    Route::controller(\App\Http\Controllers\Frontend\PetPollController::class)
+        ->prefix('/survei-pet-friendly')
+        ->name('pet-poll.')
+        ->group(function () {
+            Route::get('/', 'show')->name('show');
+            Route::get('/tenants', 'searchTenants')->name('tenants');
+            Route::post('/', 'submit')->name('submit');
+        });
 });
