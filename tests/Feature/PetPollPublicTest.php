@@ -35,4 +35,23 @@ class PetPollPublicTest extends TestCase
             ->assertOk()
             ->assertSee('Survei belum tersedia.');
     }
+
+    public function test_tenant_search_only_returns_active_tenants(): void
+    {
+        $category = Category::create(['name' => 'Fashion', 'color_zone' => 'red', 'is_active' => true]);
+        Tenant::create(['category_id' => $category->id, 'type' => 'tenant', 'name' => 'Bali Collection', 'is_active' => true]);
+        Tenant::create(['category_id' => $category->id, 'type' => 'tenant', 'name' => 'Bali Inactive', 'is_active' => false]);
+        Tenant::create(['category_id' => $category->id, 'type' => 'island', 'name' => 'Bali Island', 'is_active' => true]);
+
+        $response = $this->getJson(route('frontend.pet-poll.tenants', ['q' => 'Bali']))
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonFragment(['name' => 'Bali Collection']);
+    }
+
+    public function test_tenant_search_requires_two_characters(): void
+    {
+        $this->getJson(route('frontend.pet-poll.tenants', ['q' => 'a']))
+            ->assertStatus(422);
+    }
 }

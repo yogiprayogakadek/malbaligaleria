@@ -36,7 +36,19 @@ class PetPollController extends Controller
 
     public function searchTenants(Request $request)
     {
-        return response()->json([]);
+        $validated = $request->validate([
+            'q' => ['required', 'string', 'min:2', 'max:80'],
+        ]);
+
+        $tenants = $this->petPollService->searchTenants($validated['q'])->map(function ($tenant) {
+            return [
+                'id' => $tenant->id,
+                'name' => $tenant->name,
+                'category' => $tenant->category ? $tenant->category->name : null,
+            ];
+        });
+
+        return response()->json($tenants);
     }
 
     public function submit(Request $request)

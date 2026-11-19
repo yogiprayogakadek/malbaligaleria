@@ -15,4 +15,16 @@ class PetPollService
     {
         return PetPoll::query()->latest('id')->first();
     }
+
+    public function searchTenants(string $query): Collection
+    {
+        return Tenant::query()
+            ->with('category:id,name')
+            ->where('is_active', true)
+            ->where('type', 'tenant')
+            ->where('name', 'like', '%' . $query . '%')
+            ->orderBy('name')
+            ->limit(20)
+            ->get(['id', 'name', 'category_id']);
+    }
 }
