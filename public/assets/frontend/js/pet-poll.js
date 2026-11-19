@@ -205,24 +205,73 @@
 
     var btnCopy = document.getElementById('btnCopyEditLink');
     var editInput = document.getElementById('editUrlInput');
-    if (btnCopy && editInput) {
+    var copyStatus = document.getElementById('copyStatus');
+    var copyLabel = btnCopy ? btnCopy.querySelector('.btn-copy-label') : null;
+    var copyResetTimer = null;
+
+    if (btnCopy && editInput && copyLabel) {
         btnCopy.addEventListener('click', function () {
             var url = editInput.value;
+
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(onCopied);
+                navigator.clipboard.writeText(url).then(onCopied).catch(function () {
+                    legacyCopy();
+                });
             } else {
-                editInput.select();
-                document.execCommand('copy');
-                onCopied();
+                legacyCopy();
             }
         });
 
+        function legacyCopy() {
+            var copied = false;
+            editInput.select();
+
+            try {
+                copied = document.execCommand('copy');
+            } catch (error) {
+                copied = false;
+            }
+
+            if (copied) {
+                onCopied();
+            } else {
+                onCopyFailed();
+            }
+        }
+
+        function setButtonState(state, label) {
+            window.clearTimeout(copyResetTimer);
+            btnCopy.classList.remove('is-copied', 'is-copy-failed');
+
+            if (state) {
+                btnCopy.classList.add(state);
+            }
+
+            copyLabel.textContent = label;
+
+            if (copyStatus) {
+                copyStatus.textContent = state === 'is-copied'
+                    ? 'Tautan edit berhasil disalin.'
+                    : 'Tautan edit gagal disalin. Pilih tautan lalu salin manual.';
+            }
+
+            if (state) {
+                copyResetTimer = window.setTimeout(function () {
+                    btnCopy.classList.remove(state);
+                    copyLabel.textContent = 'Salin tautan';
+                    if (copyStatus) {
+                        copyStatus.textContent = '';
+                    }
+                }, 2400);
+            }
+        }
+
         function onCopied() {
-            var original = btnCopy.textContent;
-            btnCopy.textContent = 'Tersalin!';
-            setTimeout(function () {
-                btnCopy.textContent = original;
-            }, 2000);
+            setButtonState('is-copied', 'Tersalin');
+        }
+
+        function onCopyFailed() {
+            setButtonState('is-copy-failed', 'Pilih manual');
         }
     }
 })();

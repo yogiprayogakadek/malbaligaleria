@@ -89,7 +89,17 @@
                             <span class="detail-label" style="text-align: left;">Tautan Rahasia Ubah Jawaban</span>
                             <div class="copy-input-group">
                                 <input type="text" readonly class="input-text" id="editUrlInput" value="{{ $response->edit_url }}">
-                                <button type="button" class="btn-copy-link" id="btnCopyEditLink">Salin tautan</button>
+                                <button type="button" class="btn-copy-link" id="btnCopyEditLink">
+                                    <svg class="btn-copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                        <rect x="9" y="9" width="12" height="12" rx="2"></rect>
+                                        <path d="M5 15V5a2 2 0 0 1 2-2h8"></path>
+                                    </svg>
+                                    <svg class="btn-copy-check" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                        <path d="M20 6 9 17l-5-5"></path>
+                                    </svg>
+                                    <span class="btn-copy-label">Salin tautan</span>
+                                </button>
+                                <span class="visually-hidden" role="status" aria-live="polite" id="copyStatus"></span>
                             </div>
                             <p class="step-helper" style="text-align: left; margin-top: 8px; font-size: 12px;">
                                 Simpan tautan ini untuk mengubah keputusan jika diperlukan sebelum survei ditutup.
