@@ -204,4 +204,41 @@ class PetPollAdminTest extends TestCase
             ->assertOk()
             ->assertSee('Pet Poll');
     }
+
+    public function test_admin_can_update_sender_email_and_sender_name(): void
+    {
+        $poll = PetPoll::create([
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Pertanyaan?',
+            'pet_scope' => 'Cakupan.',
+            'is_open' => true,
+        ]);
+
+        $this->actingAs($this->admin)->put(route('admin.pet-poll.settings.update'), [
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Pertanyaan?',
+            'pet_scope' => 'Cakupan.',
+            'sender_email' => 'cs@malbaligaleria.com',
+            'sender_name' => 'CS MBG',
+            'closes_at' => null,
+        ])->assertRedirect(route('admin.pet-poll.settings'));
+
+        $poll->refresh();
+        $this->assertSame('cs@malbaligaleria.com', $poll->sender_email);
+        $this->assertSame('CS MBG', $poll->sender_name);
+    }
+
+    public function test_admin_can_reset_poll_responses(): void
+    {
+        [$poll, $allowed, $denied] = $this->makePollWithAnswers();
+
+        $this->assertSame(2, PetPollResponse::where('pet_poll_id', $poll->id)->count());
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.pet-poll.reset'))
+            ->assertRedirect(route('admin.pet-poll.index'))
+            ->assertSessionHas('success');
+
+        $this->assertSame(0, PetPollResponse::where('pet_poll_id', $poll->id)->count());
+    }
 }

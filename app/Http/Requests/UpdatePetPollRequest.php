@@ -18,6 +18,8 @@ class UpdatePetPollRequest extends FormRequest
             'title' => ['required', 'string', 'max:80'],
             'question' => ['required', 'string', 'max:200'],
             'pet_scope' => ['required', 'string', 'max:300'],
+            'sender_email' => ['nullable', 'email', 'max:150'],
+            'sender_name' => ['nullable', 'string', 'max:100'],
             'closes_at' => ['nullable', 'date'],
         ];
     }
@@ -43,6 +45,9 @@ class UpdatePetPollRequest extends FormRequest
             'question.max' => 'Pertanyaan maksimal 200 karakter.',
             'pet_scope.required' => 'Cakupan pet wajib diisi.',
             'pet_scope.max' => 'Cakupan pet maksimal 300 karakter.',
+            'sender_email.email' => 'Format email pengirim tidak valid.',
+            'sender_email.max' => 'Email pengirim maksimal 150 karakter.',
+            'sender_name.max' => 'Nama pengirim maksimal 100 karakter.',
             'closes_at.date' => 'Format tenggat waktu tidak valid.',
         ];
     }

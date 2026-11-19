@@ -173,4 +173,9 @@ class PetPollService
     {
         return PetPollResponse::query()->where('pet_poll_id', $poll->id)->exists();
     }
+
+    public function resetResponses(PetPoll $poll): int
+    {
+        return PetPollResponse::query()->where('pet_poll_id', $poll->id)->delete();
+    }
 }

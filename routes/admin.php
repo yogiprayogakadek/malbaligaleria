@@ -61,6 +61,7 @@ Route::controller(AdminDashboardController::class)
                     Route::get('/settings', 'settings')->name('settings');
                     Route::put('/settings', 'updateSettings')->name('settings.update');
                     Route::post('/status', 'toggleStatus')->name('status');
+                    Route::post('/reset', 'resetResponses')->name('reset');
                 });
 
             // User (RESTRICTED TO SUPERUSER)

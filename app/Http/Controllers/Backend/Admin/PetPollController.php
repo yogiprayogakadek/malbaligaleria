@@ -84,9 +84,11 @@ class PetPollController extends Controller
         $attemptedScopeChange = ($data['pet_scope'] !== $poll->pet_scope);
 
         if ($hasResponses && ($attemptedQuestionChange || $attemptedScopeChange)) {
-            // Simpan hanya title & closes_at, tolak pertanyaan & cakupan
+            // Simpan title, sender_email, sender_name, & closes_at, tolak pertanyaan & cakupan
             $poll->update([
                 'title' => $data['title'],
+                'sender_email' => $data['sender_email'] ?? null,
+                'sender_name' => $data['sender_name'] ?? null,
                 'closes_at' => $data['closes_at'],
             ]);
 
@@ -95,12 +97,26 @@ class PetPollController extends Controller
                 ->withErrors([
                     'question' => 'Pertanyaan dan cakupan pet terkunci karena sudah ada jawaban dari tenant.',
                 ])
-                ->with('success', 'Judul dan tenggat waktu berhasil diperbarui, namun pertanyaan tetap terkunci.');
+                ->with('success', 'Judul, email pengirim, dan tenggat waktu berhasil diperbarui, namun pertanyaan tetap terkunci.');
         }
 
         $poll->update($data);
 
         return redirect()->route('admin.pet-poll.settings')->with('success', 'Pengaturan survei berhasil disimpan.');
+    }
+
+    public function resetResponses(Request $request)
+    {
+        $poll = $this->petPollService->current();
+        if (!$poll) {
+            return redirect()->route('admin.pet-poll.index')->with('error', 'Survei tidak ditemukan.');
+        }
+
+        $count = $this->petPollService->resetResponses($poll);
+
+        return redirect()
+            ->route('admin.pet-poll.index')
+            ->with('success', "Berhasil mengosongkan {$count} hasil survei. Seluruh data jawaban uji coba telah dibersihkan.");
     }
 
     public function toggleStatus(Request $request)

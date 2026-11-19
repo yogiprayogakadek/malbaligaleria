@@ -210,4 +210,29 @@ class PetPollPublicTest extends TestCase
         $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $island->id, 'allows_pets' => 1])
             ->assertSessionHasErrors('tenant_id');
     }
+
+    public function test_mailable_uses_custom_sender_address_when_configured(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+        $poll->update([
+            'sender_email' => 'custom-sender@mbg.com',
+            'sender_name' => 'Custom MBG Team',
+        ]);
+
+        $response = PetPollResponse::create([
+            'pet_poll_id' => $poll->id,
+            'tenant_id' => $tenant->id,
+            'allows_pets' => true,
+            'email' => 'tenant@store.com',
+            'edit_token' => 'abc-token',
+            'responded_at' => now(),
+        ]);
+
+        $mailable = new \App\Mail\PetPollEditLinkMail($response);
+        $envelope = $mailable->envelope();
+
+        $this->assertNotNull($envelope->from);
+        $this->assertSame('custom-sender@mbg.com', $envelope->from->address);
+        $this->assertSame('Custom MBG Team', $envelope->from->name);
+    }
 }

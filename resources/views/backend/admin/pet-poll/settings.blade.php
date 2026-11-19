@@ -137,6 +137,55 @@
                     @enderror
                 </div>
 
+                <hr class="my-4">
+
+                {{-- Konfigurasi Pengirim Email --}}
+                <h5 class="fw-semibold mb-1">Pengaturan Email Notifikasi</h5>
+                <p class="text-muted fs-2 mb-3">Tautan ubah jawaban survei akan dikirim ke PIC tenant menggunakan identitas pengirim ini.</p>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pollSenderEmail" class="form-label fw-semibold">Email Pengirim</label>
+                        <input
+                            type="email"
+                            name="sender_email"
+                            id="pollSenderEmail"
+                            class="form-control @error('sender_email') is-invalid @enderror"
+                            placeholder="contoh: tenant.relations@malbaligaleria.com"
+                            value="{{ old('sender_email', $poll->sender_email) }}"
+                            maxlength="150"
+                        >
+                        <div class="form-text">Alamat email yang tampil sebagai pengirim (From). Jika kosong, menggunakan default sistem (<code>{{ config('mail.from.address') }}</code>).</div>
+                        @error('sender_email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="pollSenderName" class="form-label fw-semibold">Nama Pengirim</label>
+                        <input
+                            type="text"
+                            name="sender_name"
+                            id="pollSenderName"
+                            class="form-control @error('sender_name') is-invalid @enderror"
+                            placeholder="contoh: Management Mal Bali Galeria"
+                            value="{{ old('sender_name', $poll->sender_name) }}"
+                            maxlength="100"
+                        >
+                        <div class="form-text">Nama pengirim yang tampil di inbox penerima. Jika kosong, menggunakan default sistem (<code>{{ config('mail.from.name') }}</code>).</div>
+                        @error('sender_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="alert alert-info py-2 px-3 fs-2 mb-4 d-flex align-items-center">
+                    <i class="ti ti-info-circle fs-5 me-2 flex-shrink-0"></i>
+                    <div>
+                        Server pengiriman email (SMTP host, port, username, password) dikonfigurasi melalui file <code>.env</code> server (driver saat ini: <strong>{{ config('mail.default') }}</strong>).
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-end gap-2">
                     <a href="{{ route('admin.pet-poll.index') }}" class="btn btn-outline-secondary">Batal</a>
                     <button type="submit" class="btn btn-primary">

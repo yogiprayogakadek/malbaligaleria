@@ -12,6 +12,8 @@ class PetPoll extends Model
         'title',
         'question',
         'pet_scope',
+        'sender_email',
+        'sender_name',
         'closes_at',
         'is_open',
         'created_by',

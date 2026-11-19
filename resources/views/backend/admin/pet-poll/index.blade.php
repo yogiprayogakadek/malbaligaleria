@@ -48,6 +48,11 @@
                 <a href="{{ route('admin.pet-poll.export', ['filter' => $filter, 'search' => $search]) }}" class="btn btn-outline-secondary">
                     <i class="ti ti-download fs-4 me-1"></i> Ekspor CSV
                 </a>
+                @if($stats['answered'] > 0)
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#resetPollModal">
+                        <i class="ti ti-trash fs-4 me-1"></i> Kosongkan Hasil
+                    </button>
+                @endif
                 <a href="{{ route('admin.pet-poll.settings') }}" class="btn btn-primary">
                     <i class="ti ti-settings fs-4 me-1"></i> Pengaturan
                 </a>
@@ -275,6 +280,38 @@
                         <i class="ti ti-plus fs-4 me-1"></i> Buat Survei Pet Friendly
                     </button>
                 </form>
+            </div>
+        </div>
+    @endif
+    @if($poll && $stats['answered'] > 0)
+        <!-- Modal Konfirmasi Kosongkan Hasil -->
+        <div class="modal fade" id="resetPollModal" tabindex="-1" aria-labelledby="resetPollModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger-subtle text-danger">
+                        <h5 class="modal-title fw-semibold" id="resetPollModalLabel">
+                            <i class="ti ti-alert-triangle fs-5 me-1"></i> Kosongkan Hasil Survei
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">
+                            Tindakan ini akan <strong>menghapus permanen seluruh {{ $stats['answered'] }} jawaban</strong> yang telah masuk dari database.
+                        </p>
+                        <p class="text-muted fs-2 mb-0">
+                            Gunakan fitur ini untuk membersihkan data hasil uji coba sebelum survei disebarkan secara resmi ke tenant. Tindakan ini tidak dapat dibatalkan.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                        <form method="POST" action="{{ route('admin.pet-poll.reset') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">
+                                <i class="ti ti-trash fs-4 me-1"></i> Ya, Kosongkan Hasil
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     @endif
