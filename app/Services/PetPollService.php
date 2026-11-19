@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\PetPollEditLinkMail;
+use App\Mail\PetPollTestMail;
 use App\Models\PetPoll;
 use App\Models\PetPollResponse;
 use App\Models\Tenant;
@@ -92,13 +93,69 @@ class PetPollService
     public function sendEditLinkEmail(PetPollResponse $response): void
     {
         try {
-            Mail::to($response->email)->send(new PetPollEditLinkMail($response));
+            $poll = $response->poll;
+            $mailer = $poll ? $this->configureMailer($poll) : null;
+
+            Mail::mailer($mailer)
+                ->to($response->email)
+                ->send(new PetPollEditLinkMail($response));
         } catch (\Throwable $e) {
             Log::warning('Pet poll confirmation email failed: ' . $e->getMessage(), [
                 'response_id' => $response->id,
                 'email' => $response->email,
             ]);
         }
+    }
+
+    public function sendTestEmail(PetPoll $poll, string $recipient): void
+    {
+        $mailer = $this->configureMailer($poll);
+
+        Mail::mailer($mailer)
+            ->to($recipient)
+            ->send(new PetPollTestMail($poll));
+    }
+
+    /**
+     * Daftarkan mailer SMTP khusus survei dari data pengaturan poll.
+     * Mengembalikan null jika SMTP khusus belum diisi, sehingga memakai
+     * mailer default aplikasi.
+     */
+    protected function configureMailer(PetPoll $poll): ?string
+    {
+        if (empty($poll->mail_host)) {
+            return null;
+        }
+
+        $scheme = match ($poll->mail_encryption) {
+            'ssl' => 'smtps',
+            'tls' => 'smtp',
+            default => null,
+        };
+
+        config([
+            'mail.mailers.pet_poll' => [
+                'transport' => 'smtp',
+                'scheme' => $scheme,
+                'host' => $poll->mail_host,
+                'port' => $poll->mail_port ?: 587,
+                'username' => $poll->mail_username,
+                'password' => $poll->mail_password,
+                'timeout' => 15,
+                'local_domain' => parse_url((string) config('app.url'), PHP_URL_HOST),
+            ],
+        ]);
+
+        if ($poll->sender_email) {
+            config([
+                'mail.from.address' => $poll->sender_email,
+                'mail.from.name' => $poll->sender_name ?: config('mail.from.name'),
+            ]);
+        }
+
+        Mail::purge('pet_poll');
+
+        return 'pet_poll';
     }
 
     public function stats(PetPoll $poll): array

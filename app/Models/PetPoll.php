@@ -14,6 +14,11 @@ class PetPoll extends Model
         'pet_scope',
         'sender_email',
         'sender_name',
+        'mail_host',
+        'mail_port',
+        'mail_username',
+        'mail_password',
+        'mail_encryption',
         'closes_at',
         'is_open',
         'created_by',
@@ -22,6 +27,8 @@ class PetPoll extends Model
     protected $casts = [
         'closes_at' => 'datetime',
         'is_open' => 'boolean',
+        'mail_port' => 'integer',
+        'mail_password' => 'encrypted',
     ];
 
     public function isOpen(): bool

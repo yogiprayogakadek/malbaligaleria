@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('pet_polls', function (Blueprint $table) {
+            $table->string('mail_host', 150)->nullable()->after('sender_name');
+            $table->unsignedSmallInteger('mail_port')->nullable()->after('mail_host');
+            $table->string('mail_username', 150)->nullable()->after('mail_port');
+            $table->text('mail_password')->nullable()->after('mail_username');
+            $table->string('mail_encryption', 10)->nullable()->after('mail_password');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('pet_polls', function (Blueprint $table) {
+            $table->dropColumn([
+                'mail_host',
+                'mail_port',
+                'mail_username',
+                'mail_password',
+                'mail_encryption',
+            ]);
+        });
+    }
+};

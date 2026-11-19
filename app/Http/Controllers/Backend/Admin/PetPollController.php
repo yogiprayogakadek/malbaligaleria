@@ -80,29 +80,59 @@ class PetPollController extends Controller
         $data = $request->validated();
         $hasResponses = $this->petPollService->hasResponses($poll);
 
+        // Password SMTP kosong berarti pertahankan password yang tersimpan.
+        if (empty($data['mail_password'] ?? null)) {
+            unset($data['mail_password']);
+        }
+
         $attemptedQuestionChange = ($data['question'] !== $poll->question);
         $attemptedScopeChange = ($data['pet_scope'] !== $poll->pet_scope);
 
         if ($hasResponses && ($attemptedQuestionChange || $attemptedScopeChange)) {
-            // Simpan title, sender_email, sender_name, & closes_at, tolak pertanyaan & cakupan
-            $poll->update([
-                'title' => $data['title'],
-                'sender_email' => $data['sender_email'] ?? null,
-                'sender_name' => $data['sender_name'] ?? null,
-                'closes_at' => $data['closes_at'],
-            ]);
+            // Simpan pengaturan non-pertanyaan, tolak pertanyaan & cakupan
+            $poll->update(array_merge(
+                collect($data)->except(['question', 'pet_scope'])->all(),
+                ['closes_at' => $data['closes_at']]
+            ));
 
             return redirect()
                 ->route('admin.pet-poll.settings')
                 ->withErrors([
                     'question' => 'Pertanyaan dan cakupan pet terkunci karena sudah ada jawaban dari tenant.',
                 ])
-                ->with('success', 'Judul, email pengirim, dan tenggat waktu berhasil diperbarui, namun pertanyaan tetap terkunci.');
+                ->with('success', 'Pengaturan lain berhasil diperbarui, namun pertanyaan tetap terkunci.');
         }
 
         $poll->update($data);
 
         return redirect()->route('admin.pet-poll.settings')->with('success', 'Pengaturan survei berhasil disimpan.');
+    }
+
+    public function sendTestMail(Request $request)
+    {
+        $poll = $this->petPollService->current();
+        if (!$poll) {
+            return redirect()->route('admin.pet-poll.index')->with('error', 'Survei tidak ditemukan.');
+        }
+
+        $validated = $request->validate([
+            'test_recipient' => ['required', 'email', 'max:150'],
+        ], [
+            'test_recipient.required' => 'Alamat email tujuan uji wajib diisi.',
+            'test_recipient.email' => 'Format email tujuan uji tidak valid.',
+        ]);
+
+        try {
+            $this->petPollService->sendTestEmail($poll, $validated['test_recipient']);
+
+            return redirect()
+                ->route('admin.pet-poll.settings')
+                ->with('success', 'Email uji berhasil dikirim ke ' . $validated['test_recipient'] . '.');
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.pet-poll.settings')
+                ->with('error', 'Email uji gagal dikirim: ' . $e->getMessage());
+        }
     }
 
     public function resetResponses(Request $request)

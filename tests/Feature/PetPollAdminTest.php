@@ -8,6 +8,7 @@ use App\Models\PetPollResponse;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -240,5 +241,120 @@ class PetPollAdminTest extends TestCase
             ->assertSessionHas('success');
 
         $this->assertSame(0, PetPollResponse::where('pet_poll_id', $poll->id)->count());
+    }
+
+    public function test_admin_can_save_smtp_settings_and_password_is_encrypted(): void
+    {
+        $poll = $this->makePoll();
+
+        $this->actingAs($this->admin)->put(route('admin.pet-poll.settings.update'), [
+            'title' => $poll->title,
+            'question' => $poll->question,
+            'pet_scope' => $poll->pet_scope,
+            'sender_email' => 'notif@mbg.com',
+            'sender_name' => 'Notifikasi MBG',
+            'mail_host' => 'smtp.mailtrap.io',
+            'mail_port' => 2525,
+            'mail_username' => 'smtp-user',
+            'mail_password' => 'super-secret',
+            'mail_encryption' => 'tls',
+            'closes_at' => null,
+        ])->assertRedirect(route('admin.pet-poll.settings'));
+
+        $poll->refresh();
+        $this->assertSame('smtp.mailtrap.io', $poll->mail_host);
+        $this->assertSame(2525, $poll->mail_port);
+        $this->assertSame('smtp-user', $poll->mail_username);
+        $this->assertSame('super-secret', $poll->mail_password);
+        $this->assertSame('tls', $poll->mail_encryption);
+
+        $raw = \DB::table('pet_polls')->where('id', $poll->id)->value('mail_password');
+        $this->assertNotSame('super-secret', $raw);
+    }
+
+    public function test_blank_password_keeps_existing_smtp_password(): void
+    {
+        $poll = $this->makePoll();
+        $poll->update(['mail_password' => 'existing-secret']);
+
+        $this->actingAs($this->admin)->put(route('admin.pet-poll.settings.update'), [
+            'title' => $poll->title,
+            'question' => $poll->question,
+            'pet_scope' => $poll->pet_scope,
+            'mail_host' => 'smtp.mbg.com',
+            'mail_port' => 587,
+            'mail_username' => 'user',
+            'mail_password' => '',
+            'mail_encryption' => 'tls',
+            'closes_at' => null,
+        ])->assertRedirect(route('admin.pet-poll.settings'));
+
+        $this->assertSame('existing-secret', $poll->fresh()->mail_password);
+    }
+
+    public function test_admin_can_send_test_email_using_poll_smtp_settings(): void
+    {
+        Mail::fake();
+
+        $poll = $this->makePoll();
+        $poll->update([
+            'sender_email' => 'notif@mbg.com',
+            'sender_name' => 'Notifikasi MBG',
+            'mail_host' => 'smtp.mbg.com',
+            'mail_port' => 587,
+            'mail_username' => 'user',
+            'mail_password' => 'secret',
+            'mail_encryption' => 'tls',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.pet-poll.test-mail'), ['test_recipient' => 'qa@mbg.com'])
+            ->assertRedirect(route('admin.pet-poll.settings'))
+            ->assertSessionHas('success');
+
+        Mail::assertSent(\App\Mail\PetPollTestMail::class, function ($mail) {
+            return $mail->hasTo('qa@mbg.com');
+        });
+
+        $this->assertSame('smtp.mbg.com', config('mail.mailers.pet_poll.host'));
+        $this->assertSame('smtp', config('mail.mailers.pet_poll.scheme'));
+        $this->assertSame('notif@mbg.com', config('mail.from.address'));
+    }
+
+    public function test_test_email_requires_valid_recipient(): void
+    {
+        $this->makePoll();
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.pet-poll.test-mail'), ['test_recipient' => 'not-an-email'])
+            ->assertSessionHasErrors('test_recipient');
+    }
+
+    public function test_settings_page_shows_smtp_fields_without_exposing_password(): void
+    {
+        $poll = $this->makePoll();
+        $poll->update([
+            'mail_host' => 'smtp.mbg.com',
+            'mail_password' => 'super-secret',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.pet-poll.settings'))
+            ->assertOk()
+            ->assertSee('SMTP Host')
+            ->assertSee('Username SMTP')
+            ->assertSee('Password SMTP')
+            ->assertSee('Kirim Email Uji')
+            ->assertDontSee('super-secret');
+    }
+
+    protected function makePoll(): PetPoll
+    {
+        return PetPoll::create([
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Pertanyaan?',
+            'pet_scope' => 'Cakupan.',
+            'is_open' => true,
+        ]);
     }
 }

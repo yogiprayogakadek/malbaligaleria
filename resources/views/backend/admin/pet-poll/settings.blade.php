@@ -141,7 +141,7 @@
 
                 {{-- Konfigurasi Pengirim Email --}}
                 <h5 class="fw-semibold mb-1">Pengaturan Email Notifikasi</h5>
-                <p class="text-muted fs-2 mb-3">Tautan ubah jawaban survei akan dikirim ke PIC tenant menggunakan identitas pengirim ini.</p>
+                <p class="text-muted fs-2 mb-3">Tautan ubah jawaban survei akan dikirim ke PIC tenant menggunakan identitas pengirim dan server SMTP di bawah ini.</p>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -179,11 +179,91 @@
                     </div>
                 </div>
 
-                <div class="alert alert-info py-2 px-3 fs-2 mb-4 d-flex align-items-center">
-                    <i class="ti ti-info-circle fs-5 me-2 flex-shrink-0"></i>
-                    <div>
-                        Server pengiriman email (SMTP host, port, username, password) dikonfigurasi melalui file <code>.env</code> server (driver saat ini: <strong>{{ config('mail.default') }}</strong>).
+                <h6 class="fw-semibold mt-3 mb-3">Server SMTP</h6>
+
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="pollMailHost" class="form-label fw-semibold">SMTP Host</label>
+                        <input
+                            type="text"
+                            name="mail_host"
+                            id="pollMailHost"
+                            class="form-control @error('mail_host') is-invalid @enderror"
+                            placeholder="contoh: smtp.gmail.com"
+                            value="{{ old('mail_host', $poll->mail_host) }}"
+                            maxlength="150"
+                        >
+                        <div class="form-text">Alamat server SMTP. Jika kosong, pengiriman memakai konfigurasi default aplikasi.</div>
+                        @error('mail_host')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="pollMailPort" class="form-label fw-semibold">Port</label>
+                        <input
+                            type="number"
+                            name="mail_port"
+                            id="pollMailPort"
+                            class="form-control @error('mail_port') is-invalid @enderror"
+                            placeholder="587"
+                            min="1"
+                            max="65535"
+                            value="{{ old('mail_port', $poll->mail_port) }}"
+                        >
+                        <div class="form-text">Umumnya 587 (TLS) atau 465 (SSL).</div>
+                        @error('mail_port')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pollMailUsername" class="form-label fw-semibold">Username SMTP</label>
+                        <input
+                            type="text"
+                            name="mail_username"
+                            id="pollMailUsername"
+                            class="form-control @error('mail_username') is-invalid @enderror"
+                            placeholder="contoh: notifikasi@malbaligaleria.com"
+                            value="{{ old('mail_username', $poll->mail_username) }}"
+                            maxlength="150"
+                            autocomplete="off"
+                        >
+                        @error('mail_username')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="pollMailPassword" class="form-label fw-semibold">Password SMTP</label>
+                        <input
+                            type="password"
+                            name="mail_password"
+                            id="pollMailPassword"
+                            class="form-control @error('mail_password') is-invalid @enderror"
+                            placeholder="{{ $poll->mail_password ? 'Tersimpan, isi hanya jika ingin mengganti' : 'Masukkan password SMTP' }}"
+                            maxlength="255"
+                            autocomplete="new-password"
+                        >
+                        <div class="form-text">Password disimpan terenkripsi. Biarkan kosong untuk mempertahankan password yang sudah ada.</div>
+                        @error('mail_password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3" style="max-width: 240px;">
+                    <label for="pollMailEncryption" class="form-label fw-semibold">Enkripsi</label>
+                    <select name="mail_encryption" id="pollMailEncryption" class="form-select @error('mail_encryption') is-invalid @enderror">
+                        <option value="" {{ old('mail_encryption', $poll->mail_encryption) ? '' : 'selected' }}>Tanpa enkripsi</option>
+                        <option value="tls" {{ old('mail_encryption', $poll->mail_encryption) === 'tls' ? 'selected' : '' }}>TLS (STARTTLS)</option>
+                        <option value="ssl" {{ old('mail_encryption', $poll->mail_encryption) === 'ssl' ? 'selected' : '' }}>SSL (SMTPS)</option>
+                    </select>
+                    @error('mail_encryption')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
@@ -193,6 +273,47 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="fw-semibold mb-1">Uji Pengiriman Email</h5>
+            <p class="text-muted fs-2 mb-3">
+                Simpan pengaturan di atas terlebih dahulu, lalu kirim email uji untuk memastikan server SMTP dapat dijangkau.
+            </p>
+
+            <form method="POST" action="{{ route('admin.pet-poll.test-mail') }}" class="row g-2 align-items-start">
+                @csrf
+                <div class="col-md-6">
+                    <label for="testRecipient" class="form-label fw-semibold">Email Tujuan Uji</label>
+                    <input
+                        type="email"
+                        name="test_recipient"
+                        id="testRecipient"
+                        class="form-control @error('test_recipient') is-invalid @enderror"
+                        placeholder="contoh: nama@malbaligaleria.com"
+                        value="{{ old('test_recipient', $poll->sender_email ?: auth()->user()->email) }}"
+                        maxlength="150"
+                        required
+                    >
+                    @error('test_recipient')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-6 d-flex align-items-end" style="min-height: 62px;">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="ti ti-send fs-4 me-1"></i> Kirim Email Uji
+                    </button>
+                </div>
+            </form>
+
+            @if(empty($poll->mail_host))
+                <div class="alert alert-warning py-2 px-3 fs-2 mt-3 mb-0">
+                    <i class="ti ti-alert-triangle fs-5 me-2"></i>
+                    SMTP khusus belum diisi. Email uji akan memakai mailer default aplikasi (<strong>{{ config('mail.default') }}</strong>).
+                </div>
+            @endif
         </div>
     </div>
 </div>
