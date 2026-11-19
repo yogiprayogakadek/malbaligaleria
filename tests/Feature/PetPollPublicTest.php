@@ -89,6 +89,7 @@ class PetPollPublicTest extends TestCase
 
         $response = $this->post(route('frontend.pet-poll.submit'), [
             'tenant_id' => $tenant->id,
+            'pic_name' => 'I Made Adi',
             'allows_pets' => 1,
             'note' => 'Hanya kucing, wajib carrier.',
         ]);
@@ -98,6 +99,7 @@ class PetPollPublicTest extends TestCase
         $this->assertDatabaseHas('pet_poll_responses', [
             'pet_poll_id' => $poll->id,
             'tenant_id' => $tenant->id,
+            'pic_name' => 'I Made Adi',
             'allows_pets' => 1,
         ]);
 
@@ -114,6 +116,7 @@ class PetPollPublicTest extends TestCase
 
         $response = $this->post(route('frontend.pet-poll.submit'), [
             'tenant_id' => $tenant->id,
+            'pic_name' => 'I Made Adi',
             'allows_pets' => 1,
             'email' => 'manager@balicollection.com',
         ]);
@@ -133,10 +136,10 @@ class PetPollPublicTest extends TestCase
     {
         [$poll, $tenant] = $this->makePollAndTenant();
 
-        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1]);
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'pic_name' => 'Adi', 'allows_pets' => 1]);
 
         // Attempting to submit again from public form without token
-        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 0])
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'pic_name' => 'Adi', 'allows_pets' => 0])
             ->assertSessionHasErrors('tenant_id');
 
         $this->assertSame(1, PetPollResponse::where('pet_poll_id', $poll->id)->count());
@@ -147,17 +150,20 @@ class PetPollPublicTest extends TestCase
     {
         [$poll, $tenant] = $this->makePollAndTenant();
 
-        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1]);
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'pic_name' => 'Adi', 'allows_pets' => 1]);
         $existing = PetPollResponse::first();
 
         $this->post(route('frontend.pet-poll.submit'), [
             'tenant_id' => $tenant->id,
+            'pic_name' => 'Adi Baru',
             'allows_pets' => 0,
             'token' => $existing->edit_token,
         ])->assertRedirect(route('frontend.pet-poll.show'));
 
         $this->assertSame(1, PetPollResponse::where('pet_poll_id', $poll->id)->count());
-        $this->assertFalse((bool) PetPollResponse::first()->fresh()->allows_pets);
+        $updated = PetPollResponse::first()->fresh();
+        $this->assertFalse((bool) $updated->allows_pets);
+        $this->assertSame('Adi Baru', $updated->pic_name);
     }
 
     public function test_token_edit_route_renders_prefilled_form_for_tenant(): void
@@ -166,6 +172,7 @@ class PetPollPublicTest extends TestCase
 
         $this->post(route('frontend.pet-poll.submit'), [
             'tenant_id' => $tenant->id,
+            'pic_name' => 'I Made Adi',
             'allows_pets' => 1,
             'email' => 'pic@store.com',
         ]);
@@ -176,6 +183,7 @@ class PetPollPublicTest extends TestCase
             ->assertSee($tenant->name)
             ->assertSee('Anda sedang memperbarui keputusan resmi')
             ->assertSee($existing->edit_token)
+            ->assertSee('I Made Adi')
             ->assertSee('pic@store.com');
     }
 
@@ -190,7 +198,7 @@ class PetPollPublicTest extends TestCase
         [$poll, $tenant] = $this->makePollAndTenant();
         $poll->update(['closes_at' => now()->subMinute()]);
 
-        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1])
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'pic_name' => 'Adi', 'allows_pets' => 1])
             ->assertSessionHas('error');
 
         $this->assertSame(0, \App\Models\PetPollResponse::count());
@@ -207,8 +215,18 @@ class PetPollPublicTest extends TestCase
             'is_active' => true,
         ]);
 
-        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $island->id, 'allows_pets' => 1])
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $island->id, 'pic_name' => 'Adi', 'allows_pets' => 1])
             ->assertSessionHasErrors('tenant_id');
+    }
+
+    public function test_pic_name_is_required(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1])
+            ->assertSessionHasErrors('pic_name');
+
+        $this->assertSame(0, PetPollResponse::count());
     }
 
     public function test_mailable_uses_custom_sender_address_when_configured(): void

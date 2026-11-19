@@ -8,7 +8,7 @@
     <div style="max-width: 560px; margin: 0 auto; background-color: #FFFFFF; border: 1px solid #E2DDD1; border-radius: 8px; padding: 32px 28px;">
         <h2 style="color: #1F4E3D; margin-top: 0; font-size: 22px;">Survei Pet Friendly Mal Bali Galeria</h2>
         <p style="font-size: 15px; margin-bottom: 20px;">
-            Halo <strong>{{ $response->tenant->name }}</strong>,
+            Halo <strong>{{ $response->pic_name ?: $response->tenant->name }}</strong>,
         </p>
         <p style="font-size: 14px; line-height: 1.6;">
             Terima kasih telah berpartisipasi dalam survei pet friendly. Keputusan Anda saat ini:

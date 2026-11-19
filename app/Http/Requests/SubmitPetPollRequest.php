@@ -24,6 +24,7 @@ class SubmitPetPollRequest extends FormRequest
                         ->whereNull('deleted_at');
                 }),
             ],
+            'pic_name' => ['required', 'string', 'max:100'],
             'allows_pets' => ['required', 'boolean'],
             'note' => ['nullable', 'string', 'max:300'],
             'email' => ['nullable', 'email', 'max:150'],
@@ -36,6 +37,8 @@ class SubmitPetPollRequest extends FormRequest
         return [
             'tenant_id.required' => 'Pilih tenant Anda terlebih dahulu.',
             'tenant_id.exists' => 'Tenant tidak ditemukan atau sedang tidak aktif.',
+            'pic_name.required' => 'Nama PIC atau penanggung jawab wajib diisi.',
+            'pic_name.max' => 'Nama PIC maksimal 100 karakter.',
             'allows_pets.required' => 'Pilih salah satu keputusan (mengizinkan atau tidak).',
             'allows_pets.boolean' => 'Pilihan keputusan tidak valid.',
             'note.max' => 'Catatan maksimal 300 karakter.',

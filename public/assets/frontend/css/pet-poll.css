@@ -152,13 +152,20 @@ a {
 
 .search-icon {
     position: absolute;
-    right: 13px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
+    display: block;
     width: 18px;
     height: 18px;
+    min-width: 18px;
+    max-width: 18px;
     color: var(--muted);
     pointer-events: none;
+}
+
+#tenantSearchInput {
+    padding-right: 44px;
 }
 
 .combobox-results {

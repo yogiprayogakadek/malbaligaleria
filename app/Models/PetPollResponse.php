@@ -10,6 +10,7 @@ class PetPollResponse extends Model
     protected $fillable = [
         'pet_poll_id',
         'tenant_id',
+        'pic_name',
         'allows_pets',
         'note',
         'email',

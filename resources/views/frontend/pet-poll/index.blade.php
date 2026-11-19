@@ -61,6 +61,12 @@
                             <span class="detail-label">Keputusan</span>
                             <strong>{{ $response->allows_pets ? 'Kami mengizinkan pet' : 'Kami tidak mengizinkan pet' }}</strong>
                         </div>
+                        @if($response->pic_name)
+                            <div class="detail-row" style="margin-top: 10px;">
+                                <span class="detail-label">PIC</span>
+                                <span>{{ $response->pic_name }}</span>
+                            </div>
+                        @endif
                         @if($response->email)
                             <div class="detail-row" style="margin-top: 10px;">
                                 <span class="detail-label">Email Konfirmasi</span>
@@ -141,7 +147,7 @@
                                     aria-describedby="tenantHelp"
                                     value="{{ old('tenant_name_display', $response ? $response->tenant->name : '') }}"
                                 >
-                                <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <circle cx="8.5" cy="8.5" r="5.5" />
                                     <path d="m13 13 4 4" />
                                 </svg>
@@ -164,7 +170,29 @@
                         </div>
                     @endif
 
-                    {{-- Step 2: Keputusan Tenant --}}
+                    {{-- Step 2: PIC / Penanggung Jawab --}}
+                    <div class="poll-step">
+                        <h2 class="step-title">PIC / Penanggung jawab</h2>
+                        <p class="step-helper">Nama orang yang berwenang atas keputusan ini di tenant Anda.</p>
+
+                        <label for="pollPicName" class="visually-hidden" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0);">Nama PIC atau penanggung jawab</label>
+                        <input
+                            type="text"
+                            class="input-text"
+                            name="pic_name"
+                            id="pollPicName"
+                            placeholder="Contoh: I Made Adi, Store Manager"
+                            maxlength="100"
+                            required
+                            value="{{ old('pic_name', $response ? $response->pic_name : '') }}"
+                            autocomplete="name"
+                        >
+                        @error('pic_name')
+                            <div class="alert-message alert-error" style="margin-top: 8px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- Step 3: Keputusan Tenant --}}
                     <div class="poll-step">
                         <h2 class="step-title">{{ $poll->question }}</h2>
                         <p class="step-helper">Keputusan resmi untuk area tenant Anda, bukan area umum mall.</p>
@@ -213,7 +241,7 @@
                         @enderror
                     </div>
 
-                    {{-- Step 3: Email PIC / Tenant (opsional) --}}
+                    {{-- Step 4: Email PIC / Tenant (opsional) --}}
                     <div class="poll-step">
                         <h2 class="step-title">Email Anda (opsional)</h2>
                         <p class="step-helper">Tautan khusus untuk mengubah keputusan tenant akan dikirimkan ke email ini.</p>

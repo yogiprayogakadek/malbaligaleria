@@ -57,6 +57,7 @@ class PetPollService
             }
 
             $existing->update([
+                'pic_name' => $data['pic_name'],
                 'allows_pets' => (bool) $data['allows_pets'],
                 'note' => $data['note'] ?? $existing->note,
                 'email' => $data['email'] ?? $existing->email,
@@ -70,6 +71,7 @@ class PetPollService
             $response = PetPollResponse::create([
                 'pet_poll_id' => $poll->id,
                 'tenant_id' => $data['tenant_id'],
+                'pic_name' => $data['pic_name'],
                 'allows_pets' => (bool) $data['allows_pets'],
                 'note' => $data['note'] ?? null,
                 'email' => $data['email'] ?? null,

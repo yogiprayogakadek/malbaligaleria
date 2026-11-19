@@ -217,6 +217,7 @@
                                     <th>No.</th>
                                     <th>Nama Tenant</th>
                                     <th>Kategori</th>
+                                    <th>PIC</th>
                                     <th>Keputusan</th>
                                     <th>Email</th>
                                     <th>Catatan</th>
@@ -229,6 +230,7 @@
                                         <td>{{ $responses->firstItem() + $loop->index }}</td>
                                         <td class="fw-semibold">{{ $resp->tenant ? $resp->tenant->name : '-' }}</td>
                                         <td>{{ ($resp->tenant && $resp->tenant->category) ? $resp->tenant->category->name : '-' }}</td>
+                                        <td>{{ $resp->pic_name ?: '-' }}</td>
                                         <td>
                                             @if($resp->allows_pets)
                                                 <span class="badge bg-success-subtle text-success">Mengizinkan</span>
@@ -254,7 +256,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center py-4 text-muted">
+                                        <td colspan="8" class="text-center py-4 text-muted">
                                             Belum ada jawaban. Bagikan tautan survei ke tenant.
                                         </td>
                                     </tr>

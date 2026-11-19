@@ -162,13 +162,14 @@ class PetPollController extends Controller
                     }
                 });
             } else {
-                fputcsv($handle, ['Tenant', 'Kategori', 'Jawaban', 'Email', 'Catatan', 'Waktu (WITA)']);
+                fputcsv($handle, ['Tenant', 'Kategori', 'PIC', 'Jawaban', 'Email', 'Catatan', 'Waktu (WITA)']);
                 $query = $this->petPollService->responseQuery($poll, $filter, $search);
                 $query->chunk(100, function ($responses) use ($handle) {
                     foreach ($responses as $r) {
                         fputcsv($handle, [
                             $r->tenant ? $r->tenant->name : '-',
                             ($r->tenant && $r->tenant->category) ? $r->tenant->category->name : '-',
+                            $r->pic_name ?: '-',
                             $r->allows_pets ? 'Mengizinkan' : 'Tidak Mengizinkan',
                             $r->email ?? '-',
                             $r->note ?? '-',
