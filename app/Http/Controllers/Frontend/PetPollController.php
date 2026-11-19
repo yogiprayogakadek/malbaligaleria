@@ -35,6 +35,21 @@ class PetPollController extends Controller
         return view('frontend.pet-poll.index', compact('poll', 'response', 'submitted', 'isOpen'));
     }
 
+    public function editWithToken(string $token)
+    {
+        $response = $this->petPollService->findByToken($token);
+        if (!$response) {
+            abort(404, 'Tautan ubah jawaban tidak valid atau tidak ditemukan.');
+        }
+
+        $poll = $response->poll;
+        $isOpen = $poll ? $poll->isOpen() : false;
+        $isTokenEdit = true;
+        $submitted = false;
+
+        return view('frontend.pet-poll.index', compact('poll', 'response', 'isOpen', 'isTokenEdit', 'submitted'));
+    }
+
     public function searchTenants(Request $request)
     {
         $validated = $request->validate([

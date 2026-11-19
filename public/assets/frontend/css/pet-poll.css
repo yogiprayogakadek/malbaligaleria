@@ -440,6 +440,45 @@ a {
     padding: 18px;
 }
 
+.edit-token-box {
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--surface-tint);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-control);
+    text-align: left;
+}
+
+.copy-input-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.copy-input-group .input-text {
+    font-size: 13px;
+    font-family: inherit;
+    background: #FFFFFF;
+}
+
+.btn-copy-link {
+    background-color: var(--forest);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-control);
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
+}
+
+.btn-copy-link:hover {
+    background-color: var(--forest-dark);
+}
+
 .detail-row {
     margin-bottom: 10px;
     font-size: 14.5px;

@@ -12,6 +12,8 @@ class PetPollResponse extends Model
         'tenant_id',
         'allows_pets',
         'note',
+        'email',
+        'edit_token',
         'ip_address',
         'user_agent',
         'responded_at',
@@ -21,6 +23,11 @@ class PetPollResponse extends Model
         'allows_pets' => 'boolean',
         'responded_at' => 'datetime',
     ];
+
+    public function getEditUrlAttribute(): ?string
+    {
+        return $this->edit_token ? route('frontend.pet-poll.edit', ['token' => $this->edit_token]) : null;
+    }
 
     public function poll(): BelongsTo
     {

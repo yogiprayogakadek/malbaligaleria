@@ -126,7 +126,7 @@ class PetPollAdminTest extends TestCase
 
         $response->assertOk();
         $content = $response->streamedContent();
-        $this->assertStringContainsString('Tenant,Kategori,Jawaban,Catatan', $content);
+        $this->assertStringContainsString('Tenant,Kategori,Jawaban,Email,Catatan', $content);
         $this->assertStringContainsString('Waktu (WITA)', $content);
         $this->assertStringContainsString($allowed->name, $content);
     }

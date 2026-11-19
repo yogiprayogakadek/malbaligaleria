@@ -146,7 +146,7 @@ class PetPollController extends Controller
                     }
                 });
             } else {
-                fputcsv($handle, ['Tenant', 'Kategori', 'Jawaban', 'Catatan', 'Waktu (WITA)']);
+                fputcsv($handle, ['Tenant', 'Kategori', 'Jawaban', 'Email', 'Catatan', 'Waktu (WITA)']);
                 $query = $this->petPollService->responseQuery($poll, $filter, $search);
                 $query->chunk(100, function ($responses) use ($handle) {
                     foreach ($responses as $r) {
@@ -154,6 +154,7 @@ class PetPollController extends Controller
                             $r->tenant ? $r->tenant->name : '-',
                             ($r->tenant && $r->tenant->category) ? $r->tenant->category->name : '-',
                             $r->allows_pets ? 'Mengizinkan' : 'Tidak Mengizinkan',
+                            $r->email ?? '-',
                             $r->note ?? '-',
                             $r->responded_at ? $r->responded_at->timezone('Asia/Makassar')->format('d/m/Y H:i') : '-',
                         ]);

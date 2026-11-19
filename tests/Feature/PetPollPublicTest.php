@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\PetPoll;
+use App\Models\PetPollResponse;
 use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class PetPollPublicTest extends TestCase
@@ -105,15 +107,82 @@ class PetPollPublicTest extends TestCase
             ->assertSee($tenant->name);
     }
 
-    public function test_resubmit_updates_the_same_response(): void
+    public function test_submit_generates_edit_token_and_sends_email_if_provided(): void
+    {
+        Mail::fake();
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $response = $this->post(route('frontend.pet-poll.submit'), [
+            'tenant_id' => $tenant->id,
+            'allows_pets' => 1,
+            'email' => 'manager@balicollection.com',
+        ]);
+
+        $response->assertRedirect(route('frontend.pet-poll.show'));
+
+        $pollResponse = PetPollResponse::first();
+        $this->assertNotNull($pollResponse->edit_token);
+        $this->assertSame('manager@balicollection.com', $pollResponse->email);
+
+        Mail::assertSent(\App\Mail\PetPollEditLinkMail::class, function ($mail) use ($tenant) {
+            return $mail->hasTo('manager@balicollection.com') && $mail->response->tenant_id === $tenant->id;
+        });
+    }
+
+    public function test_resubmit_without_token_is_rejected_if_already_answered(): void
     {
         [$poll, $tenant] = $this->makePollAndTenant();
 
         $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1]);
-        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 0]);
 
-        $this->assertSame(1, \App\Models\PetPollResponse::where('pet_poll_id', $poll->id)->count());
-        $this->assertFalse(\App\Models\PetPollResponse::first()->allows_pets);
+        // Attempting to submit again from public form without token
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 0])
+            ->assertSessionHasErrors('tenant_id');
+
+        $this->assertSame(1, PetPollResponse::where('pet_poll_id', $poll->id)->count());
+        $this->assertTrue((bool) PetPollResponse::first()->allows_pets);
+    }
+
+    public function test_resubmit_with_valid_token_updates_response(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1]);
+        $existing = PetPollResponse::first();
+
+        $this->post(route('frontend.pet-poll.submit'), [
+            'tenant_id' => $tenant->id,
+            'allows_pets' => 0,
+            'token' => $existing->edit_token,
+        ])->assertRedirect(route('frontend.pet-poll.show'));
+
+        $this->assertSame(1, PetPollResponse::where('pet_poll_id', $poll->id)->count());
+        $this->assertFalse((bool) PetPollResponse::first()->fresh()->allows_pets);
+    }
+
+    public function test_token_edit_route_renders_prefilled_form_for_tenant(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $this->post(route('frontend.pet-poll.submit'), [
+            'tenant_id' => $tenant->id,
+            'allows_pets' => 1,
+            'email' => 'pic@store.com',
+        ]);
+        $existing = PetPollResponse::first();
+
+        $this->get(route('frontend.pet-poll.edit', ['token' => $existing->edit_token]))
+            ->assertOk()
+            ->assertSee($tenant->name)
+            ->assertSee('Anda sedang memperbarui keputusan resmi')
+            ->assertSee($existing->edit_token)
+            ->assertSee('pic@store.com');
+    }
+
+    public function test_invalid_edit_token_aborts_404(): void
+    {
+        $this->get(route('frontend.pet-poll.edit', ['token' => 'invalid-token-12345']))
+            ->assertNotFound();
     }
 
     public function test_closed_poll_rejects_submission(): void

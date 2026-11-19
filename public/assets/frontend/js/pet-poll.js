@@ -202,4 +202,27 @@
             btnSubmit.innerHTML = '<span class="spinner" aria-hidden="true"></span><span>Mengirim...</span>';
         });
     }
+
+    var btnCopy = document.getElementById('btnCopyEditLink');
+    var editInput = document.getElementById('editUrlInput');
+    if (btnCopy && editInput) {
+        btnCopy.addEventListener('click', function () {
+            var url = editInput.value;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(onCopied);
+            } else {
+                editInput.select();
+                document.execCommand('copy');
+                onCopied();
+            }
+        });
+
+        function onCopied() {
+            var original = btnCopy.textContent;
+            btnCopy.textContent = 'Tersalin!';
+            setTimeout(function () {
+                btnCopy.textContent = original;
+            }, 2000);
+        }
+    }
 })();

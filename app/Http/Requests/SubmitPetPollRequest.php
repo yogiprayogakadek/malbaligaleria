@@ -26,6 +26,8 @@ class SubmitPetPollRequest extends FormRequest
             ],
             'allows_pets' => ['required', 'boolean'],
             'note' => ['nullable', 'string', 'max:300'],
+            'email' => ['nullable', 'email', 'max:150'],
+            'token' => ['nullable', 'string', 'max:64'],
         ];
     }
 
@@ -37,6 +39,8 @@ class SubmitPetPollRequest extends FormRequest
             'allows_pets.required' => 'Pilih salah satu keputusan (mengizinkan atau tidak).',
             'allows_pets.boolean' => 'Pilihan keputusan tidak valid.',
             'note.max' => 'Catatan maksimal 300 karakter.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 150 karakter.',
         ];
     }
 }

@@ -213,6 +213,7 @@
                                     <th>Nama Tenant</th>
                                     <th>Kategori</th>
                                     <th>Keputusan</th>
+                                    <th>Email</th>
                                     <th>Catatan</th>
                                     <th>Waktu (WITA)</th>
                                 </tr>
@@ -231,6 +232,13 @@
                                             @endif
                                         </td>
                                         <td>
+                                            @if($resp->email)
+                                                <span class="text-truncate d-inline-block" style="max-width: 180px;" title="{{ $resp->email }}">{{ $resp->email }}</span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             @if($resp->note)
                                                 <span class="text-truncate d-inline-block" style="max-width: 240px;" title="{{ $resp->note }}">{{ $resp->note }}</span>
                                             @else
@@ -241,7 +249,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center py-4 text-muted">
+                                        <td colspan="7" class="text-center py-4 text-muted">
                                             Belum ada jawaban. Bagikan tautan survei ke tenant.
                                         </td>
                                     </tr>

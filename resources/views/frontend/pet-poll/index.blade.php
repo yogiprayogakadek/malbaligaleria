@@ -61,13 +61,13 @@
                             <span class="detail-label">Keputusan</span>
                             <strong>{{ $response->allows_pets ? 'Kami mengizinkan pet' : 'Kami tidak mengizinkan pet' }}</strong>
                         </div>
-                        @if($response->note)
+                        @if($response->email)
                             <div class="detail-row" style="margin-top: 10px;">
-                                <span class="detail-label">Catatan</span>
-                                <span>{{ $response->note }}</span>
+                                <span class="detail-label">Email Konfirmasi</span>
+                                <span>{{ $response->email }}</span>
                             </div>
                         @endif
-                        <div class="detail-row" style="margin-top: 10px; font-size: 12px; color: var(--sage-text);">
+                        <div class="detail-row" style="margin-top: 10px; font-size: 12px; color: var(--muted);">
                             Dikirim pada {{ $response->responded_at ? $response->responded_at->timezone('Asia/Makassar')->translatedFormat('d M Y, H:i') : now()->timezone('Asia/Makassar')->translatedFormat('d M Y, H:i') }} WITA.
                             @if($isOpen && $poll->closes_at)
                                 Jawaban dapat diubah sampai {{ $poll->closes_at->timezone('Asia/Makassar')->translatedFormat('d M Y, H:i') }} WITA.
@@ -75,66 +75,94 @@
                         </div>
                     </div>
 
-                    @if($isOpen)
-                        <form method="GET" action="{{ route('frontend.pet-poll.show') }}">
-                            <input type="hidden" name="edit" value="1">
-                            <button type="submit" class="btn-link-action">Ubah jawaban</button>
-                        </form>
+                    @if($isOpen && $response->edit_url)
+                        <div class="edit-token-box">
+                            <span class="detail-label" style="text-align: left;">Tautan Rahasia Ubah Jawaban</span>
+                            <div class="copy-input-group">
+                                <input type="text" readonly class="input-text" id="editUrlInput" value="{{ $response->edit_url }}">
+                                <button type="button" class="btn-copy-link" id="btnCopyEditLink">Salin tautan</button>
+                            </div>
+                            <p class="step-helper" style="text-align: left; margin-top: 8px; font-size: 12px;">
+                                Simpan tautan ini untuk mengubah keputusan jika diperlukan sebelum survei ditutup.
+                                @if($response->email)
+                                    <br>Tautan juga telah dikirimkan ke <strong>{{ $response->email }}</strong>.
+                                @endif
+                            </p>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <a href="{{ $response->edit_url }}" class="btn-link-action">Ubah jawaban sekarang</a>
+                        </div>
                     @endif
                 </section>
             @else
                 {{-- Form pengisian --}}
-                @if($response && !request()->has('edit'))
+                @if($isTokenEdit ?? false)
                     <div class="alert-message alert-banner">
-                        Anda sudah mengirim jawaban untuk <strong>{{ $response->tenant->name }}</strong>. Anda dapat memperbarui jawaban ini selama survei masih dibuka.
+                        Anda sedang memperbarui keputusan resmi untuk <strong>{{ $response->tenant->name }}</strong>.
                     </div>
                 @endif
 
                 <form method="POST" action="{{ route('frontend.pet-poll.submit') }}" id="petPollForm" novalidate>
                     @csrf
 
-                    {{-- Step 1: Tenant Combobox --}}
-                    <div class="poll-step">
-                        <h2 class="step-title">Pilih tenant Anda</h2>
-                        <p class="step-helper">Ketik dan pilih tenant resmi yang terdaftar di Mal Bali Galeria.</p>
+                    @if($isTokenEdit ?? false)
+                        <input type="hidden" name="token" value="{{ $response->edit_token }}">
+                        <input type="hidden" name="tenant_id" value="{{ $response->tenant_id }}">
 
-                        <input type="hidden" name="tenant_id" id="selectedTenantId" value="{{ old('tenant_id', $response ? $response->tenant_id : '') }}">
-
-                        <div class="combobox-wrapper" id="comboboxWrapper">
-                            <input
-                                type="text"
-                                class="input-text"
-                                id="tenantSearchInput"
-                                placeholder="Cari nama tenant..."
-                                autocomplete="off"
-                                role="combobox"
-                                aria-autocomplete="list"
-                                aria-expanded="false"
-                                aria-controls="tenantSearchResults"
-                                aria-describedby="tenantHelp"
-                                value="{{ old('tenant_name_display', $response ? $response->tenant->name : '') }}"
-                            >
-                            <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <circle cx="8.5" cy="8.5" r="5.5" />
-                                <path d="m13 13 4 4" />
-                            </svg>
-                            <ul class="combobox-results" id="tenantSearchResults" role="listbox" style="display: none;"></ul>
-                        </div>
-                        <span id="tenantHelp" class="step-helper" style="display: block; margin-top: 6px;">Ketik minimal 2 karakter untuk mencari.</span>
-
-                        @error('tenant_id')
-                            <div class="alert-message alert-error" style="margin-top: 8px;">{{ $message }}</div>
-                        @enderror
-
-                        {{-- Prasasti tenant terpilih --}}
-                        <div class="tenant-plaque" id="tenantPlaque" style="{{ ($response || old('tenant_id')) ? '' : 'display: none;' }}">
-                            <div>
-                                <div class="tenant-plaque-title" id="tenantPlaqueName">{{ $response ? $response->tenant->name : '' }}</div>
-                                <div class="tenant-plaque-sub" id="tenantPlaqueCategory">{{ $response && $response->tenant->category ? $response->tenant->category->name : '' }}</div>
+                        <div class="poll-step">
+                            <h2 class="step-title">Tenant Anda</h2>
+                            <div class="tenant-plaque" style="display: flex;">
+                                <div>
+                                    <div class="tenant-plaque-title">{{ $response->tenant->name }}</div>
+                                    <div class="tenant-plaque-sub">{{ $response->tenant->category ? $response->tenant->category->name : '' }}</div>
+                                </div>
                             </div>
-                            <button type="button" class="btn-link-action" id="btnChangeTenant">Ganti tenant</button>
                         </div>
-                    </div>
+                    @else
+                        {{-- Step 1: Tenant Combobox --}}
+                        <div class="poll-step">
+                            <h2 class="step-title">Pilih tenant Anda</h2>
+                            <p class="step-helper">Ketik dan pilih tenant resmi yang terdaftar di Mal Bali Galeria.</p>
+
+                            <input type="hidden" name="tenant_id" id="selectedTenantId" value="{{ old('tenant_id', $response ? $response->tenant_id : '') }}">
+
+                            <div class="combobox-wrapper" id="comboboxWrapper">
+                                <input
+                                    type="text"
+                                    class="input-text"
+                                    id="tenantSearchInput"
+                                    placeholder="Cari nama tenant..."
+                                    autocomplete="off"
+                                    role="combobox"
+                                    aria-autocomplete="list"
+                                    aria-expanded="false"
+                                    aria-controls="tenantSearchResults"
+                                    aria-describedby="tenantHelp"
+                                    value="{{ old('tenant_name_display', $response ? $response->tenant->name : '') }}"
+                                >
+                                <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="8.5" cy="8.5" r="5.5" />
+                                    <path d="m13 13 4 4" />
+                                </svg>
+                                <ul class="combobox-results" id="tenantSearchResults" role="listbox" style="display: none;"></ul>
+                            </div>
+                            <span id="tenantHelp" class="step-helper" style="display: block; margin-top: 6px;">Ketik minimal 2 karakter untuk mencari.</span>
+
+                            @error('tenant_id')
+                                <div class="alert-message alert-error" style="margin-top: 8px;">{{ $message }}</div>
+                            @enderror
+
+                            {{-- Prasasti tenant terpilih --}}
+                            <div class="tenant-plaque" id="tenantPlaque" style="{{ ($response || old('tenant_id')) ? '' : 'display: none;' }}">
+                                <div>
+                                    <div class="tenant-plaque-title" id="tenantPlaqueName">{{ $response ? $response->tenant->name : '' }}</div>
+                                    <div class="tenant-plaque-sub" id="tenantPlaqueCategory">{{ $response && $response->tenant->category ? $response->tenant->category->name : '' }}</div>
+                                </div>
+                                <button type="button" class="btn-link-action" id="btnChangeTenant">Ganti tenant</button>
+                            </div>
+                        </div>
+                    @endif
 
                     {{-- Step 2: Keputusan Tenant --}}
                     <div class="poll-step">
@@ -185,11 +213,28 @@
                         @enderror
                     </div>
 
-                    {{-- Step 3: Catatan opsional disembunyikan sementara --}}
+                    {{-- Step 3: Email PIC / Tenant (opsional) --}}
+                    <div class="poll-step">
+                        <h2 class="step-title">Email Anda (opsional)</h2>
+                        <p class="step-helper">Tautan khusus untuk mengubah keputusan tenant akan dikirimkan ke email ini.</p>
+                        <input
+                            type="email"
+                            class="input-text"
+                            name="email"
+                            id="pollEmail"
+                            placeholder="contoh: manager@tenant.com"
+                            maxlength="150"
+                            value="{{ old('email', $response ? $response->email : '') }}"
+                            autocomplete="email"
+                        >
+                        @error('email')
+                            <div class="alert-message alert-error" style="margin-top: 8px;">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     {{-- Submit button --}}
                     <button type="submit" class="btn-primary-poll" id="btnSubmitPoll" {{ !$isOpen ? 'disabled' : '' }}>
-                        <span class="btn-text">Kirim jawaban</span>
+                        <span class="btn-text">{{ ($isTokenEdit ?? false) ? 'Simpan perubahan keputusan' : 'Kirim jawaban' }}</span>
                     </button>
 
                     <p class="poll-footer-note">

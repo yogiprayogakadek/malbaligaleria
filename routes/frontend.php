@@ -56,5 +56,6 @@ Route::name('frontend.')->group(function () {
             Route::get('/', 'show')->name('show');
             Route::get('/tenants', 'searchTenants')->name('tenants');
             Route::post('/', 'submit')->name('submit');
+            Route::get('/edit/{token}', 'editWithToken')->name('edit');
         });
 });
