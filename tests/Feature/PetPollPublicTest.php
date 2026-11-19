@@ -184,7 +184,33 @@ class PetPollPublicTest extends TestCase
             ->assertSee('Anda sedang memperbarui keputusan resmi')
             ->assertSee($existing->edit_token)
             ->assertSee('I Made Adi')
-            ->assertSee('pic@store.com');
+            ->assertDontSee('pic@store.com');
+    }
+
+    public function test_email_field_is_hidden_on_public_form(): void
+    {
+        $this->makePollAndTenant();
+
+        $this->get(route('frontend.pet-poll.show'))
+            ->assertOk()
+            ->assertDontSee('Email Anda (opsional)')
+            ->assertDontSee('name="email"', false);
+    }
+
+    public function test_confirmation_page_shows_save_edit_link_notification(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $this->post(route('frontend.pet-poll.submit'), [
+            'tenant_id' => $tenant->id,
+            'pic_name' => 'I Made Adi',
+            'allows_pets' => 1,
+        ]);
+
+        $this->get(route('frontend.pet-poll.show'))
+            ->assertOk()
+            ->assertSee('Simpan tautan di bawah untuk mengubah jawaban', false)
+            ->assertSee('sweetalert2.min.js', false);
     }
 
     public function test_invalid_edit_token_aborts_404(): void

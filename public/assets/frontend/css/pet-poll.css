@@ -486,6 +486,30 @@ a {
     background-color: var(--forest-dark);
 }
 
+.pet-poll-swal {
+    font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+    border-radius: var(--radius-surface);
+}
+
+.pet-poll-swal .swal2-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.pet-poll-swal .swal2-html-container {
+    color: var(--ink);
+}
+
+.pet-poll-swal .swal2-confirm,
+.pet-poll-swal .swal2-cancel {
+    border-radius: var(--radius-control);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .detail-row {
     margin-bottom: 10px;
     font-size: 14.5px;

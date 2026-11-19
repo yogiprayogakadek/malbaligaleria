@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/pet-poll.css') }}">
+    @if($submitted && $response && $response->edit_url)
+        <link rel="stylesheet" href="{{ asset('assets/backend/css/sweetalert2.min.css') }}">
+    @endif
 </head>
 <body>
     <main class="pet-poll-page">
@@ -241,25 +244,6 @@
                         @enderror
                     </div>
 
-                    {{-- Step 4: Email PIC / Tenant (opsional) --}}
-                    <div class="poll-step">
-                        <h2 class="step-title">Email Anda (opsional)</h2>
-                        <p class="step-helper">Tautan khusus untuk mengubah keputusan tenant akan dikirimkan ke email ini.</p>
-                        <input
-                            type="email"
-                            class="input-text"
-                            name="email"
-                            id="pollEmail"
-                            placeholder="contoh: manager@tenant.com"
-                            maxlength="150"
-                            value="{{ old('email', $response ? $response->email : '') }}"
-                            autocomplete="email"
-                        >
-                        @error('email')
-                            <div class="alert-message alert-error" style="margin-top: 8px;">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     {{-- Submit button --}}
                     <button type="submit" class="btn-primary-poll" id="btnSubmitPoll" {{ !$isOpen ? 'disabled' : '' }}>
                         <span class="btn-text">{{ ($isTokenEdit ?? false) ? 'Simpan perubahan keputusan' : 'Kirim jawaban' }}</span>
@@ -286,6 +270,79 @@
             };
         </script>
         <script src="{{ asset('assets/frontend/js/pet-poll.js') }}"></script>
+    @endif
+
+    @if($submitted && $response && $response->edit_url)
+        <script src="{{ asset('assets/backend/js/sweetalert2.min.js') }}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var editUrl = @json($response->edit_url);
+                var tenantName = @json($response->tenant->name);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Jawaban tersimpan',
+                    html:
+                        '<p style="margin: 0 0 14px; font-size: 14px; line-height: 1.5;">' +
+                        'Keputusan <strong>' + tenantName + '</strong> sudah tercatat. Simpan tautan di bawah untuk mengubah jawaban sebelum survei ditutup.' +
+                        '</p>' +
+                        '<input id="swalEditUrl" type="text" readonly value="' + editUrl.replace(/"/g, '&quot;') + '" ' +
+                        'style="width: 100%; padding: 10px 12px; border: 1px solid #E2DDD1; border-radius: 6px; font-size: 12px; color: #1C201D; background: #FAF7F2; box-sizing: border-box;">',
+                    confirmButtonText: 'Salin tautan',
+                    confirmButtonColor: '#1F4E3D',
+                    showCancelButton: true,
+                    cancelButtonText: 'Nanti saja',
+                    cancelButtonColor: '#5C6660',
+                    customClass: {
+                        popup: 'pet-poll-swal'
+                    },
+                    didOpen: function () {
+                        var input = document.getElementById('swalEditUrl');
+                        if (input) {
+                            input.focus();
+                            input.select();
+                        }
+                    }
+                }).then(function (result) {
+                    if (!result.isConfirmed) {
+                        return;
+                    }
+
+                    var copy = navigator.clipboard && navigator.clipboard.writeText
+                        ? navigator.clipboard.writeText(editUrl)
+                        : Promise.reject();
+
+                    copy.then(function () {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Tautan edit disalin',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            customClass: { popup: 'pet-poll-swal' }
+                        });
+                    }).catch(function () {
+                        var input = document.getElementById('swalEditUrl');
+                        if (input) {
+                            input.select();
+                            document.execCommand('copy');
+                        }
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'info',
+                            title: 'Tautan sudah dipilih, salin manual',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            customClass: { popup: 'pet-poll-swal' }
+                        });
+                    });
+                });
+            });
+        </script>
     @endif
 </body>
 </html>
