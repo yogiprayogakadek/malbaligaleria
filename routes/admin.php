@@ -50,6 +50,19 @@ Route::controller(AdminDashboardController::class)
 
         // Restricted to Admin & Superuser Only
         Route::middleware(['role:admin,superuser'])->group(function () {
+            // Pet Poll
+            Route::controller(\App\Http\Controllers\Backend\Admin\PetPollController::class)
+                ->prefix('/pet-poll')
+                ->name('pet-poll.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/export', 'export')->name('export');
+                    Route::get('/settings', 'settings')->name('settings');
+                    Route::put('/settings', 'updateSettings')->name('settings.update');
+                    Route::post('/status', 'toggleStatus')->name('status');
+                });
+
             // User (RESTRICTED TO SUPERUSER)
             Route::controller(UserController::class)
                 ->middleware('superuser')
