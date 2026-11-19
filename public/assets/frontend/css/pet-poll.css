@@ -1,17 +1,21 @@
 :root {
-    --canvas: #F4F0E3;
-    --surface: #FFFDF7;
-    --ink: #1A1A1A;
-    --teal: #2C5F5D;
-    --teal-dark: #1A3A38;
-    --sage-text: #5A6A68;
-    --brass: #A67C3D;
-    --brass-text: #7A5A2E;
-    --line: #DCD4BF;
-    --danger: #A32A2A;
-    --danger-bg: #FBEBEB;
-    --radius-surface: 6px;
-    --radius-control: 4px;
+    --canvas: #F7F4EE;
+    --surface: #FFFFFF;
+    --surface-tint: #FAF7F2;
+    --ink: #1C201D;
+    --forest: #1F4E3D;
+    --forest-dark: #143529;
+    --forest-tint: #EEF4F1;
+    --terracotta: #C25E3E;
+    --terracotta-dark: #9C462C;
+    --terracotta-tint: #FDF5F2;
+    --muted: #5C6660;
+    --line: #E2DDD1;
+    --line-focus: #1F4E3D;
+    --danger: #9E2A2B;
+    --danger-bg: #FCF1F1;
+    --radius-surface: 8px;
+    --radius-control: 6px;
 }
 
 * {
@@ -20,21 +24,26 @@
     padding: 0;
 }
 
+::selection {
+    background-color: #E2EDE7;
+    color: var(--forest-dark);
+}
+
 html, body {
     background-color: var(--canvas);
     color: var(--ink);
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
     font-size: 16px;
     line-height: 1.6;
     min-height: 100vh;
 }
 
 a {
-    color: var(--teal);
+    color: var(--forest);
 }
 
 .pet-poll-page {
-    padding: 32px 16px 48px;
+    padding: 40px 16px 56px;
     display: flex;
     justify-content: center;
 }
@@ -44,8 +53,9 @@ a {
     border: 1px solid var(--line);
     border-radius: var(--radius-surface);
     width: 100%;
-    max-width: 680px;
-    padding: 32px 28px;
+    max-width: 660px;
+    padding: 36px 32px;
+    box-shadow: 0 4px 20px rgba(28, 32, 29, 0.04);
 }
 
 @media (max-width: 540px) {
@@ -56,64 +66,58 @@ a {
 
 .poll-header {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 
 .poll-logo {
     display: inline-block;
-    max-width: 180px;
+    max-width: 170px;
     height: auto;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .poll-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 28px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 30px;
     font-weight: 600;
     line-height: 1.25;
     color: var(--ink);
-    margin-bottom: 8px;
+    letter-spacing: -0.015em;
+    margin-bottom: 10px;
 }
 
 @media (min-width: 640px) {
     .poll-title {
-        font-size: 32px;
+        font-size: 34px;
     }
 }
 
 .poll-intro {
     font-size: 15px;
-    color: var(--sage-text);
-    max-width: 560px;
+    color: var(--muted);
+    max-width: 540px;
     margin: 0 auto;
+    line-height: 1.55;
 }
 
 .poll-step {
-    margin-top: 28px;
-}
-
-.step-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--brass-text);
-    margin-bottom: 4px;
+    margin-top: 32px;
 }
 
 .step-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 19px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 21px;
     font-weight: 600;
     color: var(--ink);
+    letter-spacing: -0.01em;
     margin-bottom: 6px;
 }
 
 .step-helper {
-    font-size: 13px;
-    color: var(--sage-text);
-    margin-bottom: 12px;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.45;
 }
 
 .combobox-wrapper {
@@ -126,18 +130,19 @@ a {
     background-color: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-control);
-    padding: 10px 14px;
+    padding: 11px 14px;
     font-family: inherit;
     font-size: 15px;
     color: var(--ink);
     outline: none;
+    caret-color: var(--terracotta);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .input-text:focus,
 .textarea-input:focus {
-    border-color: var(--brass);
-    box-shadow: 0 0 0 2px rgba(166, 124, 61, 0.25);
+    border-color: var(--forest);
+    box-shadow: 0 0 0 3px rgba(31, 78, 61, 0.15);
 }
 
 .textarea-input {
@@ -147,12 +152,13 @@ a {
 
 .search-icon {
     position: absolute;
-    right: 12px;
+    right: 13px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--sage-text);
+    width: 18px;
+    height: 18px;
+    color: var(--muted);
     pointer-events: none;
-    font-size: 14px;
 }
 
 .combobox-results {
@@ -167,14 +173,15 @@ a {
     overflow-y: auto;
     z-index: 20;
     list-style: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 24px rgba(28, 32, 29, 0.08);
 }
 
 .combobox-option {
     padding: 10px 14px;
     cursor: pointer;
     font-size: 14px;
-    border-bottom: 1px solid #F0ECE0;
+    border-bottom: 1px solid #F1EFEA;
+    transition: background-color 0.1s ease;
 }
 
 .combobox-option:last-child {
@@ -183,28 +190,29 @@ a {
 
 .combobox-option.is-active,
 .combobox-option:hover {
-    background-color: #F6F2E7;
-    color: var(--teal-dark);
+    background-color: var(--forest-tint);
+    color: var(--forest-dark);
 }
 
 .combobox-option-category {
     display: block;
     font-size: 12px;
-    color: var(--sage-text);
+    color: var(--muted);
 }
 
 .combobox-status {
-    padding: 10px 14px;
-    font-size: 13px;
-    color: var(--sage-text);
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: var(--muted);
 }
 
 .tenant-plaque {
-    margin-top: 12px;
+    margin-top: 14px;
     padding: 14px 16px;
-    background: #FAF7EE;
-    border: 1px solid var(--brass);
-    border-radius: var(--radius-surface);
+    background: var(--surface-tint);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--terracotta);
+    border-radius: var(--radius-control);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -212,32 +220,37 @@ a {
 }
 
 .tenant-plaque-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: 18px;
     font-weight: 600;
     color: var(--ink);
-    letter-spacing: 0.02em;
+    letter-spacing: -0.01em;
 }
 
 .tenant-plaque-sub {
-    font-size: 12px;
-    color: var(--sage-text);
+    font-size: 12.5px;
+    color: var(--muted);
 }
 
 .btn-link-action {
     background: none;
     border: none;
-    color: var(--teal);
+    color: var(--forest);
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
+    text-underline-offset: 3px;
     padding: 4px;
 }
 
+.btn-link-action:hover {
+    color: var(--terracotta);
+}
+
 .btn-link-action:focus-visible {
-    outline: 2px solid var(--brass);
+    outline: 2px solid var(--forest);
     outline-offset: 2px;
 }
 
@@ -274,7 +287,7 @@ a {
 }
 
 .board-card:hover {
-    border-color: var(--teal);
+    border-color: var(--forest);
 }
 
 .board-card input[type="radio"] {
@@ -283,55 +296,56 @@ a {
     right: 16px;
     width: 18px;
     height: 18px;
-    accent-color: var(--teal);
+    accent-color: var(--forest);
     cursor: pointer;
 }
 
 .board-card:has(input[type="radio"]:checked) {
-    border-color: var(--teal);
-    background-color: #F4F8F7;
-    box-shadow: 0 2px 6px rgba(44, 95, 93, 0.12);
+    border-color: var(--forest);
+    background-color: var(--forest-tint);
+    box-shadow: 0 2px 8px rgba(31, 78, 61, 0.1);
 }
 
 .board-card:has(input[type="radio"]:focus-visible) {
-    outline: 2px solid var(--brass);
+    outline: 2px solid var(--forest);
     outline-offset: 2px;
 }
 
 .board-icon {
     width: 32px;
     height: 32px;
-    margin-bottom: 10px;
-    color: var(--teal);
+    margin-bottom: 12px;
+    color: var(--forest);
     flex-shrink: 0;
 }
 
 .board-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 16px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 17px;
     font-weight: 600;
     color: var(--ink);
+    letter-spacing: -0.01em;
     margin-bottom: 4px;
 }
 
 .board-desc {
     font-size: 13px;
-    color: var(--sage-text);
+    color: var(--muted);
     line-height: 1.45;
 }
 
 .char-counter {
     text-align: right;
     font-size: 12px;
-    color: var(--sage-text);
+    color: var(--muted);
     margin-top: 4px;
 }
 
 .btn-primary-poll {
     width: 100%;
-    margin-top: 24px;
-    padding: 12px 20px;
-    background-color: var(--teal);
+    margin-top: 26px;
+    padding: 13px 20px;
+    background-color: var(--forest);
     color: #FFFFFF;
     border: none;
     border-radius: var(--radius-control);
@@ -343,16 +357,20 @@ a {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 44px;
-    transition: background-color 0.15s ease;
+    min-height: 46px;
+    transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
 .btn-primary-poll:hover:not(:disabled) {
-    background-color: var(--teal-dark);
+    background-color: var(--forest-dark);
+}
+
+.btn-primary-poll:active:not(:disabled) {
+    transform: translateY(1px);
 }
 
 .btn-primary-poll:focus-visible {
-    outline: 2px solid var(--brass);
+    outline: 2px solid var(--terracotta);
     outline-offset: 2px;
 }
 
@@ -362,10 +380,11 @@ a {
 }
 
 .poll-footer-note {
-    margin-top: 14px;
+    margin-top: 16px;
     text-align: center;
-    font-size: 12px;
-    color: var(--sage-text);
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 .alert-message {
@@ -378,13 +397,13 @@ a {
 .alert-error {
     background-color: var(--danger-bg);
     color: var(--danger);
-    border: 1px solid #E8B4B4;
+    border: 1px solid #F0C4C4;
 }
 
 .alert-banner {
-    background: #FAF7EE;
-    border: 1px solid var(--brass);
-    color: var(--brass-text);
+    background: var(--surface-tint);
+    border: 1px solid var(--line);
+    color: var(--ink);
 }
 
 .confirmation-card {
@@ -394,33 +413,36 @@ a {
 
 .confirmation-badge {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 4px 14px;
     border-radius: 4px;
-    background-color: #E6F0EE;
-    color: var(--teal-dark);
+    background-color: var(--forest-tint);
+    color: var(--forest);
     font-size: 12px;
     font-weight: 600;
     margin-bottom: 12px;
 }
 
 .confirmation-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 24px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.015em;
     margin-bottom: 6px;
 }
 
 .confirmation-detail {
-    margin: 18px 0;
+    margin: 20px 0;
     text-align: left;
-    background: #FAF7EE;
+    background: var(--surface-tint);
     border: 1px solid var(--line);
-    border-radius: var(--radius-surface);
-    padding: 16px;
+    border-radius: var(--radius-control);
+    padding: 18px;
 }
 
 .detail-row {
-    margin-bottom: 8px;
-    font-size: 14px;
+    margin-bottom: 10px;
+    font-size: 14.5px;
 }
 
 .detail-row:last-child {
@@ -429,11 +451,12 @@ a {
 
 .detail-label {
     font-weight: 600;
-    color: var(--ink);
+    color: var(--muted);
     display: block;
-    font-size: 12px;
+    font-size: 11.5px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
 }
 
 .spinner {

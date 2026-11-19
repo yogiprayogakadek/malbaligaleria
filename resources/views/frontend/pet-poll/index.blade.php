@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/pet-poll.css') }}">
 </head>
@@ -95,9 +95,8 @@
 
                     {{-- Step 1: Tenant Combobox --}}
                     <div class="poll-step">
-                        <label class="step-label" for="tenantSearchInput">1. Tenant Anda</label>
-                        <h2 class="step-title">Nama tenant</h2>
-                        <p class="step-helper">Gunakan nama tenant yang terdaftar di Mal Bali Galeria.</p>
+                        <h2 class="step-title">Pilih tenant Anda</h2>
+                        <p class="step-helper">Ketik dan pilih tenant resmi yang terdaftar di Mal Bali Galeria.</p>
 
                         <input type="hidden" name="tenant_id" id="selectedTenantId" value="{{ old('tenant_id', $response ? $response->tenant_id : '') }}">
 
@@ -115,7 +114,10 @@
                                 aria-describedby="tenantHelp"
                                 value="{{ old('tenant_name_display', $response ? $response->tenant->name : '') }}"
                             >
-                            <span class="search-icon" aria-hidden="true">&#9906;</span>
+                            <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="8.5" cy="8.5" r="5.5" />
+                                <path d="m13 13 4 4" />
+                            </svg>
                             <ul class="combobox-results" id="tenantSearchResults" role="listbox" style="display: none;"></ul>
                         </div>
                         <span id="tenantHelp" class="step-helper" style="display: block; margin-top: 6px;">Ketik minimal 2 karakter untuk mencari.</span>
@@ -136,9 +138,8 @@
 
                     {{-- Step 2: Keputusan Tenant --}}
                     <div class="poll-step">
-                        <label class="step-label">2. Keputusan tenant Anda</label>
                         <h2 class="step-title">{{ $poll->question }}</h2>
-                        <p class="step-helper">Keputusan ini untuk area tenant Anda, bukan area umum mall.</p>
+                        <p class="step-helper">Keputusan resmi untuk area tenant Anda, bukan area umum mall.</p>
 
                         <fieldset class="board-fieldset">
                             <legend class="visually-hidden" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0);">Pilih keputusan izin pet</legend>
