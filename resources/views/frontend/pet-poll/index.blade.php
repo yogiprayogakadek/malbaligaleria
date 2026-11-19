@@ -184,22 +184,7 @@
                         @enderror
                     </div>
 
-                    {{-- Step 3: Catatan opsional --}}
-                    <div class="poll-step">
-                        <label class="step-label" for="pollNote">Catatan untuk mall (opsional)</label>
-                        <p class="step-helper">Tulis syarat khusus yang ingin mall ketahui.</p>
-                        <textarea
-                            class="textarea-input"
-                            id="pollNote"
-                            name="note"
-                            maxlength="300"
-                            placeholder="Contoh: hanya kucing, wajib carrier."
-                        >{{ old('note', $response ? $response->note : '') }}</textarea>
-                        <div class="char-counter"><span id="charCount">0</span> / 300</div>
-                        @error('note')
-                            <div class="alert-message alert-error" style="margin-top: 8px;">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    {{-- Step 3: Catatan opsional disembunyikan sementara --}}
 
                     {{-- Submit button --}}
                     <button type="submit" class="btn-primary-poll" id="btnSubmitPoll" {{ !$isOpen ? 'disabled' : '' }}>

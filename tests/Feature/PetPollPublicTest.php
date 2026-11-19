@@ -26,6 +26,7 @@ class PetPollPublicTest extends TestCase
             ->assertSee($poll->title)
             ->assertSee($poll->question)
             ->assertSee($poll->pet_scope)
+            ->assertDontSee('pollNote')
             ->assertSee('Kirim jawaban');
     }
 
