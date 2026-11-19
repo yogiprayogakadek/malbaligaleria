@@ -111,6 +111,11 @@ class Tenant extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function petPollResponses()
+    {
+        return $this->hasMany(PetPollResponse::class);
+    }
+
     // public function getRouteKeyName()
     // {
     //     return 'uuid';
