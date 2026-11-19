@@ -102,4 +102,21 @@ class PetPollService
 
         return $query->orderBy('name');
     }
+
+    public function createDefault(?int $userId = null): PetPoll
+    {
+        return PetPoll::create([
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Apakah tenant Anda mengizinkan pet masuk ke area tenant?',
+            'pet_scope' => 'Anjing dan kucing, wajib memakai tali atau carrier.',
+            'closes_at' => null,
+            'is_open' => true,
+            'created_by' => $userId,
+        ]);
+    }
+
+    public function hasResponses(PetPoll $poll): bool
+    {
+        return PetPollResponse::query()->where('pet_poll_id', $poll->id)->exists();
+    }
 }

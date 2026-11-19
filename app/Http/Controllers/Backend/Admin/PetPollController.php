@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdatePetPollRequest;
 use App\Services\PetPollService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -44,6 +45,78 @@ class PetPollController extends Controller
         return view('backend.admin.pet-poll.index', compact('poll', 'stats', 'filter', 'search', 'responses', 'unansweredTenants'));
     }
 
+    public function store(Request $request)
+    {
+        $existing = $this->petPollService->current();
+        if ($existing) {
+            return redirect()->route('admin.pet-poll.index')->with('error', 'Survei sudah ada.');
+        }
+
+        $this->petPollService->createDefault(auth()->id());
+
+        return redirect()->route('admin.pet-poll.index')->with('success', 'Survei pet friendly berhasil dibuat.');
+    }
+
+    public function settings()
+    {
+        $poll = $this->petPollService->current();
+        if (!$poll) {
+            return redirect()->route('admin.pet-poll.index')->with('error', 'Buat survei terlebih dahulu.');
+        }
+
+        $hasResponses = $this->petPollService->hasResponses($poll);
+        $responseCount = $poll->responses()->count();
+
+        return view('backend.admin.pet-poll.settings', compact('poll', 'hasResponses', 'responseCount'));
+    }
+
+    public function updateSettings(UpdatePetPollRequest $request)
+    {
+        $poll = $this->petPollService->current();
+        if (!$poll) {
+            return redirect()->route('admin.pet-poll.index')->with('error', 'Survei tidak ditemukan.');
+        }
+
+        $data = $request->validated();
+        $hasResponses = $this->petPollService->hasResponses($poll);
+
+        $attemptedQuestionChange = ($data['question'] !== $poll->question);
+        $attemptedScopeChange = ($data['pet_scope'] !== $poll->pet_scope);
+
+        if ($hasResponses && ($attemptedQuestionChange || $attemptedScopeChange)) {
+            // Simpan hanya title & closes_at, tolak pertanyaan & cakupan
+            $poll->update([
+                'title' => $data['title'],
+                'closes_at' => $data['closes_at'],
+            ]);
+
+            return redirect()
+                ->route('admin.pet-poll.settings')
+                ->withErrors([
+                    'question' => 'Pertanyaan dan cakupan pet terkunci karena sudah ada jawaban dari tenant.',
+                ])
+                ->with('success', 'Judul dan tenggat waktu berhasil diperbarui, namun pertanyaan tetap terkunci.');
+        }
+
+        $poll->update($data);
+
+        return redirect()->route('admin.pet-poll.settings')->with('success', 'Pengaturan survei berhasil disimpan.');
+    }
+
+    public function toggleStatus(Request $request)
+    {
+        $poll = $this->petPollService->current();
+        if (!$poll) {
+            return redirect()->route('admin.pet-poll.index')->with('error', 'Survei tidak ditemukan.');
+        }
+
+        $poll->update(['is_open' => !$poll->is_open]);
+
+        $message = $poll->is_open ? 'Survei berhasil dibuka kembali.' : 'Survei berhasil ditutup.';
+
+        return redirect()->route('admin.pet-poll.index')->with('success', $message);
+    }
+
     public function export(Request $request): StreamedResponse
     {
         $poll = $this->petPollService->current();
@@ -58,7 +131,6 @@ class PetPollController extends Controller
 
         return response()->streamDownload(function () use ($poll, $filter, $search) {
             $handle = fopen('php://output', 'w');
-            // UTF-8 BOM
             fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             if ($filter === 'unanswered') {
@@ -93,25 +165,5 @@ class PetPollController extends Controller
         }, $fileName, [
             'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
-    }
-
-    public function store(Request $request)
-    {
-        return back();
-    }
-
-    public function settings()
-    {
-        return response('settings');
-    }
-
-    public function updateSettings(Request $request)
-    {
-        return back();
-    }
-
-    public function toggleStatus(Request $request)
-    {
-        return back();
     }
 }

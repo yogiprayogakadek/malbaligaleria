@@ -130,4 +130,65 @@ class PetPollAdminTest extends TestCase
         $this->assertStringContainsString('Waktu (WITA)', $content);
         $this->assertStringContainsString($allowed->name, $content);
     }
+
+    public function test_admin_can_create_default_poll(): void
+    {
+        $this->actingAs($this->admin)->post(route('admin.pet-poll.store'))->assertRedirect();
+
+        $this->assertDatabaseCount('pet_polls', 1);
+        $this->assertSame('Survei Pet Friendly', PetPoll::first()->title);
+    }
+
+    public function test_settings_can_be_updated_before_any_response(): void
+    {
+        $poll = PetPoll::create([
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Pertanyaan lama?',
+            'pet_scope' => 'Cakupan lama.',
+            'is_open' => true,
+        ]);
+
+        $this->actingAs($this->admin)->put(route('admin.pet-poll.settings.update'), [
+            'title' => 'Survei Pet Friendly Update',
+            'question' => 'Pertanyaan baru?',
+            'pet_scope' => 'Semua hewan peliharaan dengan carrier.',
+            'closes_at' => '2026-12-31T23:59',
+        ])->assertRedirect();
+
+        $poll->refresh();
+        $this->assertSame('Pertanyaan baru?', $poll->question);
+        $this->assertSame('Survei Pet Friendly Update', $poll->title);
+    }
+
+    public function test_question_and_scope_are_locked_after_first_response(): void
+    {
+        [$poll, $allowed] = $this->makePollWithAnswers();
+
+        $this->actingAs($this->admin)->put(route('admin.pet-poll.settings.update'), [
+            'title' => 'Judul Baru Berubah',
+            'question' => 'Pertanyaan berubah?',
+            'pet_scope' => 'Cakupan berubah?',
+            'closes_at' => null,
+        ])->assertSessionHasErrors('question');
+
+        $poll->refresh();
+        $this->assertSame('Judul Baru Berubah', $poll->title);
+        $this->assertNotSame('Pertanyaan berubah?', $poll->question);
+    }
+
+    public function test_admin_can_toggle_poll_status(): void
+    {
+        $poll = PetPoll::create([
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Pertanyaan?',
+            'pet_scope' => 'Cakupan.',
+            'is_open' => true,
+        ]);
+
+        $this->actingAs($this->admin)->post(route('admin.pet-poll.status'))->assertRedirect();
+        $this->assertFalse($poll->fresh()->is_open);
+
+        $this->actingAs($this->admin)->post(route('admin.pet-poll.status'))->assertRedirect();
+        $this->assertTrue($poll->fresh()->is_open);
+    }
 }
