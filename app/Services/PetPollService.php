@@ -27,4 +27,21 @@ class PetPollService
             ->limit(20)
             ->get(['id', 'name', 'category_id']);
     }
+
+    public function submit(PetPoll $poll, array $data, ?string $ip, ?string $userAgent): PetPollResponse
+    {
+        return PetPollResponse::updateOrCreate(
+            [
+                'pet_poll_id' => $poll->id,
+                'tenant_id' => $data['tenant_id'],
+            ],
+            [
+                'allows_pets' => (bool) $data['allows_pets'],
+                'note' => $data['note'] ?? null,
+                'ip_address' => $ip,
+                'user_agent' => $userAgent,
+                'responded_at' => now(),
+            ]
+        );
+    }
 }

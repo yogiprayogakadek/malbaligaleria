@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SubmitPetPollRequest;
 use App\Models\PetPollResponse;
 use App\Services\PetPollService;
 use Illuminate\Http\Request;
@@ -51,8 +52,26 @@ class PetPollController extends Controller
         return response()->json($tenants);
     }
 
-    public function submit(Request $request)
+    public function submit(SubmitPetPollRequest $request)
     {
-        return back();
+        $poll = $this->petPollService->current();
+
+        if (!$poll || !$poll->isOpen()) {
+            return redirect()
+                ->route('frontend.pet-poll.show')
+                ->with('error', 'Survei sudah ditutup atau belum tersedia.');
+        }
+
+        $response = $this->petPollService->submit(
+            $poll,
+            $request->validated(),
+            $request->ip(),
+            substr((string) $request->userAgent(), 0, 255)
+        );
+
+        $request->session()->put('pet_poll_response_' . $poll->id, $response->id);
+        $request->session()->flash('pet_poll_submitted', true);
+
+        return redirect()->route('frontend.pet-poll.show');
     }
 }

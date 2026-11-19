@@ -54,4 +54,90 @@ class PetPollPublicTest extends TestCase
         $this->getJson(route('frontend.pet-poll.tenants', ['q' => 'a']))
             ->assertStatus(422);
     }
+
+    protected function makePollAndTenant(): array
+    {
+        $poll = PetPoll::create([
+            'title' => 'Survei Pet Friendly',
+            'question' => 'Apakah tenant Anda mengizinkan pet masuk ke area tenant?',
+            'pet_scope' => 'Anjing dan kucing, wajib memakai tali atau carrier.',
+            'is_open' => true,
+        ]);
+
+        $category = Category::create([
+            'name' => 'Fashion',
+            'color_zone' => 'red',
+            'is_active' => true,
+        ]);
+
+        $tenant = Tenant::create([
+            'category_id' => $category->id,
+            'type' => 'tenant',
+            'name' => 'Bali Collection',
+            'is_active' => true,
+        ]);
+
+        return [$poll, $tenant];
+    }
+
+    public function test_submit_stores_response_and_shows_confirmation(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $response = $this->post(route('frontend.pet-poll.submit'), [
+            'tenant_id' => $tenant->id,
+            'allows_pets' => 1,
+            'note' => 'Hanya kucing, wajib carrier.',
+        ]);
+
+        $response->assertRedirect(route('frontend.pet-poll.show'));
+
+        $this->assertDatabaseHas('pet_poll_responses', [
+            'pet_poll_id' => $poll->id,
+            'tenant_id' => $tenant->id,
+            'allows_pets' => 1,
+        ]);
+
+        $this->get(route('frontend.pet-poll.show'))
+            ->assertOk()
+            ->assertSee('Jawaban tersimpan')
+            ->assertSee($tenant->name);
+    }
+
+    public function test_resubmit_updates_the_same_response(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1]);
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 0]);
+
+        $this->assertSame(1, \App\Models\PetPollResponse::where('pet_poll_id', $poll->id)->count());
+        $this->assertFalse(\App\Models\PetPollResponse::first()->allows_pets);
+    }
+
+    public function test_closed_poll_rejects_submission(): void
+    {
+        [$poll, $tenant] = $this->makePollAndTenant();
+        $poll->update(['closes_at' => now()->subMinute()]);
+
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $tenant->id, 'allows_pets' => 1])
+            ->assertSessionHas('error');
+
+        $this->assertSame(0, \App\Models\PetPollResponse::count());
+    }
+
+    public function test_inactive_or_non_tenant_cannot_be_submitted(): void
+    {
+        [$poll] = $this->makePollAndTenant();
+        $category = Category::first();
+        $island = Tenant::create([
+            'category_id' => $category->id,
+            'type' => 'island',
+            'name' => 'Island',
+            'is_active' => true,
+        ]);
+
+        $this->post(route('frontend.pet-poll.submit'), ['tenant_id' => $island->id, 'allows_pets' => 1])
+            ->assertSessionHasErrors('tenant_id');
+    }
 }
