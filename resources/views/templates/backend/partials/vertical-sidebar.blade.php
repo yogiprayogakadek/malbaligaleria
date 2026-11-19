@@ -242,7 +242,7 @@
                     @endrole
 
                     <!-- CONTENT MANAGEMENT CATEGORY -->
-                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasAnyPermission(['view category tenants', 'view tenants', 'view events', 'view gallery', 'view promo']))
+                    @if(auth()->user()->hasRole('superuser') || auth()->user()->hasRole('admin') || auth()->user()->hasAnyPermission(['view category tenants', 'view tenants', 'view events', 'view gallery', 'view promo']))
                         <li class="nav-small-cap sidebar-section-header hide-menu" data-section="section-content">
                             <iconify-icon icon="solar:menu-dots-linear" class="mini-icon"></iconify-icon>
                             <span class="hide-menu">Content Management</span>
@@ -426,6 +426,16 @@
                                         </ul>
                                     </li>
                                 </ul>
+                            </li>
+                            @endif
+
+                            <!-- Pet Poll -->
+                            @if(auth()->user()->hasRole('superuser') || auth()->user()->hasRole('admin'))
+                            <li class="sidebar-item">
+                                <a class="sidebar-link {{ request()->routeIs('admin.pet-poll.*') ? 'active' : '' }}" href="{{ route('admin.pet-poll.index') }}">
+                                    <iconify-icon icon="solar:paw-line-duotone"></iconify-icon>
+                                    <span class="hide-menu">Pet Poll</span>
+                                </a>
                             </li>
                             @endif
                         </div>

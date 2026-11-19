@@ -191,4 +191,17 @@ class PetPollAdminTest extends TestCase
         $this->actingAs($this->admin)->post(route('admin.pet-poll.status'))->assertRedirect();
         $this->assertTrue($poll->fresh()->is_open);
     }
+
+    public function test_sidebar_displays_pet_poll_menu_item(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('admin.pet-poll.index'))
+            ->assertOk()
+            ->assertSee('Pet Poll');
+
+        $this->actingAs($this->superuser)
+            ->get(route('admin.pet-poll.index'))
+            ->assertOk()
+            ->assertSee('Pet Poll');
+    }
 }
